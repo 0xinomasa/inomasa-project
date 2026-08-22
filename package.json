@@ -2,7 +2,7 @@
   "name": "inomasa",
   "version": "0.0.0",
   "private": true,
-  "description": "Inomasa application skeleton",
+  "description": "Inomasa modular-monolith engineering baseline",
   "type": "module",
   "engines": {
     "node": "22.x"
@@ -11,6 +11,9 @@
   "scripts": {
     "clean": "node scripts/clean.mjs",
     "dev": "next dev",
+    "db:migrate": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/db-migrate.ts",
+    "db:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/db-proof.ts",
+    "db:verify": "npm run db:migrate && npm run db:proof",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
     "test": "node --experimental-strip-types --test test/*.test.ts",
@@ -21,6 +24,7 @@
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.1",
+    "@types/pg": "8.23.1",
     "@types/react": "19.2.18",
     "@types/react-dom": "19.2.4",
     "eslint": "10.9.0",
@@ -28,7 +32,9 @@
     "typescript-eslint": "8.67.0"
   },
   "dependencies": {
+    "kysely": "0.29.5",
     "next": "16.3.2",
+    "pg": "8.23.0",
     "react": "19.2.8",
     "react-dom": "19.2.8"
   }

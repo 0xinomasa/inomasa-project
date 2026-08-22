@@ -11,11 +11,28 @@ permissions:
   contents: read
 
 env:
+  DATABASE_DIRECT_URL: postgresql://inomasa_ci@127.0.0.1:5432/inomasa_ci
+  DATABASE_URL: postgresql://inomasa_ci@127.0.0.1:5432/inomasa_ci
+  INOMASA_ENV: AUTOMATED_TEST
   NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
   verify:
     runs-on: ubuntu-latest
+    services:
+      postgres:
+        image: postgres:17-alpine
+        env:
+          POSTGRES_DB: inomasa_ci
+          POSTGRES_HOST_AUTH_METHOD: trust
+          POSTGRES_USER: inomasa_ci
+        ports:
+          - 5432:5432
+        options: >-
+          --health-cmd "pg_isready -U inomasa_ci -d inomasa_ci"
+          --health-interval 5s
+          --health-timeout 5s
+          --health-retries 10
     steps:
       - name: Check out repository
         uses: actions/checkout@v4
@@ -31,3 +48,6 @@ jobs:
 
       - name: Run engineering checks
         run: npm run verify
+
+      - name: Run PostgreSQL migration and persistence proof
+        run: npm run db:verify

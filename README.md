@@ -2,7 +2,7 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current B2 baseline is a responsive Next.js application skeleton. It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing product behavior. It contains no wallet integration, authentication, smart contract, Arc integration, x402 implementation, database, hosted agent, evidence logic, capital logic, or production deployment configuration.
+The current B3 baseline is a responsive Next.js application skeleton plus a provider-portable PostgreSQL persistence foundation. It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing product behavior. The only schema object is an explicitly non-domain engineering probe used to verify migration, write/read, and transaction behavior. It contains no wallet integration, authentication, smart contract, Arc integration, x402 implementation, business schema, hosted agent, evidence logic, capital logic, or production deployment configuration.
 
 ## Authority
 
@@ -61,32 +61,46 @@ npm run build
 
 The Next.js build output is written to `.next/` and is intentionally ignored by Git.
 
-## B2 structure
+## B3 structure
 
 ```text
 src/
   app/       Next.js web shell and composition root
   modules/   future bounded business modules
-  platform/  future external/vendor adapters
+  platform/  infrastructure adapters, including the PostgreSQL boundary
   shared/    domain-neutral shared code only
+migrations/  ordered, version-controlled PostgreSQL schema evolution
+scripts/     engineering operations, including migration/proof commands
 test/        structural application-shell tests
 ```
 
-The physical folders preserve a modular monolith. They do not imply that Canonical semantic domains are microservices. B2 deliberately introduces no named business module or vendor adapter.
+The physical folders preserve a modular monolith. They do not imply that Canonical semantic domains are microservices. B3 deliberately introduces no named business module and keeps PostgreSQL/Kysely inside `src/platform/persistence/`.
 
-## Known framework gate
+## Persistence workflow
 
-B2 is intentionally non-production. Before B3 or any deployment, update Next.js using the fixed release from the official security update scheduled for 26 August 2026, then repeat `npm audit` and the complete verification suite. See [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md).
-
-## Local environment
-
-Create a local file only when a later phase needs runtime configuration:
+Copy the example locally, replace every placeholder, and keep the file private:
 
 ```bash
 umask 077
 cp .env.example .env.local
 chmod 600 .env.local
 ```
+
+`DATABASE_URL` is the runtime/application connection. `DATABASE_DIRECT_URL` is the administrative/migration connection. A hosted provider may supply pooled and direct variants; application code does not use provider-specific variable names or APIs.
+
+Apply all pending migrations, then run the non-domain write/read/rollback proof:
+
+```bash
+npm run db:verify
+```
+
+Run this only against an isolated development/test database. Clean reconstruction means creating an empty PostgreSQL database and running `npm run db:migrate`; manual dashboard schema changes are not authoritative. See [`docs/engineering/persistence-foundation.md`](docs/engineering/persistence-foundation.md).
+
+## Network-exposure security hold
+
+`NEXT-SEC-2026-08` is open. It does not block repository work, local application execution, or B3 database engineering, but it blocks B4 and every externally reachable Inomasa runtime. The release/version check is deliberately current-source-driven rather than hardcoded. See [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md).
+
+## Local environment
 
 Never commit `.env.local`, credentials, API keys, wallet material, seed phrases, private keys, production identifiers, or copied secret values.
 

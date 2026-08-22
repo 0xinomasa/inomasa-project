@@ -7,7 +7,7 @@ This hierarchy prevents chat context, repository convenience, historical artifac
 ## Authority order
 
 1. **Inomasa Canonical Architecture v1.0** — sole active architecture authority.
-2. **Formally accepted System Realization decisions and specifications** — implementation authority only when they conform to the Canonical Architecture. No complete System Realization specification is committed as of B2.
+2. **Formally accepted System Realization decisions and specifications** — implementation authority only when they conform to the Canonical Architecture. B2/B3 engineering choices remain narrowly scoped and do not constitute a complete System Realization specification.
 3. **Accepted repository engineering documentation and decision records** — operational guidance within their stated scope.
 4. **Task instructions and working plans** — execution direction that may not silently override higher authority.
 5. **Historical Architecture Record Set** — Foundation/Domain files, maps, checkpoints, candidates, external reviews, and prior adjudication artifacts retained only for lineage, audit, or an explicitly reopened question.
