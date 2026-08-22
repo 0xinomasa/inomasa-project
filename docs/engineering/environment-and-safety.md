@@ -21,8 +21,10 @@ Use separate configuration, credentials, identifiers, endpoints, databases, wall
 
 1. local development;
 2. automated test;
-3. Arc testnet/staging;
-4. production/mainnet.
+3. private Arc testnet;
+4. closed Arc testnet;
+5. public/demo testnet;
+6. production/mainnet.
 
 Never copy production secrets into development or test. Never label testnet evidence, balances, identities, contracts, or settlement as production-authoritative.
 
@@ -33,6 +35,9 @@ Local convention:
 - environment values are validated at the application boundary once a runtime exists;
 - no committed code may silently default to production endpoints.
 - any `NEXT_PUBLIC_*` value is shipped to the browser and therefore must never contain a secret.
+- `DATABASE_URL` is runtime access and `DATABASE_DIRECT_URL` is administrative/migration access; neither value may be committed or printed.
+- non-local database URLs must explicitly require secure transport.
+- an environment must never reuse another environment's database credentials or state merely for convenience.
 
 ## Safe Codex workflow on Ubuntu Proot
 
@@ -69,9 +74,9 @@ If a normal Codex sandbox becomes compatible in a future environment, replace th
 
 Launch OpenCode from the repository root so it discovers `AGENTS.md` and `opencode.json`. Provider credentials are local configuration and must not be committed. OpenCode passing B0 does not authorize it to bypass repository, secret, or architecture guardrails.
 
-## B2 framework security gate
+## Next.js network-exposure gate
 
-B2 uses Next.js `16.3.2` for a local, non-production application skeleton. The Next.js project announced a critical security release scheduled for 26 August 2026, but the fixed version was not available when B2 was created. Before B3 or any deployment, update to the fixed supported release published through the official advisory, run `npm audit`, and repeat the full clean-install verification. Do not expose the B2 skeleton as a production-authoritative service before that gate passes.
+B3 development readiness is `PASS WITH SECURITY HOLD`. `NEXT-SEC-2026-08` blocks B4 and all hosted/private/public application exposure, but it does not block trusted local execution, migrations, or database connectivity. The durable gate and required re-verification are defined in [`security-gates.md`](security-gates.md). Do not encode an anticipated fixed version or publication date as architecture truth.
 
 ## Network workaround
 

@@ -11,10 +11,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Current phase boundary
 
-- Current implemented scope is **B2 Application Skeleton** only.
+- Current implemented scope is **B3 Persistence Foundation** only.
 - The shell may display BUILD as available, MIGRATE as `LOCKED`, and CAPITAL as a separate path. These are presentation states, not domain authority or implemented business behavior.
-- Do not implement product workflows, authentication, persistence, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
-- Do not begin B3 unless the user explicitly authorizes it after the B2 verdict.
+- B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
+- Do not implement product workflows, authentication, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
+- Do not begin B4 or expose an Inomasa runtime while `NEXT-SEC-2026-08` is open.
 
 ## Architecture authority
 
@@ -39,7 +40,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Never change runtime, package manager, dependency strategy, or major tooling silently.
 - Keep the modular monolith deployable as one unit until an explicit architecture decision says otherwise.
 - Next.js is selected for the B2 web shell only. Do not infer that its route structure defines semantic domains or future service boundaries.
-- Before B3 or any deployment, re-check the announced 26 August 2026 Next.js security release, update to the fixed supported release, and rerun every verification gate. B2 must remain non-production until that check passes.
+- `NEXT-SEC-2026-08` is an open security hold on network exposure, not local persistence engineering. Before B4 or any externally reachable runtime, re-check current primary sources and satisfy every gate in `docs/engineering/security-gates.md`.
+- `PG-TLS-SEMANTICS-01` blocks a `pg` 9, `pg-connection-string` 3, or equivalent PostgreSQL TLS-semantics change until current primary guidance is reviewed and certificate plus hostname verification is proven. Never suppress the warning by weakening TLS.
 
 ## Secrets and environment safety
 
@@ -65,7 +67,8 @@ Before reporting completion:
 2. Run `npm run typecheck`.
 3. Run `npm test`.
 4. Run `npm run build`.
-5. Run `git diff --check`.
-6. Inspect `git status --short` and report every remaining change.
+5. When database behavior changed, run `npm run db:verify` against an isolated PostgreSQL database.
+6. Run `git diff --check`.
+7. Inspect `git status --short` and report every remaining change.
 
 Do not claim `PASS`, `IMPLEMENTED`, or `VERIFIED` when a command failed, was skipped, or its output was not observed.
