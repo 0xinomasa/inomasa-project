@@ -1,7 +1,7 @@
-/** Machine-readable marker proving that the B1 repository baseline builds. */
+/** Machine-readable marker for the verified repository phase. */
 export const repositoryBaseline = Object.freeze({
   architectureAuthority: 'Inomasa Canonical Architecture v1.0',
-  phase: 'B1 Repository Bootstrap',
+  phase: 'B2 Application Skeleton',
   runtime: 'Node.js 22',
-  status: 'engineering-baseline-only',
+  status: 'application-skeleton-only',
 } as const);

@@ -6,6 +6,6 @@
     "docs/engineering/environment-and-safety.md"
   ],
   "watcher": {
-    "ignore": [".git/**", "coverage/**", "dist/**", "node_modules/**"]
+    "ignore": [".git/**", ".next/**", "coverage/**", "dist/**", "node_modules/**"]
   }
 }

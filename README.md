@@ -2,7 +2,7 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-This initial baseline is repository infrastructure only. It contains no product feature, wallet integration, smart contract, Arc integration, x402 implementation, database, hosted agent, or deployment configuration.
+The current B2 baseline is a responsive Next.js application skeleton. It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing product behavior. It contains no wallet integration, authentication, smart contract, Arc integration, x402 implementation, database, hosted agent, evidence logic, capital logic, or production deployment configuration.
 
 ## Authority
 
@@ -27,6 +27,21 @@ npm ci
 
 Keep repositories inside the Ubuntu filesystem. Do not place the working tree under `/sdcard` or other Android shared storage.
 
+## Run locally
+
+```bash
+npm run dev
+```
+
+Open `http://localhost:3000`. The B2 page is a presentation shell only; no economic capability or external integration is active.
+
+For a production-mode local run:
+
+```bash
+npm run build
+npm start
+```
+
 ## Verify
 
 Run the complete local quality gate:
@@ -44,7 +59,24 @@ npm test
 npm run build
 ```
 
-The build output is written to `dist/` and is intentionally ignored by Git. There is no `start` or `dev` command in B1 because no application runtime has been implemented.
+The Next.js build output is written to `.next/` and is intentionally ignored by Git.
+
+## B2 structure
+
+```text
+src/
+  app/       Next.js web shell and composition root
+  modules/   future bounded business modules
+  platform/  future external/vendor adapters
+  shared/    domain-neutral shared code only
+test/        structural application-shell tests
+```
+
+The physical folders preserve a modular monolith. They do not imply that Canonical semantic domains are microservices. B2 deliberately introduces no named business module or vendor adapter.
+
+## Known framework gate
+
+B2 is intentionally non-production. Before B3 or any deployment, update Next.js using the fixed release from the official security update scheduled for 26 August 2026, then repeat `npm audit` and the complete verification suite. See [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md).
 
 ## Local environment
 
@@ -57,6 +89,8 @@ chmod 600 .env.local
 ```
 
 Never commit `.env.local`, credentials, API keys, wallet material, seed phrases, private keys, production identifiers, or copied secret values.
+
+Values prefixed with `NEXT_PUBLIC_` are bundled into browser code. They must never contain secrets.
 
 ## Agent-assisted development
 

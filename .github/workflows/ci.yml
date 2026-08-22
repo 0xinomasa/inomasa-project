@@ -1,4 +1,4 @@
-name: Engineering baseline
+name: Engineering verification
 
 on:
   pull_request:
@@ -8,6 +8,9 @@ on:
 
 permissions:
   contents: read
+
+env:
+  NEXT_TELEMETRY_DISABLED: 1
 
 jobs:
   verify:

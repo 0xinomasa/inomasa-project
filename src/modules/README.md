@@ -4,4 +4,4 @@ Future bounded business modules belong here after their boundaries are selected 
 
 Do not create, merge, rename, or couple modules merely to make implementation convenient. Structural changes must conform to the Canonical Architecture and be recorded explicitly.
 
-B1 intentionally defines no product module.
+B2 intentionally defines no product module.

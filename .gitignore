@@ -1,4 +1,6 @@
 node_modules/
+.next/
+out/
 dist/
 coverage/
 .cache/
@@ -23,6 +25,7 @@ secrets/
 .codex-log/
 *.log
 npm-debug.log*
+.vercel/
 
 # Editor and OS junk
 .idea/

@@ -7,7 +7,7 @@ This file is a concise engineering guardrail for repository work. It does not re
 ## Invariants carried into engineering
 
 - **Business is primary.** Technology, agents, models, chains, and vendors serve authorized business/economic activity; they do not become the product authority.
-- **BUILD, MIGRATE, and CAPITAL remain distinct entry boundaries.** Repository convenience must not collapse their semantics or dependency rules. B1 implements none of them.
+- **BUILD, MIGRATE, and CAPITAL remain distinct entry boundaries.** Repository convenience must not collapse their semantics or dependency rules. B2 displays these boundaries but implements none of their business behavior.
 - **Authority and intelligence stay separate.** AI/model output is advisory or delegated within explicit principal authority; intelligence must not silently acquire identity, wallet, policy, or settlement authority.
 - **Principal control is explicit.** Manual, Semi, and Full modes preserve user-granted scope, revocation, recovery, and emergency boundaries.
 - **Economic capacity is funded capacity.** Escrow/obligation capacity must remain 1:1 with funds actually locked under the authorized mechanism; inferred credit must not masquerade as funded capacity.

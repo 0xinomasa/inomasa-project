@@ -11,9 +11,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Current phase boundary
 
-- Current scope is **B1 Repository Bootstrap** only.
-- Do not implement product features, application flows, smart contracts, wallet/Arc/Circle/x402 integrations, databases, hosted agents, deployment, BUILD, MIGRATE, or CAPITAL behavior.
-- Do not begin B2 unless the user explicitly authorizes it after the B1 verdict.
+- Current implemented scope is **B2 Application Skeleton** only.
+- The shell may display BUILD as available, MIGRATE as `LOCKED`, and CAPITAL as a separate path. These are presentation states, not domain authority or implemented business behavior.
+- Do not implement product workflows, authentication, persistence, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
+- Do not begin B3 unless the user explicitly authorizes it after the B2 verdict.
 
 ## Architecture authority
 
@@ -37,6 +38,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Prefer platform and standard-library capabilities before adding dependencies.
 - Never change runtime, package manager, dependency strategy, or major tooling silently.
 - Keep the modular monolith deployable as one unit until an explicit architecture decision says otherwise.
+- Next.js is selected for the B2 web shell only. Do not infer that its route structure defines semantic domains or future service boundaries.
+- Before B3 or any deployment, re-check the announced 26 August 2026 Next.js security release, update to the fixed supported release, and rerun every verification gate. B2 must remain non-production until that check passes.
 
 ## Secrets and environment safety
 

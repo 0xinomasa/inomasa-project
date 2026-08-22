@@ -32,6 +32,7 @@ Local convention:
 - `.env.local` is ignored and should use permission mode `600`;
 - environment values are validated at the application boundary once a runtime exists;
 - no committed code may silently default to production endpoints.
+- any `NEXT_PUBLIC_*` value is shipped to the browser and therefore must never contain a secret.
 
 ## Safe Codex workflow on Ubuntu Proot
 
@@ -67,6 +68,10 @@ If a normal Codex sandbox becomes compatible in a future environment, replace th
 ## OpenCode
 
 Launch OpenCode from the repository root so it discovers `AGENTS.md` and `opencode.json`. Provider credentials are local configuration and must not be committed. OpenCode passing B0 does not authorize it to bypass repository, secret, or architecture guardrails.
+
+## B2 framework security gate
+
+B2 uses Next.js `16.3.2` for a local, non-production application skeleton. The Next.js project announced a critical security release scheduled for 26 August 2026, but the fixed version was not available when B2 was created. Before B3 or any deployment, update to the fixed supported release published through the official advisory, run `npm audit`, and repeat the full clean-install verification. Do not expose the B2 skeleton as a production-authoritative service before that gate passes.
 
 ## Network workaround
 

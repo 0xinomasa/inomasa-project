@@ -2,7 +2,7 @@
   "name": "inomasa",
   "version": "0.0.0",
   "private": true,
-  "description": "Inomasa engineering repository baseline",
+  "description": "Inomasa application skeleton",
   "type": "module",
   "engines": {
     "node": "22.x"
@@ -10,17 +10,26 @@
   "packageManager": "npm@10.9.8",
   "scripts": {
     "clean": "node scripts/clean.mjs",
+    "dev": "next dev",
     "lint": "eslint . --max-warnings 0",
     "typecheck": "tsc -p tsconfig.json --noEmit",
-    "test": "npm run build --silent && node --test test/*.test.mjs",
-    "build": "npm run clean --silent && tsc -p tsconfig.build.json",
+    "test": "node --experimental-strip-types --test test/*.test.ts",
+    "build": "npm run clean --silent && next build",
+    "start": "next start",
     "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
     "@types/node": "22.20.1",
+    "@types/react": "19.2.18",
+    "@types/react-dom": "19.2.4",
     "eslint": "10.9.0",
     "typescript": "6.0.3",
     "typescript-eslint": "8.67.0"
+  },
+  "dependencies": {
+    "next": "16.3.2",
+    "react": "19.2.8",
+    "react-dom": "19.2.8"
   }
 }
