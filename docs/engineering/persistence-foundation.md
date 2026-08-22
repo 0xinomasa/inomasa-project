@@ -36,6 +36,8 @@ The selected packages support Node.js 22 and run as portable JavaScript in Ubunt
 
 For hosted Neon proof, use the pooled connection string for `DATABASE_URL` and the direct connection string for `DATABASE_DIRECT_URL`, both with the secure transport parameters currently recommended by Neon. Those values belong only in a permission-restricted local environment or approved secret store, never Git, logs, chat transcripts, or GitHub workflow files.
 
+The hosted B3 proof emitted the node-postgres forward-compatibility warning for `sslmode=require`. Under the pinned B3 versions, that mode still preserves the driver's historical `verify-full`-equivalent verification, so the successful proof remains valid and the provider connection strings remain unchanged. `PG-TLS-SEMANTICS-01` in [`security-gates.md`](security-gates.md) blocks the planned major driver/parser transition until current guidance is re-evaluated and full certificate and hostname verification is preserved. Never resolve the warning by disabling TLS verification.
+
 ## Migration standard
 
 Files in `migrations/` are the authoritative schema evolution record. They are applied in lexical order by `npm run db:migrate`; Kysely records execution in its migration metadata table and serializes concurrent migration attempts with a database lock. A failure exits non-zero and reports the stage/migration without printing a connection URL.
