@@ -1,0 +1,31 @@
+node_modules/
+dist/
+coverage/
+.cache/
+.tmp/
+tmp/
+*.tsbuildinfo
+
+# Environment and secrets
+.env
+.env.*
+!.env.example
+*.local
+secrets/
+*.pem
+*.key
+*.p12
+*.pfx
+*.keystore
+*.jks
+
+# Tool output
+.codex-log/
+*.log
+npm-debug.log*
+
+# Editor and OS junk
+.idea/
+.vscode/
+.DS_Store
+Thumbs.db
