@@ -1,0 +1,11 @@
+{
+  "$schema": "https://opencode.ai/config.json",
+  "instructions": [
+    "docs/engineering/source-hierarchy.md",
+    "docs/engineering/canonical-invariants.md",
+    "docs/engineering/environment-and-safety.md"
+  ],
+  "watcher": {
+    "ignore": [".git/**", "coverage/**", "dist/**", "node_modules/**"]
+  }
+}

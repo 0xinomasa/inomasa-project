@@ -1,0 +1,73 @@
+# Environment and safety baseline
+
+## B0 compatibility result
+
+Status: `VERIFIED — PASS WITH WORKAROUND`.
+
+Primary development environment:
+
+- official Termux application on Android;
+- Ubuntu ARM64 through Proot Distro;
+- repository stored inside the Ubuntu filesystem, not Android shared storage;
+- Node.js 22 through NVM;
+- npm with the committed lockfile;
+- laptop retained as fallback.
+
+The phone is an active development client. Local servers and agents can stop when Android kills Termux, battery policy suspends it, the application closes, or the phone powers off. Persistent deployments and event-driven background agents must run on approved hosted infrastructure in later phases.
+
+## Environment separation
+
+Use separate configuration, credentials, identifiers, endpoints, databases, wallets, contracts, and evidence for:
+
+1. local development;
+2. automated test;
+3. Arc testnet/staging;
+4. production/mainnet.
+
+Never copy production secrets into development or test. Never label testnet evidence, balances, identities, contracts, or settlement as production-authoritative.
+
+Local convention:
+
+- `.env.example` contains variable names and safe non-secret examples only;
+- `.env.local` is ignored and should use permission mode `600`;
+- environment values are validated at the application boundary once a runtime exists;
+- no committed code may silently default to production endpoints.
+
+## Safe Codex workflow on Ubuntu Proot
+
+Codex's normal Linux sandbox failed under Ubuntu Proot during B0 even after system Bubblewrap was installed. Direct Bubblewrap execution passed, but Codex's composed sandbox failed during synthetic mount/old-root setup. Therefore the recorded workaround is:
+
+```bash
+cd /path/to/trusted/repository
+git status --short
+codex --sandbox danger-full-access
+```
+
+This mode removes Codex's internal filesystem and network sandbox. The process remains subject to the outer Android/Termux/Proot environment, but it can access everything available inside that environment. Consequently:
+
+- use it only in a repository you created or fully trust;
+- never launch it from `/root`, the Ubuntu home root, `/sdcard`, or a directory containing unrelated material;
+- do not make `danger-full-access` a global default or committed configuration;
+- never use `--dangerously-bypass-approvals-and-sandbox`;
+- keep production secrets, seed phrases, private keys, and unrelated credentials out of the environment;
+- constrain every task to explicit files and operations;
+- review commands, diffs, and generated files before acceptance.
+
+After each Codex session:
+
+```bash
+git status --short
+git diff --check
+git diff
+npm run verify
+```
+
+If a normal Codex sandbox becomes compatible in a future environment, replace this workaround with the least-privilege supported mode. Laptop or another properly isolated environment remains the fallback for higher-risk work.
+
+## OpenCode
+
+Launch OpenCode from the repository root so it discovers `AGENTS.md` and `opencode.json`. Provider credentials are local configuration and must not be committed. OpenCode passing B0 does not authorize it to bypass repository, secret, or architecture guardrails.
+
+## Network workaround
+
+The B0 Ubuntu environment required IPv4 for some downloads. Use `curl -4` only when ordinary network access fails; do not encode it into application behavior.

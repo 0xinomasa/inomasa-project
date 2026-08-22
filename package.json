@@ -1,0 +1,26 @@
+{
+  "name": "inomasa",
+  "version": "0.0.0",
+  "private": true,
+  "description": "Inomasa engineering repository baseline",
+  "type": "module",
+  "engines": {
+    "node": "22.x"
+  },
+  "packageManager": "npm@10.9.8",
+  "scripts": {
+    "clean": "node scripts/clean.mjs",
+    "lint": "eslint . --max-warnings 0",
+    "typecheck": "tsc -p tsconfig.json --noEmit",
+    "test": "npm run build --silent && node --test test/*.test.mjs",
+    "build": "npm run clean --silent && tsc -p tsconfig.build.json",
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
+  },
+  "devDependencies": {
+    "@eslint/js": "10.0.1",
+    "@types/node": "22.20.1",
+    "eslint": "10.9.0",
+    "typescript": "6.0.3",
+    "typescript-eslint": "8.67.0"
+  }
+}
