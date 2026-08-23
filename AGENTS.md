@@ -6,6 +6,7 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 - Work only from the trusted Git repository root.
 - Before changing anything, inspect `git status --short` and preserve unrelated user changes.
+- Read `PROJECT_STATE.md` first for the accepted engineering state, open holds, takeover procedure, and exact next gate. Chat history is never required project state.
 - Read `docs/engineering/source-hierarchy.md` and `docs/engineering/canonical-invariants.md` before any structural, domain, authority, economic, wallet, settlement, evidence, agent, trust, risk, capital, or AI-runtime decision.
 - Read `docs/engineering/environment-and-safety.md` before handling environment configuration or running Codex in Ubuntu Proot.
 
@@ -14,8 +15,9 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Current implemented scope is **B3 Persistence Foundation** only.
 - The shell may display BUILD as available, MIGRATE as `LOCKED`, and CAPITAL as a separate path. These are presentation states, not domain authority or implemented business behavior.
 - B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
+- The Engineering Continuity & Handoff checkpoint follows B3 and adds repository-native takeover evidence only. It is not PRE-B4 or a product phase.
 - Do not implement product workflows, authentication, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
-- Do not begin B4 or expose an Inomasa runtime while `NEXT-SEC-2026-08` is open.
+- Do not begin PRE-B4 or B4, and do not expose an Inomasa runtime while `NEXT-SEC-2026-08` is open, unless a later explicit task authorizes the gate work.
 
 ## Architecture authority
 
@@ -58,6 +60,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - With the Ubuntu Proot B0 workaround, `codex --sandbox danger-full-access` is allowed only from this trusted repository and under direct supervision. It is not a repository default and does not authorize access outside the task.
 - Never use `--dangerously-bypass-approvals-and-sandbox`.
 - The Android device is a development client, not a production server or persistent hosted-agent runtime.
+- Do not treat any device, local clone, chat, AI memory, or current provider as the sole record of project state. Accepted state belongs in GitHub `main` and the repository evidence identified by `PROJECT_STATE.md`.
+- Any competent human or AI operator must be able to follow the same committed guardrails. Tool identity never grants additional authority.
 
 ## Completion gate
 
@@ -70,5 +74,6 @@ Before reporting completion:
 5. When database behavior changed, run `npm run db:verify` against an isolated PostgreSQL database.
 6. Run `git diff --check`.
 7. Inspect `git status --short` and report every remaining change.
+8. For a significant gate or accepted phase merge, update `PROJECT_STATE.md` with the evidence, open holds, and exact next gate before declaring continuity complete.
 
 Do not claim `PASS`, `IMPLEMENTED`, or `VERIFIED` when a command failed, was skipped, or its output was not observed.

@@ -4,6 +4,8 @@ Private engineering repository for Inomasa, an application layer being designed 
 
 The current B3 baseline is a responsive Next.js application skeleton plus a provider-portable PostgreSQL persistence foundation. It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing product behavior. The only schema object is an explicitly non-domain engineering probe used to verify migration, write/read, and transaction behavior. It contains no wallet integration, authentication, smart contract, Arc integration, x402 implementation, business schema, hosted agent, evidence logic, capital logic, or production deployment configuration.
 
+For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
+
 ## Authority
 
 The **Inomasa Canonical Architecture v1.0** is the sole active architecture authority. Repository documentation summarizes implementation guardrails but does not replace or amend the Canonical Architecture. See [`docs/engineering/source-hierarchy.md`](docs/engineering/source-hierarchy.md).
@@ -13,7 +15,7 @@ The **Inomasa Canonical Architecture v1.0** is the sole active architecture auth
 - Node.js 22 through NVM
 - npm 10.9.8 (the recorded B0 baseline)
 - Git
-- Ubuntu Proot in Termux for primary Android development
+- a suitable Node.js development environment; Android Ubuntu Proot is proven but not required
 
 ## Clone and install
 
@@ -25,7 +27,7 @@ nvm use
 npm ci
 ```
 
-Keep repositories inside the Ubuntu filesystem. Do not place the working tree under `/sdcard` or other Android shared storage.
+On Android, keep repositories inside the Ubuntu filesystem rather than `/sdcard` or other shared storage. A laptop/PC can take over from a clean clone; it must not depend on files copied from the phone.
 
 ## Run locally
 
