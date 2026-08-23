@@ -11,7 +11,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | Latest completed engineering gate | **B3 — Persistence Foundation: PASS WITH WORKAROUND** |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
-| Current corrective checkpoint | Engineering Continuity & Handoff; the commit containing this file |
+| Current corrective checkpoint | Engineering Continuity & Handoff baseline `92ac2e1312777472aab2f29a847e5c98e6e87e1a`; this file includes later continuity clarifications |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
 | Next authorized gate | **PRE-B4 Deployment & Network-Exposure Gate**; not started |
 | Deployment state | No Inomasa application runtime is authorized for network exposure |
@@ -36,15 +36,35 @@ Do not infer that a newer version, provider dashboard message, or prior chat clo
 7. Credentials and recovery material are supplied through authorized channels outside Git. Never commit or paste them into documentation, issues, CI logs, or chat.
 8. After every significant gate decision or accepted merge, update this file in the same change whenever practical. Record the latest completed gate, evidence, open holds, and exact next gate. A future operator must not need historical chat to discover state.
 
+## Invariant destination, adaptable execution route
+
+The engineering destination is invariant: the accepted state and next gate in this file, Canonical Architecture constraints, repository safety rules, acceptance criteria, and required verification evidence. An execution route is not invariant. It is a scoped profile selected for the actual device, operating system, operator, AI tool, and infrastructure capabilities in front of the operator.
+
+- Select the safest, least-privilege route that can satisfy the same gate in the actual environment.
+- Commands, tools, sequencing, and provider administration may differ between profiles, but the route must not weaken constraints, acceptance criteria, or required evidence.
+- Treat Android/Ubuntu Proot procedures and workarounds as scoped to that proven profile. Do not copy them to a capable Linux laptop, Windows/macOS environment, another AI tool, or a human workflow unless their actual constraints justify it.
+- Equivalent evidence must demonstrate the same acceptance criteria even when the route differs.
+- Never claim an environment or operator route is `VERIFIED` by analogy with another route.
+
+This repository is the navigation and handoff system: it preserves the destination, current state, constraints, blockers, acceptance criteria, known profiles, and evidence. The next competent operator chooses the route; the repository determines what must remain true and what proof must be produced.
+
+Environment/profile statuses mean:
+
+- `VERIFIED` — the stated profile and scope actually passed the required checks, with observed evidence.
+- `SUPPORTED/TARGET` — expected to be viable, but the relevant clean bootstrap and verification have not yet been fully observed.
+- `UNSUPPORTED/BLOCKED` — known not to satisfy current requirements, or blocked until a documented constraint is resolved or a safe workaround is proven.
+
+Statuses are scoped. Passing CI does not verify a local workstation, and verifying one tool on one operating system does not verify another route.
+
 ## Supported takeover environments
 
 | Environment | Status | Notes |
 | --- | --- | --- |
-| Android + Termux + Ubuntu ARM64 Proot | B0 proven | Node 22/NVM/npm work; Codex requires the recorded supervised workaround. |
-| GitHub-hosted Ubuntu runner | CI proven | Node 22, clean install, engineering checks, and ephemeral PostgreSQL proof passed. |
-| Laptop/PC with a suitable Linux environment, WSL, or macOS | Supported takeover target | Must prove the clean-clone procedure below before claiming local readiness. No device-specific repository state is required. |
+| Android + Termux + Ubuntu ARM64 Proot | `VERIFIED` for B0 and the recorded local scope | Node 22/NVM/npm work; Codex uses the recorded supervised profile because its normal sandbox is `UNSUPPORTED/BLOCKED` in this environment. |
+| GitHub-hosted Ubuntu runner | `VERIFIED` for CI scope | Node 22, clean install, engineering checks, and ephemeral PostgreSQL proof passed. This does not verify an interactive workstation. |
+| Laptop/PC with a suitable Linux environment, WSL, or macOS | `SUPPORTED/TARGET` | Use the safest route available there and pass the clean-clone procedure before claiming local readiness. No device-specific repository state is required. |
 
-Native Windows outside WSL has not been established as a proven baseline. It may be evaluated later without changing the architecture.
+Native Windows outside WSL is `SUPPORTED/TARGET`, not `VERIFIED`. It requires an environment-appropriate clean bootstrap route and observed evidence; evaluating that route does not change the architecture.
 
 ## Clean-clone takeover
 
@@ -110,5 +130,4 @@ No Arc, Circle, wallet, x402, hosted-agent, production database, or production d
 
 ## Exact next step
 
-After this corrective checkpoint is merged and its `main` CI is observed successful, the next gate is **PRE-B4 Deployment & Network-Exposure Gate**. Its first mandatory blocker is `NEXT-SEC-2026-08`. This file does not start or authorize PRE-B4 or B4.
-
+The next gate remains **PRE-B4 Deployment & Network-Exposure Gate**. Its first mandatory blocker is `NEXT-SEC-2026-08`. Continuity clarifications do not start or authorize PRE-B4 or B4.

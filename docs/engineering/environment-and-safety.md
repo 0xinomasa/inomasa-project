@@ -17,6 +17,20 @@ Android + Termux + Ubuntu Proot is a proven environment, not an architectural or
 
 The phone is an active development client. Local servers and agents can stop when Android kills Termux, battery policy suspends it, the application closes, or the phone powers off. Persistent deployments and event-driven background agents must run on approved hosted infrastructure in later phases.
 
+## Execution profiles and evidence status
+
+Environment-specific procedures are execution profiles, not universal requirements. The engineering destination remains fixed by the accepted gate, Canonical Architecture, safety constraints, acceptance criteria, and required evidence. The route may vary across devices, operating systems, AI tools, human operators, and infrastructure providers.
+
+For the actual environment, choose the safest and most effective route that preserves every invariant and produces equivalent verification evidence. Prefer the least-privilege viable mode. Do not carry the Ubuntu Proot sandbox workaround, an AI-specific workflow, or a provider-specific administrative step into another profile without evidence that its constraints require it.
+
+Use these scoped status labels:
+
+- `VERIFIED` — the profile and stated scope actually passed the required checks with observed evidence;
+- `SUPPORTED/TARGET` — expected to be viable but not yet fully proven by the relevant clean bootstrap and checks;
+- `UNSUPPORTED/BLOCKED` — known not to satisfy current requirements, or awaiting a safe documented resolution.
+
+Android + Termux + Ubuntu Proot is `VERIFIED` for the recorded B0/local scope. Its normal Codex sandbox route is `UNSUPPORTED/BLOCKED`, while the supervised trusted-repository workaround below is the proven profile. GitHub-hosted Ubuntu is separately `VERIFIED` for CI scope. Other workstations and operator/tool combinations remain `SUPPORTED/TARGET` until their own relevant evidence is observed. See [`PROJECT_STATE.md`](../../PROJECT_STATE.md) for the authoritative current status table.
+
 ## Environment separation
 
 Use separate configuration, credentials, identifiers, endpoints, databases, wallets, contracts, and evidence for:
@@ -76,7 +90,7 @@ If a normal Codex sandbox becomes compatible in a future environment, replace th
 
 Launch OpenCode from the repository root so it discovers `AGENTS.md` and `opencode.json`. Provider credentials are local configuration and must not be committed. OpenCode passing B0 does not authorize it to bypass repository, secret, or architecture guardrails.
 
-Codex, OpenCode, ChatGPT, other AI tools, and human operators are interchangeable execution clients. None may store the only copy of a decision, gate, recovery step, or verification result. Significant accepted state belongs in GitHub `main` and `PROJECT_STATE.md`.
+Codex, OpenCode, ChatGPT, other AI tools, and human operators are interchangeable execution clients. Their workflows may differ according to actual capabilities, but they must preserve the same guardrails and produce equivalent gate evidence. None may store the only copy of a decision, gate, recovery step, or verification result. Significant accepted state belongs in GitHub `main` and `PROJECT_STATE.md`.
 
 ## Replacement-device and provider recovery
 
