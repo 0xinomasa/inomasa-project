@@ -4,14 +4,16 @@
 
 Status: `VERIFIED — PASS WITH WORKAROUND`.
 
-Primary development environment:
+B0-proven development environment:
 
 - official Termux application on Android;
 - Ubuntu ARM64 through Proot Distro;
 - repository stored inside the Ubuntu filesystem, not Android shared storage;
 - Node.js 22 through NVM;
 - npm with the committed lockfile;
-- laptop retained as fallback.
+- laptop retained as a clean-clone takeover target.
+
+Android + Termux + Ubuntu Proot is a proven environment, not an architectural or repository requirement. A laptop/PC or another suitable workstation can take over by following [`PROJECT_STATE.md`](../../PROJECT_STATE.md), installing the committed Node/npm baseline, and passing the clean-clone checks. Do not promote a new environment to `VERIFIED` until its outputs are observed.
 
 The phone is an active development client. Local servers and agents can stop when Android kills Termux, battery policy suspends it, the application closes, or the phone powers off. Persistent deployments and event-driven background agents must run on approved hosted infrastructure in later phases.
 
@@ -73,6 +75,12 @@ If a normal Codex sandbox becomes compatible in a future environment, replace th
 ## OpenCode
 
 Launch OpenCode from the repository root so it discovers `AGENTS.md` and `opencode.json`. Provider credentials are local configuration and must not be committed. OpenCode passing B0 does not authorize it to bypass repository, secret, or architecture guardrails.
+
+Codex, OpenCode, ChatGPT, other AI tools, and human operators are interchangeable execution clients. None may store the only copy of a decision, gate, recovery step, or verification result. Significant accepted state belongs in GitHub `main` and `PROJECT_STATE.md`.
+
+## Replacement-device and provider recovery
+
+Use the clean-clone and recovery procedures in [`PROJECT_STATE.md`](../../PROJECT_STATE.md). Replacement devices must reconstruct dependencies from `package-lock.json`; database providers must be addressed through the generic PostgreSQL configuration and versioned migrations. Never transfer a credential by committing it, copying it into a tracked file, or placing it in chat.
 
 ## Next.js network-exposure gate
 
