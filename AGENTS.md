@@ -57,6 +57,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 - Do not use destructive Git/filesystem commands such as `git reset --hard`, forced pushes to `main`, or broad recursive deletion.
 - Do not weaken checks to make them pass.
+- Treat environment and operator procedures as scoped execution profiles, not universal commands. Choose the safest least-privilege route supported by the actual environment while preserving the same architecture constraints, safety rules, acceptance criteria, and required gate evidence.
+- A different route is acceptable only when it produces equivalent evidence. Label a profile `VERIFIED` only after its stated scope has actually passed; otherwise use `SUPPORTED/TARGET` or `UNSUPPORTED/BLOCKED` as defined in `PROJECT_STATE.md`.
 - With the Ubuntu Proot B0 workaround, `codex --sandbox danger-full-access` is allowed only from this trusted repository and under direct supervision. It is not a repository default and does not authorize access outside the task.
 - Never use `--dangerously-bypass-approvals-and-sandbox`.
 - The Android device is a development client, not a production server or persistent hosted-agent runtime.
