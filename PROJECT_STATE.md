@@ -13,14 +13,16 @@ This file is the concise repository-native entry point for a human or AI operato
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
 | Current corrective checkpoint | Engineering Continuity & Handoff baseline `92ac2e1312777472aab2f29a847e5c98e6e87e1a`; this file includes later continuity clarifications |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
-| Next authorized gate | **PRE-B4 Deployment & Network-Exposure Gate**; not started |
-| Deployment state | No Inomasa application runtime is authorized for network exposure |
+| Active work | **B4 — Deployment Foundation corrective continuation**; not complete and no B4 verdict issued |
+| Current blocking gate | `NEXT-SEC-2026-08`; protected Preview remains prohibited until the gate closes |
+| First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
+| Deployment state | No Inomasa application runtime reached `READY`; no successful network exposure exists |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
 
 ## Open mandatory gates
 
-- `NEXT-SEC-2026-08` — **OPEN**. Blocks PRE-B4 completion, B4 deployment, and every externally reachable Inomasa runtime. Closure requires current primary-source review and all evidence listed in [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md).
+- `NEXT-SEC-2026-08` — **OPEN**. Blocks PRE-B4 completion, B4 deployment, including protected Preview, and every externally reachable Inomasa runtime. On 2026-08-24 the [official Next.js notice](https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026) still scheduled a future fix, while the repository and [current npm stable release](https://www.npmjs.com/package/next) were both `16.3.2`; therefore no officially fixed supported stable release was yet available. Closure remains current-source-driven and requires every item in [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md); do not hardcode a future version or date as closure truth.
 - `PG-TLS-SEMANTICS-01` — **ACTIVE**. Blocks `pg` 9, `pg-connection-string` 3, or an equivalent TLS-semantics change until certificate and hostname verification are re-proven. It does not block the pinned B3 foundation.
 
 Do not infer that a newer version, provider dashboard message, or prior chat closes either gate. Gate status changes require committed evidence and an observed successful `main` CI run.
@@ -112,7 +114,7 @@ The expected proof is successful connection, migration observation, parameterize
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
 | Next.js | Local B2 application shell runtime | Selected engineering framework, subordinate to Canonical Architecture | Network exposure remains blocked by `NEXT-SEC-2026-08`. |
-| Vercel | Future deployment candidate | Not configured or authorized by B3 | Must not be assumed or started before the next gate. |
+| Vercel | Current B4 deployment candidate; project `inomasa` exists | Provider implementation only, not an architecture boundary | Project inspection on 2026-08-24 found Framework Preset unset (`framework: null`), Node project setting `24.x` (repository `engines` remains authoritative at `22.x`), and no Git integration. The first CLI deployment built Next.js successfully but Vercel then expected `public` and ended `ERROR`. Correct the Framework Preset to Next.js without deploying; do not create a fake `public` output or weaken the security gate. |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
 No Arc, Circle, wallet, x402, hosted-agent, production database, or production deployment integration exists at this checkpoint.
@@ -130,4 +132,11 @@ No Arc, Circle, wallet, x402, hosted-agent, production database, or production d
 
 ## Exact next step
 
-The next gate remains **PRE-B4 Deployment & Network-Exposure Gate**. Its first mandatory blocker is `NEXT-SEC-2026-08`. Continuity clarifications do not start or authorize PRE-B4 or B4.
+The active B4 correction remains blocked before protected Preview. Use this smallest safe sequence:
+
+1. Correct the existing Vercel project `inomasa` Framework Preset to **Next.js** without creating a deployment. Do not set an output directory to `public` and do not change application code to imitate a static site.
+2. Keep `NEXT-SEC-2026-08` open. When an officially fixed, supported stable Next.js release is actually available, repeat the primary-source review and satisfy the complete clean-install, audit, local runtime/render, build, and observed `main` CI evidence in the gate record.
+3. Before the next deployment, verify Vercel Authentication protects all Preview URLs and verify the deployment target is explicitly **Preview**, never Production.
+4. Only after the security gate closes, create one protected Preview from accepted GitHub `main`, prove unauthenticated access is denied and authorized access renders correctly, then record the B4 verdict.
+
+Do not begin B5 or add product features while completing this sequence.
