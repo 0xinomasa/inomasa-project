@@ -16,6 +16,10 @@ Production exposure, or B5 work.
 - Pull-request verification: run `32703957217`, completed successfully.
 - Accepted-`main` verification: run `32704062572`, `push/main`, completed
   successfully, including the isolated PostgreSQL migration and persistence proof.
+- B4 evidence acceptance: pull request `#7`, merge
+  `d2829c35e52fc59d8579e16d88956997cb79e681`.
+- B4 evidence `main` verification: run `32704891257`, `push/main`, completed
+  successfully, including the isolated PostgreSQL migration and persistence proof.
 - Local profile: Node `22.23.2`, npm `10.9.8`, clean `npm ci`, audit with zero
   vulnerabilities, lint, typecheck, 6/6 tests, production build, and production
   server HTTP `200` with the expected shell anchors.
