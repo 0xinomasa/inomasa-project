@@ -8,24 +8,27 @@ This file is the concise repository-native entry point for a human or AI operato
 | --- | --- |
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
-| Latest completed engineering gate | **B3 — Persistence Foundation: PASS WITH WORKAROUND** |
+| Latest completed engineering gate | **B3 — Persistence Foundation: PASS WITH WORKAROUND**; B4 remains active pending protected Preview proof |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
-| Current corrective checkpoint | Engineering Continuity & Handoff baseline `92ac2e1312777472aab2f29a847e5c98e6e87e1a`; this file includes later continuity clarifications |
+| Current corrective checkpoint | B4 provider correction observed on 2026-08-24: Vercel Framework Preset `Next.js`, Node `22.x`, and Vercel Authentication on all Previews |
+| B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
 | Active work | **B4 — Deployment Foundation corrective continuation**; not complete and no B4 verdict issued |
-| Current blocking gate | `NEXT-SEC-2026-08`; protected Preview remains prohibited until the gate closes |
+| Current blocking gate | None for the authorized B4 protected Preview; `NEXT-SEC-2026-08` is retired and obsolete |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
-| Deployment state | No Inomasa application runtime reached `READY`; no successful network exposure exists |
+| Deployment state | No Inomasa application runtime has reached `READY`; the next deployment must target protected Preview, never Production |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
 
 ## Open mandatory gates
 
-- `NEXT-SEC-2026-08` — **OPEN**. Blocks PRE-B4 completion, B4 deployment, including protected Preview, and every externally reachable Inomasa runtime. On 2026-08-24 the [official Next.js notice](https://nextjs.org/blog/upcoming-nextjs-security-release-august-2026) still scheduled a future fix, while the repository and [current npm stable release](https://www.npmjs.com/package/next) were both `16.3.2`; therefore no officially fixed supported stable release was yet available. Closure remains current-source-driven and requires every item in [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md); do not hardcode a future version or date as closure truth.
+- `NEXT-SEC-2026-08` — **RETIRED / OBSOLETE**. Retained only as lineage; it is not an active gate and must not be reopened by inference. See [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md).
 - `PG-TLS-SEMANTICS-01` — **ACTIVE**. Blocks `pg` 9, `pg-connection-string` 3, or an equivalent TLS-semantics change until certificate and hostname verification are re-proven. It does not block the pinned B3 foundation.
 
-Do not infer that a newer version, provider dashboard message, or prior chat closes either gate. Gate status changes require committed evidence and an observed successful `main` CI run.
+Do not infer changes to `PG-TLS-SEMANTICS-01` from a newer version, provider
+dashboard message, or prior chat. Its status changes require committed evidence and
+an observed successful `main` CI run.
 
 ## Durable continuity rules
 
@@ -113,8 +116,8 @@ The expected proof is successful connection, migration observation, parameterize
 | npm registry | Locked Node dependency retrieval | Package distribution only | `package-lock.json` is authoritative; do not change dependencies merely to work around a transient outage. |
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
-| Next.js | Local B2 application shell runtime | Selected engineering framework, subordinate to Canonical Architecture | Network exposure remains blocked by `NEXT-SEC-2026-08`. |
-| Vercel | Current B4 deployment candidate; project `inomasa` exists | Provider implementation only, not an architecture boundary | Project inspection on 2026-08-24 found Framework Preset unset (`framework: null`), Node project setting `24.x` (repository `engines` remains authoritative at `22.x`), and no Git integration. The first CLI deployment built Next.js successfully but Vercel then expected `public` and ended `ERROR`. Correct the Framework Preset to Next.js without deploying; do not create a fake `public` output or weaken the security gate. |
+| Next.js | B2 application shell runtime used by B4 Preview | Selected engineering framework, subordinate to Canonical Architecture | `NEXT-SEC-2026-08` is retired; any future security concern requires a new current-evidence gate. |
+| Vercel | Current B4 deployment provider; project `inomasa` exists | Provider implementation only, not an architecture boundary | On 2026-08-24 the Framework Preset was corrected from unset to `Next.js`, Node from `24.x` to `22.x`, and Vercel Authentication was observed for all Previews. The next deployment must explicitly target Preview and prove denied unauthenticated access plus authorized rendering. |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
 No Arc, Circle, wallet, x402, hosted-agent, production database, or production deployment integration exists at this checkpoint.
@@ -132,11 +135,16 @@ No Arc, Circle, wallet, x402, hosted-agent, production database, or production d
 
 ## Exact next step
 
-The active B4 correction remains blocked before protected Preview. Use this smallest safe sequence:
+The active B4 correction is ready for protected Preview proof. Use this smallest safe sequence:
 
-1. Correct the existing Vercel project `inomasa` Framework Preset to **Next.js** without creating a deployment. Do not set an output directory to `public` and do not change application code to imitate a static site.
-2. Keep `NEXT-SEC-2026-08` open. When an officially fixed, supported stable Next.js release is actually available, repeat the primary-source review and satisfy the complete clean-install, audit, local runtime/render, build, and observed `main` CI evidence in the gate record.
-3. Before the next deployment, verify Vercel Authentication protects all Preview URLs and verify the deployment target is explicitly **Preview**, never Production.
-4. Only after the security gate closes, create one protected Preview from accepted GitHub `main`, prove unauthenticated access is denied and authorized access renders correctly, then record the B4 verdict.
+1. Merge this state correction only after pull-request checks pass and observe the resulting `main` CI run.
+2. Create one deployment from accepted GitHub `main`, explicitly targeting **Preview**, never Production.
+3. Prove unauthenticated access is denied and authorized access renders correctly, then record the deployment identity, commit, target, protection evidence, and B4 verdict.
 
-Do not begin B5 or add product features while completing this sequence.
+The current Ubuntu ARM64 profile has no compatible Chrome/Chromium binary for
+`agent-browser`; local render evidence therefore used the production server's HTTP
+response and expected semantic HTML anchors. This is equivalent evidence for this
+static shell only and does not promote browser automation on this profile to
+`VERIFIED`.
+
+Do not begin B5, expose Production, or add product features while completing this sequence.
