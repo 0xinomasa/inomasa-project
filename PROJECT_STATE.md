@@ -11,7 +11,9 @@ This file is the concise repository-native entry point for a human or AI operato
 | Latest completed engineering gate | **B4 — Deployment Foundation: VERIFIED / PASS** |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
-| Current corrective checkpoint | B4 provider correction observed on 2026-08-24: Vercel Framework Preset `Next.js`, Node `22.x`, and Vercel Authentication on all Previews |
+| B4 acceptance evidence | Pull request `#7`, merge `d2829c35e52fc59d8579e16d88956997cb79e681` |
+| B4 accepted-main CI evidence | Engineering verification run `32704891257`, `push/main`, completed successfully, including PostgreSQL proof |
+| Current corrective checkpoint | B4 continuity synchronized after the protected Preview verdict; B5 remains not started |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
 | Active work | None; B4 is complete and B5 has not started |
