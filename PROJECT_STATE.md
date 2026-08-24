@@ -8,16 +8,18 @@ This file is the concise repository-native entry point for a human or AI operato
 | --- | --- |
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
-| Latest completed engineering gate | **B3 — Persistence Foundation: PASS WITH WORKAROUND**; B4 remains active pending protected Preview proof |
+| Latest completed engineering gate | **B4 — Deployment Foundation: VERIFIED / PASS** |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
 | Current corrective checkpoint | B4 provider correction observed on 2026-08-24: Vercel Framework Preset `Next.js`, Node `22.x`, and Vercel Authentication on all Previews |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
-| Active work | **B4 — Deployment Foundation corrective continuation**; not complete and no B4 verdict issued |
-| Current blocking gate | None for the authorized B4 protected Preview; `NEXT-SEC-2026-08` is retired and obsolete |
+| Active work | None; B4 is complete and B5 has not started |
+| Current blocking gate | No B4 blocker remains; `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
-| Deployment state | No Inomasa application runtime has reached `READY`; the next deployment must target protected Preview, never Production |
+| B4 protected Preview evidence | Vercel deployment `dpl_az1jRshRMZYn57RbFxsvkozLJZ2k` from accepted `main` commit `d75bcd5472f35f0cc962c6a420473957915153f6`; target `preview`, state `READY` |
+| Deployment protection evidence | Anonymous request redirected to Vercel SSO without the shell; authorized request rendered expected shell anchors; temporary automation bypass removed and Vercel Authentication remained enabled |
+| Deployment state | One protected Preview is `READY`; no Production deployment or authority was created |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
 
@@ -117,7 +119,7 @@ The expected proof is successful connection, migration observation, parameterize
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
 | Next.js | B2 application shell runtime used by B4 Preview | Selected engineering framework, subordinate to Canonical Architecture | `NEXT-SEC-2026-08` is retired; any future security concern requires a new current-evidence gate. |
-| Vercel | Current B4 deployment provider; project `inomasa` exists | Provider implementation only, not an architecture boundary | On 2026-08-24 the Framework Preset was corrected from unset to `Next.js`, Node from `24.x` to `22.x`, and Vercel Authentication was observed for all Previews. The next deployment must explicitly target Preview and prove denied unauthenticated access plus authorized rendering. |
+| Vercel | B4 deployment provider; project `inomasa` hosts one protected Preview | Provider implementation only, not an architecture boundary | Framework Preset `Next.js`, Node `22.x`, Vercel Authentication on all Previews, Git Fork Protection enabled, no Preview environment variables, and no remaining automation bypass after proof. See [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md). |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
 No Arc, Circle, wallet, x402, hosted-agent, production database, or production deployment integration exists at this checkpoint.
@@ -135,16 +137,8 @@ No Arc, Circle, wallet, x402, hosted-agent, production database, or production d
 
 ## Exact next step
 
-The active B4 correction is ready for protected Preview proof. Use this smallest safe sequence:
-
-1. Merge this state correction only after pull-request checks pass and observe the resulting `main` CI run.
-2. Create one deployment from accepted GitHub `main`, explicitly targeting **Preview**, never Production.
-3. Prove unauthenticated access is denied and authorized access renders correctly, then record the deployment identity, commit, target, protection evidence, and B4 verdict.
-
-The current Ubuntu ARM64 profile has no compatible Chrome/Chromium binary for
-`agent-browser`; local render evidence therefore used the production server's HTTP
-response and expected semantic HTML anchors. This is equivalent evidence for this
-static shell only and does not promote browser automation on this profile to
-`VERIFIED`.
-
-Do not begin B5, expose Production, or add product features while completing this sequence.
+B4 is complete. Do not begin B5 until a later explicit task authorizes its scope
+and acceptance criteria. Until then, preserve the protected Preview, keep
+Production unexposed, retain `PG-TLS-SEMANTICS-01`, and make no product, domain,
+authority, economic, wallet, settlement, evidence, agent, trust, risk, or capital
+implementation change.
