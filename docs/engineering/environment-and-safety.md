@@ -96,14 +96,6 @@ Codex, OpenCode, ChatGPT, other AI tools, and human operators are interchangeabl
 
 Use the clean-clone and recovery procedures in [`PROJECT_STATE.md`](../../PROJECT_STATE.md). Replacement devices must reconstruct dependencies from `package-lock.json`; database providers must be addressed through the generic PostgreSQL configuration and versioned migrations. Never transfer a credential by committing it, copying it into a tracked file, or placing it in chat.
 
-## Retired Next.js network-exposure gate
-
-`NEXT-SEC-2026-08` is retained as historical lineage but is retired and obsolete;
-it is not an active gate and does not block B4. This retirement does not authorize
-Production exposure or weaken environment separation. Evaluate any future Next.js
-security concern from current primary evidence and record a new gate when warranted
-rather than reopening the retired identifier. See [`security-gates.md`](security-gates.md).
-
 ## Network workaround
 
 The B0 Ubuntu environment required IPv4 for some downloads. Use `curl -4` only when ordinary network access fails; do not encode it into application behavior.

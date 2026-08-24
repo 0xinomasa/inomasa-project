@@ -13,7 +13,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
 | B4 acceptance evidence | Pull request `#7`, merge `d2829c35e52fc59d8579e16d88956997cb79e681` |
 | B4 accepted-main CI evidence | Engineering verification run `32704891257`, `push/main`, completed successfully, including PostgreSQL proof |
-| Current corrective checkpoint | B4 continuity synchronized after the protected Preview verdict; B5 remains not started |
+| Current corrective checkpoint | Post-B4 cleanup removes obsolete current-file lineage and records the protected engineering-alias decision; B5 remains not started |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
 | Active work | None; B4 is complete and B5 has not started |
@@ -27,7 +27,6 @@ The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitatio
 
 ## Open mandatory gates
 
-- `NEXT-SEC-2026-08` — **RETIRED / OBSOLETE**. Retained only as lineage; it is not an active gate and must not be reopened by inference. See [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md).
 - `PG-TLS-SEMANTICS-01` — **ACTIVE**. Blocks `pg` 9, `pg-connection-string` 3, or an equivalent TLS-semantics change until certificate and hostname verification are re-proven. It does not block the pinned B3 foundation.
 
 Do not infer changes to `PG-TLS-SEMANTICS-01` from a newer version, provider
@@ -120,8 +119,8 @@ The expected proof is successful connection, migration observation, parameterize
 | npm registry | Locked Node dependency retrieval | Package distribution only | `package-lock.json` is authoritative; do not change dependencies merely to work around a transient outage. |
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
-| Next.js | B2 application shell runtime used by B4 Preview | Selected engineering framework, subordinate to Canonical Architecture | `NEXT-SEC-2026-08` is retired; any future security concern requires a new current-evidence gate. |
-| Vercel | B4 deployment provider; project `inomasa` hosts one protected Preview | Provider implementation only, not an architecture boundary | Framework Preset `Next.js`, Node `22.x`, Vercel Authentication on all Previews, Git Fork Protection enabled, no Preview environment variables, and no remaining automation bypass after proof. See [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md). |
+| Next.js | B2 application shell runtime used by B4 Preview | Selected engineering framework, subordinate to Canonical Architecture | Any future security concern requires a new current-evidence gate. |
+| Vercel | B4 deployment provider; project `inomasa` hosts one protected Preview | Provider implementation only, not an architecture boundary | Framework Preset `Next.js`, Node `22.x`, Vercel Authentication on all Previews, Git Fork Protection enabled, no Preview environment variables, and no remaining automation bypass after proof. `inomasa.vercel.app` is reserved and verified but intentionally unaliased because the current plan cannot protect production domains; the protected Preview remains the sole engineering runtime URL. See [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md). |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
 No Arc, Circle, wallet, x402, hosted-agent, production database, or production deployment integration exists at this checkpoint.

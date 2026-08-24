@@ -98,9 +98,12 @@ npm run db:verify
 
 Run this only against an isolated development/test database. Clean reconstruction means creating an empty PostgreSQL database and running `npm run db:migrate`; manual dashboard schema changes are not authoritative. See [`docs/engineering/persistence-foundation.md`](docs/engineering/persistence-foundation.md).
 
-## Network-exposure security hold
+## Deployment foundation
 
-`NEXT-SEC-2026-08` is open. It does not block repository work, local application execution, or B3 database engineering, but it blocks B4 and every externally reachable Inomasa runtime. The release/version check is deliberately current-source-driven rather than hardcoded. See [`docs/engineering/security-gates.md`](docs/engineering/security-gates.md).
+B4 is `VERIFIED — PASS`. The B2 shell is available only through the protected
+Vercel Preview recorded in
+[`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md).
+No Production deployment or product behavior is authorized.
 
 ## Local environment
 

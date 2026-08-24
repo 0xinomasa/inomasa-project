@@ -44,9 +44,6 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Never change runtime, package manager, dependency strategy, or major tooling silently.
 - Keep the modular monolith deployable as one unit until an explicit architecture decision says otherwise.
 - Next.js is selected for the B2 web shell only. Do not infer that its route structure defines semantic domains or future service boundaries.
-- `NEXT-SEC-2026-08` is retired and obsolete. It is not an active gate and must not
-  be reopened by inference; any future security concern requires its own current,
-  evidence-based gate record.
 - `PG-TLS-SEMANTICS-01` blocks a `pg` 9, `pg-connection-string` 3, or equivalent PostgreSQL TLS-semantics change until current primary guidance is reviewed and certificate plus hostname verification is proven. Never suppress the warning by weakening TLS.
 
 ## Secrets and environment safety
