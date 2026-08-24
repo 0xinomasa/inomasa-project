@@ -96,9 +96,13 @@ Codex, OpenCode, ChatGPT, other AI tools, and human operators are interchangeabl
 
 Use the clean-clone and recovery procedures in [`PROJECT_STATE.md`](../../PROJECT_STATE.md). Replacement devices must reconstruct dependencies from `package-lock.json`; database providers must be addressed through the generic PostgreSQL configuration and versioned migrations. Never transfer a credential by committing it, copying it into a tracked file, or placing it in chat.
 
-## Next.js network-exposure gate
+## Retired Next.js network-exposure gate
 
-B3 development readiness is `PASS WITH SECURITY HOLD`. `NEXT-SEC-2026-08` blocks B4 and all hosted/private/public application exposure, but it does not block trusted local execution, migrations, or database connectivity. The durable gate and required re-verification are defined in [`security-gates.md`](security-gates.md). Do not encode an anticipated fixed version or publication date as architecture truth.
+`NEXT-SEC-2026-08` is retained as historical lineage but is retired and obsolete;
+it is not an active gate and does not block B4. This retirement does not authorize
+Production exposure or weaken environment separation. Evaluate any future Next.js
+security concern from current primary evidence and record a new gate when warranted
+rather than reopening the retired identifier. See [`security-gates.md`](security-gates.md).
 
 ## Network workaround
 
