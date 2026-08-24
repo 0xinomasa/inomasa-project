@@ -77,5 +77,23 @@ Protection and render proof:
 - Product implementation remains bounded to the B3 persistence foundation and B2
   structural shell; no business or economic workflow is implemented.
 - `PG-TLS-SEMANTICS-01` remains active and unchanged.
-- `NEXT-SEC-2026-08` remains retired and obsolete.
 - B5 has not started and requires a later explicit authorization.
+
+## Post-B4 engineering alias evaluation
+
+The short project domain `inomasa.vercel.app` is assigned to and verified for the
+Vercel project, but it has no deployment alias and returns
+`404 DEPLOYMENT_NOT_FOUND`.
+
+It was not assigned to the B4 artifact. The project uses
+[Vercel Standard Protection](https://vercel.com/docs/deployment-protection), which
+protects Preview and generated deployment URLs but excludes production domains.
+Enabling protection for all deployments was rejected by
+Vercel with status `428` because that protection scope is unavailable on the
+current plan. Assigning the short project production domain would therefore risk
+public exposure and conflict with the B4 no-Production boundary.
+
+The existing deployment remains `READY`, target `preview`, protected by Vercel
+Authentication, and the sole engineering runtime URL. No deployment, promotion,
+alias mutation, environment-variable change, or product work was performed during
+this evaluation.
