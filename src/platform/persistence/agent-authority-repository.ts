@@ -5,6 +5,7 @@ import {
   type StandingPurchaseAuthorityGrant,
 } from '../../modules/authority/model.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import { isInomasaEnvironment } from '../../shared/environment.ts';
 import type { PersistenceTransaction, PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
@@ -59,6 +60,7 @@ function asGrant(
     !row.authority_domain_business_id.startsWith('biz_') ||
     !row.allowed_counterparty_business_id.startsWith('biz_') ||
     !row.allowed_offer_id.startsWith('off_') ||
+    !isInomasaEnvironment(row.environment) ||
     row.delegation_allowed ||
     (row.status !== 'ACTIVE' && row.status !== 'EXPIRED' && row.status !== 'REVOKED')
   ) {
@@ -336,6 +338,15 @@ export class PostgresAgentAuthorityRepository {
     if (decision.outcome !== 'ALLOW') {
       throw new Error(`Agent purchase denied: ${decision.reason}.`);
     }
+    const evaluatedAtEpoch = Date.parse(input.evaluatedAt);
+    const executionExpiresAtEpoch = Date.parse(input.executionAuthorizationExpiresAt);
+    if (
+      !Number.isFinite(executionExpiresAtEpoch) ||
+      executionExpiresAtEpoch <= evaluatedAtEpoch ||
+      executionExpiresAtEpoch > Date.parse(grant.expiresAt)
+    ) {
+      throw new Error('Execution authorization expiry must be positive and bounded by the grant.');
+    }
 
     const allowance = await database
       .updateTable('standing_authority_grants')
@@ -384,7 +395,7 @@ export class PostgresAgentAuthorityRepository {
     const database = transaction.withSchema(applicationSchema);
     const existing = await database
       .selectFrom('execution_authorizations')
-      .select(['intent_id', 'obligation_id', 'state'])
+      .select(['control_version', 'grant_id', 'grant_version', 'intent_id', 'obligation_id', 'state'])
       .where('authorization_id', '=', input.authorizationId)
       .forUpdate()
       .executeTakeFirstOrThrow();
@@ -396,6 +407,27 @@ export class PostgresAgentAuthorityRepository {
     }
     if (existing.state !== 'ISSUED') {
       throw new Error(`Execution authorization cannot be consumed from state ${existing.state}.`);
+    }
+
+    const grant = await database
+      .selectFrom('standing_authority_grants')
+      .select(['expires_at', 'represented_business_id', 'status'])
+      .where('grant_id', '=', existing.grant_id)
+      .where('grant_version', '=', existing.grant_version)
+      .forUpdate()
+      .executeTakeFirstOrThrow();
+    if (grant.status !== 'ACTIVE' || grant.expires_at <= new Date(input.consumedAt)) {
+      throw new Error('Parent authority grant is no longer executable.');
+    }
+    const currentControl = await database
+      .selectFrom('business_controls')
+      .select('control_id')
+      .where('business_id', '=', grant.represented_business_id)
+      .where('control_version', '=', existing.control_version)
+      .where('status', '=', 'ACTIVE')
+      .executeTakeFirst();
+    if (currentControl === undefined) {
+      throw new Error('Execution authorization is stale for the current Business control version.');
     }
 
     const authorization = await database
@@ -426,17 +458,26 @@ export class PostgresAgentAuthorityRepository {
     readonly grantorPrincipalId: `usr_${string}`;
     readonly revokedAt: string;
   }): Promise<void> {
-    const result = await this.#persistence.databaseForApplication
-      .withSchema(applicationSchema)
-      .updateTable('standing_authority_grants')
-      .set({ revoked_at: input.revokedAt, status: 'REVOKED' })
-      .where('grant_id', '=', input.grantId)
-      .where('grantor_principal_id', '=', input.grantorPrincipalId)
-      .where('status', '=', 'ACTIVE')
-      .executeTakeFirstOrThrow();
-    if (result.numUpdatedRows !== 1n) {
-      throw new Error('Active authority grant was not revoked by its recorded grantor.');
-    }
+    await this.#persistence.transaction(async (transaction) => {
+      const database = transaction.withSchema(applicationSchema);
+      const result = await database
+        .updateTable('standing_authority_grants')
+        .set({ revoked_at: input.revokedAt, status: 'REVOKED' })
+        .where('grant_id', '=', input.grantId)
+        .where('grantor_principal_id', '=', input.grantorPrincipalId)
+        .where('status', '=', 'ACTIVE')
+        .executeTakeFirstOrThrow();
+      if (result.numUpdatedRows !== 1n) {
+        throw new Error('Active authority grant was not revoked by its recorded grantor.');
+      }
+
+      await database
+        .updateTable('execution_authorizations')
+        .set({ state: 'REVOKED' })
+        .where('grant_id', '=', input.grantId)
+        .where('state', '=', 'ISSUED')
+        .execute();
+    });
   }
 
   async listAgentAuthorities(): Promise<readonly AgentAuthoritySummary[]> {
