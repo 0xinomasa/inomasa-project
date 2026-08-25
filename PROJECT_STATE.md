@@ -9,8 +9,8 @@ This file is the concise repository-native entry point for a human or AI operato
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
 | Latest completed engineering gate | **B5 — Testnet Scope & System Realization Entry: VERIFIED / PASS** |
-| Active realization program | **Accelerated controlled Alpha vertical build: IN PROGRESS** |
-| Next proof checkpoint | **Circle Treasury provisioning + first reconciled Arc Testnet USDC settlement: NOT YET EXECUTED** |
+| Active realization program | **First integrated controlled Alpha vertical: VERIFIED / PASS; showcase hardening: IN PROGRESS** |
+| Next proof checkpoint | **Bounded Agent-triggered repeat service purchase with explicit authority and spend/counterparty limits: NOT YET EXECUTED** |
 | B5 result | Decision-and-continuity evidence only; selects Human-Controlled Business Entry as the first bounded realization candidate and adds no product behavior |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
@@ -19,16 +19,17 @@ This file is the concise repository-native entry point for a human or AI operato
 | B5 acceptance evidence | Pull request `#10`, merge `395dfd9aa105cdd95088ffd5602739d6c79cbba5` |
 | B5 accepted-main CI evidence | Engineering verification run `32794327644`, `push/main`, completed successfully, including PostgreSQL proof |
 | Alpha implementation checkpoint | Commit `724e96b175b2dbe08e24f70a5f98c8f8f95b800a`, pull request `#12`, merge `6ac8045db9bb762b529f145c589dced39b901cf1`; PR verification run `32822885262` and accepted-main run `32823716812` completed successfully with 19/19 tests, production build, and clean PostgreSQL migrations `001`-`004` |
+| First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
 | Current continuity checkpoint | B0-B5 lineage is preserved; the old B6/B7/B8 continuation is retired and the authorized Alpha compresses final R1-R5 causal logic into one vertical build |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
-| Product implementation boundary | Deterministic Business/economic kernel, Alpha domain migrations, local idempotent genesis/commerce preparation, Circle Developer-Controlled Wallet EOA adapter, exact Arc receipt verifier, settlement-gated snapshot service executor, and application dashboard are `IMPLEMENTED`; external Circle settlement and paid-service execution remain unproven |
-| Active work | Two common-control test Businesses (`Signal Forge`, `Ops Pilot`) and one `AUTHORIZED` 0.250000 USDC obligation are locally persisted with pending Circle Treasury bindings; first real Arc settlement is next |
-| Current blocking gate | External Arc proof requires an operator-configured Circle API key, registered entity secret, wallet set, and faucet funding; `PG-TLS-SEMANTICS-01` remains active for its scoped dependency change |
+| Product implementation boundary | Deterministic Business/economic kernel, Alpha migrations, Circle EOA Treasury adapter, exact Arc verifier, settlement/economic allocation, paid snapshot service, narrow Evidence, and application dashboard are `IMPLEMENTED`; the first integrated controlled Arc Testnet path is `VERIFIED` |
+| Active work | `Signal Forge` and `Ops Pilot` remain synthetic/common-control. Their first exact `0.250000` USDC service obligation is `SETTLED`; seller `REVENUE`, buyer `SERVICE_COST`, chain settlement Evidence, and service-delivery Evidence are persisted exactly once |
+| Current blocking gate | No blocker remains for the first integrated Alpha proof. `PG-TLS-SEMANTICS-01` remains active for its scoped dependency change; bounded Agent authority, x402 selection, and Capital remain later proof work |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
 | B4 protected Preview evidence | Vercel deployment `dpl_az1jRshRMZYn57RbFxsvkozLJZ2k` from accepted `main` commit `d75bcd5472f35f0cc962c6a420473957915153f6`; target `preview`, state `READY` |
 | Deployment protection evidence | Anonymous request redirected to Vercel SSO without the shell; authorized request rendered expected shell anchors; temporary automation bypass removed and Vercel Authentication remained enabled |
-| Alpha protected Preview evidence | Deployment `dpl_BHtdiU4F18tJYWnSa77BTAh9pT63` from implementation commit `724e96b175b2dbe08e24f70a5f98c8f8f95b800a`; target Preview, state `READY`, Node `22.x`, protected authenticated render verified, zero observed runtime warnings/errors |
-| Deployment state | The Alpha has a protected Preview `READY`; anonymous access still redirects to Vercel SSO, automation-bypass count is zero, and no Production deployment or authority was created |
+| Alpha protected Preview evidence | Deployment `dpl_6XgtJVdU9uQPUb3jMz7g7UnodGKZ`; target Preview, state `READY`, protected render displayed both Businesses, exact amount, tx hash, `COMPLETE`, `REVENUE`, and `SERVICE_COST`; anonymous access remained HTTP `302` to Vercel SSO |
+| Deployment state | The executed Alpha has a protected Preview `READY`; automation-bypass count and configured future-Preview environment-variable count were restored to zero after proof; no Production deployment or authority was created |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
 
@@ -49,6 +50,15 @@ an observed successful `main` CI run.
   application/runtime contract and did not fail B5. Before changing the workflow,
   review current primary GitHub Actions guidance and verify a focused CI update;
   do not mix that maintenance into product realization.
+
+- `CIRCLE-DNS-ANDROID-01` — **ACTIVE / ENVIRONMENT-SCOPED / NON-BLOCKING**.
+  The current ISP resolver intercepted `api.circle.com` as
+  `internetpositif.ioh.co.id`, causing correct TLS hostname verification to stop
+  Circle calls. DNSSEC-valid DNS-over-HTTPS returned Circle's Cloudflare
+  addresses and TLS verification then passed. A temporary exact host pin was used
+  only for the observed private-testnet operations and removed afterward. Never
+  disable TLS verification; prefer a trusted Private DNS/VPN or another clean
+  network before subsequent provider operations.
 
 ## Durable continuity rules
 
@@ -137,20 +147,19 @@ The expected proof is successful connection, migration observation, parameterize
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
 | Next.js | B2 application shell runtime used by B4 Preview | Selected engineering framework, subordinate to Canonical Architecture | Any future security concern requires a new current-evidence gate. |
-| Arc Testnet | Required Alpha chain and current real-execution target | Exact chain/asset registry is implemented; no transaction is yet proven | Chain ID `5042002`; testnet identifiers and facts must never be reused as mainnet authority. |
-| Circle Developer-Controlled Wallets | Selected Alpha EOA Treasury execution adapter | Platform-controlled external account profile behind an Inomasa port; not identity or Protected Treasury | API key, registered entity secret, and wallet-set ID stay outside Git; User-Controlled EOA remains the user-custody/exit reference path. |
+| Arc Testnet | Required Alpha chain and current real-execution target | Exact chain/asset registry and the first real USDC settlement are verified | Chain ID `5042002`; testnet identifiers and facts must never be reused as mainnet authority. |
+| Circle Developer-Controlled Wallets | Selected and verified Alpha EOA Treasury execution adapter | Two platform-controlled external account bindings are active behind an Inomasa port; neither is identity, user custody, or Protected Treasury | API key, registered entity secret, and wallet-set ID stay outside Git; User-Controlled EOA remains the user-custody/exit reference path. |
 | Vercel | Deployment provider; project `inomasa` hosts the protected Alpha Preview | Provider implementation only, not an architecture boundary | Framework Preset `Next.js`, Node `22.x`, Vercel Authentication on all Previews, Git Fork Protection enabled, no Preview environment variables, and no remaining automation bypass after proof. `inomasa.vercel.app` remains intentionally unaliased because the current plan cannot protect production domains. See [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md). |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
 The repository now contains an Arc Testnet registry and Circle
-Developer-Controlled Wallet EOA adapter. Local database state has two
-common-control test Businesses, pending Treasury bindings, and one replay-safe
-authorized service settlement. The paid snapshot executor is implemented but
-correctly refuses to run before a reconciled private-testnet settlement. Live Arc
-RPC connectivity is observed, but it is not settlement proof. No Circle credential
-is committed or configured in repository evidence, no Circle wallet or real Arc
-transaction is yet proven, x402/Gateway remains unselected, and no hosted Agent,
-Production database, or Production deployment exists.
+Developer-Controlled Wallet EOA adapter. Private-testnet database state has two
+common-control test Businesses, two active Circle Treasury bindings, one settled
+service obligation, exact seller/buyer economic entries, and two narrow Evidence
+facts. Circle and Arc independently report the same successful `0.250000` USDC
+transfer, and the settlement-gated service is complete. No credential is committed,
+x402/Gateway remains unselected, and no hosted Agent, Production database, or
+Production deployment exists.
 
 ## Recovery and takeover rules
 
@@ -165,12 +174,13 @@ Production database, or Production deployment exists.
 
 ## Exact next step
 
-Continue the controlled Alpha vertically. Securely configure the dedicated Circle
-Developer-Controlled Wallet testnet credentials outside Git, run the private-testnet
-migration/bootstrap, provision the two EOA Treasury accounts idempotently, faucet
-fund the payer, then execute and reconcile one small Arc Testnet USDC service
-settlement. Then run the settlement-gated snapshot service and verify the protected
-Preview before adding x402, background durability, Agent delegation, or Capital.
+Continue the controlled Alpha vertically from the verified commerce loop. Add the
+smallest explicit Agent authority record and deterministic policy that can trigger a
+second versioned service purchase only for the approved Business, offer,
+counterparty, per-transaction amount, cumulative test budget, and expiry. Preserve
+Human/platform revocation and common-control provenance. Do not add an LLM to the
+deterministic authorization or settlement path; intelligence may propose/trigger
+only within the persisted authority envelope.
 
 Do not begin Production/mainnet, public anonymous access, MIGRATE, unrestricted
 Agent authority, or Capital deployment. See

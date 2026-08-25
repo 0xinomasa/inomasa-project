@@ -41,7 +41,7 @@ async function main(): Promise<void> {
         destinationAddress: context.destinationAddress,
         idempotencyKey: context.idempotencyKey,
         referenceId: context.obligationId,
-        sourceProviderWalletId: context.sourceProviderWalletId,
+        sourceAddress: context.sourceAddress,
       });
     } catch (error) {
       await commerce.recordOutcomeUnknown({

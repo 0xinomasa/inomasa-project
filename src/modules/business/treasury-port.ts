@@ -18,7 +18,7 @@ export interface SubmitTreasuryTransferCommand {
   readonly destinationAddress: `0x${string}`;
   readonly idempotencyKey: string;
   readonly referenceId: string;
-  readonly sourceProviderWalletId: string;
+  readonly sourceAddress: `0x${string}`;
 }
 
 export interface SubmittedTreasuryTransfer {

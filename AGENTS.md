@@ -22,6 +22,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   explicit common-control provenance, logical Treasury bindings, commerce/settlement
   state models, a settlement-gated deterministic snapshot service, PostgreSQL
   schema, and a Circle Developer-Controlled Wallet adapter.
+- The first integrated controlled Alpha path is verified on Arc Testnet: two active
+  Circle EOA bindings, one exact `0.250000` USDC settlement, exact revenue/cost
+  allocation, paid snapshot delivery, narrow Evidence, and protected Preview
+  rendering. This remains synthetic/common-control test activity, not organic demand.
 - Circle Developer-Controlled EOA on Arc Testnet is the selected Alpha Treasury
   execution profile. It is platform-controlled external account infrastructure, not
   canonical identity, user custody, or an Inomasa Protected Treasury claim.
@@ -32,6 +36,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Continue by working vertically: Business -> control -> Treasury -> terms/obligation
   -> selected payment adapter -> Arc settlement -> exact economic state -> narrow
   Evidence -> durable bounded operation.
+- The next bounded iteration may add Agent-triggered operation only through an
+  explicit persisted authority envelope with Business, capability, counterparty,
+  amount/budget, expiry, and revocation constraints. The Agent/LLM must not own
+  deterministic authorization, settlement, or economic classification.
 - Production/mainnet, public anonymous access, unrestricted agent authority, MIGRATE,
   and capital deployment remain unauthorized.
 - Never present local state, synthetic/common-control demand, testnet USDC, pending
