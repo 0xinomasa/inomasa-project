@@ -11,8 +11,11 @@ dashboard that reports what is connected versus pending. The paid service execut
 is settlement-gated and produces a digest-bound live Arc network snapshot. The first
 controlled vertical is now verified: two Circle EOA Treasuries, one real `0.250000`
 Arc Testnet USDC service settlement, exact revenue/cost allocation, narrow Evidence,
-and application-visible paid delivery. The actors remain synthetic/common-control
-and the money remains testnet value.
+and application-visible paid delivery. A second real `0.100000` settlement is also
+verified after an operator-invoked Agent request passed a persisted, non-delegable
+Human grant with exact offer, counterparty, amount, cumulative allowance, expiry,
+and revocation controls. The Agent has no wallet custody or LLM authority. All
+actors remain synthetic/common-control and the money remains testnet value.
 
 B5 Testnet Scope & System Realization Entry remains `VERIFIED — PASS` historical
 lineage. The old standalone B6/B7/B8 sequence is retired. BUILD is now active through
@@ -144,6 +147,21 @@ may the paid service execute:
 ```bash
 npm run alpha:execute-service
 ```
+
+Prepare the bounded Agent-triggered repeat purchase idempotently, then pass its
+explicit settlement and service IDs to the same execution scripts:
+
+```bash
+npm run alpha:agent-purchase
+npm run alpha:submit-settlement -- set_arc_snapshot_agent_v1
+npm run alpha:reconcile-settlement -- set_arc_snapshot_agent_v1
+npm run alpha:execute-service -- svc_arc_snapshot_agent_v1 obl_arc_snapshot_agent_v1
+```
+
+The Agent command records a separate Agent principal and provider-of-record,
+Standing Grant, Action Intent, policy decision, Execution Authorization, and atomic
+allowance consumption before creating the economic obligation. Replays do not spend
+allowance twice or create a second obligation.
 
 The service fetches a current Arc network snapshot, stores the output and its
 SHA-256 digest, and records narrow delivery Evidence. It is deterministic software,
