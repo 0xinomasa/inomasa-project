@@ -2,7 +2,20 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current B3 baseline is a responsive Next.js application skeleton plus a provider-portable PostgreSQL persistence foundation. It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing product behavior. The only schema object is an explicitly non-domain engineering probe used to verify migration, write/read, and transaction behavior. It contains no wallet integration, authentication, smart contract, Arc integration, x402 implementation, business schema, hosted agent, evidence logic, capital logic, or production deployment configuration.
+The current implemented baseline is a responsive Next.js application skeleton, a
+provider-portable PostgreSQL persistence foundation, and a protected Vercel Preview.
+It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing
+product behavior. The only schema object is an explicitly non-domain engineering
+probe used to verify migration, write/read, and transaction behavior. It contains
+no wallet integration, authentication, smart contract, Arc integration, x402
+implementation, business schema, hosted agent, evidence logic, capital logic, or
+Production deployment configuration.
+
+B5 is limited to the repository-native Testnet Scope & System Realization Entry
+decision. It selects Human-Controlled Business Entry as the first bounded
+realization candidate while explicitly deferring code, schema, authentication,
+wallet/provider selection, and external configuration. See
+[`docs/engineering/b5-scope-and-system-realization-entry.md`](docs/engineering/b5-scope-and-system-realization-entry.md).
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
@@ -63,7 +76,7 @@ npm run build
 
 The Next.js build output is written to `.next/` and is intentionally ignored by Git.
 
-## B3 structure
+## Current structure
 
 ```text
 src/

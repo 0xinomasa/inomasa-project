@@ -7,7 +7,8 @@ Status: `VERIFIED — PASS` on 2026-08-24.
 B4 proves that the existing B2 shell can be built by the selected provider and
 served as a Vercel Authentication-protected Preview from accepted GitHub `main`.
 It introduces no product behavior, domain authority, database integration,
-Production exposure, or B5 work.
+Production exposure, or later-gate authority. B5 is authorized separately by its
+own scope contract.
 
 ## Accepted source and pre-deployment evidence
 
@@ -77,7 +78,9 @@ Protection and render proof:
 - Product implementation remains bounded to the B3 persistence foundation and B2
   structural shell; no business or economic workflow is implemented.
 - `PG-TLS-SEMANTICS-01` remains active and unchanged.
-- B5 has not started and requires a later explicit authorization.
+- B5 is separately active only as the decision-and-continuity gate defined in
+  [`b5-scope-and-system-realization-entry.md`](b5-scope-and-system-realization-entry.md).
+  It does not change the B4 deployment evidence or authorize B6.
 
 ## Post-B4 engineering alias evaluation
 
