@@ -18,6 +18,9 @@ import type { CircleDeveloperWalletConfig } from './config.ts';
 
 const circleTerminalFailureStates = new Set(['CANCELLED', 'DENIED', 'FAILED', 'STUCK']);
 
+type CircleWalletsClient = ReturnType<typeof initiateDeveloperControlledWalletsClient>;
+type CircleTransferInput = Parameters<CircleWalletsClient['createTransaction']>[0];
+
 function requireEvmAddress(value: string, label: string): `0x${string}` {
   if (!/^0x[0-9a-fA-F]{40}$/.test(value)) {
     throw new Error(`${label} returned by Circle is not a 20-byte EVM address.`);
@@ -25,6 +28,22 @@ function requireEvmAddress(value: string, label: string): `0x${string}` {
 
   return value as `0x${string}`;
 }
+
+export function buildCircleTransferInput(
+  command: SubmitTreasuryTransferCommand,
+): CircleTransferInput {
+  return {
+    amount: [formatUsdcAmount(command.amountMicroUsdc)],
+    blockchain: arcTestnet.circleBlockchain,
+    destinationAddress: command.destinationAddress,
+    fee: { config: { feeLevel: 'MEDIUM' }, type: 'level' },
+    idempotencyKey: command.idempotencyKey,
+    refId: command.referenceId,
+    tokenAddress: arcTestnet.usdc.address,
+    walletAddress: command.sourceAddress,
+  };
+}
+
 export class CircleDeveloperWalletAdapter implements TreasuryWalletPort {
   readonly #client;
   readonly #walletSetId: string;
@@ -81,15 +100,7 @@ export class CircleDeveloperWalletAdapter implements TreasuryWalletPort {
   async submitTransfer(
     command: SubmitTreasuryTransferCommand,
   ): Promise<SubmittedTreasuryTransfer> {
-    const response = await this.#client.createTransaction({
-      amount: [formatUsdcAmount(command.amountMicroUsdc)],
-      destinationAddress: command.destinationAddress,
-      fee: { config: { feeLevel: 'MEDIUM' }, type: 'level' },
-      idempotencyKey: command.idempotencyKey,
-      refId: command.referenceId,
-      tokenAddress: arcTestnet.usdc.address,
-      walletId: command.sourceProviderWalletId,
-    });
+    const response = await this.#client.createTransaction(buildCircleTransferInput(command));
     const transactionId = response.data?.id;
 
     if (transactionId === undefined || transactionId.length === 0) {
