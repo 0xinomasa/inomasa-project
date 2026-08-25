@@ -280,7 +280,10 @@ runtime or x402 machine-payment exchange.
   commands returned `ALREADY_COMPLETE` without a second payment or delivery;
 - local verification: lint, typecheck, 28/28 tests, production build, migrations
   `001`-`006`, database write/read and rollback proof, and zero npm audit findings;
-- PR verification: GitHub Actions run `32838374285`, successful;
+- implementation-head verification: GitHub Actions run `32838374285`, successful;
+- final PR verification: run `32839024137`, successful; merge
+  `8d60744ec7c330a0403ef4787bc21634fbf2ed01`; accepted-main run
+  `32839154514`, successful;
 - protected Preview: `dpl_2QPTA8bHtcK8BSzbw6PhzSN132Nu`, target Preview,
   `READY`; anonymous access returned HTTP `302` to Vercel SSO, protected render
   exposed the exact x402 state, protected API repeated the `402`/`200` header
