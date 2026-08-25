@@ -12,6 +12,7 @@
     "clean": "node scripts/clean.mjs",
     "dev": "next dev",
     "alpha:bootstrap": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-bootstrap.ts",
+    "alpha:agent-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-agent-purchase.ts",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",
     "alpha:prepare-commerce": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-prepare-commerce.ts",
     "alpha:submit-settlement": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-submit-settlement.ts",

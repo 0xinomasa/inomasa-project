@@ -1,12 +1,25 @@
 import { alphaBusinessTemplates } from '../../modules/business/templates.ts';
 import { arcTestnet } from '../../platform/arc/config.ts';
 import { readDatabaseConnectionConfig } from '../../platform/persistence/config.ts';
+import { PostgresAgentAuthorityRepository } from '../../platform/persistence/agent-authority-repository.ts';
 import { PostgresAlphaBusinessRepository } from '../../platform/persistence/alpha-business-repository.ts';
 import { PostgresAlphaCommerceRepository } from '../../platform/persistence/alpha-commerce-repository.ts';
 import { PostgresPersistence } from '../../platform/persistence/database.ts';
 import { PostgresAlphaServiceRepository } from '../../platform/persistence/alpha-service-repository.ts';
 
 export interface AlphaDashboard {
+  readonly agentAuthorities: readonly {
+    readonly agentPrincipalId: string;
+    readonly allowanceConsumedMicroUsdc: string;
+    readonly allowanceTotalMicroUsdc: string;
+    readonly allowedCounterpartyBusinessId: string;
+    readonly allowedOfferId: string;
+    readonly expiresAt: Date;
+    readonly grantId: string;
+    readonly grantStatus: string;
+    readonly providerOfRecordPrincipalId: string;
+    readonly runtimeClass: string;
+  }[];
   readonly businesses: readonly {
     readonly actorClassification: string;
     readonly address: string | null;
@@ -95,6 +108,7 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
   if (!hasRuntimeDatabaseConfiguration()) {
     return {
       ...base,
+      agentAuthorities: [],
       businesses: [],
       commerce: [],
       economicEntries: [],
@@ -108,9 +122,11 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
   try {
     persistence = new PostgresPersistence(readDatabaseConnectionConfig('runtime'));
     const businessRepository = new PostgresAlphaBusinessRepository(persistence);
+    const authorityRepository = new PostgresAgentAuthorityRepository(persistence);
     const commerceRepository = new PostgresAlphaCommerceRepository(persistence);
     const serviceRepository = new PostgresAlphaServiceRepository(persistence);
-    const [businesses, commerce, economicEntries, evidence, serviceDeliveries] = await Promise.all([
+    const [agentAuthorities, businesses, commerce, economicEntries, evidence, serviceDeliveries] = await Promise.all([
+      authorityRepository.listAgentAuthorities(),
       businessRepository.listBusinesses(),
       commerceRepository.listCommerce(),
       commerceRepository.listEconomicEntries(),
@@ -119,6 +135,7 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
     ]);
     return {
       ...base,
+      agentAuthorities,
       businesses,
       commerce,
       economicEntries,
@@ -129,6 +146,7 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
   } catch {
     return {
       ...base,
+      agentAuthorities: [],
       businesses: [],
       commerce: [],
       economicEntries: [],

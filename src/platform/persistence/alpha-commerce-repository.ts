@@ -1,7 +1,7 @@
 import type { EconomicObligation, ServiceOffer, SettlementOperation } from '../../modules/commerce/model.ts';
 import type { TreasuryTransferOutcome } from '../../modules/business/treasury-port.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
-import type { PostgresPersistence } from './database.ts';
+import type { PersistenceTransaction, PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
 export interface AlphaSettlementExecutionContext {
@@ -64,11 +64,14 @@ export class PostgresAlphaCommerceRepository {
     this.#persistence = persistence;
   }
 
-  async prepareCommerce(input: {
-    readonly obligation: EconomicObligation;
-    readonly offer: ServiceOffer;
-    readonly settlement: SettlementOperation;
-  }): Promise<{ readonly created: boolean }> {
+  async prepareCommerce(
+    input: {
+      readonly obligation: EconomicObligation;
+      readonly offer: ServiceOffer;
+      readonly settlement: SettlementOperation;
+    },
+    transaction?: PersistenceTransaction,
+  ): Promise<{ readonly created: boolean }> {
     if (
       input.obligation.offerId !== input.offer.offerId ||
       input.settlement.obligationId !== input.obligation.obligationId ||
@@ -77,8 +80,13 @@ export class PostgresAlphaCommerceRepository {
       throw new Error('Offer, obligation, and settlement do not form one economic commitment.');
     }
 
-    return this.#persistence.transaction(async (transaction) => {
-      const database = transaction.withSchema(applicationSchema);
+    if (transaction === undefined) {
+      return this.#persistence.transaction((activeTransaction) =>
+        this.prepareCommerce(input, activeTransaction),
+      );
+    }
+
+    const database = transaction.withSchema(applicationSchema);
 
       await database
         .insertInto('service_offers')
@@ -122,9 +130,12 @@ export class PostgresAlphaCommerceRepository {
           asset: input.obligation.asset,
           buyer_business_id: input.obligation.buyerBusinessId,
           environment: input.obligation.environment,
+          execution_authorization_id: input.obligation.executionAuthorizationId ?? null,
           obligation_id: input.obligation.obligationId,
           offer_id: input.obligation.offerId,
           provenance: input.obligation.provenance,
+          represented_business_id: input.obligation.representedBusinessId ?? null,
+          requester_principal_id: input.obligation.requesterPrincipalId ?? null,
           seller_business_id: input.obligation.sellerBusinessId,
           settled_at: null,
           state: input.obligation.state,
@@ -141,8 +152,11 @@ export class PostgresAlphaCommerceRepository {
           'asset',
           'buyer_business_id',
           'environment',
+          'execution_authorization_id',
           'offer_id',
           'provenance',
+          'represented_business_id',
+          'requester_principal_id',
           'seller_business_id',
           'terms_version',
         ])
@@ -153,8 +167,14 @@ export class PostgresAlphaCommerceRepository {
         storedObligation.asset !== input.obligation.asset ||
         storedObligation.buyer_business_id !== input.obligation.buyerBusinessId ||
         storedObligation.environment !== input.obligation.environment ||
+        storedObligation.execution_authorization_id !==
+          (input.obligation.executionAuthorizationId ?? null) ||
         storedObligation.offer_id !== input.obligation.offerId ||
         storedObligation.provenance !== input.obligation.provenance ||
+        storedObligation.represented_business_id !==
+          (input.obligation.representedBusinessId ?? null) ||
+        storedObligation.requester_principal_id !==
+          (input.obligation.requesterPrincipalId ?? null) ||
         storedObligation.seller_business_id !== input.obligation.sellerBusinessId ||
         storedObligation.terms_version !== input.obligation.termsVersion
       ) {
@@ -203,8 +223,7 @@ export class PostgresAlphaCommerceRepository {
         throw new Error('Settlement ID already exists with different execution semantics.');
       }
 
-      return { created: obligation !== undefined };
-    });
+    return { created: obligation !== undefined };
   }
 
   async getSettlementExecutionContext(

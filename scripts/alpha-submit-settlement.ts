@@ -4,7 +4,9 @@ import { readDatabaseConnectionConfig } from '../src/platform/persistence/config
 import { PostgresAlphaCommerceRepository } from '../src/platform/persistence/alpha-commerce-repository.ts';
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 
-const settlementId = 'set_arc_snapshot_v1' as const;
+const settlementArgument = process.argv[2] ?? 'set_arc_snapshot_v1';
+if (!settlementArgument.startsWith('set_')) throw new Error('Settlement ID must start with set_.');
+const settlementId = settlementArgument as `set_${string}`;
 
 async function main(): Promise<void> {
   const databaseConfig = readDatabaseConnectionConfig('runtime');

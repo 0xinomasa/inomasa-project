@@ -30,6 +30,81 @@ interface PrincipalTable {
   readonly principal_kind: string;
 }
 
+interface AgentRegistrationTable {
+  readonly agent_principal_id: string;
+  readonly created_at: Generated<Date>;
+  readonly provider_of_record_principal_id: string;
+  readonly runtime_class: string;
+  readonly software_version: string;
+  readonly status: string;
+}
+
+interface StandingAuthorityGrantTable {
+  readonly action_type: string;
+  readonly allowance_consumed_micro_usdc: string;
+  readonly allowance_total_micro_usdc: string;
+  readonly allowed_counterparty_business_id: string;
+  readonly allowed_offer_id: string;
+  readonly asset: string;
+  readonly authority_domain_business_id: string;
+  readonly control_version: number;
+  readonly created_at: Generated<Date>;
+  readonly delegation_allowed: boolean;
+  readonly environment: string;
+  readonly expires_at: Timestamp;
+  readonly grantee_principal_id: string;
+  readonly grant_id: string;
+  readonly grant_version: number;
+  readonly grantor_principal_id: string;
+  readonly max_per_action_micro_usdc: string;
+  readonly represented_business_id: string;
+  readonly revoked_at: Timestamp | null;
+  readonly status: string;
+  readonly valid_from: Timestamp;
+}
+
+interface ActionIntentTable {
+  readonly action_type: string;
+  readonly amount_micro_usdc: string;
+  readonly asset: string;
+  readonly authority_domain_business_id: string;
+  readonly counterparty_business_id: string;
+  readonly grant_id: string;
+  readonly intent_id: string;
+  readonly offer_id: string;
+  readonly purpose: string;
+  readonly represented_business_id: string;
+  readonly requested_at: Timestamp;
+  readonly requester_principal_id: string;
+  readonly state: string;
+}
+
+interface AuthorityPolicyDecisionTable {
+  readonly decided_at: Timestamp;
+  readonly decision_id: string;
+  readonly grant_id: string;
+  readonly grant_version: number;
+  readonly intent_id: string;
+  readonly outcome: string;
+  readonly policy_version: number;
+  readonly reason: string;
+}
+
+interface ExecutionAuthorizationTable {
+  readonly authorization_id: string;
+  readonly consumed_at: Timestamp | null;
+  readonly control_version: number;
+  readonly decision_id: string;
+  readonly expires_at: Timestamp;
+  readonly grant_id: string;
+  readonly grant_version: number;
+  readonly intent_id: string;
+  readonly issued_at: Timestamp;
+  readonly obligation_id: string | null;
+  readonly policy_version: number;
+  readonly state: string;
+}
+
 interface GenesisRequestTable {
   readonly consumed_at: Timestamp | null;
   readonly created_at: Generated<Date>;
@@ -125,9 +200,12 @@ interface ObligationTable {
   readonly buyer_business_id: string;
   readonly created_at: Generated<Date>;
   readonly environment: string;
+  readonly execution_authorization_id: string | null;
   readonly obligation_id: string;
   readonly offer_id: string;
   readonly provenance: string;
+  readonly represented_business_id: string | null;
+  readonly requester_principal_id: string | null;
   readonly seller_business_id: string;
   readonly settled_at: Timestamp | null;
   readonly state: string;
@@ -180,11 +258,15 @@ interface EvidenceFactTable {
 }
 
 export interface PersistenceDatabase {
+  readonly action_intents: ActionIntentTable;
+  readonly agent_registrations: AgentRegistrationTable;
+  readonly authority_policy_decisions: AuthorityPolicyDecisionTable;
   readonly business_controls: BusinessControlTable;
   readonly business_events: BusinessEventTable;
   readonly businesses: BusinessTable;
   readonly economic_entries: EconomicEntryTable;
   readonly evidence_facts: EvidenceFactTable;
+  readonly execution_authorizations: ExecutionAuthorizationTable;
   readonly genesis_requests: GenesisRequestTable;
   readonly obligations: ObligationTable;
   readonly principals: PrincipalTable;
@@ -192,6 +274,7 @@ export interface PersistenceDatabase {
   readonly service_offers: ServiceOfferTable;
   readonly service_executions: ServiceExecutionTable;
   readonly settlement_operations: SettlementOperationTable;
+  readonly standing_authority_grants: StandingAuthorityGrantTable;
   readonly treasury_bindings: TreasuryBindingTable;
 }
 
