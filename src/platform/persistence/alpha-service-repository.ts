@@ -8,7 +8,9 @@ export interface AlphaServiceDeliverySummary {
   readonly consumerBusinessId: string;
   readonly executionId: string;
   readonly obligationId: string;
+  readonly output: unknown;
   readonly outputSha256: string;
+  readonly provenance: string;
   readonly providerBusinessId: string;
   readonly sourceReference: string;
   readonly state: string;
@@ -171,7 +173,9 @@ export class PostgresAlphaServiceRepository {
         'consumer_business_id as consumerBusinessId',
         'execution_id as executionId',
         'obligation_id as obligationId',
+        'output',
         'output_sha256 as outputSha256',
+        'provenance',
         'provider_business_id as providerBusinessId',
         'source_reference as sourceReference',
         'state',

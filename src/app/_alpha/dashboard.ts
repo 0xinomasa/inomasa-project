@@ -5,6 +5,7 @@ import { PostgresAgentAuthorityRepository } from '../../platform/persistence/age
 import { PostgresAlphaBusinessRepository } from '../../platform/persistence/alpha-business-repository.ts';
 import { PostgresAlphaCommerceRepository } from '../../platform/persistence/alpha-commerce-repository.ts';
 import { PostgresPersistence } from '../../platform/persistence/database.ts';
+import { PostgresGatewayX402Repository } from '../../platform/persistence/gateway-x402-repository.ts';
 import { PostgresAlphaServiceRepository } from '../../platform/persistence/alpha-service-repository.ts';
 
 export interface AlphaDashboard {
@@ -35,10 +36,18 @@ export interface AlphaDashboard {
     readonly buyerBusinessId: string;
     readonly obligationId: string;
     readonly provenance: string;
+    readonly provider: string | null;
+    readonly providerTransactionId: string | null;
     readonly sellerBusinessId: string;
     readonly settlementId: string | null;
     readonly settlementState: string | null;
     readonly transactionHash: string | null;
+  }[];
+  readonly gatewayFunding: readonly {
+    readonly amountMicroUsdc: string;
+    readonly businessId: string;
+    readonly fundingId: string;
+    readonly state: string;
   }[];
   readonly economicEntries: readonly {
     readonly amountMicroUsdc: string;
@@ -73,12 +82,23 @@ export interface AlphaDashboard {
     readonly consumerBusinessId: string;
     readonly executionId: string;
     readonly obligationId: string;
+    readonly output: unknown;
     readonly outputSha256: string;
+    readonly provenance: string;
     readonly providerBusinessId: string;
     readonly sourceReference: string;
     readonly state: string;
   }[];
   readonly templates: typeof alphaBusinessTemplates;
+  readonly x402Payments: readonly {
+    readonly amountMicroUsdc: string;
+    readonly network: string;
+    readonly paymentId: string;
+    readonly providerState: string | null;
+    readonly providerTransactionId: string | null;
+    readonly scheme: string;
+    readonly state: string;
+  }[];
 }
 
 function hasRuntimeDatabaseConfiguration(): boolean {
@@ -113,8 +133,10 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
       commerce: [],
       economicEntries: [],
       evidence: [],
+      gatewayFunding: [],
       persistence: 'NOT_CONFIGURED',
       serviceDeliveries: [],
+      x402Payments: [],
     };
   }
 
@@ -125,13 +147,25 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
     const authorityRepository = new PostgresAgentAuthorityRepository(persistence);
     const commerceRepository = new PostgresAlphaCommerceRepository(persistence);
     const serviceRepository = new PostgresAlphaServiceRepository(persistence);
-    const [agentAuthorities, businesses, commerce, economicEntries, evidence, serviceDeliveries] = await Promise.all([
+    const gatewayRepository = new PostgresGatewayX402Repository(persistence);
+    const [
+      agentAuthorities,
+      businesses,
+      commerce,
+      economicEntries,
+      evidence,
+      gatewayFunding,
+      serviceDeliveries,
+      x402Payments,
+    ] = await Promise.all([
       authorityRepository.listAgentAuthorities(),
       businessRepository.listBusinesses(),
       commerceRepository.listCommerce(),
       commerceRepository.listEconomicEntries(),
       commerceRepository.listEvidenceFacts(),
+      gatewayRepository.listFunding(),
       serviceRepository.listServiceDeliveries(),
+      gatewayRepository.listPayments(),
     ]);
     return {
       ...base,
@@ -140,8 +174,10 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
       commerce,
       economicEntries,
       evidence,
+      gatewayFunding,
       persistence: 'CONNECTED',
       serviceDeliveries,
+      x402Payments,
     };
   } catch {
     return {
@@ -151,8 +187,10 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
       commerce: [],
       economicEntries: [],
       evidence: [],
+      gatewayFunding: [],
       persistence: 'UNAVAILABLE',
       serviceDeliveries: [],
+      x402Payments: [],
     };
   } finally {
     await persistence?.close();

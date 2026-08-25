@@ -34,19 +34,25 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Circle Developer-Controlled EOA on Arc Testnet is the selected Alpha Treasury
   execution profile. It is platform-controlled external account infrastructure, not
   canonical identity, user custody, or an Inomasa Protected Treasury claim.
-- Gateway/Nanopayments and the exact x402 adapter are not selected yet. Do not hardcode
-  Gateway as the Alpha payment path merely because the selected EOA is compatible.
+- Circle Gateway/Nanopayments with x402 v2 `exact` is the selected and verified
+  Alpha machine-payment rail. It uses the existing Circle EOA, a one-time USDC
+  deposit, Circle Signing API EIP-712 signatures, the Gateway facilitator, and a
+  provider-reported per-payment receipt. It does not create a direct per-payment
+  Arc transaction hash and must not be described as one.
 - B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
 - The Engineering Continuity & Handoff checkpoint follows B3 and adds repository-native takeover evidence only. It is not a product phase.
 - Continue by working vertically: Business -> control -> Treasury -> terms/obligation
   -> selected payment adapter -> Arc settlement -> exact economic state -> narrow
   Evidence -> durable bounded operation.
-- Continue next with the smallest selected x402-compatible payment realization.
-  Preserve the existing authority, obligation, reconciliation, exact accounting,
-  replay, and provenance guarantees. A Gateway/Nanopayments spike is not VERIFIED
-  until its EOA deposit/signing/facilitator/settlement path is observed end to end.
-- Production/mainnet, public anonymous access, unrestricted agent authority, MIGRATE,
-  and capital deployment remain unauthorized.
+- The next Showcase checkpoint is the smallest honest Capital loop over the now
+  credible commerce/Evidence path. Preserve provider-attributed risk decisions,
+  deterministic terms/authorization/execution, `CAPITAL` classification, and
+  later-use/outcome evidence. Capital must not become revenue, a universal score,
+  automatic entitlement, or silent platform balance-sheet risk.
+- Production/mainnet, public anonymous access, unrestricted agent authority,
+  MIGRATE, and Production/public Capital exposure remain unauthorized. The next
+  bounded common-control Arc Testnet Capital proof is authorized by the execution
+  mandate and must preserve the constraints above.
 - Never present local state, synthetic/common-control demand, testnet USDC, pending
   provider state, or an unexecuted adapter as real finalized Arc commerce.
 

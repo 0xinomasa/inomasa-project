@@ -120,6 +120,35 @@ test('an outcome-unknown settlement can later reconcile to the observed Arc fact
   assert.equal(recovered.state, 'COMPLETE');
 });
 
+test('Gateway x402 remains an explicit settlement provider instead of impersonating a direct transfer', () => {
+  const provider = business('signal-forge', 'biz_signal_forge');
+  const buyer = business('ops-pilot', 'biz_ops_pilot');
+  const offer: ServiceOffer = {
+    capabilityId: 'arc-market-snapshot',
+    description: 'Gateway-priced Arc snapshot',
+    offerId: 'off_gateway_snapshot',
+    priceMicroUsdc: parseUsdcAmount('0.01'),
+    providerBusinessId: provider.businessId,
+    status: 'ACTIVE',
+    termsVersion: 1,
+  };
+  const obligation = acceptServiceOffer({
+    buyer,
+    offer,
+    obligationId: 'obl_gateway_snapshot',
+    provider,
+  });
+  const settlement = authorizeSettlement({
+    idempotencyKey: '9d837cd3-ff97-477d-9dd3-960edda16bcb',
+    obligation,
+    provider: 'CIRCLE_GATEWAY_X402',
+    settlementId: 'set_gateway_snapshot',
+  });
+
+  assert.equal(settlement.provider, 'CIRCLE_GATEWAY_X402');
+  assert.equal(settlement.transactionHash, undefined);
+});
+
 test('self-dealing cannot be hidden as an ordinary Alpha service obligation', () => {
   const provider = business('signal-forge', 'biz_signal_forge');
   const offer: ServiceOffer = {

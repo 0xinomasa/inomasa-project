@@ -43,7 +43,7 @@ export interface SettlementOperation {
   readonly chainId: 5042002;
   readonly idempotencyKey: string;
   readonly obligationId: EconomicObligation['obligationId'];
-  readonly provider: 'CIRCLE_DEVELOPER_WALLETS';
+  readonly provider: 'CIRCLE_DEVELOPER_WALLETS' | 'CIRCLE_GATEWAY_X402';
   readonly providerTransactionId?: string;
   readonly settlementId: `set_${string}`;
   readonly state: SettlementState;
@@ -108,6 +108,7 @@ export function acceptServiceOffer(input: {
 export function authorizeSettlement(input: {
   readonly idempotencyKey: string;
   readonly obligation: EconomicObligation;
+  readonly provider?: SettlementOperation['provider'];
   readonly settlementId: `set_${string}`;
 }): SettlementOperation {
   if (input.obligation.state !== 'OPEN') {
@@ -124,7 +125,7 @@ export function authorizeSettlement(input: {
     chainId: 5042002,
     idempotencyKey: input.idempotencyKey,
     obligationId: input.obligation.obligationId,
-    provider: 'CIRCLE_DEVELOPER_WALLETS',
+    provider: input.provider ?? 'CIRCLE_DEVELOPER_WALLETS',
     settlementId: input.settlementId,
     state: 'AUTHORIZED',
   };

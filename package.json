@@ -14,8 +14,11 @@
     "alpha:bootstrap": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-bootstrap.ts",
     "alpha:agent-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-agent-purchase.ts",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",
+    "alpha:gateway-fund": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-gateway-fund.ts",
     "alpha:prepare-commerce": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-prepare-commerce.ts",
     "alpha:submit-settlement": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-submit-settlement.ts",
+    "alpha:x402-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-purchase.ts",
+    "alpha:x402-http-proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-http-proof.ts",
     "alpha:reconcile-settlement": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-reconcile-settlement.ts",
     "alpha:wallets": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/circle-provision-alpha-wallets.ts",
     "db:migrate": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/db-migrate.ts",
@@ -40,10 +43,14 @@
   },
   "dependencies": {
     "@circle-fin/developer-controlled-wallets": "10.8.0",
+    "@circle-fin/x402-batching": "3.4.0",
+    "@x402/core": "2.23.0",
+    "@x402/evm": "2.23.0",
     "kysely": "0.29.5",
     "next": "16.3.2",
     "pg": "8.23.0",
     "react": "19.2.8",
-    "react-dom": "19.2.8"
+    "react-dom": "19.2.8",
+    "viem": "2.55.19"
   }
 }

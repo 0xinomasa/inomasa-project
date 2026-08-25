@@ -17,6 +17,7 @@ export default async function Home() {
   const dashboard = await loadAlphaDashboard();
   const latestCommerce = dashboard.commerce[0];
   const latestDelivery = dashboard.serviceDeliveries[0];
+  const latestX402 = dashboard.x402Payments[0];
 
   return (
     <main>
@@ -70,6 +71,10 @@ export default async function Home() {
             <div>
               <dt>Service output</dt>
               <dd>{latestDelivery?.state ?? 'PENDING SETTLEMENT'}</dd>
+            </div>
+            <div>
+              <dt>Gateway x402</dt>
+              <dd>{latestX402?.state ?? 'NOT STARTED'}</dd>
             </div>
           </dl>
         </aside>
@@ -141,8 +146,8 @@ export default async function Home() {
           </div>
           <p>
             The Alpha records terms and authorization before a provider transfer. Revenue and
-            service cost remain absent until Circle state is reconciled against the exact Arc
-            receipt and USDC transfer log.
+            service cost remain absent until Circle state is reconciled against either an exact
+            Arc transfer receipt or a verified Gateway x402 settlement.
           </p>
         </div>
 
@@ -165,18 +170,24 @@ export default async function Home() {
                   <div><dt>Seller</dt><dd>{activity.sellerBusinessId}</dd></div>
                   <div><dt>Settlement</dt><dd>{activity.settlementState ?? 'NOT CREATED'}</dd></div>
                   <div>
-                    <dt>Arc transaction</dt>
+                    <dt>Settlement rail</dt>
+                    <dd>{activity.provider?.replaceAll('_', ' ') ?? 'NOT SELECTED'}</dd>
+                  </div>
+                  <div>
+                    <dt>Settlement proof</dt>
                     <dd>
-                      {activity.transactionHash === null ? (
-                        'NOT OBSERVED'
-                      ) : (
+                      {activity.transactionHash !== null ? (
                         <a
                           href={`${dashboard.network.explorerUrl}/tx/${activity.transactionHash}`}
                           rel="noreferrer"
                           target="_blank"
                         >
-                          {compactAddress(activity.transactionHash)}
+                          Arc tx · {compactAddress(activity.transactionHash)}
                         </a>
+                      ) : activity.providerTransactionId !== null ? (
+                        `Gateway receipt · ${activity.providerTransactionId}`
+                      ) : (
+                        'NOT OBSERVED'
                       )}
                     </dd>
                   </div>
@@ -193,6 +204,53 @@ export default async function Home() {
             ))}
           </div>
         )}
+      </section>
+
+      <section className="evidence-section" id="x402">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Circle Gateway · x402 v2</p>
+            <h2>Machine payment, exact authority.</h2>
+          </div>
+          <p>
+            The Agent signs no private key locally. Circle signs one exact EIP-3009 authorization
+            after Inomasa locks the offer, counterparty, amount, nonce-bearing payload, and Human
+            grant lineage. Gateway settles it without relabeling provider evidence as a direct
+            per-payment Arc transaction.
+          </p>
+        </div>
+
+        <div className="activity-ledger">
+          {dashboard.x402Payments.length === 0 ? (
+            <article className="activity-empty">
+              <span>NOT STARTED</span>
+              <p>No x402 payment operation exists in the connected environment.</p>
+            </article>
+          ) : (
+            dashboard.x402Payments.map((payment) => (
+              <article key={payment.paymentId}>
+                <div>
+                  <span>{payment.paymentId}</span>
+                  <em>{payment.network}</em>
+                </div>
+                <strong>{payment.state}</strong>
+                <dl>
+                  <div><dt>Scheme</dt><dd>x402 v2 · {payment.scheme}</dd></div>
+                  <div><dt>Amount</dt><dd>{displayUsdc(payment.amountMicroUsdc)}</dd></div>
+                  <div><dt>Facilitator state</dt><dd>{payment.providerState ?? 'NOT HANDED OFF'}</dd></div>
+                  <div>
+                    <dt>Gateway receipt</dt>
+                    <dd>{payment.providerTransactionId ?? 'NOT SETTLED'}</dd>
+                  </div>
+                  <div>
+                    <dt>Funding rail</dt>
+                    <dd>{dashboard.gatewayFunding[0]?.state ?? 'NOT FUNDED'}</dd>
+                  </div>
+                </dl>
+              </article>
+            ))
+          )}
+        </div>
       </section>
 
       <section className="evidence-section" id="agent-authority">
@@ -313,7 +371,7 @@ export default async function Home() {
           <article>
             <span>03</span>
             <h3>Settlement</h3>
-            <p>Circle provider state and Arc finality reconcile before revenue or cost is posted.</p>
+            <p>Circle provider state and the selected rail proof reconcile before revenue or cost is posted.</p>
           </article>
           <article>
             <span>04</span>
@@ -334,6 +392,7 @@ export default async function Home() {
           <div><dt>Gas asset</dt><dd>Native USDC · 18 decimals</dd></div>
           <div><dt>USDC interface</dt><dd>{dashboard.network.usdc.address}</dd></div>
           <div><dt>Treasury profile</dt><dd>Circle Developer-Controlled EOA</dd></div>
+          <div><dt>Machine-payment rail</dt><dd>Circle Gateway · x402 v2 exact</dd></div>
           <div><dt>Assurance</dt><dd>PLATFORM-CONTROLLED EXTERNAL</dd></div>
         </dl>
       </section>
