@@ -6,7 +6,7 @@ type PathCardProps = {
 };
 
 export function PathCard({ path, position }: PathCardProps) {
-  const isAvailable = path.status === 'AVAILABLE';
+  const isAvailable = path.status === 'ALPHA';
 
   return (
     <article className={`path-card path-card--${path.status.toLowerCase()}`} id={path.id}>

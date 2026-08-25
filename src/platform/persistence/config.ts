@@ -1,13 +1,10 @@
-const inomasaEnvironments = [
-  'LOCAL_DEVELOPMENT',
-  'AUTOMATED_TEST',
-  'PRIVATE_ARC_TESTNET',
-  'CLOSED_ARC_TESTNET',
-  'PUBLIC_DEMO_TESTNET',
-  'MAINNET',
-] as const;
+import {
+  inomasaEnvironments,
+  isInomasaEnvironment,
+  type InomasaEnvironment,
+} from '../../shared/environment.ts';
 
-export type InomasaEnvironment = (typeof inomasaEnvironments)[number];
+export type { InomasaEnvironment } from '../../shared/environment.ts';
 export type DatabaseConnectionPurpose = 'runtime' | 'administrative';
 export type EnvironmentVariables = Readonly<Record<string, string | undefined>>;
 
@@ -26,10 +23,6 @@ const nonTlsEnvironments = new Set<InomasaEnvironment>([
   'LOCAL_DEVELOPMENT',
   'AUTOMATED_TEST',
 ]);
-
-function isInomasaEnvironment(value: string): value is InomasaEnvironment {
-  return (inomasaEnvironments as readonly string[]).includes(value);
-}
 
 function readEnvironment(environment: EnvironmentVariables): InomasaEnvironment {
   const value = environment['INOMASA_ENV']?.trim();
