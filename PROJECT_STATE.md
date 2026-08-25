@@ -8,18 +8,20 @@ This file is the concise repository-native entry point for a human or AI operato
 | --- | --- |
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
-| Latest completed engineering gate | **B4 — Deployment Foundation: VERIFIED / PASS** |
-| Current authorized gate | **B5 — Testnet Scope & System Realization Entry: ACTIVE WORK** |
-| B5 scope | Decision-and-continuity evidence only; selects Human-Controlled Business Entry as the first bounded realization candidate and adds no product behavior |
+| Latest completed engineering gate | **B5 — Testnet Scope & System Realization Entry: VERIFIED / PASS** |
+| Next engineering gate | **B6 — Human-Controlled Business Entry System Realization Specification: NOT STARTED / NOT AUTHORIZED** |
+| B5 result | Decision-and-continuity evidence only; selects Human-Controlled Business Entry as the first bounded realization candidate and adds no product behavior |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
 | B4 acceptance evidence | Pull request `#7`, merge `d2829c35e52fc59d8579e16d88956997cb79e681` |
 | B4 accepted-main CI evidence | Engineering verification run `32704891257`, `push/main`, completed successfully, including PostgreSQL proof |
-| Current continuity checkpoint | B5 scope and System Realization entry documentation is active on a focused branch; no B5 product implementation exists |
+| B5 acceptance evidence | Pull request `#10`, merge `395dfd9aa105cdd95088ffd5602739d6c79cbba5` |
+| B5 accepted-main CI evidence | Engineering verification run `32794327644`, `push/main`, completed successfully, including PostgreSQL proof |
+| Current continuity checkpoint | B5 acceptance evidence is synchronized; B6 remains not started and no B5 product implementation exists |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | B3 foundation only; no product or economic workflow is implemented |
-| Active work | Focused B5 scope and System Realization entry documentation; B6 has not started |
-| Current blocking gate | No B4 blocker remains; `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change |
+| Active work | None; B5 is complete and B6 has not started |
+| Current blocking gate | No B5 blocker remains; `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
 | B4 protected Preview evidence | Vercel deployment `dpl_az1jRshRMZYn57RbFxsvkozLJZ2k` from accepted `main` commit `d75bcd5472f35f0cc962c6a420473957915153f6`; target `preview`, state `READY` |
 | Deployment protection evidence | Anonymous request redirected to Vercel SSO without the shell; authorized request rendered expected shell anchors; temporary automation bypass removed and Vercel Authentication remained enabled |
@@ -34,6 +36,16 @@ The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitatio
 Do not infer changes to `PG-TLS-SEMANTICS-01` from a newer version, provider
 dashboard message, or prior chat. Its status changes require committed evidence and
 an observed successful `main` CI run.
+
+## Open non-blocking maintenance observations
+
+- `GHA-ACTIONS-RUNTIME-01` — **ACTIVE / NON-BLOCKING**. Accepted-main B5 run
+  `32794327644` passed, but GitHub warned that `actions/checkout@v4` and
+  `actions/setup-node@v4` target deprecated Node.js 20 internally and were forced
+  to run on Node.js 24. This does not change the repository's Node.js 22
+  application/runtime contract and did not fail B5. Before changing the workflow,
+  review current primary GitHub Actions guidance and verify a focused CI update;
+  do not mix that maintenance into product realization.
 
 ## Durable continuity rules
 
@@ -140,9 +152,9 @@ No Arc, Circle, wallet, x402, hosted-agent, production database, or production d
 
 ## Exact next step
 
-Complete B5 only within
-[`docs/engineering/b5-scope-and-system-realization-entry.md`](docs/engineering/b5-scope-and-system-realization-entry.md): preserve the protected Preview, keep Production unexposed, retain `PG-TLS-SEMANTICS-01`, and create no product, domain, authority, economic, wallet, settlement, evidence, agent, trust, risk, or capital implementation.
-
-After B5 is accepted, the exact next gate is **B6 — Human-Controlled Business Entry
-System Realization Specification**. B6 is `NOT STARTED`, requires separate explicit
-authorization, and must not be inferred from B5 selection.
+B5 is complete. Do not begin **B6 — Human-Controlled Business Entry System
+Realization Specification** until a later explicit task authorizes its scope and
+acceptance criteria. Until then, preserve the protected Preview, keep Production
+unexposed, retain `PG-TLS-SEMANTICS-01`, and create no product, domain, authority,
+economic, wallet, settlement, evidence, agent, trust, risk, or capital
+implementation.

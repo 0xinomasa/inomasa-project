@@ -78,7 +78,7 @@ Protection and render proof:
 - Product implementation remains bounded to the B3 persistence foundation and B2
   structural shell; no business or economic workflow is implemented.
 - `PG-TLS-SEMANTICS-01` remains active and unchanged.
-- B5 is separately active only as the decision-and-continuity gate defined in
+- B5 is separately complete as the decision-and-continuity gate defined in
   [`b5-scope-and-system-realization-entry.md`](b5-scope-and-system-realization-entry.md).
   It does not change the B4 deployment evidence or authorize B6.
 
