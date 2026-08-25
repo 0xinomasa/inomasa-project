@@ -2,7 +2,7 @@
 
 ## Status
 
-Status: `FIRST INTEGRATED ARC TESTNET VERTICAL VERIFIED / SHOWCASE ITERATION ACTIVE`.
+Status: `CONTROLLED ARC TESTNET ALPHA WITH X402 VERIFIED / SHOWCASE ITERATION ACTIVE`.
 
 This is the live execution contract after B5. B0-B5 remain accepted historical
 lineage. The old standalone B6 Agent Wallet, B7 x402, and B8 Background Execution
@@ -81,9 +81,19 @@ Correct classification and limitations:
   must not claim provider-enforced testnet Agent budgets.
 - External wallets remain a manual/reference fallback, not the integrated primary.
 
-Gateway/Nanopayments is **not selected** by this decision. The payment boundary is
-named `selected compatible payment/x402 adapter` until direct settlement has been
-proven and the R4 implementation evidence selects a scheme.
+Circle Gateway/Nanopayments with x402 v2 `exact` is now selected for the Alpha
+machine-payment rail after the observed proof below. The direct Circle transfer
+adapter remains valid for ordinary Treasury transfers; Gateway is not promoted to
+the semantic owner of obligations, authority, accounting, or Evidence.
+
+The selection adds `@circle-fin/x402-batching` `3.4.0`, x402 core/evm `2.23.0`,
+and their required `viem` surface. A generic Inomasa x402 port and persisted
+protocol objects isolate Circle-specific signing/facilitator behavior in
+`src/platform/`. Replacing Gateway would require a new rail proof, not a rewrite of
+Business, authority, obligation, accounting, or service-delivery semantics. The
+tradeoffs are a one-time EOA deposit, Circle operational dependency, and Gateway's
+live minimum authorization validity of `604800` seconds. Public/mainnet price and
+operational suitability remain unadjudicated.
 
 ## Exact Arc registry
 
@@ -120,11 +130,11 @@ gas quantities and network fees remain separate fields.
 - live read-only Arc RPC connectivity has returned chain ID `5042002`, a moving
   block head, and deployed bytecode at the configured USDC interface.
 
-The first two Circle wallets, two Arc transactions, exact economic allocation, two
-paid service executions, and one bounded Agent-triggered repeat purchase are now
-proven. This does not claim user custody, Protected Treasury, x402, a durable hosted
-Agent/background worker, LLM authority, Reputation, Capital, Production value, or
-organic demand.
+The first two Circle wallets, direct Arc transfers, exact economic allocation,
+three paid service executions, bounded Agent authority, and one Gateway x402
+machine payment are now proven. This does not claim user custody, Protected
+Treasury, a durable hosted Agent/background worker, LLM authority, Reputation,
+Capital, Production value, or organic demand.
 
 ## Observed implementation proof
 
@@ -224,6 +234,77 @@ The platform executed the already authorized Business obligation through the sam
 Circle Treasury adapter. This proves bounded delegated operation, not a hosted Agent
 runtime or x402 machine-payment exchange.
 
+## Observed Circle Gateway x402 proof
+
+- implementation checkpoint: `1c15f7d2a98429d4c62f0ee718f30a624106cfee`,
+  pull request `#16`;
+- selected provider package: `@circle-fin/x402-batching` `3.4.0`; protocol x402
+  v2, scheme `exact`, network `eip155:5042002`;
+- live Gateway registry: contract
+  `0x0077777d7EBA4688BDeF3E311b846F25870A19B9`, Arc domain `26`, minimum
+  signature validity `604800` seconds, USDC
+  `0x3600000000000000000000000000000000000000`;
+- funding: Ops Pilot approved Gateway in successful Arc transaction
+  `0x3a3629a9d6b755d921b918eaab0cc849b5dc1c057dbece54c5e06068a5335cde`,
+  block `58770843`, then deposited exact `1.000000 USDC` in successful transaction
+  `0x2280402061b6a7960efd6d24804a753310eba5e3f193b0a5a66225c11b7c2c53`,
+  block `58770884`;
+- authority: Agent `agt_ops_pilot_buyer_v1`, Human-issued non-delegable grant
+  `grt_ops_pilot_x402_v1`, exact offer `off_arc_snapshot_x402_v1`, exact
+  counterparty `biz_signal_forge`, `0.010000` per-action maximum and `0.020000`
+  total allowance;
+- commitment chain: `int_arc_snapshot_x402_v1` -> policy decision -> consumed
+  `xau_arc_snapshot_x402_v1` -> obligation `obl_arc_snapshot_x402_v1` ->
+  settlement `set_arc_snapshot_x402_v1` -> payment
+  `pay_arc_snapshot_x402_v1`;
+- signing: Circle Developer-Controlled Wallet Signing API produced the EIP-712
+  EIP-3009 signature; no local private key was introduced. The exact signed payload
+  was digest-bound and persisted before facilitator handoff;
+- provider outcome: Gateway verified payer
+  `0xcd4194d3cab4fe5e306ac397f8896b4b8e0f7ede` and returned settlement receipt
+  `3d6239e1-9d29-46a0-bfb8-117578b9d1d4` for exact `0.010000 USDC` to Signal
+  Forge;
+- independent balance observation: payer Gateway balance `0.990000`, seller
+  Gateway balance `0.010000`, both pending batches `0`;
+- classification: the per-payment outcome is `PROVIDER_REPORTED` from
+  `CIRCLE_GATEWAY_X402`; it is not falsely assigned a direct Arc transaction hash.
+  The deposit transactions remain independently Arc-observed facts;
+- economic result: Ops Pilot `SERVICE_COST / OUTFLOW` and Signal Forge
+  `REVENUE / INFLOW`, exact `0.010000 USDC`, common-control provenance, each
+  posted once;
+- paid service: `svc_arc_snapshot_x402_v1`, source Arc block `58771214`, output
+  SHA-256 `d9f0a6bef580aa7ce9150840bce004ba39c590dc8407677109c74ac794994e84`;
+- HTTP proof: the protected resource returned HTTP `402` with
+  `PAYMENT-REQUIRED`; the committed signed request returned HTTP `200` with
+  `PAYMENT-RESPONSE` and the paid service output. Repeated purchase and service
+  commands returned `ALREADY_COMPLETE` without a second payment or delivery;
+- local verification: lint, typecheck, 28/28 tests, production build, migrations
+  `001`-`006`, database write/read and rollback proof, and zero npm audit findings;
+- PR verification: GitHub Actions run `32838374285`, successful;
+- protected Preview: `dpl_2QPTA8bHtcK8BSzbw6PhzSN132Nu`, target Preview,
+  `READY`; anonymous access returned HTTP `302` to Vercel SSO, protected render
+  exposed the exact x402 state, protected API repeated the `402`/`200` header
+  proof, and temporary Preview variables plus automation bypass were restored to
+  zero;
+- runtime log scan contained only the active `pg` TLS-semantics warning; no
+  application request failure was observed.
+
+The first Circle typed-data request failed validation because the provider requires
+an explicit `EIP712Domain` declaration even though the SDK input type did not add
+it. The adapter now serializes that domain explicitly. The first facilitator
+verify returned HTTP `400` because the x402 v2 envelope omitted the required
+`resource` field. No settlement occurred; Inomasa added that field around the same
+stored signature without changing or re-signing payer, payee, value, nonce, or
+validity. Both failures remain implementation evidence rather than manufactured
+PASS states.
+
+Gateway's seven-day minimum validity makes the exact signed payload an effect
+commitment boundary once handed to the facilitator. Revocation can prevent an
+unconsumed Inomasa authorization from reaching that boundary; it cannot erase an
+already handed-off EIP-3009 authorization or rewrite a completed result. Ambiguous
+settlement must retain and reconcile the same stored payload rather than sign a
+new nonce.
+
 ## Completed external proof sequence
 
 All eleven steps below were observed successfully on 25 August 2026. They remain
@@ -261,6 +342,10 @@ Agent authority.
   and https://developers.circle.com/agent-stack/agent-wallets/wallet-operations/custom-policies
 - Circle Gateway Nanopayments EOA limitation:
   https://developers.circle.com/gateway/nanopayments/quickstarts/buyer
+- Circle Gateway x402 seller integration:
+  https://developers.circle.com/gateway/nanopayments/quickstarts/seller
+- Circle Developer-Controlled Wallet typed-data signing:
+  https://developers.circle.com/api-reference/wallets/developer-controlled-wallets/sign-typed-data
 - Circle User-Controlled recovery:
   https://developers.circle.com/wallets/user-controlled/recover-account
 - Arc network and asset registry:
