@@ -2,7 +2,7 @@
 
 ## Status
 
-Status: `IMPLEMENTED LOCALLY / EXTERNAL ARC PROOF PENDING`.
+Status: `IMPLEMENTED + PROTECTED PREVIEW VERIFIED / EXTERNAL ARC PROOF PENDING`.
 
 This is the live execution contract after B5. B0-B5 remain accepted historical
 lineage. The old standalone B6 Agent Wallet, B7 x402, and B8 Background Execution
@@ -124,6 +124,29 @@ This checkpoint does not claim Circle credentials are configured, wallets are
 created, USDC is funded, an Arc transaction is submitted/finalized, x402 is
 implemented, a durable background worker exists, the paid service has run, or an
 Agent has authority. Live RPC connectivity alone is not settlement evidence.
+
+## Observed implementation proof
+
+- implementation commit: `724e96b175b2dbe08e24f70a5f98c8f8f95b800a`;
+- pull request: `#12`;
+- PR verification run: `32822885262`, successful with Node `22.23.2`, npm
+  `10.9.8`, zero audit vulnerabilities, 19/19 tests, production build, and clean
+  PostgreSQL reconstruction through migrations `001`-`004`;
+- protected Preview: `dpl_BHtdiU4F18tJYWnSa77BTAh9pT63`, source commit
+  `724e96b175b2dbe08e24f70a5f98c8f8f95b800a`, environment `preview`, state
+  `READY`, Node `22.x`;
+- anonymous Preview request: HTTP `302` to Vercel SSO;
+- authenticated Preview render: Alpha shell, both templates, Arc chain ID, and
+  explicit not-configured/no-ledger/no-Evidence states observed;
+- post-proof automation-bypass count: zero; Vercel Authentication and Git Fork
+  Protection remained enabled;
+- runtime warning/error query after the authenticated request returned no events.
+
+An earlier Preview attempt was provider-blocked before build because the commit used
+the unverified local author `root@localhost.localdomain`. The branch commit metadata
+was corrected to the repository identity
+`Inomasa <131157449+0xinomasa@users.noreply.github.com>`; no application change or
+protection weakening was used to bypass the provider check.
 
 ## Immediate external proof sequence
 
