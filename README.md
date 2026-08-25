@@ -2,20 +2,20 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current implemented baseline is a responsive Next.js application skeleton, a
-provider-portable PostgreSQL persistence foundation, and a protected Vercel Preview.
-It represents the BUILD, MIGRATE, and CAPITAL entry boundaries without implementing
-product behavior. The only schema object is an explicitly non-domain engineering
-probe used to verify migration, write/read, and transaction behavior. It contains
-no wallet integration, authentication, smart contract, Arc integration, x402
-implementation, business schema, hosted agent, evidence logic, capital logic, or
-Production deployment configuration.
+The current implementation is an accelerated controlled Alpha on top of the B0-B5
+engineering foundation. It includes deterministic versioned Business genesis, two
+interdependent common-control test Business templates, explicit control/Treasury
+bindings, exact USDC commerce and settlement state, a PostgreSQL Alpha schema, a
+Circle Developer-Controlled Wallet EOA adapter for Arc Testnet, and an application
+dashboard that reports what is connected versus pending. The paid service executor
+is settlement-gated and produces a digest-bound live Arc network snapshot; it cannot
+run until the corresponding Arc settlement is reconciled as complete.
 
-B5 Testnet Scope & System Realization Entry is `VERIFIED — PASS`. It selects
-Human-Controlled Business Entry as the first bounded realization candidate while
-explicitly deferring code, schema, authentication, wallet/provider selection, and
-external configuration. B6 has not started. See
-[`docs/engineering/b5-scope-and-system-realization-entry.md`](docs/engineering/b5-scope-and-system-realization-entry.md).
+B5 Testnet Scope & System Realization Entry remains `VERIFIED — PASS` historical
+lineage. The old standalone B6/B7/B8 sequence is retired. BUILD is now active through
+one vertical Alpha program that compresses the final R1-R5 dependency logic. MIGRATE
+is deferred; CAPITAL follows a credible commerce/Evidence loop. See
+[`docs/engineering/alpha-execution.md`](docs/engineering/alpha-execution.md).
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
@@ -48,7 +48,10 @@ On Android, keep repositories inside the Ubuntu filesystem rather than `/sdcard`
 npm run dev
 ```
 
-Open `http://localhost:3000`. The B2 page is a presentation shell only; no economic capability or external integration is active.
+Open `http://localhost:3000`. Without database/provider configuration the dashboard
+fails closed and labels those integrations `NOT_CONFIGURED`. With the local
+development database migrated and bootstrapped, it displays the two actual local
+Business records and their pending Treasury state.
 
 For a production-mode local run:
 
@@ -80,16 +83,67 @@ The Next.js build output is written to `.next/` and is intentionally ignored by 
 
 ```text
 src/
-  app/       Next.js web shell and composition root
-  modules/   future bounded business modules
-  platform/  infrastructure adapters, including the PostgreSQL boundary
+  app/       Next.js composition root and Alpha dashboard
+  modules/   Business and commerce policy/state
+  platform/  PostgreSQL, Arc, and Circle adapters
   shared/    domain-neutral shared code only
 migrations/  ordered, version-controlled PostgreSQL schema evolution
 scripts/     engineering operations, including migration/proof commands
 test/        structural application-shell tests
 ```
 
-The physical folders preserve a modular monolith. They do not imply that Canonical semantic domains are microservices. B3 deliberately introduces no named business module and keeps PostgreSQL/Kysely inside `src/platform/persistence/`.
+The physical folders preserve a modular monolith. They do not imply that Canonical
+semantic domains are microservices. PostgreSQL/Kysely and Circle SDK types remain
+inside `src/platform/`; Business rules depend on module ports rather than vendor SDKs.
+
+## Controlled Alpha bootstrap
+
+After applying migrations against an isolated local development database:
+
+```bash
+npm run alpha:bootstrap
+```
+
+The command creates `Signal Forge` and `Ops Pilot` once and reports
+`ALREADY_EXISTS` on replay. It does not create a Circle wallet or submit a transfer.
+
+Prepare the versioned offer, common-control obligation, and idempotent settlement
+authorization:
+
+```bash
+npm run alpha:prepare-commerce
+```
+
+Circle provisioning is restricted to `PRIVATE_ARC_TESTNET` and requires separately
+registered private configuration:
+
+```bash
+npm run alpha:wallets
+```
+
+Do not run this until the Circle API key, registered entity secret, and dedicated
+wallet set are configured outside Git. Current external-proof status and the exact
+sequence are in `PROJECT_STATE.md` and the Alpha execution document.
+
+After the payer Treasury is faucet-funded, submit and reconcile the selected direct
+Circle transfer:
+
+```bash
+npm run alpha:submit-settlement
+npm run alpha:reconcile-settlement
+```
+
+Reconciliation verifies the exact payer, recipient, micro-USDC amount, successful
+receipt, and Arc chain before posting revenue/cost. Only after it reaches `COMPLETE`
+may the paid service execute:
+
+```bash
+npm run alpha:execute-service
+```
+
+The service fetches a current Arc network snapshot, stores the output and its
+SHA-256 digest, and records narrow delivery Evidence. It is deterministic software,
+not an Agent or LLM claim.
 
 ## Persistence workflow
 
@@ -113,10 +167,11 @@ Run this only against an isolated development/test database. Clean reconstructio
 
 ## Deployment foundation
 
-B4 is `VERIFIED — PASS`. The B2 shell is available only through the protected
+B4 is `VERIFIED — PASS`. The accepted shell is available only through the protected
 Vercel Preview recorded in
 [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md).
-No Production deployment or product behavior is authorized.
+No Production deployment or public anonymous access is authorized. The Alpha branch
+must produce a new protected Preview before its hosted runtime is considered proven.
 
 ## Local environment
 

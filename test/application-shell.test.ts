@@ -7,9 +7,9 @@ test('the application shell keeps the three entry paths distinct', () => {
   assert.deepEqual(
     productPaths.map(({ label, status }) => ({ label, status })),
     [
-      { label: 'BUILD', status: 'AVAILABLE' },
+      { label: 'BUILD', status: 'ALPHA' },
       { label: 'MIGRATE', status: 'LOCKED' },
-      { label: 'CAPITAL', status: 'SEPARATE' },
+      { label: 'CAPITAL', status: 'NEXT' },
     ],
   );
 });

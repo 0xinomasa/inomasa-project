@@ -14,18 +14,28 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 - **B5 Testnet Scope & System Realization Entry is complete.** B5 is a
   decision-and-continuity gate and adds no product behavior.
-- B5 selects **Human-Controlled Business Entry** as the first bounded realization
-  candidate. Selection is not implementation. B6 is not started or authorized.
-- Current implemented scope remains **B4 Deployment Foundation** only; B4 adds
-  protected Preview deployment evidence and no product behavior.
-- The shell may display BUILD as available, MIGRATE as `LOCKED`, and CAPITAL as a separate path. These are presentation states, not domain authority or implemented business behavior.
+- The accelerated controlled Alpha vertical-build program is now authorized. Preserve
+  B0-B5 as historical lineage; do not resurrect the old standalone B6/B7/B8 plan.
+- BUILD is active. MIGRATE remains deferred. CAPITAL remains separate and must not be
+  implemented ahead of a credible commerce, settlement, and Evidence path.
+- Current Alpha implementation includes deterministic Business templates/genesis,
+  explicit common-control provenance, logical Treasury bindings, commerce/settlement
+  state models, a settlement-gated deterministic snapshot service, PostgreSQL
+  schema, and a Circle Developer-Controlled Wallet adapter.
+- Circle Developer-Controlled EOA on Arc Testnet is the selected Alpha Treasury
+  execution profile. It is platform-controlled external account infrastructure, not
+  canonical identity, user custody, or an Inomasa Protected Treasury claim.
+- Gateway/Nanopayments and the exact x402 adapter are not selected yet. Do not hardcode
+  Gateway as the Alpha payment path merely because the selected EOA is compatible.
 - B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
 - The Engineering Continuity & Handoff checkpoint follows B3 and adds repository-native takeover evidence only. It is not a product phase.
-- Do not implement product workflows, authentication, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
-- Do not begin B6. The accepted B5 scope and System Realization entry evidence in
-  `docs/engineering/b5-scope-and-system-realization-entry.md` does not authorize
-  authentication, a domain schema, a wallet/provider selection, product
-  implementation, or Production exposure.
+- Continue by working vertically: Business -> control -> Treasury -> terms/obligation
+  -> selected payment adapter -> Arc settlement -> exact economic state -> narrow
+  Evidence -> durable bounded operation.
+- Production/mainnet, public anonymous access, unrestricted agent authority, MIGRATE,
+  and capital deployment remain unauthorized.
+- Never present local state, synthetic/common-control demand, testnet USDC, pending
+  provider state, or an unexecuted adapter as real finalized Arc commerce.
 
 ## Architecture authority
 
@@ -86,3 +96,13 @@ Before reporting completion:
 8. For a significant gate or accepted phase merge, update `PROJECT_STATE.md` with the evidence, open holds, and exact next gate before declaring continuity complete.
 
 Do not claim `PASS`, `IMPLEMENTED`, or `VERIFIED` when a command failed, was skipped, or its output was not observed.
+
+<!-- BEGIN:nextjs-agent-rules -->
+
+# This is NOT the Next.js you know
+
+This version has breaking changes — APIs, conventions, and file structure may all differ from your training data. Read the relevant guide in `node_modules/next/dist/docs/` (resolved from this file's directory; in monorepos the `next` package may not be visible from the repo root) before writing any code. Heed deprecation notices.
+
+This block is written and re-added by `next dev` — verify at `node_modules/next/dist/server/lib/generate-agent-files.js`. Removing it from a diff only re-creates the uncommitted change; committing it with your work keeps the tree clean.
+
+<!-- END:nextjs-agent-rules -->

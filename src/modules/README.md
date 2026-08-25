@@ -1,7 +1,12 @@
 # Business modules
 
-Future bounded business modules belong here after their boundaries are selected through the System Realization process.
+The accelerated Alpha selects two bounded implementation modules inside the existing
+modular monolith:
 
-Do not create, merge, rename, or couple modules merely to make implementation convenient. Structural changes must conform to the Canonical Architecture and be recorded explicitly.
+- `business/` owns deterministic Business templates/genesis, control-facing records,
+  logical Treasury bindings, and the Treasury wallet port;
+- `commerce/` owns exact USDC quantities, service offers, obligations, and settlement
+  state transitions.
 
-B2 intentionally defines no product module.
+These folders are implementation ownership boundaries, not microservices and not a
+mechanical copy of Canonical semantic domains. Vendor SDKs remain under `src/platform/`.

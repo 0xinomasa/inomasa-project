@@ -487,6 +487,382 @@ footer p {
   display: none;
 }
 
+.alpha-hero,
+.economy-section,
+.activity-section,
+.evidence-section,
+.execution-section,
+.network-section {
+  margin-inline: auto;
+  max-width: var(--max-width);
+  width: calc(100% - 64px);
+}
+
+.alpha-hero {
+  align-items: end;
+  display: grid;
+  gap: 54px;
+  grid-template-columns: minmax(0, 1fr) 320px;
+  min-height: 650px;
+  padding-block: 104px 82px;
+}
+
+.alpha-hero__copy {
+  max-width: 860px;
+}
+
+.proof-card {
+  background: linear-gradient(145deg, rgba(200, 255, 82, 0.07), transparent 60%), var(--panel);
+  border: 1px solid rgba(200, 255, 82, 0.25);
+  padding: 26px;
+}
+
+.proof-card__label {
+  color: var(--lime);
+  font-family: 'Courier New', monospace;
+  font-size: 0.65rem;
+  letter-spacing: 0.12em;
+  margin-bottom: 24px;
+  text-transform: uppercase;
+}
+
+.proof-card dl,
+.business-card dl,
+.network-section dl {
+  margin: 0;
+}
+
+.proof-card dl div,
+.business-card dl div,
+.network-section dl div {
+  align-items: center;
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 18px;
+  justify-content: space-between;
+  padding-block: 13px;
+}
+
+.proof-card dt,
+.proof-card dd,
+.business-card dt,
+.business-card dd,
+.network-section dt,
+.network-section dd {
+  font-size: 0.66rem;
+  margin: 0;
+}
+
+.proof-card dt,
+.business-card dt,
+.network-section dt {
+  color: var(--muted);
+}
+
+.proof-card dd {
+  color: var(--lime);
+  font-family: 'Courier New', monospace;
+}
+
+.economy-section,
+.activity-section,
+.evidence-section,
+.execution-section,
+.network-section {
+  border-top: 1px solid var(--line);
+  padding-block: 96px;
+}
+
+.economy-graph {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.business-card {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  min-height: 420px;
+  padding: 28px;
+}
+
+.business-card__topline {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 58px;
+}
+
+.business-card__topline span,
+.business-card__topline em,
+.classification-label,
+.dependency-rail {
+  font-family: 'Courier New', monospace;
+  font-size: 0.61rem;
+  font-style: normal;
+  letter-spacing: 0.1em;
+}
+
+.business-card__topline span {
+  color: var(--muted);
+}
+
+.business-card__topline em,
+.classification-label {
+  color: var(--lime);
+}
+
+.business-card h3 {
+  font-size: clamp(2.4rem, 4vw, 4.2rem);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  margin-bottom: 16px;
+}
+
+.business-card > p:not(.classification-label) {
+  color: var(--muted);
+  font-size: 0.82rem;
+  line-height: 1.6;
+  margin-bottom: 36px;
+  max-width: 440px;
+}
+
+.business-card dd {
+  color: var(--muted-strong);
+  max-width: 60%;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.classification-label {
+  border-top: 1px solid var(--line);
+  margin: 22px 0 0;
+  padding-top: 18px;
+}
+
+.dependency-rail {
+  align-items: center;
+  border: 1px solid var(--line);
+  color: var(--muted);
+  display: grid;
+  gap: 18px;
+  grid-column: 1 / -1;
+  grid-template-columns: 1fr auto 1fr;
+  padding: 22px 28px;
+}
+
+.dependency-rail strong {
+  color: var(--lime);
+  font-weight: 400;
+}
+
+.dependency-rail span:last-child {
+  text-align: right;
+}
+
+.activity-ledger,
+.activity-empty {
+  border: 1px solid var(--line);
+}
+
+.activity-ledger article,
+.activity-empty {
+  background: var(--panel);
+  padding: 28px;
+}
+
+.activity-ledger article > div:first-child {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+}
+
+.activity-ledger span,
+.activity-ledger em,
+.activity-empty span {
+  color: var(--muted);
+  font-family: 'Courier New', monospace;
+  font-size: 0.61rem;
+  font-style: normal;
+  letter-spacing: 0.1em;
+}
+
+.activity-ledger em,
+.activity-empty span {
+  color: var(--lime);
+}
+
+.activity-ledger strong {
+  display: block;
+  font-size: clamp(2.6rem, 7vw, 6rem);
+  font-weight: 400;
+  letter-spacing: -0.06em;
+  margin-block: 56px 28px;
+}
+
+.activity-ledger dl {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(5, 1fr);
+  margin: 0;
+}
+
+.activity-ledger dl div {
+  border: 1px solid var(--line);
+  min-width: 0;
+  padding: 14px;
+}
+
+.activity-ledger dt,
+.activity-ledger dd {
+  font-size: 0.65rem;
+  margin: 0;
+  overflow-wrap: anywhere;
+}
+
+.activity-ledger dt {
+  color: var(--muted);
+  margin-bottom: 10px;
+}
+
+.activity-ledger dd,
+.activity-ledger a {
+  color: var(--muted-strong);
+}
+
+.activity-empty p {
+  color: var(--muted);
+  margin: 22px 0 0;
+}
+
+.evidence-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.evidence-grid > article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  min-height: 310px;
+  padding: 28px;
+}
+
+.evidence-grid__heading {
+  align-items: center;
+  display: flex;
+  justify-content: space-between;
+  margin-bottom: 44px;
+}
+
+.evidence-grid__heading h3 {
+  font-size: 1.25rem;
+  font-weight: 400;
+  margin: 0;
+}
+
+.evidence-grid__heading span,
+.empty-state,
+.fact-list span,
+.fact-list small {
+  font-family: 'Courier New', monospace;
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+}
+
+.evidence-grid__heading span,
+.fact-list span {
+  color: var(--lime);
+}
+
+.empty-state {
+  color: var(--muted);
+  margin-top: 92px;
+}
+
+.fact-list > div {
+  border-top: 1px solid var(--line);
+  display: grid;
+  gap: 8px;
+  padding-block: 16px;
+}
+
+.fact-list strong {
+  font-size: 0.76rem;
+  font-weight: 400;
+}
+
+.fact-list small {
+  color: var(--muted);
+  overflow-wrap: anywhere;
+}
+
+.execution-section,
+.network-section {
+  display: grid;
+  gap: 70px;
+  grid-template-columns: minmax(250px, 0.75fr) 1.25fr;
+}
+
+.execution-grid {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(2, 1fr);
+}
+
+.execution-grid article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  min-height: 205px;
+  padding: 24px;
+}
+
+.execution-grid span,
+.compact-paths span {
+  color: var(--lime);
+  font-family: 'Courier New', monospace;
+  font-size: 0.61rem;
+}
+
+.execution-grid h3 {
+  font-size: 1.35rem;
+  font-weight: 400;
+  margin: 40px 0 12px;
+}
+
+.execution-grid p,
+.compact-paths p {
+  color: var(--muted);
+  font-size: 0.75rem;
+  line-height: 1.6;
+  margin: 0;
+}
+
+.network-section dd {
+  color: var(--muted-strong);
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.compact-paths {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.compact-paths article {
+  border: 1px solid var(--line);
+  min-height: 220px;
+  padding: 24px;
+}
+
+.compact-paths h3 {
+  font-size: 2rem;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  margin: 48px 0 12px;
+}
+
 @media (max-width: 900px) {
   .site-header,
   .hero,
@@ -539,6 +915,30 @@ footer p {
 
   footer {
     margin-bottom: 72px;
+  }
+
+  .alpha-hero,
+  .economy-section,
+  .activity-section,
+  .evidence-section,
+  .execution-section,
+  .network-section {
+    width: calc(100% - 40px);
+  }
+
+  .alpha-hero,
+  .execution-section,
+  .network-section {
+    grid-template-columns: 1fr;
+  }
+
+  .alpha-hero {
+    min-height: auto;
+    padding-block: 92px 70px;
+  }
+
+  .proof-card {
+    max-width: 520px;
   }
 
   .mobile-nav {
@@ -651,6 +1051,50 @@ footer p {
     justify-content: center;
     gap: 18px;
     min-height: 170px;
+  }
+
+  .alpha-hero,
+  .economy-section,
+  .execution-section,
+  .network-section {
+    width: calc(100% - 28px);
+  }
+
+  .alpha-hero {
+    gap: 32px;
+    padding-block: 76px 56px;
+  }
+
+  .economy-section,
+  .execution-section,
+  .network-section {
+    padding-block: 72px;
+  }
+
+  .economy-graph,
+  .activity-ledger dl,
+  .evidence-grid,
+  .execution-grid,
+  .compact-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .business-card {
+    min-height: auto;
+    padding: 22px;
+  }
+
+  .business-card__topline {
+    margin-bottom: 42px;
+  }
+
+  .dependency-rail {
+    align-items: start;
+    grid-template-columns: 1fr;
+  }
+
+  .dependency-rail span:last-child {
+    text-align: left;
   }
 }
 

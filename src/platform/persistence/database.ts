@@ -1,4 +1,5 @@
 import {
+  type ColumnType,
   type Generated,
   Kysely,
   PostgresDialect,
@@ -10,6 +11,9 @@ import type { DatabaseConnectionConfig } from './config.ts';
 
 export const engineeringSchema = 'inomasa_engineering';
 export const engineeringProbeTable = 'persistence_probe';
+export const applicationSchema = 'inomasa_app';
+
+type Timestamp = ColumnType<Date, Date | string, Date | string>;
 
 interface EngineeringPersistenceProbeTable {
   readonly created_at: Generated<Date>;
@@ -17,8 +21,178 @@ interface EngineeringPersistenceProbeTable {
   readonly probe_value: string;
 }
 
+interface PrincipalTable {
+  readonly actor_classification: string;
+  readonly created_at: Generated<Date>;
+  readonly display_name: string;
+  readonly environment: string;
+  readonly principal_id: string;
+  readonly principal_kind: string;
+}
+
+interface GenesisRequestTable {
+  readonly consumed_at: Timestamp | null;
+  readonly created_at: Generated<Date>;
+  readonly genesis_request_id: string;
+  readonly requester_principal_id: string;
+  readonly state: string;
+  readonly template_id: string;
+  readonly template_version: number;
+}
+
+interface BusinessTable {
+  readonly actor_classification: string;
+  readonly business_id: string;
+  readonly business_principal_id: string;
+  readonly common_control_group_id: string | null;
+  readonly created_at: Generated<Date>;
+  readonly display_name: string;
+  readonly environment: string;
+  readonly genesis_request_id: string;
+  readonly status: string;
+  readonly template_id: string;
+  readonly template_version: number;
+}
+
+interface BusinessControlTable {
+  readonly accepted_at: Timestamp;
+  readonly business_id: string;
+  readonly control_id: string;
+  readonly control_version: number;
+  readonly controller_principal_id: string;
+  readonly ended_at: Timestamp | null;
+  readonly status: string;
+}
+
+interface BusinessEventTable {
+  readonly actor_principal_id: string;
+  readonly business_id: string;
+  readonly event_id: string;
+  readonly event_type: string;
+  readonly occurred_at: Timestamp;
+  readonly payload: unknown;
+  readonly request_id: string;
+}
+
+interface TreasuryBindingTable {
+  readonly account_assurance: string;
+  readonly account_type: string;
+  readonly address: string | null;
+  readonly binding_id: string;
+  readonly binding_version: number;
+  readonly blockchain: string;
+  readonly business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly custody_model: string;
+  readonly ended_at: Timestamp | null;
+  readonly environment: string;
+  readonly provider: string;
+  readonly provider_wallet_id: string | null;
+  readonly status: string;
+}
+
+interface ServiceOfferTable {
+  readonly capability_id: string;
+  readonly created_at: Generated<Date>;
+  readonly description: string;
+  readonly offer_id: string;
+  readonly price_micro_usdc: string;
+  readonly provider_business_id: string;
+  readonly status: string;
+  readonly terms_version: number;
+}
+
+interface ServiceExecutionTable {
+  readonly capability_id: string;
+  readonly completed_at: Timestamp;
+  readonly consumer_business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly environment: string;
+  readonly execution_id: string;
+  readonly obligation_id: string;
+  readonly output: unknown;
+  readonly output_sha256: string;
+  readonly provenance: string;
+  readonly provider_business_id: string;
+  readonly settlement_id: string;
+  readonly source_reference: string;
+  readonly state: string;
+}
+
+interface ObligationTable {
+  readonly amount_micro_usdc: string;
+  readonly asset: string;
+  readonly buyer_business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly environment: string;
+  readonly obligation_id: string;
+  readonly offer_id: string;
+  readonly provenance: string;
+  readonly seller_business_id: string;
+  readonly settled_at: Timestamp | null;
+  readonly state: string;
+  readonly terms_version: number;
+}
+
+interface SettlementOperationTable {
+  readonly amount_micro_usdc: string;
+  readonly asset_address: string;
+  readonly chain_id: number;
+  readonly created_at: Generated<Date>;
+  readonly idempotency_key: string;
+  readonly obligation_id: string;
+  readonly provider: string;
+  readonly provider_state: string | null;
+  readonly provider_transaction_id: string | null;
+  readonly settlement_id: string;
+  readonly state: string;
+  readonly transaction_hash: string | null;
+  readonly updated_at: Timestamp;
+}
+
+interface EconomicEntryTable {
+  readonly amount_micro_usdc: string;
+  readonly asset: string;
+  readonly business_id: string;
+  readonly category: string;
+  readonly direction: string;
+  readonly entry_id: string;
+  readonly obligation_id: string;
+  readonly occurred_at: Timestamp;
+  readonly provenance: string;
+  readonly settlement_id: string;
+}
+
+interface EvidenceFactTable {
+  readonly coverage: string;
+  readonly created_at: Generated<Date>;
+  readonly environment: string;
+  readonly evidence_id: string;
+  readonly fact_type: string;
+  readonly observed_at: Timestamp;
+  readonly payload: unknown;
+  readonly provenance: string;
+  readonly source_reference: string;
+  readonly source_type: string;
+  readonly subject_id: string;
+  readonly subject_type: string;
+  readonly verification: string;
+}
+
 export interface PersistenceDatabase {
+  readonly business_controls: BusinessControlTable;
+  readonly business_events: BusinessEventTable;
+  readonly businesses: BusinessTable;
+  readonly economic_entries: EconomicEntryTable;
+  readonly evidence_facts: EvidenceFactTable;
+  readonly genesis_requests: GenesisRequestTable;
+  readonly obligations: ObligationTable;
+  readonly principals: PrincipalTable;
   readonly persistence_probe: EngineeringPersistenceProbeTable;
+  readonly service_offers: ServiceOfferTable;
+  readonly service_executions: ServiceExecutionTable;
+  readonly settlement_operations: SettlementOperationTable;
+  readonly treasury_bindings: TreasuryBindingTable;
 }
 
 export type PersistenceTransaction = Transaction<PersistenceDatabase>;
@@ -66,6 +240,10 @@ export class PostgresPersistence {
   }
 
   get databaseForEngineeringProof(): Kysely<PersistenceDatabase> {
+    return this.#database;
+  }
+
+  get databaseForApplication(): Kysely<PersistenceDatabase> {
     return this.#database;
   }
 }
