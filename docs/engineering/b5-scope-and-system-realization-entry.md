@@ -2,8 +2,12 @@
 
 ## Status and purpose
 
-Status: `SELECTED — B5 GATE SCOPE`; acceptance evidence is recorded in
-`PROJECT_STATE.md` only after the focused change and accepted-main CI have passed.
+Status: `VERIFIED — PASS` on 2026-08-25.
+
+Acceptance evidence: pull request `#10`, merge
+`395dfd9aa105cdd95088ffd5602739d6c79cbba5`, and accepted-main engineering
+verification run `32794327644`, completed successfully including the isolated
+PostgreSQL proof. `PROJECT_STATE.md` is the current continuity index.
 
 B5 is **Testnet Scope & System Realization Entry**. It closes the gap between the
 B0-B4 engineering runway and later product realization by selecting the first

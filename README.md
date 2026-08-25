@@ -11,10 +11,10 @@ no wallet integration, authentication, smart contract, Arc integration, x402
 implementation, business schema, hosted agent, evidence logic, capital logic, or
 Production deployment configuration.
 
-B5 is limited to the repository-native Testnet Scope & System Realization Entry
-decision. It selects Human-Controlled Business Entry as the first bounded
-realization candidate while explicitly deferring code, schema, authentication,
-wallet/provider selection, and external configuration. See
+B5 Testnet Scope & System Realization Entry is `VERIFIED — PASS`. It selects
+Human-Controlled Business Entry as the first bounded realization candidate while
+explicitly deferring code, schema, authentication, wallet/provider selection, and
+external configuration. B6 has not started. See
 [`docs/engineering/b5-scope-and-system-realization-entry.md`](docs/engineering/b5-scope-and-system-realization-entry.md).
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
