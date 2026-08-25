@@ -29,4 +29,14 @@ Next.js route folders are delivery structure, not semantic domains, services, or
 
 ## Why no named product modules yet
 
-B2 proves the responsive application shell and build path. B3 adds only a non-domain persistence proof. Naming concrete implementation modules or business tables before their vertical-slice boundaries are accepted would turn engineering setup into an architecture decision. Module directories and domain schema will be introduced only after their responsibilities are accepted.
+B2 proves the responsive application shell and build path. B3 adds only a
+non-domain persistence proof. B5 selects Human-Controlled Business Entry as the
+first bounded realization candidate, but deliberately leaves its owner-to-module,
+API, and schema decisions for the separately authorized System Realization
+Specification gate. See
+[`b5-scope-and-system-realization-entry.md`](b5-scope-and-system-realization-entry.md).
+
+Naming concrete implementation modules or business tables before those
+responsibilities are accepted would turn engineering setup into a silent
+architecture decision. Module directories and domain schema will be introduced
+only after their responsibilities are accepted.

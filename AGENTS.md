@@ -12,14 +12,21 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Current phase boundary
 
-- Current implemented scope is **B4 Deployment Foundation** only; B4 adds protected
-  Preview deployment evidence and no product behavior.
+- **B5 Testnet Scope & System Realization Entry** is the only authorized work.
+  B5 is a decision-and-continuity gate and adds no product behavior.
+- B5 selects **Human-Controlled Business Entry** as the first bounded realization
+  candidate. Selection is not implementation and does not authorize B6.
+- Current implemented scope remains **B4 Deployment Foundation** only; B4 adds
+  protected Preview deployment evidence and no product behavior.
 - The shell may display BUILD as available, MIGRATE as `LOCKED`, and CAPITAL as a separate path. These are presentation states, not domain authority or implemented business behavior.
 - B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
 - The Engineering Continuity & Handoff checkpoint follows B3 and adds repository-native takeover evidence only. It is not a product phase.
 - Do not implement product workflows, authentication, smart contracts, wallet/Arc/Circle/x402 integrations, agents, evidence, settlement, capital logic, or fake economic functionality.
-- Do not begin B5. B4 authority is limited to the deployment foundation and its
-  evidence; it does not authorize product implementation or Production exposure.
+- Do not begin B6. B5 authority is limited to the scope and System Realization
+  entry evidence in
+  `docs/engineering/b5-scope-and-system-realization-entry.md`; it does not authorize
+  authentication, a domain schema, a wallet/provider selection, product
+  implementation, or Production exposure.
 
 ## Architecture authority
 
