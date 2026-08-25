@@ -2,7 +2,7 @@
 
 ## Status
 
-Status: `IMPLEMENTED + PROTECTED PREVIEW VERIFIED / EXTERNAL ARC PROOF PENDING`.
+Status: `FIRST INTEGRATED ARC TESTNET VERTICAL VERIFIED / SHOWCASE ITERATION ACTIVE`.
 
 This is the live execution contract after B5. B0-B5 remain accepted historical
 lineage. The old standalone B6 Agent Wallet, B7 x402, and B8 Background Execution
@@ -120,10 +120,10 @@ gas quantities and network fees remain separate fields.
 - live read-only Arc RPC connectivity has returned chain ID `5042002`, a moving
   block head, and deployed bytecode at the configured USDC interface.
 
-This checkpoint does not claim Circle credentials are configured, wallets are
-created, USDC is funded, an Arc transaction is submitted/finalized, x402 is
-implemented, a durable background worker exists, the paid service has run, or an
-Agent has authority. Live RPC connectivity alone is not settlement evidence.
+The first two Circle wallets, one Arc transaction, exact economic allocation, and
+one paid service execution are now proven. This does not claim user custody,
+Protected Treasury, x402, a durable background worker, Agent authority,
+Reputation, Capital, Production value, or organic demand.
 
 ## Observed implementation proof
 
@@ -142,13 +142,56 @@ Agent has authority. Live RPC connectivity alone is not settlement evidence.
   Protection remained enabled;
 - runtime warning/error query after the authenticated request returned no events.
 
+## Observed first integrated Arc proof
+
+- environment: `PRIVATE_ARC_TESTNET`;
+- actors: synthetic/common-control; software and Arc execution: real testnet;
+- Circle payer Treasury: Ops Pilot EOA
+  `0xcd4194d3cab4fe5e306ac397f8896b4b8e0f7ede`;
+- Circle seller Treasury: Signal Forge EOA
+  `0xd1d26154d2a493a0be3a30f8e8ae5498bd12f144`;
+- obligation: `obl_arc_snapshot_v1`, exact `0.250000 USDC`;
+- Circle provider transaction: `300ea7f4-9392-570b-9907-3cd6da1a1f4a`,
+  `COMPLETE`;
+- Arc transaction:
+  `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`,
+  block `58765237`, successful Circle USDC `transfer` of `250000` micro-USDC;
+- exact economic allocation: Signal Forge `REVENUE / INFLOW`, Ops Pilot
+  `SERVICE_COST / OUTFLOW`, both common-control and each posted once;
+- paid service: `svc_arc_snapshot_v1`, `COMPLETE`, source Arc block `58765304`,
+  digest `e22f9142f36a6ec47235f73b143fe44295d9e89da0f9ef41a0cd2e7566a7d97d`;
+- Evidence: chain-verified settlement fact and provider-reported service-output
+  fact remain distinct;
+- replay proof: repeated reconciliation remained `COMPLETE`, repeated service
+  execution returned `ALREADY_COMPLETE`, and resubmission from `COMPLETE` was
+  rejected;
+- protected Preview: `dpl_6XgtJVdU9uQPUb3jMz7g7UnodGKZ`, `READY`; authenticated
+  render exposed the actual amount, tx hash, settlement, revenue, and cost while
+  anonymous access remained HTTP `302` to Vercel SSO;
+- post-proof Vercel state: automation bypass count zero, future-Preview environment
+  variable count zero, no Production exposure;
+- runtime log scan contained only the already-recorded `pg` TLS-semantics warning;
+  no application request failure was observed.
+
+The initial transfer attempt returned Circle `API parameter invalid` because the
+SDK's permissive type accepted `walletId + tokenAddress` while Circle's current Arc
+guide requires `walletAddress + blockchain + tokenAddress`. No provider transaction
+ID was returned, so Inomasa retained `OUTCOME_UNKNOWN`. Circle transaction listing
+showed only the faucet funding transfer, a corrected request passed fee estimation,
+and one retry with the stored idempotency key succeeded. The adapter and regression
+test now enforce the documented request shape.
+
 An earlier Preview attempt was provider-blocked before build because the commit used
 the unverified local author `root@localhost.localdomain`. The branch commit metadata
 was corrected to the repository identity
 `Inomasa <131157449+0xinomasa@users.noreply.github.com>`; no application change or
 protection weakening was used to bypass the provider check.
 
-## Immediate external proof sequence
+## Completed external proof sequence
+
+All eleven steps below were observed successfully on 25 August 2026. They remain
+the recovery/replay sequence; completion does not authorize Production or broader
+Agent authority.
 
 1. Securely create/register the Circle entity secret and API key outside Git.
 2. Create or select one dedicated Alpha wallet set and configure the three private

@@ -8,8 +8,11 @@ interdependent common-control test Business templates, explicit control/Treasury
 bindings, exact USDC commerce and settlement state, a PostgreSQL Alpha schema, a
 Circle Developer-Controlled Wallet EOA adapter for Arc Testnet, and an application
 dashboard that reports what is connected versus pending. The paid service executor
-is settlement-gated and produces a digest-bound live Arc network snapshot; it cannot
-run until the corresponding Arc settlement is reconciled as complete.
+is settlement-gated and produces a digest-bound live Arc network snapshot. The first
+controlled vertical is now verified: two Circle EOA Treasuries, one real `0.250000`
+Arc Testnet USDC service settlement, exact revenue/cost allocation, narrow Evidence,
+and application-visible paid delivery. The actors remain synthetic/common-control
+and the money remains testnet value.
 
 B5 Testnet Scope & System Realization Entry remains `VERIFIED — PASS` historical
 lineage. The old standalone B6/B7/B8 sequence is retired. BUILD is now active through
@@ -49,9 +52,10 @@ npm run dev
 ```
 
 Open `http://localhost:3000`. Without database/provider configuration the dashboard
-fails closed and labels those integrations `NOT_CONFIGURED`. With the local
-development database migrated and bootstrapped, it displays the two actual local
-Business records and their pending Treasury state.
+fails closed and labels those integrations `NOT_CONFIGURED`. With a migrated and
+bootstrapped database, it displays the actual Business, Treasury, obligation,
+settlement, ledger, service, and Evidence state available in that explicitly
+selected environment.
 
 For a production-mode local run:
 
