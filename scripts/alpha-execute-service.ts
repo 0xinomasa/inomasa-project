@@ -5,8 +5,12 @@ import { readDatabaseConnectionConfig } from '../src/platform/persistence/config
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { PostgresAlphaServiceRepository } from '../src/platform/persistence/alpha-service-repository.ts';
 
-const executionId = 'svc_arc_snapshot_v1' as const;
-const obligationId = 'obl_arc_snapshot_v1' as const;
+const executionArgument = process.argv[2] ?? 'svc_arc_snapshot_v1';
+const obligationArgument = process.argv[3] ?? 'obl_arc_snapshot_v1';
+if (!executionArgument.startsWith('svc_')) throw new Error('Execution ID must start with svc_.');
+if (!obligationArgument.startsWith('obl_')) throw new Error('Obligation ID must start with obl_.');
+const executionId = executionArgument as `svc_${string}`;
+const obligationId = obligationArgument as `obl_${string}`;
 
 function digestSnapshot(snapshot: {
   readonly blockNumber: bigint;

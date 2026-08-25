@@ -10,7 +10,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | Accepted branch | `main` |
 | Latest completed engineering gate | **B5 — Testnet Scope & System Realization Entry: VERIFIED / PASS** |
 | Active realization program | **First integrated controlled Alpha vertical: VERIFIED / PASS; showcase hardening: IN PROGRESS** |
-| Next proof checkpoint | **Bounded Agent-triggered repeat service purchase with explicit authority and spend/counterparty limits: NOT YET EXECUTED** |
+| Next proof checkpoint | **Selected compatible x402 realization with exact authority/economic linkage: NOT YET EXECUTED** |
 | B5 result | Decision-and-continuity evidence only; selects Human-Controlled Business Entry as the first bounded realization candidate and adds no product behavior |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
@@ -20,15 +20,17 @@ This file is the concise repository-native entry point for a human or AI operato
 | B5 accepted-main CI evidence | Engineering verification run `32794327644`, `push/main`, completed successfully, including PostgreSQL proof |
 | Alpha implementation checkpoint | Commit `724e96b175b2dbe08e24f70a5f98c8f8f95b800a`, pull request `#12`, merge `6ac8045db9bb762b529f145c589dced39b901cf1`; PR verification run `32822885262` and accepted-main run `32823716812` completed successfully with 19/19 tests, production build, and clean PostgreSQL migrations `001`-`004` |
 | First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
+| Bounded Agent proof | Commits `262aa5f` and `8fc9657`; Agent `agt_ops_pilot_buyer_v1` is provider-attributed, operator-invoked, and non-custodial; exact offer/counterparty/per-action/cumulative/expiry/revocation policy issued and consumed authorization `xau_arc_snapshot_agent_v1`; settlement `set_arc_snapshot_agent_v1` completed for `0.100000` Arc Testnet USDC in transaction `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`; service `svc_arc_snapshot_agent_v1` completed from Arc block `58768105` |
 | Current continuity checkpoint | B0-B5 lineage is preserved; the old B6/B7/B8 continuation is retired and the authorized Alpha compresses final R1-R5 causal logic into one vertical build |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
-| Product implementation boundary | Deterministic Business/economic kernel, Alpha migrations, Circle EOA Treasury adapter, exact Arc verifier, settlement/economic allocation, paid snapshot service, narrow Evidence, and application dashboard are `IMPLEMENTED`; the first integrated controlled Arc Testnet path is `VERIFIED` |
-| Active work | `Signal Forge` and `Ops Pilot` remain synthetic/common-control. Their first exact `0.250000` USDC service obligation is `SETTLED`; seller `REVENUE`, buyer `SERVICE_COST`, chain settlement Evidence, and service-delivery Evidence are persisted exactly once |
-| Current blocking gate | No blocker remains for the first integrated Alpha proof. `PG-TLS-SEMANTICS-01` remains active for its scoped dependency change; bounded Agent authority, x402 selection, and Capital remain later proof work |
+| Product implementation boundary | Deterministic Business/economic kernel, bounded Agent authority/allowance, Alpha migrations, Circle EOA Treasury adapter, exact Arc verifier, settlement/economic allocation, paid snapshot service, narrow Evidence, and application dashboard are `IMPLEMENTED`; the Human and bounded-Agent controlled Arc Testnet paths are `VERIFIED` |
+| Active work | `Signal Forge`, `Ops Pilot`, and the buyer Agent remain synthetic/common-control. Two exact service obligations totaling `0.350000` USDC are `SETTLED`; four economic entries, two chain settlement Evidence facts, and two service-delivery Evidence facts are persisted exactly once |
+| Current blocking gate | No blocker remains for the bounded Agent proof. `PG-TLS-SEMANTICS-01` remains active for its scoped dependency change; x402 selection/realization and Capital remain later proof work |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
 | B4 protected Preview evidence | Vercel deployment `dpl_az1jRshRMZYn57RbFxsvkozLJZ2k` from accepted `main` commit `d75bcd5472f35f0cc962c6a420473957915153f6`; target `preview`, state `READY` |
 | Deployment protection evidence | Anonymous request redirected to Vercel SSO without the shell; authorized request rendered expected shell anchors; temporary automation bypass removed and Vercel Authentication remained enabled |
 | Alpha protected Preview evidence | Deployment `dpl_6XgtJVdU9uQPUb3jMz7g7UnodGKZ`; target Preview, state `READY`, protected render displayed both Businesses, exact amount, tx hash, `COMPLETE`, `REVENUE`, and `SERVICE_COST`; anonymous access remained HTTP `302` to Vercel SSO |
+| Agent Alpha protected Preview evidence | Deployment `dpl_6rJLRfDT5SVXs35vbnDpEWLkkcK6`, target Preview, state `READY`; protected render displayed the Agent, scoped offer, `0.100000 / 0.200000 USDC` allowance, second settlement, and `COMPLETE`; anonymous access remained HTTP `302`; future-Preview env count and automation-bypass count were restored to zero |
 | Deployment state | The executed Alpha has a protected Preview `READY`; automation-bypass count and configured future-Preview environment-variable count were restored to zero after proof; no Production deployment or authority was created |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
@@ -155,11 +157,12 @@ The expected proof is successful connection, migration observation, parameterize
 The repository now contains an Arc Testnet registry and Circle
 Developer-Controlled Wallet EOA adapter. Private-testnet database state has two
 common-control test Businesses, two active Circle Treasury bindings, one settled
-service obligation, exact seller/buyer economic entries, and two narrow Evidence
-facts. Circle and Arc independently report the same successful `0.250000` USDC
-transfer, and the settlement-gated service is complete. No credential is committed,
-x402/Gateway remains unselected, and no hosted Agent, Production database, or
-Production deployment exists.
+Human service obligation and one bounded-Agent service obligation, exact seller/buyer
+economic entries, and four narrow Evidence facts. Circle and Arc independently
+report successful `0.250000` and `0.100000` USDC transfers, and both
+settlement-gated services are complete. No credential is committed; x402/Gateway
+remains unselected, and no hosted Agent, Agent wallet custody, LLM authority,
+Production database, or Production deployment exists.
 
 ## Recovery and takeover rules
 
@@ -174,13 +177,13 @@ Production deployment exists.
 
 ## Exact next step
 
-Continue the controlled Alpha vertically from the verified commerce loop. Add the
-smallest explicit Agent authority record and deterministic policy that can trigger a
-second versioned service purchase only for the approved Business, offer,
-counterparty, per-transaction amount, cumulative test budget, and expiry. Preserve
-Human/platform revocation and common-control provenance. Do not add an LLM to the
-deterministic authorization or settlement path; intelligence may propose/trigger
-only within the persisted authority envelope.
+Continue the controlled Alpha vertically from the verified Human and bounded-Agent
+commerce loops. Select and prove the smallest compatible x402 realization for Arc
+Testnet. Evaluate Circle Gateway/Nanopayments first, including its one-time EOA
+deposit, Circle signing-API compatibility, facilitator failure/ambiguity semantics,
+and exact linkage back to Inomasa Intent, Authorization, obligation, economic state,
+and Evidence. Do not classify an unsigned HTTP 402 exchange or an unobserved adapter
+as paid machine-to-machine commerce.
 
 Do not begin Production/mainnet, public anonymous access, MIGRATE, unrestricted
 Agent authority, or Capital deployment. See

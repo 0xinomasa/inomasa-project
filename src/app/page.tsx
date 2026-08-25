@@ -195,6 +195,50 @@ export default async function Home() {
         )}
       </section>
 
+      <section className="evidence-section" id="agent-authority">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Bounded agent operation</p>
+            <h2>Intelligence requests. Authority decides.</h2>
+          </div>
+          <p>
+            The first buyer Agent has no wallet custody. It may request one exact capability only
+            inside a Human-granted, expiring counterparty and USDC allowance envelope.
+          </p>
+        </div>
+
+        <div className="activity-ledger">
+          {dashboard.agentAuthorities.length === 0 ? (
+            <article className="activity-empty">
+              <span>NOT GRANTED</span>
+              <p>No bounded Agent authority exists in the connected environment.</p>
+            </article>
+          ) : (
+            dashboard.agentAuthorities.map((authority) => (
+              <article key={authority.grantId}>
+                <div>
+                  <span>{authority.agentPrincipalId}</span>
+                  <em>{authority.runtimeClass.replaceAll('_', ' ')}</em>
+                </div>
+                <strong>{authority.grantStatus}</strong>
+                <dl>
+                  <div><dt>Provider of record</dt><dd>{authority.providerOfRecordPrincipalId}</dd></div>
+                  <div><dt>Allowed offer</dt><dd>{authority.allowedOfferId}</dd></div>
+                  <div><dt>Counterparty</dt><dd>{authority.allowedCounterpartyBusinessId}</dd></div>
+                  <div>
+                    <dt>Allowance consumed</dt>
+                    <dd>
+                      {displayUsdc(authority.allowanceConsumedMicroUsdc)} /{' '}
+                      {displayUsdc(authority.allowanceTotalMicroUsdc)}
+                    </dd>
+                  </div>
+                </dl>
+              </article>
+            ))
+          )}
+        </div>
+      </section>
+
       <section className="evidence-section">
         <div className="section-heading">
           <div>

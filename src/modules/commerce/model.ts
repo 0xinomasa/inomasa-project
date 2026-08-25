@@ -26,9 +26,12 @@ export interface EconomicObligation {
   readonly asset: 'USDC';
   readonly buyerBusinessId: BusinessInstance['businessId'];
   readonly environment: InomasaEnvironment;
+  readonly executionAuthorizationId?: `xau_${string}`;
   readonly obligationId: `obl_${string}`;
   readonly offerId: ServiceOffer['offerId'];
   readonly provenance: EconomicProvenance;
+  readonly representedBusinessId?: BusinessInstance['businessId'];
+  readonly requesterPrincipalId?: `agt_${string}`;
   readonly sellerBusinessId: BusinessInstance['businessId'];
   readonly state: 'OPEN' | 'SETTLED';
   readonly termsVersion: number;
@@ -48,6 +51,11 @@ export interface SettlementOperation {
 }
 
 export function acceptServiceOffer(input: {
+  readonly agentAuthority?: {
+    readonly executionAuthorizationId: `xau_${string}`;
+    readonly representedBusinessId: BusinessInstance['businessId'];
+    readonly requesterPrincipalId: `agt_${string}`;
+  };
   readonly buyer: BusinessInstance;
   readonly offer: ServiceOffer;
   readonly obligationId: `obl_${string}`;
@@ -65,11 +73,25 @@ export function acceptServiceOffer(input: {
     throw new Error('The service offer does not belong to the selected provider Business.');
   }
 
+  if (
+    input.agentAuthority !== undefined &&
+    input.agentAuthority.representedBusinessId !== input.buyer.businessId
+  ) {
+    throw new Error('Agent authority must represent the buyer Business.');
+  }
+
   return {
     amountMicroUsdc: input.offer.priceMicroUsdc,
     asset: 'USDC',
     buyerBusinessId: input.buyer.businessId,
     environment: input.buyer.environment,
+    ...(input.agentAuthority === undefined
+      ? {}
+      : {
+          executionAuthorizationId: input.agentAuthority.executionAuthorizationId,
+          representedBusinessId: input.agentAuthority.representedBusinessId,
+          requesterPrincipalId: input.agentAuthority.requesterPrincipalId,
+        }),
     obligationId: input.obligationId,
     offerId: input.offer.offerId,
     provenance:

@@ -120,10 +120,11 @@ gas quantities and network fees remain separate fields.
 - live read-only Arc RPC connectivity has returned chain ID `5042002`, a moving
   block head, and deployed bytecode at the configured USDC interface.
 
-The first two Circle wallets, one Arc transaction, exact economic allocation, and
-one paid service execution are now proven. This does not claim user custody,
-Protected Treasury, x402, a durable background worker, Agent authority,
-Reputation, Capital, Production value, or organic demand.
+The first two Circle wallets, two Arc transactions, exact economic allocation, two
+paid service executions, and one bounded Agent-triggered repeat purchase are now
+proven. This does not claim user custody, Protected Treasury, x402, a durable hosted
+Agent/background worker, LLM authority, Reputation, Capital, Production value, or
+organic demand.
 
 ## Observed implementation proof
 
@@ -186,6 +187,42 @@ the unverified local author `root@localhost.localdomain`. The branch commit meta
 was corrected to the repository identity
 `Inomasa <131157449+0xinomasa@users.noreply.github.com>`; no application change or
 protection weakening was used to bypass the provider check.
+
+## Observed bounded Agent proof
+
+- Agent principal: `agt_ops_pilot_buyer_v1`, distinct from Business and wallet;
+- provider-of-record: `biz_ops_pilot`; runtime: deterministic
+  `OPERATOR_INVOKED`, software `deterministic-buyer@1`;
+- Standing Grant: `grt_ops_pilot_snapshot_v1`, Human grantor
+  `usr_alpha_operator`, non-delegable, offer `off_arc_snapshot_v2`, counterparty
+  `biz_signal_forge`, exact per-action ceiling `0.100000 USDC`, cumulative
+  allowance `0.200000 USDC`, expiring 1 September 2026;
+- authority path: Action Intent `int_arc_snapshot_agent_v1` -> policy `ALLOW`
+  (`WITHIN_PERSISTED_AUTHORITY`) -> Execution Authorization
+  `xau_arc_snapshot_agent_v1` -> obligation `obl_arc_snapshot_agent_v1`;
+- allowance after one consumed authorization: `0.100000 / 0.200000 USDC` used;
+- Circle provider transaction: `ce68b327-be10-5714-9475-d2941d15d73d`;
+- Arc transaction:
+  `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`;
+- exact Arc token transfer: Ops Pilot -> Signal Forge, `0.100000 USDC`, verified
+  against chain `5042002`, configured USDC interface, receipt, payer, and payee;
+- service execution: `svc_arc_snapshot_agent_v1`, `COMPLETE`, source
+  `arc-block:58768105`, output SHA-256
+  `42cecb68f122f46eba0e175cb93c58f457870f982b6ca6a65d0fb148fa34ab81`;
+- replay proof: Agent preparation returned `ALREADY_CONSUMED` / `ALREADY_EXISTS`,
+  reconciliation stayed `COMPLETE`, service execution returned
+  `ALREADY_COMPLETE`, and resubmission from `COMPLETE` failed closed;
+- policy tests deny wrong requester, offer, counterparty, per-action amount,
+  exhausted allowance, expiry, and revoked grant;
+- protected Preview: `dpl_6rJLRfDT5SVXs35vbnDpEWLkkcK6`, `READY`; protected
+  render showed the Agent scope, allowance, second settlement and completion;
+  anonymous access stayed HTTP `302`, temporary future-Preview environment
+  variables were removed, and the automation bypass was revoked (remaining zero).
+
+The Agent did not possess wallet custody or submit an independent wallet signature.
+The platform executed the already authorized Business obligation through the same
+Circle Treasury adapter. This proves bounded delegated operation, not a hosted Agent
+runtime or x402 machine-payment exchange.
 
 ## Completed external proof sequence
 
