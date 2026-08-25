@@ -23,6 +23,8 @@ export interface AlphaCommerceSummary {
   readonly buyerBusinessId: string;
   readonly obligationId: string;
   readonly provenance: string;
+  readonly provider: string | null;
+  readonly providerTransactionId: string | null;
   readonly sellerBusinessId: string;
   readonly settlementId: string | null;
   readonly settlementState: string | null;
@@ -470,6 +472,8 @@ export class PostgresAlphaCommerceRepository {
         'obligation.buyer_business_id as buyerBusinessId',
         'obligation.obligation_id as obligationId',
         'obligation.provenance as provenance',
+        'settlement.provider as provider',
+        'settlement.provider_transaction_id as providerTransactionId',
         'obligation.seller_business_id as sellerBusinessId',
         'settlement.settlement_id as settlementId',
         'settlement.state as settlementState',

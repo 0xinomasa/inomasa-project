@@ -228,6 +228,47 @@ interface SettlementOperationTable {
   readonly updated_at: Timestamp;
 }
 
+interface GatewayFundingOperationTable {
+  readonly amount_micro_usdc: string;
+  readonly approval_idempotency_key: string;
+  readonly approval_provider_transaction_id: string | null;
+  readonly approval_transaction_hash: string | null;
+  readonly business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly deposit_idempotency_key: string;
+  readonly deposit_provider_transaction_id: string | null;
+  readonly deposit_transaction_hash: string | null;
+  readonly depositor_address: string;
+  readonly funding_id: string;
+  readonly gateway_contract_address: string;
+  readonly provider_state: string | null;
+  readonly state: string;
+  readonly updated_at: Timestamp;
+}
+
+interface X402PaymentOperationTable {
+  readonly amount_micro_usdc: string;
+  readonly asset_address: string;
+  readonly created_at: Generated<Date>;
+  readonly execution_authorization_id: string;
+  readonly network: string;
+  readonly obligation_id: string;
+  readonly pay_to_address: string;
+  readonly payer_address: string;
+  readonly payment_id: string;
+  readonly payment_payload: unknown | null;
+  readonly payment_payload_sha256: string | null;
+  readonly payment_required: unknown;
+  readonly payment_required_sha256: string;
+  readonly protocol_version: number;
+  readonly provider_state: string | null;
+  readonly provider_transaction_id: string | null;
+  readonly scheme: string;
+  readonly settlement_id: string;
+  readonly state: string;
+  readonly updated_at: Timestamp;
+}
+
 interface EconomicEntryTable {
   readonly amount_micro_usdc: string;
   readonly asset: string;
@@ -267,6 +308,7 @@ export interface PersistenceDatabase {
   readonly economic_entries: EconomicEntryTable;
   readonly evidence_facts: EvidenceFactTable;
   readonly execution_authorizations: ExecutionAuthorizationTable;
+  readonly gateway_funding_operations: GatewayFundingOperationTable;
   readonly genesis_requests: GenesisRequestTable;
   readonly obligations: ObligationTable;
   readonly principals: PrincipalTable;
@@ -276,6 +318,7 @@ export interface PersistenceDatabase {
   readonly settlement_operations: SettlementOperationTable;
   readonly standing_authority_grants: StandingAuthorityGrantTable;
   readonly treasury_bindings: TreasuryBindingTable;
+  readonly x402_payment_operations: X402PaymentOperationTable;
 }
 
 export type PersistenceTransaction = Transaction<PersistenceDatabase>;
