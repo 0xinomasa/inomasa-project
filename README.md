@@ -2,9 +2,9 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current implementation is an accelerated controlled Alpha on top of the B0-B5
-engineering foundation. It includes deterministic versioned Business genesis, two
-interdependent common-control test Business templates, explicit control/Treasury
+The current implementation is a verified controlled-Alpha regression baseline. It
+includes deterministic versioned Business genesis, two interdependent
+common-control Business fixtures, explicit control/Treasury
 bindings, exact USDC commerce and settlement state, a PostgreSQL Alpha schema, a
 Circle Developer-Controlled Wallet EOA adapter for Arc Testnet, and an application
 dashboard that reports what is connected versus pending. The paid service executor
@@ -17,17 +17,22 @@ Human grant with exact offer, counterparty, amount, cumulative allowance, expiry
 and revocation controls. The Agent has no wallet custody or LLM authority. All
 actors remain synthetic/common-control and the money remains testnet value.
 
-B5 Testnet Scope & System Realization Entry remains `VERIFIED — PASS` historical
-lineage. The old standalone B6/B7/B8 sequence is retired. BUILD is now active through
-one vertical Alpha program that compresses the final R1-R5 dependency logic. MIGRATE
-is deferred; CAPITAL follows a credible commerce/Evidence loop. See
-[`docs/engineering/alpha-execution.md`](docs/engineering/alpha-execution.md).
+B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
+active controlled-Alpha program is defined by
+[`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
+The verified fixtures remain regression evidence while the system is generalized;
+Capital is a later REV2 checkpoint, not the automatic next implementation step.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
 ## Authority
 
-The **Inomasa Canonical Architecture v1.0** is the sole active architecture authority. Repository documentation summarizes implementation guardrails but does not replace or amend the Canonical Architecture. See [`docs/engineering/source-hierarchy.md`](docs/engineering/source-hierarchy.md).
+[`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md)
+is the active product and system-architecture authority. The REV2 document above is
+the active Alpha implementation guide, while accepted GitHub `main` remains mutable
+engineering truth. Inomasa Canonical Architecture v1.0 is
+`SUPERSEDED / HISTORICAL`. See the complete
+[`source hierarchy`](docs/engineering/source-hierarchy.md).
 
 ## Requirements
 
@@ -96,11 +101,11 @@ src/
   shared/    domain-neutral shared code only
 migrations/  ordered, version-controlled PostgreSQL schema evolution
 scripts/     engineering operations, including migration/proof commands
-test/        structural application-shell tests
+test/        application, domain, adapter-contract, and economic-correctness tests
 ```
 
-The physical folders preserve a modular monolith. They do not imply that Canonical
-semantic domains are microservices. PostgreSQL/Kysely and Circle SDK types remain
+The physical folders preserve a modular monolith. They do not imply that product
+architecture responsibilities are microservices. PostgreSQL/Kysely and Circle SDK types remain
 inside `src/platform/`; Business rules depend on module ports rather than vendor SDKs.
 
 ## Controlled Alpha bootstrap
@@ -111,8 +116,10 @@ After applying migrations against an isolated local development database:
 npm run alpha:bootstrap
 ```
 
-The command creates `Signal Forge` and `Ops Pilot` once and reports
-`ALREADY_EXISTS` on replay. It does not create a Circle wallet or submit a transfer.
+The command creates the `Signal Forge` and `Ops Pilot` regression fixtures once and
+reports `ALREADY_EXISTS` on replay. These common-control objects are control
+specimens, not the generic REV2 Business model. The command does not create a
+Circle wallet or submit a transfer.
 
 Prepare the versioned offer, common-control obligation, and idempotent settlement
 authorization:
@@ -189,11 +196,13 @@ Run this only against an isolated development/test database. Clean reconstructio
 
 ## Deployment foundation
 
-B4 is `VERIFIED — PASS`. The accepted shell is available only through the protected
-Vercel Preview recorded in
-[`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md).
-No Production deployment or public anonymous access is authorized. The Alpha branch
-must produce a new protected Preview before its hosted runtime is considered proven.
+B4 remains `VERIFIED — PASS` historical foundation evidence. The current controlled
+Alpha also has a verified protected Vercel Preview recorded in
+[`PROJECT_STATE.md`](PROJECT_STATE.md) and the historical
+[`Alpha execution record`](docs/engineering/alpha-execution.md). No Production
+deployment or public anonymous access is authorized. A significant hosted-runtime
+change requires new protected Preview evidence before that change is considered
+runtime-verified.
 
 ## Local environment
 

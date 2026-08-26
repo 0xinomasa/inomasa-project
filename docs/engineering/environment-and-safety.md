@@ -19,7 +19,11 @@ The phone is an active development client. Local servers and agents can stop whe
 
 ## Execution profiles and evidence status
 
-Environment-specific procedures are execution profiles, not universal requirements. The engineering destination remains fixed by the accepted gate, Canonical Architecture, safety constraints, acceptance criteria, and required evidence. The route may vary across devices, operating systems, AI tools, human operators, and infrastructure providers.
+Environment-specific procedures are execution profiles, not universal requirements.
+The engineering destination remains fixed by the active Concept & Architecture and
+Alpha Realization documents, accepted checkpoint, safety constraints, acceptance
+criteria, and required evidence. The route may vary across devices, operating
+systems, AI tools, human operators, and infrastructure providers.
 
 For the actual environment, choose the safest and most effective route that preserves every invariant and produces equivalent verification evidence. Prefer the least-privilege viable mode. Do not carry the Ubuntu Proot sandbox workaround, an AI-specific workflow, or a provider-specific administrative step into another profile without evidence that its constraints require it.
 

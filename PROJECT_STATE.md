@@ -8,10 +8,12 @@ This file is the concise repository-native entry point for a human or AI operato
 | --- | --- |
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
-| Latest completed engineering gate | **B5 — Testnet Scope & System Realization Entry: VERIFIED / PASS** |
-| Active realization program | **First integrated controlled Alpha vertical: VERIFIED / PASS; showcase hardening: IN PROGRESS** |
-| Next proof checkpoint | **Smallest honest controlled Capital loop over the verified commerce/Evidence path: NOT STARTED** |
-| B5 result | Decision-and-continuity evidence only; selects Human-Controlled Business Entry as the first bounded realization candidate and adds no product behavior |
+| Active product/architecture authority | [`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md): `ACCEPTED / ACTIVE` |
+| Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
+| Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
+| Active realization program | **Controlled Arc Testnet Product Alpha REV2**; Checkpoint A — Product authority & genericization entry is complete through this documentation-only migration |
+| Next implementation checkpoint | **Checkpoint B — Generic Business System: NOT STARTED**; Capital is Checkpoint F, not automatic next work |
+| B5 result | `VERIFIED / PASS` historical decision-and-continuity evidence; Human-Controlled Business Entry is lineage rather than the current standalone realization boundary |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
 | B4 acceptance evidence | Pull request `#7`, merge `d2829c35e52fc59d8579e16d88956997cb79e681` |
@@ -22,12 +24,14 @@ This file is the concise repository-native entry point for a human or AI operato
 | First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
 | Bounded Agent proof | Commits `262aa5f` and `8fc9657`; Agent `agt_ops_pilot_buyer_v1` is provider-attributed, operator-invoked, and non-custodial; exact offer/counterparty/per-action/cumulative/expiry/revocation policy issued and consumed authorization `xau_arc_snapshot_agent_v1`; settlement `set_arc_snapshot_agent_v1` completed for `0.100000` Arc Testnet USDC in transaction `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`; service `svc_arc_snapshot_agent_v1` completed from Arc block `58768105` |
 | Circle Gateway x402 proof | Implementation commit `1c15f7d2a98429d4c62f0ee718f30a624106cfee`, pull request `#16`, merge `8d60744ec7c330a0403ef4787bc21634fbf2ed01`; final PR run `32839024137` and accepted-main run `32839154514` completed successfully. Ops Pilot deposited `1.000000` Arc Testnet USDC to Gateway in transaction `0x2280402061b6a7960efd6d24804a753310eba5e3f193b0a5a66225c11b7c2c53`; Agent payment `pay_arc_snapshot_x402_v1` settled exact `0.010000` USDC through x402 v2 `exact`, provider receipt `3d6239e1-9d29-46a0-bfb8-117578b9d1d4`; Gateway balances became payer `0.990000`, seller `0.010000`, pending zero; service `svc_arc_snapshot_x402_v1` completed from Arc block `58771214` |
-| Current continuity checkpoint | B0-B5 lineage is preserved; the old B6/B7/B8 continuation is retired and the authorized Alpha compresses final R1-R5 causal logic into one vertical build |
+| Current continuity checkpoint | Active authority and REV2 now live in-repository; B0-B5, B6/B7/B8, R1-R5, and prior Capital-next plans remain historical lineage |
+| Authority migration local evidence | npm audit (0 vulnerabilities), lint, typecheck, 28/28 tests, Next.js `16.3.3` production build, migrations `001`-`006` already current, database write/read/rollback, local Markdown-link audit, and `git diff --check` passed; no product/provider/database behavior changed |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
 | Product implementation boundary | Deterministic Business/economic kernel, bounded Agent authority/allowance, Circle EOA Treasury, direct Arc transfer, Gateway x402 adapter, settlement/economic allocation, paid HTTP resource/service, narrow Evidence, and application dashboard are `IMPLEMENTED`; Human, bounded-Agent, direct-transfer, and x402 controlled Arc Testnet paths are `VERIFIED` |
 | Active work | `Signal Forge`, `Ops Pilot`, and the buyer Agent remain synthetic/common-control. Three exact service obligations totaling `0.360000` USDC are `SETTLED`; six economic entries, three settlement Evidence facts, and three service-delivery Evidence facts are persisted exactly once |
-| Current blocking gate | No blocker remains for the controlled commerce Alpha. `PG-TLS-SEMANTICS-01` remains active for its scoped dependency change; the controlled Capital showcase is next and not started |
-| Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); local audit (0 vulnerabilities), lint, typecheck, 28/28 tests, production build, and isolated `PRIVATE_ARC_TESTNET` PostgreSQL proof passed without product or database changes |
+| Current blocking gate | No authority-migration blocker remains. `PG-TLS-SEMANTICS-01` stays active only for its scoped dependency change; REV2 Checkpoint B is next and not started |
+| Baseline fixture/product-label status | Signal Forge, Ops Pilot, the buyer Agent, and the current shell's `CAPITAL / NEXT` label remain verified baseline fixtures/UI output. They are not generic product capacity or active roadmap authority and are unchanged by this migration |
+| Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
 | B4 protected Preview evidence | Vercel deployment `dpl_az1jRshRMZYn57RbFxsvkozLJZ2k` from accepted `main` commit `d75bcd5472f35f0cc962c6a420473957915153f6`; target `preview`, state `READY` |
 | Deployment protection evidence | Anonymous request redirected to Vercel SSO without the shell; authorized request rendered expected shell anchors; temporary automation bypass removed and Vercel Authentication remained enabled |
@@ -68,17 +72,24 @@ an observed successful `main` CI run.
 ## Durable continuity rules
 
 1. GitHub `main`, committed specifications, migrations, tests, CI evidence, and explicit gate records are the engineering continuity source.
-2. Inomasa Canonical Architecture v1.0 remains the sole active architecture authority. It is a controlled project source and is deliberately not partially copied here. If an operator lacks authorized access to it, they must stop before any semantic, authority, domain, or product-design decision.
-3. Repository engineering documents are subordinate implementation guidance. They cannot silently amend Canonical Architecture.
+2. [`docs/architecture/inomasa-concept-and-architecture-v1.0.md`](docs/architecture/inomasa-concept-and-architecture-v1.0.md) is the active product and system-architecture authority.
+3. [`docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md) is the active Alpha implementation guide and cannot silently amend the Concept & Architecture contract.
 4. Devices are replaceable development clients. Android + Termux + Ubuntu Proot is proven, not architecturally required.
 5. Operators and AI tools are replaceable. Codex, OpenCode, ChatGPT, another AI, or a human engineer receives no authority from chat history or tool identity.
 6. PostgreSQL semantics and the internal persistence boundary are durable; Neon is the provider used for B3 hosted proof, not an application boundary.
 7. Credentials and recovery material are supplied through authorized channels outside Git. Never commit or paste them into documentation, issues, CI logs, or chat.
-8. After every significant gate decision or accepted merge, update this file in the same change whenever practical. Record the latest completed gate, evidence, open holds, and exact next gate. A future operator must not need historical chat to discover state.
+8. After every significant checkpoint decision or accepted merge, update this file
+   in the same change whenever practical. Record the latest completed checkpoint,
+   evidence, open holds, and exact next execution point. A future operator must not
+   need historical chat to discover state.
 
 ## Invariant destination, adaptable execution route
 
-The engineering destination is invariant: the accepted state and next gate in this file, Canonical Architecture constraints, repository safety rules, acceptance criteria, and required verification evidence. An execution route is not invariant. It is a scoped profile selected for the actual device, operating system, operator, AI tool, and infrastructure capabilities in front of the operator.
+The engineering destination is set by the two active authority documents, accepted
+state and next checkpoint in this file, repository safety rules, acceptance
+criteria, and required verification evidence. An execution route is adaptable: it
+is a scoped profile selected for the actual device, operating system, operator, AI
+tool, and infrastructure capabilities in front of the operator.
 
 - Select the safest, least-privilege route that can satisfy the same gate in the actual environment.
 - Commands, tools, sequencing, and provider administration may differ between profiles, but the route must not weaken constraints, acceptance criteria, or required evidence.
@@ -151,7 +162,7 @@ The expected proof is successful connection, migration observation, parameterize
 | npm registry | Locked Node dependency retrieval | Package distribution only | `package-lock.json` is authoritative; do not change dependencies merely to work around a transient outage. |
 | Standards-compatible PostgreSQL | Shared persistence technology | Required persistence contract behind the internal boundary | Generic `DATABASE_URL` / `DATABASE_DIRECT_URL`, supplied outside Git. |
 | Neon | Dedicated hosted development database used for B3 proof | Current provider only; no Neon API in application/domain code | If unavailable, provision an authorized compatible PostgreSQL database and replay migrations plus `db:verify`. |
-| Next.js `16.3.3` | B2 application shell runtime used by the protected Alpha Preview | Patched Active LTS engineering framework, subordinate to Canonical Architecture | The 2026-08-25 security maintenance changed only the pinned Next.js package family and lockfile metadata; future security concerns require new current evidence. |
+| Next.js `16.3.3` | Controlled-Alpha application runtime used by the protected Preview | Patched Active LTS engineering framework, subordinate to active Inomasa product architecture | The 2026-08-25 security maintenance changed only the pinned Next.js package family and lockfile metadata; future security concerns require new current evidence. |
 | Arc Testnet | Required Alpha chain and current real-execution target | Exact chain/asset registry and the first real USDC settlement are verified | Chain ID `5042002`; testnet identifiers and facts must never be reused as mainnet authority. |
 | Circle Developer-Controlled Wallets | Selected and verified Alpha EOA Treasury execution adapter | Two platform-controlled external account bindings are active behind an Inomasa port; neither is identity, user custody, or Protected Treasury | API key, registered entity secret, and wallet-set ID stay outside Git; User-Controlled EOA remains the user-custody/exit reference path. |
 | Circle Gateway / Nanopayments | Selected and verified Alpha x402 v2 `exact` rail | One-time EOA deposit, Circle Signing API, public Gateway facilitator, and provider-reported receipts sit behind Inomasa x402 and persistence ports | No private key is introduced; exact payloads are persisted before facilitator handoff. The EOA deposit and seven-day minimum signature validity are explicit operational/security tradeoffs; generic x402 data remains portable while the Gateway adapter is replaceable. |
@@ -176,19 +187,20 @@ wallet custody, LLM authority, Production database, or Production deployment exi
 - **PostgreSQL provider unavailable:** do not redesign application code. Provision an authorized standards-compatible PostgreSQL development database, set generic local variables, replay versioned migrations, and run `npm run db:verify`.
 - **GitHub temporarily unavailable:** preserve the last verified clone and work offline only when safe. Do not declare a merge/gate accepted until the authoritative origin and `main` CI are available again.
 - **CI unavailable:** local evidence may diagnose work, but cannot replace the required observed `main` CI evidence for an accepted gate.
-- **Canonical Architecture unavailable:** continue only mechanical, non-semantic diagnosis. Pause any structural, domain, authority, or product decision until authorized access is restored.
+- **Active authority document missing or unreadable:** continue only mechanical,
+  non-semantic diagnosis. Restore the accepted repository copy from Git history
+  before structural, domain, authority, or product work.
 - **Credential loss or suspected compromise:** do not record recovery material here. Stop affected access, use the provider/account recovery process, rotate credentials, and re-run the relevant verification before resuming.
 
 ## Exact next step
 
-Continue the Showcase vertically from the verified Human, bounded-Agent, direct
-Arc-transfer, and Gateway x402 commerce loops. Implement the smallest honest
-controlled Capital proof: provider-attributed decision material and terms,
-authorization before execution, exact testnet allocation classified as `CAPITAL`
-rather than revenue, later use/performance, and new narrow Evidence. Do not create
-a universal score, automatic entitlement, silent platform balance-sheet risk, or
-an LLM-owned deterministic authority decision.
+Stop after the accepted authority/continuity migration. On a separate explicit
+execution task, begin only **REV2 Checkpoint B — Generic Business System**:
+user/Business multiplicity, four reusable Business Templates, generic Business
+instance creation and Business Package, data-driven Business Site, and the locked
+MIGRATE boundary. Preserve the current fixed Alpha economy as regression fixtures
+until generic replacement proof passes.
 
-Do not begin Production/mainnet, public anonymous access, MIGRATE, unrestricted
-Agent authority, or Production/public Capital exposure. See
-[`docs/engineering/alpha-execution.md`](docs/engineering/alpha-execution.md).
+Do not skip to ERC-8004, ERC-8183, Capital, Production/mainnet, public anonymous
+access, live MIGRATE, unrestricted Agent authority, or Production/public Capital
+exposure. Follow the active [Alpha Realization guide](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).

@@ -1,5 +1,10 @@
 # B4 Deployment Foundation evidence
 
+> **Document classification: `HISTORICAL / VERIFIED B4 EVIDENCE`.** References
+> below to B5/B6 describe the boundary at the time of B4 acceptance. They do not
+> define the current authority or Alpha sequence; see
+> [`source-hierarchy.md`](source-hierarchy.md).
+
 ## Verdict
 
 Status: `VERIFIED — PASS` on 2026-08-24.
