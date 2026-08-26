@@ -72,6 +72,28 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Keep intent, design, implementation, and proof distinct. Use `REQUIRED`,
   `SELECTED`, `PROTOTYPED`, `IMPLEMENTED`, and `VERIFIED` accurately.
 
+## Continuity closeout
+
+- Accepted GitHub `main` remains the normative mutable engineering truth. When a
+  meaningful task changes persistent engineering truth—code, schema/migrations,
+  dependencies, implementation state, verified evidence, checkpoint status,
+  active technical decisions, or operational boundaries—update the appropriate
+  existing repository state or documentation. Update `PROJECT_STATE.md` when
+  takeover or current execution state materially changes.
+- Second Brain at `/mnt/second-brain/Project/inomasa-project/` is curated
+  continuity/context enrichment, not competing engineering authority. Use it for
+  durable rationale, lessons, workflow decisions, historical context, or concise
+  milestone/session summaries that do not belong as normative engineering truth.
+- If both engineering truth and continuity context materially change, update both
+  according to their roles. If nothing durable changed, do not create
+  documentation merely to record task completion.
+- Before declaring a meaningful task complete, perform a Continuity Closeout:
+  decide whether repository state and/or Second Brain need updating, make only
+  necessary updates, verify consistency with the authority hierarchy, and report
+  completion.
+- Do not dump raw chat/session transcripts into GitHub. Avoid redundant Second
+  Brain files and reuse existing files or sections whenever practical.
+
 ## Repository boundaries
 
 - `src/app/` is the controlled-Alpha composition root; it must not own reusable
