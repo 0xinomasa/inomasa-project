@@ -2,9 +2,12 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current implementation is a verified controlled-Alpha regression baseline. It
-includes deterministic versioned Business genesis, two interdependent
-common-control Business fixtures, explicit control/Treasury
+The current implementation combines a verified controlled-Alpha regression baseline
+with a locally verified REV2 Checkpoint B Generic Business System. It includes four
+reusable BUILD templates, generic multi-user/multi-Business genesis, a reusable
+Business Package, data-driven Business Sites inside the same Next.js application,
+and a modeled but locked MIGRATE entry boundary. The accepted Signal Forge and Ops
+Pilot economy remains intact as regression evidence, with explicit control/Treasury
 bindings, exact USDC commerce and settlement state, a PostgreSQL Alpha schema, a
 Circle Developer-Controlled Wallet EOA adapter for Arc Testnet, and an application
 dashboard that reports what is connected versus pending. The paid service executor
@@ -21,7 +24,7 @@ B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
 active controlled-Alpha program is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
 The verified fixtures remain regression evidence while the system is generalized;
-Capital is a later REV2 checkpoint, not the automatic next implementation step.
+Capital is Checkpoint F, not the automatic next implementation step.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
@@ -65,7 +68,8 @@ Open `http://localhost:3000`. Without database/provider configuration the dashbo
 fails closed and labels those integrations `NOT_CONFIGURED`. With a migrated and
 bootstrapped database, it displays the actual Business, Treasury, obligation,
 settlement, ledger, service, and Evidence state available in that explicitly
-selected environment.
+selected environment. Published protected-Alpha Business Sites are served from
+Business data at `/business/<business-slug>`; they are not separate deployments.
 
 For a production-mode local run:
 
@@ -122,6 +126,23 @@ The command creates the `Signal Forge` and `Ops Pilot` regression fixtures once 
 reports `ALREADY_EXISTS` on replay. These common-control objects are control
 specimens, not the generic REV2 Business model. The command does not create a
 Circle wallet or submit a transfer.
+
+Create a fresh common-control Business from one of the four generic BUILD templates:
+
+```bash
+npm run business:create -- \
+  --template api-data-compute \
+  --name "Example Data Business" \
+  --slug example-data-business \
+  --controller-id usr_alpha_operator \
+  --controller-name "Inomasa Alpha Operator"
+```
+
+The command creates the Business, control, reusable Business Package read model,
+protected Business Site data, and a pending logical Treasury binding in one database
+transaction. It does not provision a provider wallet, transfer USDC, or claim an
+independent actor. MIGRATE requests fail closed while that entry route remains
+`LOCKED / NOT YET OPEN`.
 
 Prepare the versioned offer, common-control obligation, and idempotent settlement
 authorization:

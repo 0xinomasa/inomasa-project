@@ -489,10 +489,14 @@ footer p {
 
 .alpha-hero,
 .economy-section,
+.business-system-section,
 .activity-section,
 .evidence-section,
 .execution-section,
-.network-section {
+.network-section,
+.business-site__hero,
+.business-site__section,
+.business-site__treasury {
   margin-inline: auto;
   max-width: var(--max-width);
   width: calc(100% - 64px);
@@ -565,12 +569,76 @@ footer p {
 }
 
 .economy-section,
+.business-system-section,
 .activity-section,
 .evidence-section,
 .execution-section,
 .network-section {
   border-top: 1px solid var(--line);
   padding-block: 96px;
+}
+
+.template-grid {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.template-grid article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  min-height: 330px;
+  padding: 24px;
+}
+
+.template-grid article > span,
+.template-grid small,
+.business-instance-list article > div > span,
+.business-card__link,
+.business-site__offers article > span,
+.business-site__package article span,
+.business-site__package article strong {
+  font-family: 'Courier New', monospace;
+  font-size: 0.61rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.template-grid article > span,
+.business-instance-list article > div > span,
+.business-site__offers article > span,
+.business-site__package article strong {
+  color: var(--lime);
+}
+
+.template-grid h3 {
+  font-size: 1.7rem;
+  font-weight: 400;
+  letter-spacing: -0.04em;
+  margin: 42px 0 16px;
+}
+
+.template-grid article > p:not(.eyebrow) {
+  color: var(--muted);
+  font-size: 0.76rem;
+  line-height: 1.6;
+  min-height: 96px;
+}
+
+.template-grid article > div {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 6px;
+}
+
+.template-grid small {
+  border: 1px solid var(--line);
+  color: var(--muted-strong);
+  padding: 7px 9px;
+}
+
+.regression-section {
+  padding-top: 72px;
 }
 
 .economy-graph {
@@ -610,6 +678,189 @@ footer p {
 .business-card__topline em,
 .classification-label {
   color: var(--lime);
+}
+
+.business-card__link {
+  border-bottom: 1px solid var(--lime);
+  color: var(--lime);
+  display: inline-block;
+  margin-top: 24px;
+  padding-bottom: 6px;
+}
+
+.business-instance-list {
+  border: 1px solid var(--line);
+}
+
+.business-instance-list article {
+  align-items: center;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  display: grid;
+  gap: 32px;
+  grid-template-columns: 1fr auto;
+  padding: 28px;
+}
+
+.business-instance-list article:last-child {
+  border-bottom: 0;
+}
+
+.business-instance-list h3 {
+  font-size: 1.6rem;
+  font-weight: 400;
+  margin: 12px 0 8px;
+}
+
+.business-instance-list p {
+  color: var(--muted);
+  font-size: 0.76rem;
+  margin: 0;
+}
+
+.business-instance-list a {
+  border: 1px solid var(--line-strong);
+  font-size: 0.68rem;
+  letter-spacing: 0.08em;
+  padding: 13px 16px;
+  text-transform: uppercase;
+}
+
+.business-site__hero {
+  align-items: end;
+  display: grid;
+  gap: 70px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
+  min-height: 620px;
+  padding-block: 110px 88px;
+}
+
+.business-site__hero h1 {
+  font-size: clamp(3.2rem, 7vw, 7rem);
+  max-width: 900px;
+}
+
+.business-site__hero > div > p:last-child,
+.business-site__section .section-heading > p,
+.business-site--missing p {
+  color: var(--muted);
+  line-height: 1.7;
+}
+
+.business-site__hero dl,
+.business-site__treasury dl {
+  margin: 0;
+}
+
+.business-site__hero dl div,
+.business-site__treasury dl div {
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-block: 14px;
+}
+
+.business-site__hero dt,
+.business-site__hero dd,
+.business-site__treasury dt,
+.business-site__treasury dd {
+  font-size: 0.67rem;
+  margin: 0;
+}
+
+.business-site__hero dt,
+.business-site__treasury dt {
+  color: var(--muted);
+}
+
+.business-site__hero dd,
+.business-site__treasury dd {
+  color: var(--muted-strong);
+  text-align: right;
+}
+
+.business-site__section,
+.business-site__treasury {
+  border-top: 1px solid var(--line);
+  padding-block: 96px;
+}
+
+.business-site__offers {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.business-site__offers article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  min-height: 260px;
+  padding: 28px;
+}
+
+.business-site__offers h3 {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin: 48px 0 14px;
+  text-transform: capitalize;
+}
+
+.business-site__offers p {
+  color: var(--muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.business-site__offers strong {
+  display: block;
+  font-size: 1.4rem;
+  font-weight: 400;
+  margin-top: 34px;
+}
+
+.business-site__package > div:last-child {
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+
+.business-site__package article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 28px;
+  min-height: 140px;
+  padding: 20px;
+}
+
+.business-site__package article span {
+  color: var(--muted);
+}
+
+.business-site__treasury {
+  display: grid;
+  gap: 70px;
+  grid-template-columns: minmax(250px, 0.75fr) 1.25fr;
+}
+
+.business-site--missing {
+  display: grid;
+  min-height: 100vh;
+  place-items: center;
+  padding: 28px;
+}
+
+.business-site--missing section {
+  max-width: 760px;
+}
+
+.business-site--missing a {
+  border-bottom: 1px solid var(--lime);
+  color: var(--lime);
+  display: inline-block;
+  margin-top: 26px;
+  padding-bottom: 6px;
 }
 
 .business-card h3 {
@@ -937,6 +1188,16 @@ footer p {
     padding-block: 92px 70px;
   }
 
+  .template-grid,
+  .business-site__package > div:last-child {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+
+  .business-site__hero,
+  .business-site__treasury {
+    grid-template-columns: 1fr;
+  }
+
   .proof-card {
     max-width: 520px;
   }
@@ -1055,8 +1316,12 @@ footer p {
 
   .alpha-hero,
   .economy-section,
+  .business-system-section,
   .execution-section,
-  .network-section {
+  .network-section,
+  .business-site__hero,
+  .business-site__section,
+  .business-site__treasury {
     width: calc(100% - 28px);
   }
 
@@ -1066,16 +1331,25 @@ footer p {
   }
 
   .economy-section,
+  .business-system-section,
   .execution-section,
   .network-section {
     padding-block: 72px;
   }
 
   .economy-graph,
+  .template-grid,
+  .business-site__offers,
+  .business-site__package > div:last-child,
   .activity-ledger dl,
   .evidence-grid,
   .execution-grid,
   .compact-paths {
+    grid-template-columns: 1fr;
+  }
+
+  .business-instance-list article {
+    align-items: start;
     grid-template-columns: 1fr;
   }
 

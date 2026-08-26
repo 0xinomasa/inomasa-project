@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import { Mark } from './_components/mark';
 import { loadAlphaDashboard } from './_alpha/dashboard';
 import { productPaths, shellNavigation } from './_shell/model';
@@ -83,18 +85,46 @@ export default async function Home() {
       <section className="economy-section" id="build">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">BUILD · Economic graph v1</p>
-            <h2>Businesses with a reason to transact.</h2>
+            <p className="eyebrow">BUILD · Generic Business System</p>
+            <h2>Four starting points. No fixed population.</h2>
           </div>
           <p>
-            Signal Forge supplies Arc data. Ops Pilot consumes that capability before producing
-            an operational brief. The dependency is versioned and deterministic—no LLM is needed
-            to manufacture genesis or authority.
+            A template is reusable starting configuration. Each can create many Business
+            instances in the same operating environment without a new deployment or code branch.
+          </p>
+        </div>
+
+        <div className="template-grid">
+          {dashboard.templates.map((template, index) => (
+            <article key={template.templateId}>
+              <span>0{index + 1}</span>
+              <p className="eyebrow">{template.templateId}</p>
+              <h3>{template.label}</h3>
+              <p>{template.description}</p>
+              <div>
+                {template.capabilities.map((capability) => (
+                  <small key={capability}>{capability.replaceAll('_', ' ')}</small>
+                ))}
+              </div>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      <section className="economy-section regression-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Regression economy · preserved</p>
+            <h2>Verified fixtures stay visible.</h2>
+          </div>
+          <p>
+            Signal Forge and Ops Pilot remain common-control control specimens while the generic
+            Business System grows around them. Their accepted settlement proof is not rewritten.
           </p>
         </div>
 
         <div className="economy-graph">
-          {dashboard.templates.map((template, index) => {
+          {dashboard.fixtureProfiles.map((template, index) => {
             const business = dashboard.businesses.find(
               (candidate) => candidate.templateId === template.templateId,
             );
@@ -124,7 +154,16 @@ export default async function Home() {
                     <dt>Arc account</dt>
                     <dd>{compactAddress(business?.address ?? null)}</dd>
                   </div>
+                  <div>
+                    <dt>Product template</dt>
+                    <dd>{template.businessTemplateId}</dd>
+                  </div>
                 </dl>
+                {business === undefined ? null : (
+                  <Link className="business-card__link" href={`/business/${business.slug}`}>
+                    Open Business Site
+                  </Link>
+                )}
                 <p className="classification-label">COMMON-CONTROL TEST ACTOR</p>
               </article>
             );
@@ -136,6 +175,38 @@ export default async function Home() {
             <span>OPERATIONAL BRIEF</span>
           </div>
         </div>
+      </section>
+
+      <section className="business-system-section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Business instances</p>
+            <h2>Data creates the surface.</h2>
+          </div>
+          <p>
+            One user may control multiple Businesses, and each Business receives a reusable
+            package plus a data-driven route inside this application.
+          </p>
+        </div>
+        {dashboard.businesses.length === 0 ? (
+          <article className="activity-empty">
+            <span>GENERIC CREATION READY</span>
+            <p>No Business instance exists in the connected environment.</p>
+          </article>
+        ) : (
+          <div className="business-instance-list">
+            {dashboard.businesses.map((business) => (
+              <article key={business.businessId}>
+                <div>
+                  <span>{business.entryRoute} · {business.siteStatus}</span>
+                  <h3>{business.displayName}</h3>
+                  <p>{business.summary}</p>
+                </div>
+                <Link href={`/business/${business.slug}`}>View Business Site</Link>
+              </article>
+            ))}
+          </div>
+        )}
       </section>
 
       <section className="activity-section" id="activity">

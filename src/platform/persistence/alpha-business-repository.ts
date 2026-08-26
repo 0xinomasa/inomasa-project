@@ -3,9 +3,34 @@ import type {
   BusinessInstance,
   HumanPrincipal,
 } from '../../modules/business/model.ts';
+import { createBusinessPackage, type BusinessPackage } from '../../modules/business/business-package.ts';
+import {
+  getDefaultSiteHeadline,
+  isBusinessTemplateId,
+  isBusinessTemplateReferenceId,
+} from '../../modules/business/templates.ts';
 import type { TreasuryBinding } from '../../modules/business/treasury.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
+
+function isActorClassification(value: string): value is BusinessInstance['actorClassification'] {
+  return value === 'COMMON_CONTROL_TEST' || value === 'INDEPENDENT';
+}
+
+function isBusinessEntryRoute(value: string): value is BusinessInstance['entryRoute'] {
+  return value === 'BUILD' || value === 'MIGRATE';
+}
+
+function isBusinessEnvironment(value: string): value is BusinessInstance['environment'] {
+  return (
+    value === 'LOCAL_DEVELOPMENT' ||
+    value === 'AUTOMATED_TEST' ||
+    value === 'PRIVATE_ARC_TESTNET' ||
+    value === 'CLOSED_ARC_TESTNET' ||
+    value === 'PUBLIC_DEMO_TESTNET' ||
+    value === 'MAINNET'
+  );
+}
 
 export interface RegisteredBusinessGenesis {
   readonly businessId: `biz_${string}`;
@@ -19,9 +44,37 @@ export interface AlphaBusinessSummary {
   readonly businessId: string;
   readonly controllerPrincipalId: string;
   readonly displayName: string;
+  readonly entryRoute: string;
+  readonly siteStatus: string;
+  readonly slug: string;
+  readonly summary: string;
   readonly templateId: string;
   readonly templateVersion: number;
   readonly treasuryStatus: string;
+}
+
+export interface BusinessSiteView {
+  readonly actorClassification: string;
+  readonly businessId: `biz_${string}`;
+  readonly businessPackage: BusinessPackage;
+  readonly displayName: string;
+  readonly entryRoute: 'BUILD' | 'MIGRATE';
+  readonly headline: string;
+  readonly offers: readonly {
+    readonly capabilityId: string;
+    readonly description: string;
+    readonly offerId: string;
+    readonly priceMicroUsdc: string;
+    readonly status: string;
+  }[];
+  readonly siteDescription: string;
+  readonly siteStatus: string;
+  readonly slug: string;
+  readonly templateId: string;
+  readonly templateVersion: number;
+  readonly treasuryAddress: string | null;
+  readonly treasuryStatus: string;
+  readonly visibility: string;
 }
 
 export interface PendingTreasuryBindingSummary {
@@ -89,7 +142,10 @@ export class PostgresAlphaBusinessRepository {
           .selectFrom('businesses')
           .select([
             'business_id',
+            'entry_route',
             'genesis_request_id',
+            'slug',
+            'summary',
             'template_id',
             'template_version',
           ])
@@ -98,6 +154,10 @@ export class PostgresAlphaBusinessRepository {
 
         if (
           existing.business_id !== input.genesis.business.businessId ||
+          (isBusinessTemplateId(input.genesis.business.templateId) &&
+            (existing.entry_route !== input.genesis.business.entryRoute ||
+              existing.slug !== input.genesis.business.slug ||
+              existing.summary !== input.genesis.business.summary)) ||
           existing.template_id !== input.genesis.business.templateId ||
           existing.template_version !== input.genesis.business.templateVersion
         ) {
@@ -130,11 +190,28 @@ export class PostgresAlphaBusinessRepository {
           business_principal_id: input.genesis.business.businessPrincipalId,
           common_control_group_id: input.genesis.business.commonControlGroupId ?? null,
           display_name: input.genesis.business.displayName,
+          entry_route: input.genesis.business.entryRoute,
           environment: input.genesis.business.environment,
           genesis_request_id: input.genesis.business.genesisRequestId,
+          slug: input.genesis.business.slug,
           status: input.genesis.business.status,
+          summary: input.genesis.business.summary,
           template_id: input.genesis.business.templateId,
           template_version: input.genesis.business.templateVersion,
+        })
+        .executeTakeFirstOrThrow();
+
+      await database
+        .insertInto('business_sites')
+        .values({
+          business_id: input.genesis.business.businessId,
+          description: input.genesis.business.summary,
+          headline: getDefaultSiteHeadline(input.genesis.business.templateId),
+          site_id: input.genesis.business.businessId.replace('biz_', 'site_'),
+          slug: input.genesis.business.slug,
+          status: 'PUBLISHED',
+          updated_at: input.genesis.event.occurredAt,
+          visibility: 'PROTECTED_ALPHA',
         })
         .executeTakeFirstOrThrow();
 
@@ -162,6 +239,8 @@ export class PostgresAlphaBusinessRepository {
           payload: {
             actorClassification: input.genesis.business.actorClassification,
             commonControlGroupId: input.genesis.business.commonControlGroupId ?? null,
+            entryRoute: input.genesis.business.entryRoute,
+            slug: input.genesis.business.slug,
             templateId: input.genesis.business.templateId,
             templateVersion: input.genesis.business.templateVersion,
           },
@@ -216,12 +295,17 @@ export class PostgresAlphaBusinessRepository {
           .onRef('treasury.business_id', '=', 'business.business_id')
           .on('treasury.status', 'in', ['PENDING', 'ACTIVE']),
       )
+      .innerJoin('business_sites as site', 'site.business_id', 'business.business_id')
       .select([
         'business.actor_classification as actorClassification',
         'treasury.address as address',
         'business.business_id as businessId',
         'control.controller_principal_id as controllerPrincipalId',
         'business.display_name as displayName',
+        'business.entry_route as entryRoute',
+        'site.status as siteStatus',
+        'business.slug as slug',
+        'business.summary as summary',
         'business.template_id as templateId',
         'business.template_version as templateVersion',
         'treasury.status as treasuryStatus',
@@ -244,24 +328,17 @@ export class PostgresAlphaBusinessRepository {
     if (row.status !== 'ACTIVE') {
       throw new Error(`Business ${businessId} is not active.`);
     }
-    if (row.template_id !== 'signal-forge' && row.template_id !== 'ops-pilot') {
+    if (!isBusinessTemplateReferenceId(row.template_id)) {
       throw new Error(`Business ${businessId} has an unknown Alpha template.`);
     }
-    if (
-      row.actor_classification !== 'COMMON_CONTROL_TEST' &&
-      row.actor_classification !== 'INDEPENDENT'
-    ) {
+    if (!isActorClassification(row.actor_classification)) {
       throw new Error(`Business ${businessId} has an invalid actor classification.`);
     }
-    if (
-      row.environment !== 'LOCAL_DEVELOPMENT' &&
-      row.environment !== 'AUTOMATED_TEST' &&
-      row.environment !== 'PRIVATE_ARC_TESTNET' &&
-      row.environment !== 'CLOSED_ARC_TESTNET' &&
-      row.environment !== 'PUBLIC_DEMO_TESTNET' &&
-      row.environment !== 'MAINNET'
-    ) {
+    if (!isBusinessEnvironment(row.environment)) {
       throw new Error(`Business ${businessId} has an invalid environment.`);
+    }
+    if (!isBusinessEntryRoute(row.entry_route)) {
+      throw new Error(`Business ${businessId} has an invalid entry route.`);
     }
 
     return {
@@ -272,11 +349,117 @@ export class PostgresAlphaBusinessRepository {
         ? {}
         : { commonControlGroupId: row.common_control_group_id }),
       displayName: row.display_name,
+      entryRoute: row.entry_route,
       environment: row.environment,
       genesisRequestId: row.genesis_request_id,
+      slug: row.slug,
       status: 'ACTIVE',
+      summary: row.summary,
       templateId: row.template_id,
       templateVersion: row.template_version,
+    };
+  }
+
+  async getBusinessSiteBySlug(slug: string): Promise<BusinessSiteView | undefined> {
+    const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
+    const row = await database
+      .selectFrom('business_sites as site')
+      .innerJoin('businesses as business', 'business.business_id', 'site.business_id')
+      .leftJoin('treasury_bindings as treasury', (join) =>
+        join
+          .onRef('treasury.business_id', '=', 'business.business_id')
+          .on('treasury.status', 'in', ['PENDING', 'ACTIVE']),
+      )
+      .select([
+        'business.actor_classification as actorClassification',
+        'business.business_id as businessId',
+        'business.business_principal_id as businessPrincipalId',
+        'business.common_control_group_id as commonControlGroupId',
+        'business.display_name as displayName',
+        'business.entry_route as entryRoute',
+        'business.environment as environment',
+        'business.genesis_request_id as genesisRequestId',
+        'site.headline as headline',
+        'site.description as siteDescription',
+        'site.status as siteStatus',
+        'site.slug as slug',
+        'business.status as businessStatus',
+        'business.summary as summary',
+        'business.template_id as templateId',
+        'business.template_version as templateVersion',
+        'treasury.address as treasuryAddress',
+        'treasury.status as treasuryStatus',
+        'site.visibility as visibility',
+      ])
+      .where('site.slug', '=', slug)
+      .where('site.status', '=', 'PUBLISHED')
+      .executeTakeFirst();
+
+    if (row === undefined) {
+      return undefined;
+    }
+    if (!isBusinessTemplateReferenceId(row.templateId)) {
+      throw new Error(`Business ${row.businessId} has an unknown Business template reference.`);
+    }
+    if (!isBusinessEntryRoute(row.entryRoute)) {
+      throw new Error(`Business ${row.businessId} has an invalid entry route.`);
+    }
+    if (!isActorClassification(row.actorClassification)) {
+      throw new Error(`Business ${row.businessId} has an invalid actor classification.`);
+    }
+    if (!isBusinessEnvironment(row.environment)) {
+      throw new Error(`Business ${row.businessId} has an invalid environment.`);
+    }
+    if (row.businessStatus !== 'ACTIVE') {
+      return undefined;
+    }
+
+    const business: BusinessInstance = {
+      actorClassification: row.actorClassification,
+      businessId: row.businessId as `biz_${string}`,
+      businessPrincipalId: row.businessPrincipalId as `biz_${string}`,
+      ...(row.commonControlGroupId === null
+        ? {}
+        : { commonControlGroupId: row.commonControlGroupId }),
+      displayName: row.displayName,
+      entryRoute: row.entryRoute,
+      environment: row.environment,
+      genesisRequestId: row.genesisRequestId,
+      slug: row.slug,
+      status: 'ACTIVE',
+      summary: row.summary,
+      templateId: row.templateId,
+      templateVersion: row.templateVersion,
+    };
+    const offers = await database
+      .selectFrom('service_offers')
+      .select([
+        'capability_id as capabilityId',
+        'description',
+        'offer_id as offerId',
+        'price_micro_usdc as priceMicroUsdc',
+        'status',
+      ])
+      .where('provider_business_id', '=', business.businessId)
+      .orderBy('created_at', 'asc')
+      .execute();
+
+    return {
+      actorClassification: row.actorClassification,
+      businessId: business.businessId,
+      businessPackage: createBusinessPackage(business),
+      displayName: row.displayName,
+      entryRoute: row.entryRoute,
+      headline: row.headline,
+      offers,
+      siteDescription: row.siteDescription,
+      siteStatus: row.siteStatus,
+      slug: row.slug,
+      templateId: row.templateId,
+      templateVersion: row.templateVersion,
+      treasuryAddress: row.treasuryAddress,
+      treasuryStatus: row.treasuryStatus ?? 'UNBOUND',
+      visibility: row.visibility,
     };
   }
 
