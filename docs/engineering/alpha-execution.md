@@ -2,9 +2,19 @@
 
 ## Status
 
-Status: `CONTROLLED ARC TESTNET ALPHA WITH X402 VERIFIED / SHOWCASE ITERATION ACTIVE`.
+Document classification: `VERIFIED BASELINE / HISTORICAL EXECUTION RECORD`.
 
-This is the live execution contract after B5. B0-B5 remain accepted historical
+Checkpoint verdict: `CONTROLLED ARC TESTNET ALPHA WITH X402 VERIFIED`.
+
+This file preserves the exact implementation decisions, failures, recovery, and
+proof from the accelerated Alpha. It is no longer the live execution contract.
+Current implementation direction is
+[`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](inomasa-alpha-implementation-and-testnet-realization-v1.0.md),
+and current authority is defined by [`source-hierarchy.md`](source-hierarchy.md).
+Signal Forge, Ops Pilot, and the buyer Agent remain valid regression fixtures, not
+the generic product model or an instruction that Capital must be implemented next.
+
+This was the live execution contract after B5. B0-B5 remain accepted historical
 lineage. The old standalone B6 Agent Wallet, B7 x402, and B8 Background Execution
 sequence is retired. The final R1-R5 meanings are retained as causal checkpoints
 inside one accelerated vertical build, not as documentation-first phases:
@@ -355,11 +365,13 @@ Agent authority.
   https://docs.arc.io/arc/references/connect-to-arc and
   https://docs.arc.io/arc/references/contract-addresses
 
-## Architecture impact
+## Architecture impact at the checkpoint
 
-No Canonical Architecture revision is required by this checkpoint. Business remains
-primary; identity, account, and authority remain separate; account assurance is
-explicitly lowered to match actual platform-controlled EOA capability; settlement
-does not become economic truth until reconciliation/allocation; Evidence remains
-separate from Reputation and Capital. The implementation creates a provider adapter
-and lower-assurance profile, not a semantic amendment.
+At the time of this proof, no revision to the then-active Canonical Architecture
+was required. That architecture is now `SUPERSEDED / HISTORICAL`; the statement is
+retained as checkpoint provenance, not current authority. The implementation facts
+remain valid: Business stayed primary; identity, account, and authority remained
+separate; account assurance matched the actual platform-controlled EOA capability;
+settlement required reconciliation/allocation before economic posting; and Evidence
+remained separate from Reputation and Capital. The implementation created a
+provider adapter and lower-assurance profile, not a semantic amendment.

@@ -1,5 +1,13 @@
 # B5 scope and System Realization entry
 
+> **Document classification: `HISTORICAL / VERIFIED B5 RECORD`.** B5 and its
+> Human-Controlled Business Entry/B6 continuation no longer direct current work.
+> The then-active Inomasa Canonical Architecture v1.0 is now
+> `SUPERSEDED / HISTORICAL`. Current authority and Alpha direction are defined in
+> [`source-hierarchy.md`](source-hierarchy.md). The content below is preserved as
+> accepted decision lineage and must not be rewritten as if the old gate never
+> existed.
+
 ## Status and purpose
 
 Status: `VERIFIED — PASS` on 2026-08-25.
@@ -74,8 +82,9 @@ USDC execution, agent delegation, Evidence interpretation, or Capital.
 | Provider subordination | Circle-first infrastructure may enforce a selected design but cannot own Inomasa authority semantics |
 | Environment separation | Test and Arc-testnet identities, bindings, data, and claims remain non-production |
 
-The Canonical Architecture remains the authority for these meanings. This document
-selects a bounded realization direction and does not amend those semantics.
+At B5 acceptance, the then-active Canonical Architecture governed these meanings.
+This document selected a bounded realization direction and did not amend those
+semantics. Current authority is identified by the historical notice above.
 
 ## B5 in scope
 
@@ -158,11 +167,11 @@ Passing B5 means the realization entry decision is `VERIFIED`. It does not mean
 Human-Controlled Business Entry, authentication, wallet behavior, or any domain
 capability is `IMPLEMENTED`.
 
-## Next-gate boundary
+## Historical next-gate boundary
 
-The next gate is **B6 — Human-Controlled Business Entry System Realization
-Specification**. It is `NOT STARTED` and requires separate explicit authorization.
-It must resolve the implementation choices above before product code, schema, or
-provider configuration is introduced.
+At B5 acceptance, the recorded next gate was **B6 — Human-Controlled Business Entry
+System Realization Specification**. It was `NOT STARTED` and required separate
+explicit authorization. That boundary is preserved here as historical lineage; it
+is not the current next implementation checkpoint.
 
 B5 does not authorize or begin B6.

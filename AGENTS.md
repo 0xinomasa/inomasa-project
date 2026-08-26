@@ -6,68 +6,78 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 - Work only from the trusted Git repository root.
 - Before changing anything, inspect `git status --short` and preserve unrelated user changes.
-- Read `PROJECT_STATE.md` first for the accepted engineering state, open holds, takeover procedure, and exact next gate. Chat history is never required project state.
-- Read `docs/engineering/source-hierarchy.md` and `docs/engineering/canonical-invariants.md` before any structural, domain, authority, economic, wallet, settlement, evidence, agent, trust, risk, capital, or AI-runtime decision.
+- Read `PROJECT_STATE.md` first for accepted engineering truth, active authority,
+  open holds, takeover procedure, and the exact next execution checkpoint. Chat
+  history is never required project state.
+- Read `docs/engineering/source-hierarchy.md` and
+  `docs/engineering/architecture-invariants.md` before any structural, domain,
+  authority, economic, wallet, settlement, evidence, agent, trust, risk, capital,
+  or AI-runtime decision. Read both active authority documents linked there before
+  changing product or system meaning.
 - Read `docs/engineering/environment-and-safety.md` before handling environment configuration or running Codex in Ubuntu Proot.
 
 ## Current phase boundary
 
-- **B5 Testnet Scope & System Realization Entry is complete.** B5 is a
-  decision-and-continuity gate and adds no product behavior.
-- The accelerated controlled Alpha vertical-build program is now authorized. Preserve
-  B0-B5 as historical lineage; do not resurrect the old standalone B6/B7/B8 plan.
-- BUILD is active. MIGRATE remains deferred. CAPITAL remains separate and must not be
-  implemented ahead of a credible commerce, settlement, and Evidence path.
-- Current Alpha implementation includes deterministic Business templates/genesis,
-  explicit common-control provenance, logical Treasury bindings, commerce/settlement
-  state models, a settlement-gated deterministic snapshot service, PostgreSQL
-  schema, and a Circle Developer-Controlled Wallet adapter.
-- The first integrated controlled Alpha path is verified on Arc Testnet: two active
-  Circle EOA bindings, one exact `0.250000` USDC settlement, exact revenue/cost
-  allocation, paid snapshot delivery, narrow Evidence, and protected Preview
-  rendering. This remains synthetic/common-control test activity, not organic demand.
-- The bounded Agent iteration is also verified: one separately registered
-  operator-invoked Agent, accountable Business provider-of-record, Human-issued
-  non-delegable Standing Grant, atomic allowance accounting, Action Intent, policy
-  decision, Execution Authorization, exact `0.100000` USDC Arc settlement, and paid
-  delivery. The Agent has no wallet custody, root control, settlement policy, or LLM.
-- Circle Developer-Controlled EOA on Arc Testnet is the selected Alpha Treasury
-  execution profile. It is platform-controlled external account infrastructure, not
-  canonical identity, user custody, or an Inomasa Protected Treasury claim.
-- Circle Gateway/Nanopayments with x402 v2 `exact` is the selected and verified
-  Alpha machine-payment rail. It uses the existing Circle EOA, a one-time USDC
-  deposit, Circle Signing API EIP-712 signatures, the Gateway facilitator, and a
-  provider-reported per-payment receipt. It does not create a direct per-payment
-  Arc transaction hash and must not be described as one.
-- B3 adds a provider-portable PostgreSQL boundary, versioned migrations, and a non-domain engineering probe. It does not define a business schema.
-- The Engineering Continuity & Handoff checkpoint follows B3 and adds repository-native takeover evidence only. It is not a product phase.
-- Continue by working vertically: Business -> control -> Treasury -> terms/obligation
-  -> selected payment adapter -> Arc settlement -> exact economic state -> narrow
-  Evidence -> durable bounded operation.
-- The next Showcase checkpoint is the smallest honest Capital loop over the now
-  credible commerce/Evidence path. Preserve provider-attributed risk decisions,
-  deterministic terms/authorization/execution, `CAPITAL` classification, and
-  later-use/outcome evidence. Capital must not become revenue, a universal score,
-  automatic entitlement, or silent platform balance-sheet risk.
-- Production/mainnet, public anonymous access, unrestricted agent authority,
-  MIGRATE, and Production/public Capital exposure remain unauthorized. The next
-  bounded common-control Arc Testnet Capital proof is authorized by the execution
-  mandate and must preserve the constraints above.
+- B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
+  selection remain historical engineering lineage, not the active roadmap.
+- The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
+  — REV2**. Authority/continuity migration is its Checkpoint A. After that
+  checkpoint, the exact next implementation point is Checkpoint B — Generic
+  Business System; it must not be skipped ahead to Capital.
+- BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
+  `LOCKED / NOT YET OPEN`. Capital is Checkpoint F after generic Business, Agent,
+  commerce, and Economic History/observability capability; it is not automatic
+  next work.
+- The accepted controlled Alpha implementation remains the regression baseline:
+  deterministic Business genesis, explicit common-control provenance, logical
+  Treasury bindings, Circle Developer-Controlled EOA execution, direct Arc USDC
+  settlement, bounded Agent authority, Gateway x402 v2 `exact`, exact economic
+  posting, paid service delivery, narrow Evidence, PostgreSQL, and protected Preview.
+- Signal Forge, Ops Pilot, and the buyer Agent are regression fixtures/control
+  specimens. They are not the generic product model, system-capacity limit, or
+  proof that independent demand exists.
+- The verified direct settlements remain exact `0.250000` and `0.100000` Arc
+  Testnet USDC. The Gateway payment remains exact `0.010000` USDC with a
+  provider-reported receipt—not a direct per-payment Arc transaction hash.
+- Circle Developer-Controlled EOA remains the verified Alpha execution account
+  profile. It is platform-controlled external infrastructure, not Business or Agent
+  identity, user custody, or a Protected Treasury claim.
+- ERC-8004 and ERC-8183 are `REQUIRED / NOT IMPLEMENTED` Alpha capabilities under
+  REV2. Do not claim integration before current primary-source research and real
+  Arc Testnet proof.
+- Preserve current product code, fixtures, migrations, tests, and proof until a
+  generic replacement passes regression evidence: replace by proof, not rewrite by
+  assumption.
+- Production/mainnet, public anonymous access, unrestricted Agent authority, live
+  MIGRATE, and Production/public Capital exposure remain unauthorized.
 - Never present local state, synthetic/common-control demand, testnet USDC, pending
   provider state, or an unexecuted adapter as real finalized Arc commerce.
 
 ## Architecture authority
 
-- The **Inomasa Canonical Architecture v1.0** is the sole active architecture authority.
-- Repository documents are implementation guidance, never silent amendments to the Canonical Architecture.
-- Historical Foundation, Domain, map, checkpoint, candidate, review, and adjudication artifacts are lineage/audit records only unless explicitly reopened.
-- Never make a silent architecture change. If a request conflicts with the Canonical Architecture or requires a material unresolved decision, stop, identify the conflict or decision, and ask the user.
-- Keep design, implementation, and proof distinct. Use `REQUIRED`, `SELECTED`, `PROTOTYPED`, `IMPLEMENTED`, and `VERIFIED` accurately; never promote a status without evidence.
+- `docs/architecture/inomasa-concept-and-architecture-v1.0.md` is the active
+  product and system-architecture authority.
+- `docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md`
+  is the active controlled-Alpha implementation guide and remains subordinate to
+  the Concept & Architecture contract.
+- Accepted GitHub `main` is mutable engineering truth. Repository guidance cannot
+  silently amend the active authority documents or falsify accepted evidence.
+- **Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`.** It and the
+  Foundation, Domain, map, B0-B5, candidate, review, and adjudication artifacts are
+  lineage/audit evidence only unless an active authority explicitly carries a
+  meaning forward.
+- Never make a silent product/architecture change. If the two active authority
+  documents conflict substantively or leave a material product decision unresolved,
+  stop the affected work, identify the conflict, and ask the user.
+- Keep intent, design, implementation, and proof distinct. Use `REQUIRED`,
+  `SELECTED`, `PROTOTYPED`, `IMPLEMENTED`, and `VERIFIED` accurately.
 
 ## Repository boundaries
 
-- `src/app/` is the future composition root; it must not own domain policy.
-- `src/modules/` is for bounded business modules selected through System Realization.
+- `src/app/` is the controlled-Alpha composition root; it must not own reusable
+  Business, authority, or economic policy.
+- `src/modules/` is for bounded business modules justified by the active Alpha
+  guide and accepted implementation evidence.
 - `src/platform/` is for vendor and infrastructure adapters; business rules must not depend directly on vendor SDKs.
 - `src/shared/` is for domain-neutral cross-cutting code only; do not hide domain coupling there.
 - Do not introduce a new module, production dependency, vendor, database, contract pattern, or hosted service without documenting need, alternatives, consequences, cost/lock-in, and reversibility.
@@ -78,7 +88,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Prefer platform and standard-library capabilities before adding dependencies.
 - Never change runtime, package manager, dependency strategy, or major tooling silently.
 - Keep the modular monolith deployable as one unit until an explicit architecture decision says otherwise.
-- Next.js is selected for the B2 web shell only. Do not infer that its route structure defines semantic domains or future service boundaries.
+- Next.js is the selected controlled-Alpha application runtime. Do not infer that
+  its route structure defines semantic domains or future service boundaries.
 - `PG-TLS-SEMANTICS-01` blocks a `pg` 9, `pg-connection-string` 3, or equivalent PostgreSQL TLS-semantics change until current primary guidance is reviewed and certificate plus hostname verification is proven. Never suppress the warning by weakening TLS.
 
 ## Secrets and environment safety
@@ -112,7 +123,9 @@ Before reporting completion:
 5. When database behavior changed, run `npm run db:verify` against an isolated PostgreSQL database.
 6. Run `git diff --check`.
 7. Inspect `git status --short` and report every remaining change.
-8. For a significant gate or accepted phase merge, update `PROJECT_STATE.md` with the evidence, open holds, and exact next gate before declaring continuity complete.
+8. For a significant checkpoint or accepted phase merge, update `PROJECT_STATE.md`
+   with the evidence, open holds, and exact next execution point before declaring
+   continuity complete.
 
 Do not claim `PASS`, `IMPLEMENTED`, or `VERIFIED` when a command failed, was skipped, or its output was not observed.
 

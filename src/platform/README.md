@@ -6,7 +6,8 @@ Business rules must not depend directly on vendor SDKs. B3 selects PostgreSQL pl
 internal persistence implementation under `persistence/`. The Alpha adds:
 
 - `arc/` for the exact Arc Testnet network/asset registry;
-- `circle/` for the selected Circle Developer-Controlled Wallet EOA adapter;
+- `circle/` for the selected Circle Developer-Controlled Wallet EOA and Circle
+  Gateway/x402 adapters;
 - application persistence repositories under `persistence/` behind module contracts.
 
 Circle remains replaceable implementation machinery. Its wallet ID/address does not

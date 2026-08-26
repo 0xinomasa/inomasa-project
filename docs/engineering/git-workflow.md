@@ -25,7 +25,7 @@ Make one coherent change, run `npm run verify`, inspect `git diff --check` and `
 - accepted merge and observed `main` CI evidence;
 - open blockers, security holds, and dependency gates;
 - proven environments and current external providers;
-- exact next authorized gate.
+- exact next implementation checkpoint and whether execution is authorized.
 
 The update must distinguish evidence from intent and durable rules from mutable state. Do not create an empty commit solely to restate unchanged status, but do not leave a future operator dependent on chat history after state materially changes.
 

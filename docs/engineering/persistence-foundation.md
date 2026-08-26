@@ -2,9 +2,10 @@
 
 ## Decision scope
 
-Status: `SELECTED` for B3 implementation only.
+Status: `SELECTED / RETAINED` from B3 through the controlled Alpha.
 
-This is a subordinate tooling decision, not a Canonical Architecture change. B3 establishes this dependency direction:
+This is a subordinate tooling decision, not product architecture. B3 established
+this dependency direction, which the verified Alpha still preserves:
 
 ```text
 application/module port
@@ -49,11 +50,18 @@ npm run db:migrate
 npm run db:proof
 ```
 
-## Temporary non-domain artifact
+## Retained non-domain artifact
 
-`inomasa_engineering.persistence_probe` exists only to prove connection, migration, parameterized write/read, and transactional rollback. The proof writes a random value inside a transaction, reads and verifies it, forces rollback, and verifies that no probe row remains.
+`inomasa_engineering.persistence_probe` exists only to prove connection, migration,
+parameterized write/read, and transactional rollback. It remains alongside the
+later Alpha domain schema as a CI/operations probe. The proof writes a random value
+inside a transaction, reads and verifies it, forces rollback, and verifies that no
+probe row remains.
 
-The table is not User, Business, Wallet, Evidence, Capital, settlement, reputation, x402, Arc, or any other business model. It must be explicitly removed or superseded when an accepted vertical slice introduces the first real schema; it must never be repurposed into a domain table.
+The table is not User, Business, Wallet, Evidence, Capital, settlement, reputation,
+x402, Arc, or any other business model and must never be repurposed into one.
+Removal, if later useful, is a focused engineering-maintenance decision rather than
+an Alpha semantic requirement.
 
 ## CI and hosted proof
 
@@ -61,4 +69,7 @@ GitHub Actions uses an isolated ephemeral PostgreSQL service with trust authenti
 
 ## Downstream compatibility review
 
-The boundary leaves provider URL/pool behavior in configuration and keeps driver/query types under `src/platform/persistence/`. It does not preselect Vercel, wallet storage, Arc references, x402 receipts, background execution, Evidence schema, reconciliation, or Capital schema. Later realization work can add module-owned ports and migrations without changing the PostgreSQL provider contract or turning Canonical domains into services.
+The boundary leaves provider URL/pool behavior in configuration and keeps
+driver/query types under `src/platform/persistence/`. Later realization work can
+add or generalize module-owned ports and migrations without changing the PostgreSQL
+provider contract or turning product-architecture responsibilities into services.
