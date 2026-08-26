@@ -12,7 +12,7 @@ implementation facts, not product-architecture ownership.
 ```text
 src/
   app/       web shell and composition root
-  modules/   future bounded business modules
+  modules/   bounded business modules
   platform/  external/infrastructure adapters, including persistence
   shared/    domain-neutral shared code only
 ```

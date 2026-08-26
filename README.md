@@ -33,6 +33,8 @@ the active Alpha implementation guide, while accepted GitHub `main` remains muta
 engineering truth. Inomasa Canonical Architecture v1.0 is
 `SUPERSEDED / HISTORICAL`. See the complete
 [`source hierarchy`](docs/engineering/source-hierarchy.md).
+The lightweight [`engineering documentation index`](docs/engineering/README.md)
+separates active guidance, operational references, and historical evidence.
 
 ## Requirements
 

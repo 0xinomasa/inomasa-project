@@ -2,6 +2,7 @@
 
 **Bahasa:** Indonesia<br>
 **Status:** `ACCEPTED / ACTIVE` — product and system-architecture authority<br>
+**Engineering provenance:** Copy pada accepted GitHub `main` adalah normative engineering copy. Copy Second Brain adalah curated mirror / working source; perubahan baru memperoleh engineering authority setelah diterima ke GitHub `main`.<br>
 **Ruang lingkup:** Konsep, filosofi, model produk, prinsip sistem, dan arsitektur tingkat sistem Inomasa. Detail implementasi, spesifikasi fase, skema data, kontrak, API, deployment, acceptance criteria, dan bukti pengujian berada pada dokumen Implementation & Realization yang terpisah.
 
 ---

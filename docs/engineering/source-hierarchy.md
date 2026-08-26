@@ -26,6 +26,18 @@ or older document must never silently become current authority.
    or justify a proposed change. They are evidence, not automatically adopted
    Inomasa direction.
 
+## Repository and mirror provenance
+
+The copies of the two active authority documents committed to accepted GitHub
+`main` are the normative engineering copies. Corresponding Second Brain copies are
+curated mirrors / working sources for durable project context. An edit made only to
+a mirror, draft, chat, or working branch does not change engineering authority; it
+becomes authoritative only after review and acceptance into GitHub `main`.
+
+Formatting-only mirror differences do not change meaning. Any substantive drift
+must be reconciled explicitly rather than resolved by silently choosing the more
+recent file.
+
 ## Superseded and historical sources
 
 **Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`.** It and the
