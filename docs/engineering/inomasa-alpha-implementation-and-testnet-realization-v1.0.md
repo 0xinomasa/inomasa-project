@@ -4,6 +4,7 @@
 **Status:** `ACCEPTED / ACTIVE` — controlled Alpha implementation guide<br>
 **Lingkungan target:** Private / Controlled Arc Testnet<br>
 **Dokumen induk:** `Inomasa Concept & Architecture v1.0`<br>
+**Engineering provenance:** Copy pada accepted GitHub `main` adalah normative engineering copy. Copy Second Brain adalah curated mirror / working source; perubahan baru memperoleh engineering authority setelah diterima ke GitHub `main`.<br>
 **Fungsi dokumen:** menerjemahkan Concept & Architecture Inomasa menjadi sistem Alpha yang reusable, dapat diuji, dapat diamati, dan cukup terbuka secara struktur untuk menerima banyak user, Business, Agent, transaksi, dan Capital Provider ketika akses nantinya dibuka.
 
 ---
@@ -1105,11 +1106,15 @@ Environment-specific workaround tidak boleh diubah menjadi permanent architectur
 
 ## 28. Completion Gate
 
-Status:
+Target completion status:
 
 **CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED**
 
-hanya diberikan jika seluruh area berikut PASS.
+Current status:
+
+**IN PROGRESS — Checkpoint A complete; Checkpoints B–H are not verified.**
+
+Target completion status hanya diberikan jika seluruh area berikut PASS.
 
 ### System
 - generic N-user/N-Business model;
