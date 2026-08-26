@@ -13,9 +13,10 @@ export const productPaths = [
     href: '#migrate',
     id: 'migrate',
     label: 'MIGRATE',
-    note: 'Deferred for the first testnet proof',
+    note: 'System-ready boundary · not yet open',
     status: 'LOCKED',
-    summary: 'A future, reversible path for connecting an existing business.',
+    summary:
+      'The shared Business origin model accepts a future MIGRATE path, while every current creation request is rejected until that path is explicitly opened.',
   },
   {
     eyebrow: 'Provider path',

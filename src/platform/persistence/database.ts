@@ -122,11 +122,38 @@ interface BusinessTable {
   readonly common_control_group_id: string | null;
   readonly created_at: Generated<Date>;
   readonly display_name: string;
+  readonly entry_route: string;
   readonly environment: string;
   readonly genesis_request_id: string;
+  readonly slug: string;
   readonly status: string;
+  readonly summary: string;
   readonly template_id: string;
   readonly template_version: number;
+}
+
+interface BusinessTemplateTable {
+  readonly capabilities: unknown;
+  readonly created_at: Generated<Date>;
+  readonly default_name: string;
+  readonly default_site_headline: string;
+  readonly description: string;
+  readonly label: string;
+  readonly status: string;
+  readonly template_id: string;
+  readonly version: number;
+}
+
+interface BusinessSiteTable {
+  readonly business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly description: string;
+  readonly headline: string;
+  readonly site_id: string;
+  readonly slug: string;
+  readonly status: string;
+  readonly updated_at: Timestamp;
+  readonly visibility: string;
 }
 
 interface BusinessControlTable {
@@ -304,6 +331,8 @@ export interface PersistenceDatabase {
   readonly authority_policy_decisions: AuthorityPolicyDecisionTable;
   readonly business_controls: BusinessControlTable;
   readonly business_events: BusinessEventTable;
+  readonly business_sites: BusinessSiteTable;
+  readonly business_templates: BusinessTemplateTable;
   readonly businesses: BusinessTable;
   readonly economic_entries: EconomicEntryTable;
   readonly evidence_facts: EvidenceFactTable;

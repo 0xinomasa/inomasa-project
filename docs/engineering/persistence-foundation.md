@@ -50,6 +50,14 @@ npm run db:migrate
 npm run db:proof
 ```
 
+Migration `20260827_007_create_generic_business_system` adds the Checkpoint B
+template registry, explicit `BUILD`/future-`MIGRATE` origin fields, unique Business
+slugs, and generated Business Site records. The two accepted Alpha fixtures are
+backfilled with protected data-driven sites without changing their settlement,
+economic-entry, Evidence, or provider proof. New generic creation remains behind
+the Business module and persistence adapter; no route or database table owns
+Business policy.
+
 ## Retained non-domain artifact
 
 `inomasa_engineering.persistence_probe` exists only to prove connection, migration,

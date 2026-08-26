@@ -11,6 +11,7 @@
   "scripts": {
     "clean": "node scripts/clean.mjs",
     "dev": "next dev",
+    "business:create": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/business-create.ts",
     "alpha:bootstrap": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-bootstrap.ts",
     "alpha:agent-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-agent-purchase.ts",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",

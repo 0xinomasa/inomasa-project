@@ -1,4 +1,7 @@
-import { alphaBusinessTemplates } from '../../modules/business/templates.ts';
+import {
+  alphaFixtureProfiles,
+  businessTemplates,
+} from '../../modules/business/templates.ts';
 import { arcTestnet } from '../../platform/arc/config.ts';
 import { readDatabaseConnectionConfig } from '../../platform/persistence/config.ts';
 import { PostgresAgentAuthorityRepository } from '../../platform/persistence/agent-authority-repository.ts';
@@ -27,6 +30,10 @@ export interface AlphaDashboard {
     readonly businessId: string;
     readonly controllerPrincipalId: string;
     readonly displayName: string;
+    readonly entryRoute: string;
+    readonly siteStatus: string;
+    readonly slug: string;
+    readonly summary: string;
     readonly templateId: string;
     readonly templateVersion: number;
     readonly treasuryStatus: string;
@@ -89,7 +96,8 @@ export interface AlphaDashboard {
     readonly sourceReference: string;
     readonly state: string;
   }[];
-  readonly templates: typeof alphaBusinessTemplates;
+  readonly fixtureProfiles: typeof alphaFixtureProfiles;
+  readonly templates: typeof businessTemplates;
   readonly x402Payments: readonly {
     readonly amountMicroUsdc: string;
     readonly network: string;
@@ -122,7 +130,8 @@ export async function loadAlphaDashboard(): Promise<AlphaDashboard> {
       provider: 'CIRCLE_DEVELOPER_WALLETS',
     },
     network: arcTestnet,
-    templates: alphaBusinessTemplates,
+    fixtureProfiles: alphaFixtureProfiles,
+    templates: businessTemplates,
   } as const;
 
   if (!hasRuntimeDatabaseConfiguration()) {

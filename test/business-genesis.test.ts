@@ -1,8 +1,12 @@
 import assert from 'node:assert/strict';
 import test from 'node:test';
 
+import { createBusinessPackage } from '../src/modules/business/business-package.ts';
 import { createBusinessGenesis } from '../src/modules/business/model.ts';
-import { alphaBusinessTemplates } from '../src/modules/business/templates.ts';
+import {
+  alphaBusinessTemplates,
+  businessTemplates,
+} from '../src/modules/business/templates.ts';
 import {
   activateCircleTreasuryBinding,
   createPendingCircleTreasuryBinding,
@@ -15,7 +19,7 @@ const operator = {
   principalId: 'usr_alpha_operator',
 } as const;
 
-test('Alpha templates form a coherent dependency graph', () => {
+test('accepted Alpha fixture profiles retain their coherent dependency graph', () => {
   const capabilities = new Set(
     alphaBusinessTemplates.flatMap((template) =>
       template.capabilities.map(({ capabilityId }) => capabilityId),
@@ -27,6 +31,78 @@ test('Alpha templates form a coherent dependency graph', () => {
     alphaBusinessTemplates
       .flatMap(({ dependencies }) => dependencies)
       .every((dependency) => capabilities.has(dependency)),
+  );
+});
+
+test('BUILD exposes exactly four reusable product templates', () => {
+  assert.deepEqual(
+    businessTemplates.map(({ templateId }) => templateId),
+    [
+      'api-data-compute',
+      'saas-micro-saas',
+      'agent-as-a-service',
+      'web3-native-digital',
+    ],
+  );
+  assert.ok(businessTemplates.every(({ capabilities }) => capabilities.length > 0));
+});
+
+test('multiple users can create multiple generic Businesses without fixture-specific code', () => {
+  const secondOperator = {
+    actorClassification: 'INDEPENDENT',
+    displayName: 'Second Alpha User',
+    environment: 'AUTOMATED_TEST',
+    principalId: 'usr_second_operator',
+  } as const;
+  const created = businessTemplates.map((template, index) => {
+    const controller = index === 3 ? secondOperator : operator;
+    const business = createBusinessGenesis(
+      {
+        ...(controller.actorClassification === 'COMMON_CONTROL_TEST'
+          ? { commonControlGroupId: 'ccg_alpha_operator' }
+          : {}),
+        controller,
+        displayName: `Generic Business ${index + 1}`,
+        genesisRequestId: `generic-genesis-${index + 1}`,
+        slug: `generic-business-${index + 1}`,
+        templateId: template.templateId,
+      },
+      {
+        businessId: `biz_generic_${index + 1}`,
+        controlId: `ctl_generic_${index + 1}`,
+        eventId: `evt_generic_${index + 1}`,
+      },
+      '2026-08-27T08:00:00.000Z',
+    ).business;
+
+    return { business, package: createBusinessPackage(business) };
+  });
+
+  assert.equal(new Set(created.map(({ business }) => business.businessId)).size, 4);
+  assert.equal(created.filter(({ business }) => business.entryRoute === 'BUILD').length, 4);
+  assert.ok(created.every(({ package: businessPackage }) => businessPackage.workspace === 'READY'));
+  assert.equal(created[3]?.business.actorClassification, 'INDEPENDENT');
+});
+
+test('MIGRATE origin is modeled but creation remains locked', () => {
+  assert.throws(
+    () =>
+      createBusinessGenesis(
+        {
+          commonControlGroupId: 'ccg_alpha_operator',
+          controller: operator,
+          entryRoute: 'MIGRATE',
+          genesisRequestId: 'migrate-locked',
+          templateId: 'saas-micro-saas',
+        },
+        {
+          businessId: 'biz_migrate_locked',
+          controlId: 'ctl_migrate_locked',
+          eventId: 'evt_migrate_locked',
+        },
+        '2026-08-27T08:00:00.000Z',
+      ),
+    /LOCKED \/ NOT YET OPEN/,
   );
 });
 

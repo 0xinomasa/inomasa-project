@@ -1,12 +1,13 @@
 import type { InomasaEnvironment } from '../../shared/environment.ts';
 
 import {
-  getAlphaBusinessTemplate,
-  type AlphaBusinessTemplateId,
+  getBusinessTemplateDefinition,
+  type BusinessTemplateReferenceId,
 } from './templates.ts';
 
 export type ActorClassification = 'COMMON_CONTROL_TEST' | 'INDEPENDENT';
 export type PrincipalKind = 'BUSINESS' | 'HUMAN';
+export type BusinessEntryRoute = 'BUILD' | 'MIGRATE';
 
 export interface HumanPrincipal {
   readonly actorClassification: ActorClassification;
@@ -21,10 +22,13 @@ export interface BusinessInstance {
   readonly businessPrincipalId: `biz_${string}`;
   readonly commonControlGroupId?: string;
   readonly displayName: string;
+  readonly entryRoute: BusinessEntryRoute;
   readonly environment: InomasaEnvironment;
   readonly genesisRequestId: string;
+  readonly slug: string;
   readonly status: 'ACTIVE';
-  readonly templateId: AlphaBusinessTemplateId;
+  readonly summary: string;
+  readonly templateId: BusinessTemplateReferenceId;
   readonly templateVersion: number;
 }
 
@@ -63,8 +67,11 @@ export interface BusinessGenesisCommand {
   readonly commonControlGroupId?: string;
   readonly controller: HumanPrincipal;
   readonly displayName?: string;
+  readonly entryRoute?: BusinessEntryRoute;
   readonly genesisRequestId: string;
-  readonly templateId: AlphaBusinessTemplateId;
+  readonly slug?: string;
+  readonly summary?: string;
+  readonly templateId: BusinessTemplateReferenceId;
 }
 
 export interface GenesisIdentifiers {
@@ -83,14 +90,39 @@ function requireNonEmpty(value: string, label: string): string {
   return normalized;
 }
 
+export function normalizeBusinessSlug(value: string): string {
+  const slug = value
+    .trim()
+    .toLowerCase()
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-+|-+$/g, '');
+
+  if (slug.length < 3 || slug.length > 96) {
+    throw new Error('Business slug must contain between 3 and 96 URL-safe characters.');
+  }
+
+  return slug;
+}
+
+export function assertBusinessEntryRouteOpen(entryRoute: BusinessEntryRoute): void {
+  if (entryRoute === 'MIGRATE') {
+    throw new Error('MIGRATE is a system-ready boundary and remains LOCKED / NOT YET OPEN.');
+  }
+}
+
 export function createBusinessGenesis(
   command: BusinessGenesisCommand,
   identifiers: GenesisIdentifiers,
   occurredAt: string,
 ): BusinessGenesis {
-  const template = getAlphaBusinessTemplate(command.templateId);
+  const template = getBusinessTemplateDefinition(command.templateId);
   const genesisRequestId = requireNonEmpty(command.genesisRequestId, 'Genesis request ID');
   const displayName = requireNonEmpty(command.displayName ?? template.defaultName, 'Business name');
+  const entryRoute = command.entryRoute ?? 'BUILD';
+  const slug = normalizeBusinessSlug(command.slug ?? displayName);
+  const summary = requireNonEmpty(command.summary ?? template.description, 'Business summary');
+
+  assertBusinessEntryRouteOpen(entryRoute);
 
   if (command.controller.actorClassification === 'COMMON_CONTROL_TEST') {
     requireNonEmpty(command.commonControlGroupId ?? '', 'Common-control group ID');
@@ -104,9 +136,12 @@ export function createBusinessGenesis(
       ? {}
       : { commonControlGroupId: command.commonControlGroupId }),
     displayName,
+    entryRoute,
     environment: command.controller.environment,
     genesisRequestId,
+    slug,
     status: 'ACTIVE',
+    summary,
     templateId: template.templateId,
     templateVersion: template.version,
   };
