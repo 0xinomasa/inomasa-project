@@ -1,4 +1,7 @@
+import { createHash } from 'node:crypto';
+
 import { ArcErc8183Rpc } from '../src/platform/arc/erc8183.ts';
+import { canonicalJson } from '../src/shared/canonical-json.ts';
 import { readDatabaseConnectionConfig } from '../src/platform/persistence/config.ts';
 import { applicationSchema, PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { PostgresErc8183Repository } from '../src/platform/persistence/erc8183-repository.ts';
@@ -86,7 +89,7 @@ async function main(): Promise<void> {
         .execute(),
       database
         .selectFrom('service_executions')
-        .select(['output_sha256', 'state'])
+        .select(['output', 'output_sha256', 'state'])
         .where('obligation_id', '=', job.obligationId)
         .executeTakeFirstOrThrow(),
       database
@@ -121,6 +124,7 @@ async function main(): Promise<void> {
     if (
       delivery.state !== 'COMPLETE' ||
       !/^[0-9a-f]{64}$/.test(delivery.output_sha256) ||
+      createHash('sha256').update(canonicalJson(delivery.output)).digest('hex') !== delivery.output_sha256 ||
       !evidence.some(({ fact_type, source_type, verification }) =>
         fact_type === 'ERC8183_JOB_COMPLETED' &&
         source_type === 'ARC_ERC8183_CONTRACT' &&

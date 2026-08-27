@@ -148,7 +148,11 @@ export class ArcErc8183Rpc {
   }): Promise<{ readonly blockNumber: bigint }> {
     await this.#assertChain();
     const receipt = await this.#receipt(input.transactionHash);
-    const allowance = await this.#readAllowance(input.owner, arcErc8183.contractAddress);
+    const allowance = await this.#readAllowance(
+      input.owner,
+      arcErc8183.contractAddress,
+      receipt.blockNumber,
+    );
     if (allowance < input.amountMicroUsdc) {
       throw new ArcErc8183RpcError('USDC allowance is below the committed ERC-8183 budget.');
     }
@@ -250,11 +254,11 @@ export class ArcErc8183Rpc {
     }
   }
 
-  async #readAllowance(owner: EvmAddress, spender: EvmAddress): Promise<bigint> {
+  async #readAllowance(owner: EvmAddress, spender: EvmAddress, blockTag: string): Promise<bigint> {
     const data = encodeFunctionData({ abi: erc20Abi, args: [owner, spender], functionName: 'allowance' });
     const result = await this.#request<`0x${string}`>('eth_call', [
       { data, to: arcErc8183.paymentTokenAddress },
-      'latest',
+      blockTag,
     ]);
     return decodeFunctionResult({ abi: erc20Abi, data: result, functionName: 'allowance' });
   }

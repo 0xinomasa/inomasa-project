@@ -7,6 +7,7 @@ import type { ContractExecutionOutcome } from '../src/modules/agent/erc8004.ts';
 import type { Erc8183Leg } from '../src/modules/commerce/erc8183.ts';
 import { acceptServiceOffer, authorizeSettlement } from '../src/modules/commerce/model.ts';
 import { alphaServiceCatalog } from '../src/modules/commerce/service-catalog.ts';
+import { canonicalJson } from '../src/shared/canonical-json.ts';
 import { ArcErc8183Rpc, arcErc8183 } from '../src/platform/arc/erc8183.ts';
 import { readCircleDeveloperWalletConfig } from '../src/platform/circle/config.ts';
 import { CircleContractExecutionAdapter } from '../src/platform/circle/contract-execution.ts';
@@ -326,15 +327,16 @@ async function main(): Promise<void> {
       },
     });
 
-    const deliverable = JSON.stringify({
+    const deliverableOutput = {
       chainId: arcErc8183.chainId,
       conclusion: 'Arc commerce capability is ready for bounded testnet execution.',
       jobId,
       provenance: 'COMMON_CONTROL_TEST',
       scope: 'commerce-readiness-brief',
-    });
+    } as const;
+    const deliverable = JSON.stringify(deliverableOutput);
     const deliverableHash = keccak256(toBytes(deliverable));
-    const outputSha256 = createHash('sha256').update(deliverable).digest('hex');
+    const outputSha256 = createHash('sha256').update(canonicalJson(deliverableOutput)).digest('hex');
     await executeLeg({
       abiFunctionSignature: 'submit(uint256,bytes32,bytes)',
       abiParameters: [protocolJobId.toString(), deliverableHash, zeroBytes],
@@ -401,10 +403,18 @@ async function main(): Promise<void> {
           operationId: executionIds.COMPLETE.operationId,
           providerState,
           serviceExecutionId,
+          serviceOutput: deliverableOutput,
           serviceOutputSha256: outputSha256,
           transactionHash,
         });
       },
+    });
+
+    await jobs.ensureCompletedDeliveryIntegrity({
+      deliverableHash,
+      jobId,
+      output: deliverableOutput,
+      serviceExecutionId,
     });
 
     job = await jobs.getJob(jobId);

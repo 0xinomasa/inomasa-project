@@ -12,6 +12,7 @@ import {
   selectCommerceProtocol,
   serviceCapabilityForOffer,
 } from '../src/modules/commerce/service-catalog.ts';
+import { canonicalJson } from '../src/shared/canonical-json.ts';
 
 test('transaction shape selects x402 for instant resources and ERC-8183 for evaluated work', () => {
   assert.equal(selectCommerceProtocol({ requiresDeliverableEvaluation: false }), 'X402');
@@ -45,4 +46,11 @@ test('ERC-8183 accounting recognizes payout once and treats rejection or expiry 
   assert.equal(erc8183TerminalEconomicEffect('COMPLETED'), 'PAYOUT');
   assert.equal(erc8183TerminalEconomicEffect('REJECTED'), 'REFUND');
   assert.equal(erc8183TerminalEconomicEffect('EXPIRED'), 'REFUND');
+});
+
+test('service output canonical JSON survives PostgreSQL jsonb key reordering', () => {
+  assert.equal(
+    canonicalJson({ scope: 'brief', nested: { z: 1, a: 2 }, chainId: 5_042_002 }),
+    canonicalJson({ chainId: 5_042_002, nested: { a: 2, z: 1 }, scope: 'brief' }),
+  );
 });

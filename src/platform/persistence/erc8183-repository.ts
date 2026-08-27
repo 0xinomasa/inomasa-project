@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import type { TransactionHash } from '../../modules/agent/erc8004.ts';
 import {
   assertErc8183Transition,
@@ -8,6 +10,7 @@ import {
 } from '../../modules/commerce/erc8183.ts';
 import type { ServiceOffer } from '../../modules/commerce/model.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import { canonicalJson } from '../../shared/canonical-json.ts';
 import { arcErc8183 } from '../arc/erc8183.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
@@ -333,6 +336,7 @@ export class PostgresErc8183Repository {
     readonly protocolJobId?: bigint;
     readonly providerState: string;
     readonly serviceExecutionId?: `svc_${string}`;
+    readonly serviceOutput?: unknown;
     readonly serviceOutputSha256?: string;
     readonly transactionHash: TransactionHash;
   }): Promise<void> {
@@ -397,6 +401,7 @@ export class PostgresErc8183Repository {
       if (input.nextStatus === 'COMPLETED') {
         if (
           input.serviceExecutionId === undefined ||
+          input.serviceOutput === undefined ||
           input.serviceOutputSha256 === undefined ||
           !/^[0-9a-f]{64}$/.test(input.serviceOutputSha256) ||
           job.deliverable_hash === null
@@ -408,6 +413,7 @@ export class PostgresErc8183Repository {
           job,
           observedAt: input.observedAt,
           serviceExecutionId: input.serviceExecutionId,
+          serviceOutput: input.serviceOutput,
           serviceOutputSha256: input.serviceOutputSha256,
           transactionHash: input.transactionHash,
         });
@@ -419,6 +425,44 @@ export class PostgresErc8183Repository {
           transactionHash: input.transactionHash,
         });
       }
+    });
+  }
+
+  async ensureCompletedDeliveryIntegrity(input: {
+    readonly deliverableHash: TransactionHash;
+    readonly jobId: `job_${string}`;
+    readonly output: unknown;
+    readonly serviceExecutionId: `svc_${string}`;
+  }): Promise<void> {
+    const outputSha256 = createHash('sha256').update(canonicalJson(input.output)).digest('hex');
+    await this.#persistence.transaction(async (transaction) => {
+      const database = transaction.withSchema(applicationSchema);
+      const job = await database
+        .selectFrom('erc8183_jobs')
+        .select(['deliverable_hash', 'obligation_id', 'protocol_status', 'settlement_id'])
+        .where('job_id', '=', input.jobId)
+        .forUpdate()
+        .executeTakeFirstOrThrow();
+      const delivery = await database
+        .selectFrom('service_executions')
+        .select(['obligation_id', 'settlement_id', 'state'])
+        .where('execution_id', '=', input.serviceExecutionId)
+        .forUpdate()
+        .executeTakeFirstOrThrow();
+      if (
+        job.protocol_status !== 'COMPLETED' ||
+        job.deliverable_hash?.toLowerCase() !== input.deliverableHash.toLowerCase() ||
+        delivery.obligation_id !== job.obligation_id ||
+        delivery.settlement_id !== job.settlement_id ||
+        delivery.state !== 'COMPLETE'
+      ) {
+        throw new Error('Completed delivery does not match the chain-verified ERC-8183 job.');
+      }
+      await database
+        .updateTable('service_executions')
+        .set({ output: input.output, output_sha256: outputSha256 })
+        .where('execution_id', '=', input.serviceExecutionId)
+        .executeTakeFirstOrThrow();
     });
   }
 
@@ -451,6 +495,7 @@ export class PostgresErc8183Repository {
       };
       readonly observedAt: string;
       readonly serviceExecutionId: `svc_${string}`;
+      readonly serviceOutput: unknown;
       readonly serviceOutputSha256: string;
       readonly transactionHash: TransactionHash;
     },
@@ -519,12 +564,7 @@ export class PostgresErc8183Repository {
         environment: 'PRIVATE_ARC_TESTNET',
         execution_id: input.serviceExecutionId,
         obligation_id: job.obligation_id,
-        output: {
-          deliverableHash: job.deliverable_hash,
-          description: job.description,
-          protocol: 'ERC-8183',
-          protocolJobId: job.protocol_job_id,
-        },
+        output: input.serviceOutput,
         output_sha256: input.serviceOutputSha256,
         provenance: job.provenance,
         provider_business_id: job.provider_business_id,
