@@ -35,6 +35,18 @@ Use these scoped status labels:
 
 Android + Termux + Ubuntu Proot is `VERIFIED` for the recorded B0/local scope. Its normal Codex sandbox route is `UNSUPPORTED/BLOCKED`, while the supervised trusted-repository workaround below is the proven profile. GitHub-hosted Ubuntu is separately `VERIFIED` for CI scope. Other workstations and operator/tool combinations remain `SUPPORTED/TARGET` until their own relevant evidence is observed. See [`PROJECT_STATE.md`](../../PROJECT_STATE.md) for the authoritative current status table.
 
+### Browser automation subprofile
+
+The current Ubuntu ARM64 (`aarch64`) environment is `VERIFIED` for the narrow
+capability of launching headless Chromium through
+`/usr/local/bin/playwright-proot`. On 2026-08-28, wrapper version `0.1.18`
+opened a local `data:` page, produced a Playwright snapshot, and evaluated the
+page to `readyState: complete` with the expected marker before the session was
+closed. This verifies the wrapper/browser capability only; it does not claim
+application visual proof, product readiness, or any Checkpoint E work. The
+wrapper's sandbox setting is an environment execution detail and must not be
+copied into application behavior.
+
 ## Environment separation
 
 Use separate configuration, credentials, identifiers, endpoints, databases, wallets, contracts, and evidence for:
