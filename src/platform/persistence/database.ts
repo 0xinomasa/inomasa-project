@@ -32,11 +32,36 @@ interface PrincipalTable {
 
 interface AgentRegistrationTable {
   readonly agent_principal_id: string;
+  readonly business_id: string;
+  readonly capabilities: unknown;
   readonly created_at: Generated<Date>;
   readonly provider_of_record_principal_id: string;
+  readonly role: string;
   readonly runtime_class: string;
   readonly software_version: string;
   readonly status: string;
+}
+
+interface Erc8004IdentityOperationTable {
+  readonly agent_id: string | null;
+  readonly agent_principal_id: string;
+  readonly agent_registry: string | null;
+  readonly chain_id: number;
+  readonly created_at: Generated<Date>;
+  readonly identity_id: string;
+  readonly identity_registry_address: string;
+  readonly metadata_provider_transaction_id: string | null;
+  readonly metadata_transaction_hash: string | null;
+  readonly owner_address: string;
+  readonly provenance: string;
+  readonly provider_state: string | null;
+  readonly registration_provider_transaction_id: string | null;
+  readonly registration_transaction_hash: string | null;
+  readonly registration_uri: string | null;
+  readonly reputation_registry_address: string;
+  readonly state: string;
+  readonly updated_at: Timestamp;
+  readonly verified_at: Timestamp | null;
 }
 
 interface StandingAuthorityGrantTable {
@@ -69,6 +94,7 @@ interface ActionIntentTable {
   readonly asset: string;
   readonly authority_domain_business_id: string;
   readonly counterparty_business_id: string;
+  readonly erc8004_identity_id: ColumnType<string | null, string | null | undefined, string | null>;
   readonly grant_id: string;
   readonly intent_id: string;
   readonly offer_id: string;
@@ -335,6 +361,7 @@ export interface PersistenceDatabase {
   readonly business_templates: BusinessTemplateTable;
   readonly businesses: BusinessTable;
   readonly economic_entries: EconomicEntryTable;
+  readonly erc8004_identity_operations: Erc8004IdentityOperationTable;
   readonly evidence_facts: EvidenceFactTable;
   readonly execution_authorizations: ExecutionAuthorizationTable;
   readonly gateway_funding_operations: GatewayFundingOperationTable;

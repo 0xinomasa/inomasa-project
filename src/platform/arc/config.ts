@@ -6,7 +6,7 @@ export const arcTestnet = {
     decimals: 18,
     symbol: 'USDC',
   },
-  rpcUrl: 'https://rpc.testnet.arc.network',
+  rpcUrl: 'https://rpc.testnet.arc.io',
   usdc: {
     address: '0x3600000000000000000000000000000000000000',
     decimals: 6,

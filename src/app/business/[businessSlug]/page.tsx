@@ -3,7 +3,7 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Mark } from '../../_components/mark';
-import { loadBusinessSite } from '../../_business/site';
+import { loadBusinessAgents, loadBusinessSite } from '../../_business/site';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../../modules/commerce/money';
 
 export const dynamic = 'force-dynamic';
@@ -34,7 +34,10 @@ export async function generateMetadata({ params }: BusinessSitePageProps): Promi
 
 export default async function BusinessSitePage({ params }: BusinessSitePageProps) {
   const { businessSlug } = await params;
-  const site = await loadBusinessSite(businessSlug);
+  const [site, agents] = await Promise.all([
+    loadBusinessSite(businessSlug),
+    loadBusinessAgents(businessSlug),
+  ]);
 
   if (site === undefined) {
     notFound();
@@ -109,8 +112,8 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
             <h2>One reusable operating environment.</h2>
           </div>
           <p>
-            Capital is only a structural profile boundary here. Checkpoint B does not implement
-            allocation or provider decisions.
+            Capital remains a structural profile boundary until Checkpoint F; no allocation or
+            provider decision is implied here.
           </p>
         </div>
         <div>
@@ -120,6 +123,43 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
               <strong>{status.replaceAll('_', ' ')}</strong>
             </article>
           ))}
+        </div>
+      </section>
+
+      <section className="business-site__section">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Business Agents</p>
+            <h2>Roles and capabilities stay attached to their Business.</h2>
+          </div>
+          <p>
+            Agent identity, runtime, and economic permission are separate records. An ERC-8004
+            identity is shown only where it has actually been registered.
+          </p>
+        </div>
+        <div className="business-site__agents">
+          {agents.length === 0 ? (
+            <article className="activity-empty">
+              <span>NO ACTIVE AGENT</span>
+              <p>This Business has not registered an Agent capability.</p>
+            </article>
+          ) : (
+            agents.map((agent) => (
+              <article key={agent.agentPrincipalId}>
+                <div>
+                  <span>{agent.role.replaceAll('_', ' ')}</span>
+                  <strong>{agent.displayName}</strong>
+                  <p>{agent.capabilities.join(' · ')}</p>
+                </div>
+                <div>
+                  <span>{agent.identityState ?? 'OFFCHAIN ONLY'}</span>
+                  <Link href={`/business/${businessSlug}/agents/${agent.agentPrincipalId}`}>
+                    View Agent →
+                  </Link>
+                </div>
+              </article>
+            ))
+          )}
         </div>
       </section>
 

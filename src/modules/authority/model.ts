@@ -41,6 +41,7 @@ export interface AgentPurchaseIntent {
   readonly authorityDomainBusinessId: `biz_${string}`;
   readonly counterpartyBusinessId: `biz_${string}`;
   readonly environment: InomasaEnvironment;
+  readonly erc8004IdentityId?: `aid_${string}`;
   readonly grantId: `grt_${string}`;
   readonly intentId: `int_${string}`;
   readonly offerId: `off_${string}`;

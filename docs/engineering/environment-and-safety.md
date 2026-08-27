@@ -103,3 +103,20 @@ Use the clean-clone and recovery procedures in [`PROJECT_STATE.md`](../../PROJEC
 ## Network workaround
 
 The B0 Ubuntu environment required IPv4 for some downloads. Use `curl -4` only when ordinary network access fails; do not encode it into application behavior.
+
+On 27 August 2026, the local mobile-network resolver temporarily mapped
+`api.circle.com` to an operator address whose certificate did not contain the
+Circle hostname. TLS correctly failed closed. For a provider hostname mismatch:
+
+1. do not disable certificate or hostname verification;
+2. obtain a current DNSSEC-valid answer through a trusted DNS-over-HTTPS resolver;
+3. validate one candidate address with `curl --resolve` and require the normal
+   public trust chain plus the exact provider hostname in the certificate SAN;
+4. if execution cannot wait for the local resolver to recover, use only a narrow,
+   temporary hostname mapping for that provider call; and
+5. remove the mapping immediately afterward and verify that no override remains.
+
+Never commit or retain a provider edge IP: addresses and routing can change. This
+is an environment-scoped recovery profile, not application behavior or permission
+to bypass TLS. A mismatch that cannot be resolved with the checks above is a
+mandatory stop.

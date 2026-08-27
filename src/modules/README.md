@@ -10,6 +10,9 @@ modular monolith:
   state transitions.
 - `authority/` owns bounded grants, intents, policy decisions, execution
   authorizations, and allowance accounting.
+- `agent/` owns the generic Business-Agent relationship, role/capability/runtime
+  semantics, and the provider-neutral ERC-8004 identity contract. An Agent remains
+  distinct from its related Business, authority grants, and execution accounts.
 
 These folders are implementation ownership boundaries, not microservices and not a
 mechanical copy of the active Concept & Architecture layers. Current Business and
