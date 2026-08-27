@@ -5,7 +5,10 @@ import { PostgresAgentRepository } from '../src/platform/persistence/agent-repos
 import { PostgresAlphaBusinessRepository } from '../src/platform/persistence/alpha-business-repository.ts';
 import { readDatabaseConnectionConfig } from '../src/platform/persistence/config.ts';
 import { applicationSchema, PostgresPersistence } from '../src/platform/persistence/database.ts';
-import { PostgresErc8004Repository } from '../src/platform/persistence/erc8004-repository.ts';
+import {
+  erc8004EvidenceId,
+  PostgresErc8004Repository,
+} from '../src/platform/persistence/erc8004-repository.ts';
 import { PostgresGatewayX402Repository } from '../src/platform/persistence/gateway-x402-repository.ts';
 import { PostgresAlphaServiceRepository } from '../src/platform/persistence/alpha-service-repository.ts';
 
@@ -74,7 +77,7 @@ async function main(): Promise<void> {
       .withSchema(applicationSchema)
       .selectFrom('evidence_facts')
       .select(['fact_type', 'provenance', 'verification'])
-      .where('evidence_id', '=', `evi_${identityId}_verified`)
+      .where('evidence_id', '=', erc8004EvidenceId(identityId))
       .executeTakeFirstOrThrow();
     if (
       action.identityId !== identityId ||
@@ -138,7 +141,7 @@ async function main(): Promise<void> {
         `gateway_seller_balance_micro_usdc=${sellerBalance.availableMicroUsdc}`,
         `gateway_seller_pending_micro_usdc=${sellerBalance.pendingMicroUsdc}`,
         'provenance=COMMON_CONTROL_TEST',
-        'external_feedback=NONE_RECORDED',
+        'inomasa_feedback=NONE_INGESTED',
       ].join(' '),
     );
   } finally {

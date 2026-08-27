@@ -123,7 +123,8 @@ Current primary sources were rechecked on 27 August 2026 before execution:
   payments;
 - the same specification prohibits an Agent owner or approved operator from giving
   feedback to itself. Common-control execution therefore records the real economic
-  context and `NONE RECORDED`, rather than manufacturing a reputation score;
+  context and that Inomasa has ingested no feedback, rather than manufacturing a
+  reputation score or claiming unqueried global registry state;
 - the installed Circle Developer-Controlled Wallet SDK `10.8.0` retains
   idempotent `createContractExecutionTransaction` with Arc Testnet, contract
   address, ABI signature/parameters, and source EOA address.
@@ -150,7 +151,8 @@ Selected implementation:
   cannot silently rewrite which identity was used;
 - Agent detail exposes relationship, runtime, capabilities, portable identity,
   common-control provenance, identity-bound economic activity, and the absence of
-  external feedback without deriving a universal score.
+  feedback ingested by Inomasa without deriving a universal score or claiming
+  unqueried global registry state.
 
 Alternatives and consequences:
 
@@ -201,8 +203,8 @@ Observed Checkpoint C candidate proof on 27 August 2026:
   `47f9142bf657663bcd09472da7fe420a7e9161e65a25ec5ba7582cd793603bfe`;
 - replay returned `ALREADY_COMPLETE` for the same payment and delivery;
 - local production HTTP rendered the Business with both Agents and the Agent detail
-  with ID, registry state, exact action, common-control provenance, and
-  `NONE RECORDED` external feedback; an unknown Agent returned HTTP `404`;
+  with ID, registry state, exact action, common-control provenance, and no
+  Inomasa-ingested feedback; an unknown Agent returned HTTP `404`;
 - this is real Arc Testnet identity and provider-reported testnet commerce under
   synthetic/common control. It is not independent demand, user custody, universal
   reputation, Production value, or a direct per-payment Arc transaction hash.

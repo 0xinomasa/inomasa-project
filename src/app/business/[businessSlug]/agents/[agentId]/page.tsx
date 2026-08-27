@@ -150,7 +150,7 @@ export default async function AgentPage({ params }: AgentPageProps) {
                 </strong>
                 <p>{action.intentId}</p>
                 <small>{action.paymentId ?? 'NO PAYMENT'} · {action.provenance}</small>
-                <em>External ERC-8004 feedback: NONE RECORDED</em>
+                <em>ERC-8004 feedback ingested by Inomasa: NONE</em>
               </article>
             ))
           )}

@@ -4,6 +4,7 @@ import type {
   EvmAddress,
   TransactionHash,
 } from '../../modules/agent/erc8004.ts';
+import { agentRegistry } from '../../modules/agent/erc8004.ts';
 import type { ActorClassification } from '../../modules/business/model.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
@@ -32,6 +33,10 @@ export interface Erc8004IdentityOperation {
   readonly registrationUri: string | null;
   readonly registry: Erc8004RegistryReference;
   readonly state: Erc8004IdentityState;
+}
+
+export function erc8004EvidenceId(identityId: `aid_${string}`): `evi_${string}` {
+  return `evi_${identityId.slice(4)}`;
 }
 
 function requireAddress(value: string): EvmAddress {
@@ -96,10 +101,18 @@ export class PostgresErc8004Repository {
     readonly agentPrincipalId: `agt_${string}`;
     readonly identityId: `aid_${string}`;
     readonly ownerAddress: EvmAddress;
-    readonly provenance: ActorClassification;
     readonly registry: Erc8004RegistryReference;
   }): Promise<Erc8004IdentityOperation> {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
+    const agent = await database
+      .selectFrom('agent_registrations as registration')
+      .innerJoin('businesses as business', 'business.business_id', 'registration.business_id')
+      .select('business.actor_classification as provenance')
+      .where('registration.agent_principal_id', '=', input.agentPrincipalId)
+      .executeTakeFirstOrThrow();
+    if (agent.provenance !== 'COMMON_CONTROL_TEST' && agent.provenance !== 'INDEPENDENT') {
+      throw new Error('Agent Business has an unsupported provenance classification.');
+    }
     await database
       .insertInto('erc8004_identity_operations')
       .values({
@@ -112,7 +125,7 @@ export class PostgresErc8004Repository {
         metadata_provider_transaction_id: null,
         metadata_transaction_hash: null,
         owner_address: input.ownerAddress,
-        provenance: input.provenance,
+        provenance: agent.provenance,
         provider_state: null,
         registration_provider_transaction_id: null,
         registration_transaction_hash: null,
@@ -128,7 +141,7 @@ export class PostgresErc8004Repository {
     if (
       operation.agentPrincipalId !== input.agentPrincipalId ||
       operation.ownerAddress.toLowerCase() !== input.ownerAddress.toLowerCase() ||
-      operation.provenance !== input.provenance ||
+      operation.provenance !== agent.provenance ||
       operation.registry.chainId !== input.registry.chainId ||
       operation.registry.identityRegistryAddress.toLowerCase() !==
         input.registry.identityRegistryAddress.toLowerCase() ||
@@ -175,6 +188,9 @@ export class PostgresErc8004Repository {
     readonly providerState: string;
     readonly transactionHash: TransactionHash;
   }): Promise<void> {
+    if (input.identity.agentRegistry !== agentRegistry(input.identity)) {
+      throw new Error('ERC-8004 portable registry reference is inconsistent.');
+    }
     const result = await this.#persistence.databaseForApplication
       .withSchema(applicationSchema)
       .updateTable('erc8004_identity_operations')
@@ -187,6 +203,9 @@ export class PostgresErc8004Repository {
         updated_at: new Date(),
       })
       .where('identity_id', '=', input.identityId)
+      .where('chain_id', '=', input.identity.chainId)
+      .where('identity_registry_address', '=', input.identity.identityRegistryAddress)
+      .where('reputation_registry_address', '=', input.identity.reputationRegistryAddress)
       .where('state', 'in', ['REGISTER_SUBMITTED', 'OUTCOME_UNKNOWN'])
       .executeTakeFirstOrThrow();
     if (result.numUpdatedRows !== 1n) throw new Error('ERC-8004 registration outcome was not recorded.');
@@ -273,7 +292,7 @@ export class PostgresErc8004Repository {
       .values({
         coverage: 'IDENTITY_AND_METADATA',
         environment: identity.environment,
-        evidence_id: `evi_${identityId}_verified`,
+        evidence_id: erc8004EvidenceId(identityId),
         fact_type: 'ERC8004_AGENT_IDENTITY_VERIFIED',
         observed_at: identity.verified_at,
         payload: {

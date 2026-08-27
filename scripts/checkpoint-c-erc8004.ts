@@ -74,7 +74,6 @@ async function main(): Promise<void> {
       agentPrincipalId: buyerAgent.agentPrincipalId,
       identityId,
       ownerAddress,
-      provenance: 'COMMON_CONTROL_TEST',
       registry: arcErc8004,
     });
 
@@ -210,7 +209,7 @@ async function main(): Promise<void> {
     }
     await identities.ensureVerifiedEvidence(identityId);
     console.log(
-      `erc8004_identity=${identityId} state=VERIFIED registry=${operation.agentRegistry} agent_id=${operation.agentId} provenance=COMMON_CONTROL_TEST`,
+      `erc8004_identity=${identityId} state=VERIFIED registry=${operation.agentRegistry} agent_id=${operation.agentId} provenance=${operation.provenance}`,
     );
   } finally {
     await persistence.close();

@@ -9,6 +9,7 @@ import {
 } from '../src/modules/agent/erc8004.ts';
 import { validateBusinessAgent, type BusinessAgent } from '../src/modules/agent/model.ts';
 import { arcErc8004 } from '../src/platform/arc/erc8004.ts';
+import { erc8004EvidenceId } from '../src/platform/persistence/erc8004-repository.ts';
 
 const agent: BusinessAgent = {
   agentPrincipalId: 'agt_example',
@@ -48,6 +49,13 @@ test('ERC-8004 ambiguous outcomes reconcile the persisted transaction leg withou
     erc8004ReconciliationLeg({ hasMetadataSubmission: true, state: 'VERIFIED' }),
     null,
   );
+});
+
+test('ERC-8004 Evidence IDs preserve the schema length bound', () => {
+  const identityId = `aid_${'a'.repeat(76)}` as const;
+  const evidenceId = erc8004EvidenceId(identityId);
+  assert.equal(evidenceId.length, 80);
+  assert.equal(evidenceId.startsWith('evi_'), true);
 });
 
 test('ERC-8004 registration data URI binds the portable registry pair back to the Agent', () => {
