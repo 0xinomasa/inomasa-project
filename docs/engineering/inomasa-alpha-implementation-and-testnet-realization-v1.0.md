@@ -1112,7 +1112,7 @@ Target completion status:
 
 Current status:
 
-**IN PROGRESS — Checkpoint A complete; Checkpoints B–H are not verified.**
+**IN PROGRESS — Checkpoints A and B complete; Checkpoints C-H are not verified.**
 
 Target completion status hanya diberikan jika seluruh area berikut PASS.
 
