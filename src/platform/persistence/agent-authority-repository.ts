@@ -5,6 +5,7 @@ import {
   type StandingPurchaseAuthorityGrant,
 } from '../../modules/authority/model.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import { validateBusinessAgent } from '../../modules/agent/model.ts';
 import { isInomasaEnvironment } from '../../shared/environment.ts';
 import type { PersistenceTransaction, PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
@@ -97,6 +98,7 @@ function assertSameIntent(
     readonly asset: string;
     readonly authority_domain_business_id: string;
     readonly counterparty_business_id: string;
+    readonly erc8004_identity_id: string | null;
     readonly grant_id: string;
     readonly offer_id: string;
     readonly purpose: string;
@@ -111,6 +113,7 @@ function assertSameIntent(
     stored.asset !== intent.asset ||
     stored.authority_domain_business_id !== intent.authorityDomainBusinessId ||
     stored.counterparty_business_id !== intent.counterpartyBusinessId ||
+    stored.erc8004_identity_id !== (intent.erc8004IdentityId ?? null) ||
     stored.grant_id !== intent.grantId ||
     stored.offer_id !== intent.offerId ||
     stored.purpose !== intent.purpose ||
@@ -129,18 +132,36 @@ export class PostgresAgentAuthorityRepository {
   }
 
   async ensureAgentAndGrant(input: {
+    readonly agentBusinessId: `biz_${string}`;
+    readonly agentCapabilities: readonly string[];
     readonly agentDisplayName: string;
     readonly agentPrincipalId: `agt_${string}`;
+    readonly agentRole: string;
     readonly grant: StandingPurchaseAuthorityGrant;
     readonly providerOfRecordPrincipalId: `biz_${string}`;
     readonly runtimeClass: 'OPERATOR_INVOKED';
     readonly softwareVersion: string;
   }): Promise<{ readonly created: boolean }> {
+    validateBusinessAgent({
+      agentPrincipalId: input.agentPrincipalId,
+      businessId: input.agentBusinessId,
+      capabilities: input.agentCapabilities,
+      displayName: input.agentDisplayName,
+      environment: input.grant.environment,
+      providerOfRecordPrincipalId: input.providerOfRecordPrincipalId,
+      role: input.agentRole,
+      runtimeClass: input.runtimeClass,
+      softwareVersion: input.softwareVersion,
+      status: 'ACTIVE',
+    });
     if (input.agentPrincipalId !== input.grant.granteePrincipalId) {
       throw new Error('Grant grantee must be the Agent being registered.');
     }
     if (input.providerOfRecordPrincipalId !== input.grant.representedBusinessId) {
       throw new Error('The Alpha Agent provider-of-record must be its represented Business.');
+    }
+    if (input.agentBusinessId !== input.grant.representedBusinessId) {
+      throw new Error('The Agent Business relationship must match represented authority.');
     }
 
     return this.#persistence.transaction(async (transaction) => {
@@ -178,7 +199,10 @@ export class PostgresAgentAuthorityRepository {
         .insertInto('agent_registrations')
         .values({
           agent_principal_id: input.agentPrincipalId,
+          business_id: input.agentBusinessId,
+          capabilities: JSON.stringify(input.agentCapabilities),
           provider_of_record_principal_id: input.providerOfRecordPrincipalId,
+          role: input.agentRole,
           runtime_class: input.runtimeClass,
           software_version: input.softwareVersion,
           status: 'ACTIVE',
@@ -216,7 +240,10 @@ export class PostgresAgentAuthorityRepository {
       const registration = await database
         .selectFrom('agent_registrations')
         .select([
+          'business_id',
+          'capabilities',
           'provider_of_record_principal_id',
+          'role',
           'runtime_class',
           'software_version',
           'status',
@@ -224,7 +251,10 @@ export class PostgresAgentAuthorityRepository {
         .where('agent_principal_id', '=', input.agentPrincipalId)
         .executeTakeFirstOrThrow();
       if (
+        registration.business_id !== input.agentBusinessId ||
+        JSON.stringify(registration.capabilities) !== JSON.stringify(input.agentCapabilities) ||
         registration.provider_of_record_principal_id !== input.providerOfRecordPrincipalId ||
+        registration.role !== input.agentRole ||
         registration.runtime_class !== input.runtimeClass ||
         registration.software_version !== input.softwareVersion ||
         registration.status !== 'ACTIVE'
@@ -302,6 +332,17 @@ export class PostgresAgentAuthorityRepository {
       input.evaluatedAt,
     );
 
+    if (input.intent.erc8004IdentityId !== undefined) {
+      const identity = await database
+        .selectFrom('erc8004_identity_operations')
+        .select(['agent_principal_id', 'state'])
+        .where('identity_id', '=', input.intent.erc8004IdentityId)
+        .executeTakeFirstOrThrow();
+      if (identity.agent_principal_id !== input.intent.requesterPrincipalId || identity.state !== 'VERIFIED') {
+        throw new Error('Economic action requires the requester\'s verified ERC-8004 identity.');
+      }
+    }
+
     await database
       .insertInto('action_intents')
       .values({
@@ -310,6 +351,7 @@ export class PostgresAgentAuthorityRepository {
         asset: input.intent.asset,
         authority_domain_business_id: input.intent.authorityDomainBusinessId,
         counterparty_business_id: input.intent.counterpartyBusinessId,
+        erc8004_identity_id: input.intent.erc8004IdentityId ?? null,
         grant_id: input.intent.grantId,
         intent_id: input.intent.intentId,
         offer_id: input.intent.offerId,

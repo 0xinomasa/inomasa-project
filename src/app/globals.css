@@ -1114,6 +1114,164 @@ footer p {
   margin: 48px 0 12px;
 }
 
+.business-site__agents {
+  border: 1px solid var(--line);
+}
+
+.business-site__agents article {
+  align-items: center;
+  background: var(--panel);
+  border-bottom: 1px solid var(--line);
+  display: flex;
+  gap: 28px;
+  justify-content: space-between;
+  padding: 24px;
+}
+
+.business-site__agents article:last-child {
+  border-bottom: 0;
+}
+
+.business-site__agents article > div {
+  display: grid;
+  gap: 9px;
+}
+
+.business-site__agents article > div:last-child {
+  justify-items: end;
+}
+
+.business-site__agents span,
+.business-site__agents p,
+.business-site__agents a,
+.agent-site__capabilities span,
+.agent-site__actions span,
+.agent-site__actions small,
+.agent-site__actions em {
+  font-family: 'Courier New', monospace;
+  font-size: 0.62rem;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.business-site__agents span,
+.business-site__agents a,
+.agent-site__actions span {
+  color: var(--lime);
+}
+
+.business-site__agents strong {
+  font-size: 1.2rem;
+  font-weight: 400;
+}
+
+.business-site__agents p {
+  color: var(--muted);
+  margin: 0;
+}
+
+.agent-site__hero {
+  align-items: end;
+  display: grid;
+  gap: 70px;
+  grid-template-columns: minmax(0, 1fr) minmax(280px, 0.55fr);
+  margin-inline: auto;
+  max-width: var(--max-width);
+  min-height: 620px;
+  padding-block: 110px 88px;
+  width: calc(100% - 64px);
+}
+
+.agent-site__hero h1 {
+  font-size: clamp(3.2rem, 7vw, 7rem);
+}
+
+.agent-site__hero > div > p:last-child {
+  color: var(--muted);
+  line-height: 1.7;
+  max-width: 700px;
+}
+
+.agent-site__hero dl,
+.agent-site__identity {
+  margin: 0;
+}
+
+.agent-site__hero dl div,
+.agent-site__identity div {
+  border-top: 1px solid var(--line);
+  display: flex;
+  gap: 24px;
+  justify-content: space-between;
+  padding-block: 14px;
+}
+
+.agent-site__hero dt,
+.agent-site__hero dd,
+.agent-site__identity dt,
+.agent-site__identity dd {
+  font-size: 0.67rem;
+  margin: 0;
+}
+
+.agent-site__hero dt,
+.agent-site__identity dt {
+  color: var(--muted);
+}
+
+.agent-site__hero dd,
+.agent-site__identity dd {
+  color: var(--muted-strong);
+  max-width: 65%;
+  overflow-wrap: anywhere;
+  text-align: right;
+}
+
+.agent-site__identity a {
+  color: var(--lime);
+}
+
+.agent-site__capabilities {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 8px;
+}
+
+.agent-site__capabilities span {
+  border: 1px solid var(--line-strong);
+  color: var(--muted-strong);
+  padding: 12px 14px;
+}
+
+.agent-site__actions {
+  display: grid;
+  gap: 12px;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+}
+
+.agent-site__actions article {
+  background: var(--panel);
+  border: 1px solid var(--line);
+  display: grid;
+  gap: 16px;
+  min-height: 240px;
+  padding: 26px;
+}
+
+.agent-site__actions strong {
+  font-size: 1.8rem;
+  font-weight: 400;
+  margin-top: 24px;
+}
+
+.agent-site__actions p,
+.agent-site__actions small,
+.agent-site__actions em {
+  color: var(--muted);
+  font-style: normal;
+  overflow-wrap: anywhere;
+}
+
 @media (max-width: 900px) {
   .site-header,
   .hero,
@@ -1193,6 +1351,7 @@ footer p {
     grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 
+  .agent-site__hero,
   .business-site__hero,
   .business-site__treasury {
     grid-template-columns: 1fr;
@@ -1321,7 +1480,8 @@ footer p {
   .network-section,
   .business-site__hero,
   .business-site__section,
-  .business-site__treasury {
+  .business-site__treasury,
+  .agent-site__hero {
     width: calc(100% - 28px);
   }
 
@@ -1341,6 +1501,7 @@ footer p {
   .template-grid,
   .business-site__offers,
   .business-site__package > div:last-child,
+  .agent-site__actions,
   .activity-ledger dl,
   .evidence-grid,
   .execution-grid,
@@ -1351,6 +1512,15 @@ footer p {
   .business-instance-list article {
     align-items: start;
     grid-template-columns: 1fr;
+  }
+
+  .business-site__agents article {
+    align-items: start;
+    flex-direction: column;
+  }
+
+  .business-site__agents article > div:last-child {
+    justify-items: start;
   }
 
   .business-card {

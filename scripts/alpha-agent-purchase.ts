@@ -54,8 +54,11 @@ async function main(): Promise<void> {
       validFrom: '2026-08-25T00:00:00.000Z',
     };
     await authorities.ensureAgentAndGrant({
+      agentBusinessId: buyer.businessId,
+      agentCapabilities: ['purchase-service'],
       agentDisplayName: 'Ops Pilot Buyer Agent',
       agentPrincipalId,
+      agentRole: 'BUYER_AGENT',
       grant,
       providerOfRecordPrincipalId: buyer.businessId,
       runtimeClass: 'OPERATOR_INVOKED',

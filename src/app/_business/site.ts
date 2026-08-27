@@ -5,6 +5,11 @@ import {
   PostgresAlphaBusinessRepository,
   type BusinessSiteView,
 } from '../../platform/persistence/alpha-business-repository.ts';
+import {
+  PostgresAgentRepository,
+  type AgentDetail,
+  type AgentListItem,
+} from '../../platform/persistence/agent-repository.ts';
 import { PostgresPersistence } from '../../platform/persistence/database.ts';
 
 function hasRuntimeDatabaseConfiguration(): boolean {
@@ -24,3 +29,34 @@ export const loadBusinessSite = cache(async (slug: string): Promise<BusinessSite
     await persistence.close();
   }
 });
+
+export const loadBusinessAgents = cache(
+  async (slug: string): Promise<readonly AgentListItem[]> => {
+    if (!hasRuntimeDatabaseConfiguration()) return [];
+    const site = await loadBusinessSite(slug);
+    if (site === undefined) return [];
+    const persistence = new PostgresPersistence(readDatabaseConnectionConfig('runtime'));
+    try {
+      return await new PostgresAgentRepository(persistence).listAgentsForBusiness(site.businessId);
+    } finally {
+      await persistence.close();
+    }
+  },
+);
+
+export const loadBusinessAgent = cache(
+  async (slug: string, agentPrincipalId: string): Promise<AgentDetail | undefined> => {
+    if (!hasRuntimeDatabaseConfiguration() || !agentPrincipalId.startsWith('agt_')) return undefined;
+    const site = await loadBusinessSite(slug);
+    if (site === undefined) return undefined;
+    const persistence = new PostgresPersistence(readDatabaseConnectionConfig('runtime'));
+    try {
+      return await new PostgresAgentRepository(persistence).getAgentDetail({
+        agentPrincipalId: agentPrincipalId as `agt_${string}`,
+        businessId: site.businessId,
+      });
+    } finally {
+      await persistence.close();
+    }
+  },
+);

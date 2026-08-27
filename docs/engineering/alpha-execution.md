@@ -105,6 +105,108 @@ tradeoffs are a one-time EOA deposit, Circle operational dependency, and Gateway
 live minimum authorization validity of `604800` seconds. Public/mainnet price and
 operational suitability remain unadjudicated.
 
+## REV2 Checkpoint C ERC-8004 execution profile
+
+This section is the implementation record for REV2 Checkpoint C. It does not amend
+the active Concept & Architecture or Alpha REV2 authority.
+
+Current primary sources were rechecked on 27 August 2026 before execution:
+
+- Arc's official Agent registration tutorial identifies Arc Testnet chain
+  `5042002`, Identity Registry
+  `0x8004A818BFB912233c491871b3d84c89A494BD9e`, Reputation Registry
+  `0x8004B663056A597Dffe9eCcC1965A193B7388713`, and the current RPC endpoint
+  `https://rpc.testnet.arc.io`;
+- the current ERC-8004 specification defines the portable identity pair as
+  `agentRegistry + agentId`, requires a registration file bound back to that pair,
+  permits a base64 `data:` URI, and separates identity/reputation/validation from
+  payments;
+- the same specification prohibits an Agent owner or approved operator from giving
+  feedback to itself. Common-control execution therefore records the real economic
+  context and `NONE RECORDED`, rather than manufacturing a reputation score;
+- the installed Circle Developer-Controlled Wallet SDK `10.8.0` retains
+  idempotent `createContractExecutionTransaction` with Arc Testnet, contract
+  address, ABI signature/parameters, and source EOA address.
+
+Selected implementation:
+
+- a new bounded `modules/agent/` owns generic Business-Agent role, capabilities,
+  runtime, status, and the provider-neutral ERC-8004 contract;
+- PostgreSQL migration `008` enriches the prior Agent fixture table without
+  replacing it, persists an idempotent ERC-8004 reconciliation state machine, and
+  adds an immutable optional identity reference to Action Intent;
+- the existing Ops Pilot Circle EOA submits registry calls as a
+  platform-controlled execution account. It is explicitly not Agent identity,
+  Business identity, user custody, or Protected Treasury;
+- registration uses `register()` first, observes the emitted `agentId`, then calls
+  `setAgentURI(agentId, dataUri)`. This second transaction is required to bind the
+  final registration JSON back to the actual onchain ID without an untruthful
+  placeholder;
+- Arc RPC proof binds chain ID, successful receipts, `Registered` and `URIUpdated`
+  events, owner, `ownerOf`, and exact `tokenURI` before local state becomes
+  `VERIFIED`;
+- a new x402 action may name only the requester's already-verified identity. The
+  identity snapshot is persisted on the Action Intent, so later identity changes
+  cannot silently rewrite which identity was used;
+- Agent detail exposes relationship, runtime, capabilities, portable identity,
+  common-control provenance, identity-bound economic activity, and the absence of
+  external feedback without deriving a universal score.
+
+Alternatives and consequences:
+
+- a hosted HTTPS or IPFS registration file would reduce URI gas size but add a new
+  hosting/content-availability dependency. The bounded Alpha selects an onchain
+  base64 data URI for reversibility and self-contained proof; `setAgentURI` allows
+  later replacement;
+- a newly provisioned dedicated wallet would separate registry ownership from the
+  existing Business execution account, but would add another custody object before
+  a distinct control requirement exists. The selected EOA owner is transferable
+  under ERC-721 and remains clearly classified as platform-controlled;
+- using only an internal ID would avoid two transactions but would fail the REV2
+  interoperability obligation. Treating ERC-8004 as the Business or wallet would
+  violate active architecture invariants;
+- validation calls are deferred because Checkpoint C has no real validator need.
+  External reputation feedback is likewise not fabricated under common control;
+- no dependency or vendor was added. Existing `viem`, Circle, PostgreSQL, and Arc
+  adapters are reused. Lock-in is limited to the selected submission adapter and
+  Arc registry deployment; domain references and reconciliation remain portable.
+
+Primary sources:
+
+- https://docs.arc.io/arc/tutorials/register-your-first-ai-agent
+- https://docs.arc.io/arc/references/rpc-endpoints
+- https://eips.ethereum.org/EIPS/eip-8004
+- https://github.com/erc-8004/erc-8004-contracts
+- https://developers.circle.com/api-reference/wallets/developer-controlled-wallets/create-contract-execution-transaction
+
+Observed Checkpoint C candidate proof on 27 August 2026:
+
+- Ops Pilot retained two Agent records through the generic repository; the buyer
+  Agent is still `agt_ops_pilot_buyer_v1`, while
+  `agt_ops_pilot_observer_v1` proves a second role/capability without a wallet or
+  forced onchain identity;
+- ERC-8004 identity: Agent ID `886498`, portable registry
+  `eip155:5042002:0x8004A818BFB912233c491871b3d84c89A494BD9e`;
+- registration transaction:
+  `0x6dbd74350f1a2426fe87e604e6ffca5768b55d38139118750470323ae890fd88`;
+- metadata transaction:
+  `0xa34df9a62721a0c72417bd7eb3cd6cc673a055570efeb2aed4038a09e6295a32`;
+- identity-bound Action Intent `int_arc_snapshot_x402_8004_v1` settled exact
+  `0.010000` testnet USDC through payment
+  `pay_arc_snapshot_x402_8004_v1`, provider receipt
+  `0a58b02e-e158-4465-b8f9-5c2fd2cc51e6`;
+- post-batch Gateway balances: payer `0.980000`, seller `0.020000`, pending zero;
+- paid delivery `svc_arc_snapshot_x402_8004_v1` completed from Arc block
+  `59060455`, output SHA-256
+  `47f9142bf657663bcd09472da7fe420a7e9161e65a25ec5ba7582cd793603bfe`;
+- replay returned `ALREADY_COMPLETE` for the same payment and delivery;
+- local production HTTP rendered the Business with both Agents and the Agent detail
+  with ID, registry state, exact action, common-control provenance, and
+  `NONE RECORDED` external feedback; an unknown Agent returned HTTP `404`;
+- this is real Arc Testnet identity and provider-reported testnet commerce under
+  synthetic/common control. It is not independent demand, user custody, universal
+  reputation, Production value, or a direct per-payment Arc transaction hash.
+
 ## Exact Arc registry
 
 - network: Arc Testnet only;
