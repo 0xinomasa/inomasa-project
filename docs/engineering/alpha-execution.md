@@ -181,7 +181,7 @@ Primary sources:
 - https://github.com/erc-8004/erc-8004-contracts
 - https://developers.circle.com/api-reference/wallets/developer-controlled-wallets/create-contract-execution-transaction
 
-Observed Checkpoint C candidate proof on 27 August 2026:
+Observed Checkpoint C accepted proof on 27 August 2026:
 
 - Ops Pilot retained two Agent records through the generic repository; the buyer
   Agent is still `agt_ops_pilot_buyer_v1`, while
@@ -208,6 +208,11 @@ Observed Checkpoint C candidate proof on 27 August 2026:
 - this is real Arc Testnet identity and provider-reported testnet commerce under
   synthetic/common control. It is not independent demand, user custody, universal
   reputation, Production value, or a direct per-payment Arc transaction hash.
+- acceptance: pull request `#25`, implementation commit
+  `d9236fe0c95a4770a986494845c1f297eef4b8ba`, final head
+  `1667735838105343cd4d5273895efda2bdff72fd`, PR run `33043930935`, merge
+  `d3b26ce6e5e4808d415430d80697a4c78720415d`, and accepted-main run
+  `33044047209` all completed successfully.
 
 ## Exact Arc registry
 

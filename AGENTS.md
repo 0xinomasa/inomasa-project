@@ -21,9 +21,9 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
 - The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
-  — REV2**. Checkpoints A and B are accepted. Standing sequential authorization is
+  — REV2**. Checkpoints A-C are accepted. Standing sequential authorization is
   active for Checkpoints C-H; the exact current implementation point is Checkpoint
-  C — Generic Agent + ERC-8004, and each later checkpoint may begin only after its
+  D — Commerce primitives, and each later checkpoint may begin only after its
   predecessor is accepted on GitHub `main`. It must not be skipped ahead to Capital.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Capital is Checkpoint F after generic Business, Agent,
@@ -43,9 +43,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Circle Developer-Controlled EOA remains the verified Alpha execution account
   profile. It is platform-controlled external infrastructure, not Business or Agent
   identity, user custody, or a Protected Treasury claim.
-- ERC-8004 and ERC-8183 are `REQUIRED / NOT IMPLEMENTED` Alpha capabilities under
-  REV2. Do not claim integration before current primary-source research and real
-  Arc Testnet proof.
+- ERC-8004 is `IMPLEMENTED / VERIFIED` for the accepted Checkpoint C scope.
+  ERC-8183 remains `REQUIRED / NOT IMPLEMENTED` under REV2. Do not broaden either
+  integration claim before current primary-source research and real Arc Testnet
+  proof for the affected checkpoint.
 - Preserve current product code, fixtures, migrations, tests, and proof until a
   generic replacement passes regression evidence: replace by proof, not rewrite by
   assumption.
