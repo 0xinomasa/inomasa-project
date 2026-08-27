@@ -214,6 +214,130 @@ Observed Checkpoint C accepted proof on 27 August 2026:
   `d3b26ce6e5e4808d415430d80697a4c78720415d`, and accepted-main run
   `33044047209` all completed successfully.
 
+## REV2 Checkpoint D commerce execution profile
+
+This section records the Checkpoint D implementation and private-testnet proof. It
+does not amend either active authority and does not promote an ERC draft or one Arc
+deployment into Inomasa product ownership.
+
+Current primary sources were rechecked on 27-28 August 2026 before implementation
+and execution:
+
+- Arc's official Agentic Economy documentation selects x402 for instant resource
+  purchase and ERC-8183 for funded work with a deliverable and evaluator;
+- Arc's current ERC-8183 tutorial publishes AgenticCommerce deployment
+  `0x0747EEf0706327138c69792bF28Cd525089e4583`, Arc Testnet USDC
+  `0x3600000000000000000000000000000000000000`, a non-hooked path, and the
+  deployed lifecycle ABI;
+- EIP-8183 remains a `DRAFT`. Its current state machine is
+  `Open -> Funded -> Submitted -> Completed/Rejected/Expired`; completion pays the
+  provider, while reject/expiry returns escrow to the client. The evaluator is a
+  trusted role and the standard supplies no dispute resolution;
+- the deployed Arc tutorial ABI differs from some current EIP prose: the provider
+  sets price through `setBudget(uint256,uint256,bytes)` and funding uses
+  `fund(uint256,bytes)`. Inomasa pins the observed deployment ABI in the Arc adapter
+  rather than silently treating the draft and deployment as identical;
+- Circle Developer-Controlled Wallet contract execution remains the selected
+  signing/submission adapter. x402 v2 remains an exact, CAIP-2-scoped instant
+  payment protocol, and Circle Gateway receipts remain provider facts rather than
+  direct per-payment Arc transaction hashes.
+
+Selected implementation:
+
+- `modules/commerce` owns protocol-neutral offer definitions, transaction-shape
+  selection, ERC-8183 statuses/transitions, terminal replay rules, and payout versus
+  refund economic meaning;
+- a data-driven service catalog and `/api/alpha/services/[offerId]` make the x402
+  HTTP capability generic by offer. The former snapshot path is retained as a
+  compatibility/regression endpoint and both routes validate that the supplied
+  payment is committed to that exact offer before returning a challenge or output;
+- migration `009` adds an ERC-8183 job commitment and a unique per-leg operation
+  ledger. `UNCREATED` prevents application state from pretending that a job exists
+  onchain before the create receipt is verified. Every Circle operation has its own
+  stable idempotency key, provider transaction ID, Arc hash, block, and recoverable
+  `OUTCOME_UNKNOWN` state;
+- the Arc adapter verifies chain, deployed contract/token/zero-fee profile, exact
+  non-hooked job fields, successful receipts, historical contract state at each
+  receipt block, and one exact USDC escrow/payout/refund transfer where required;
+- offchain delivery persists the exact JSON payload plus a canonical recursive-key
+  SHA-256, so its digest remains reconstructible after PostgreSQL `jsonb` reorders
+  object keys; the separate onchain `bytes32` commitment remains the protocol fact;
+- the bounded proof reuses the accepted Ops Pilot EOA as client/evaluator and
+  Signal Forge EOA as provider. These accounts are platform-controlled execution
+  infrastructure, not Business identity, Agent identity, user custody, Protected
+  Treasury, or evidence of independent demand;
+- funding is an escrow movement and creates no Revenue or Service Cost. Only a
+  chain-verified `Completed` payout atomically settles the obligation, records one
+  Revenue/Service Cost pair, records delivery, and writes source-scoped Evidence.
+  `Rejected`/`Expired` records `REFUNDED`, cancels the obligation, and creates no
+  revenue/cost pair because the returned escrow is not new income;
+- the Alpha rejects non-zero platform/evaluator fees for this deployment. This
+  keeps the exact `0.050000` service accounting true; supporting a fee-bearing
+  deployment would require an explicit fee allocation model and new proof.
+
+Need, alternatives, consequences, cost/lock-in, and reversibility:
+
+- ERC-8183 is required by REV2 for work that naturally needs escrow, deliverable,
+  and evaluation. Reusing direct USDC or x402 would lose that job-state contract;
+  building a custom escrow would duplicate a suitable external primitive and
+  expand security ownership;
+- a third-party evaluator or hook could broaden policy, but adds trust, liveness,
+  and callback risk without a Checkpoint D need. Client-as-evaluator and the zero
+  hook are the smallest truthful common-control Alpha profile;
+- no dependency, vendor, hosted service, or custom contract was added. Existing
+  `viem`, Circle, Arc RPC, PostgreSQL, and the external Arc reference deployment are
+  reused. Cost is six testnet contract calls plus gas and `0.050000` escrow;
+- lock-in is confined to the Circle execution adapter and the selected Arc
+  deployment/ABI. Business, offer, obligation, accounting, delivery, and Evidence
+  stay internal and provider-neutral. A future conforming deployment/provider can
+  replace the adapters after registry, ABI, fee, state, exact-transfer, and replay
+  proof; no rewrite of Business meaning is required;
+- because ERC-8183 is still draft, Production/mainnet use, hooks, arbitrary fees,
+  independent evaluators, and generalized dispute handling remain unauthorized.
+
+Primary sources:
+
+- https://docs.arc.io/build/agentic-economy
+- https://docs.arc.io/arc/tutorials/create-your-first-erc-8183-job
+- https://docs.arc.io/arc/references/rpc-endpoints
+- https://eips.ethereum.org/EIPS/eip-8183
+- https://github.com/erc-8183/base-contracts
+- https://developers.circle.com/api-reference/wallets/developer-controlled-wallets/create-contract-execution-transaction
+- https://developers.circle.com/gateway/nanopayments/quickstarts/buyer
+- https://developers.circle.com/gateway/nanopayments/quickstarts/seller
+- https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
+
+Observed Checkpoint D implementation proof on 28 August 2026:
+
+- ERC-8183 job `182088`, internal
+  `job_commerce_readiness_8183_v1`, completed exact `0.050000` Arc Testnet USDC
+  with `COMMON_CONTROL_TEST` provenance;
+- create transaction
+  `0x37c99edd8d27096c8a2381b46ba3f0ae0af8b1f8905bb3205deb073da3e4cd57`;
+- provider budget transaction
+  `0x83635226dbc70bedc5591131f692b598c9e75c32741f8bcd8f3d91a1dd6807e7`;
+- client approval transaction
+  `0x07af8bd7b1711db739dd99f2ccacbbecb436433b924f4377ca038d680433cd88`;
+- exact escrow funding transaction
+  `0x0502a09790fa4127a0c6726492cfab00d1bcfa4c722bb4e9881690ae927e1ffa`;
+- deliverable submission transaction
+  `0x1b27621671120749de3ee4cd784489dc2de37086837b96b306413e91d997fdef`,
+  with commitment
+  `0x21e3af36011b6f9e30706a5159a5dc0428a792a2233f242bde4b414e13f4021a`;
+- evaluator completion and exact provider payout transaction
+  `0x21f84636a01ca34ee0d23743ebcb28140437b5a345032b777b17fd43f9b3c653`;
+- replay returned `ALREADY_COMPLETE` for all six legs; the proof found exactly
+  six unique completed operation transactions, one exact two-entry economic pair,
+  one completed delivery, and chain-verified job/payout Evidence;
+- accepted x402 payments `pay_arc_snapshot_x402_v1` and
+  `pay_arc_snapshot_x402_8004_v1` remained `COMPLETE`. Production HTTP returned
+  the committed `402` challenge and paid `200` output on both legacy and generic
+  offer routes. Automated visual browser proof remains unclaimed because
+  `agent-browser` is unavailable in the verified Ubuntu Proot profile;
+- this is real Arc Testnet escrow/payout under synthetic common control. It is not
+  independent work demand, service quality, user custody, Production value, or a
+  claim that every ERC-8183 implementation has the same ABI or fee profile.
+
 ## Exact Arc registry
 
 - network: Arc Testnet only;

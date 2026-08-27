@@ -15,7 +15,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | REV2 completion status | **IN PROGRESS**; Checkpoints A-C are accepted and verified within their scoped gates; Checkpoints D-H and the `CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED` completion gate are not verified |
 | Standing execution authorization | **ACTIVE — REV2 CHECKPOINTS C-H, SEQUENTIAL ONLY**. The owner authorized continuous execution from Checkpoint C through H on 27 August 2026. Each checkpoint still requires its predecessor accepted on GitHub `main`, checkpoint-specific research/proof/regression, persistent-state closeout, PR/CI/review/merge, and observed accepted-main evidence before advancing. This authorization does not extend beyond H or to Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent authority, or Production/public Capital exposure, and remains active until completed, revoked, or changed by the owner. |
 | Next implementation checkpoint | **REV2 Checkpoint D — Commerce primitives**: re-read current authority and accepted baseline, perform current primary-source verification for x402/ERC-8183/Arc/Circle where execution depends on it, then realize generic x402 service capability, ERC-8183 job capability, and integrated accounting/reconciliation proof |
-| Current execution status | **CHECKPOINT C ACCEPTED / CHECKPOINT D AUTHORIZED AND READY** under standing sequential authorization C-H |
+| Current execution status | **CHECKPOINT C ACCEPTED / CHECKPOINT D IMPLEMENTED AND LOCALLY VERIFIED, ACCEPTANCE PENDING** under standing sequential authorization C-H. Checkpoint E must not begin until D is merged and accepted-main CI is observed |
 | B5 result | `VERIFIED / PASS` historical decision-and-continuity evidence; Human-Controlled Business Entry is lineage rather than the current standalone realization boundary |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
@@ -35,13 +35,15 @@ This file is the concise repository-native entry point for a human or AI operato
 | Checkpoint C private-testnet proof | Ops Pilot has two generic Agent records. Buyer Agent `agt_ops_pilot_buyer_v1` is ERC-8004 Agent `886498` at `eip155:5042002:0x8004A818BFB912233c491871b3d84c89A494BD9e`; registration transaction `0x6dbd74350f1a2426fe87e604e6ffca5768b55d38139118750470323ae890fd88` and metadata transaction `0xa34df9a62721a0c72417bd7eb3cd6cc673a055570efeb2aed4038a09e6295a32` were receipt/event/owner/tokenURI verified. Identity-bound payment `pay_arc_snapshot_x402_8004_v1` completed exact `0.010000` testnet USDC with provider receipt `0a58b02e-e158-4465-b8f9-5c2fd2cc51e6`; payer/seller Gateway balances are `0.980000` / `0.020000`, pending zero. Delivery `svc_arc_snapshot_x402_8004_v1` completed from Arc block `59060455`, digest `47f9142bf657663bcd09472da7fe420a7e9161e65a25ec5ba7582cd793603bfe`, and replay returned `ALREADY_COMPLETE`. All provenance is `COMMON_CONTROL_TEST`; Inomasa has ingested no ERC-8004 feedback and makes no claim about unqueried global registry state, a score, or independent demand |
 | Checkpoint C acceptance evidence | Pull request `#25`; implementation commit `d9236fe0c95a4770a986494845c1f297eef4b8ba`; final head `1667735838105343cd4d5273895efda2bdff72fd`; final PR verification run `33043930935`; merge commit `d3b26ce6e5e4808d415430d80697a4c78720415d`; and accepted-main run `33044047209` completed successfully, including npm audit with zero vulnerabilities, lint, typecheck, 37/37 tests, Next.js `16.3.3` production build, and fresh PostgreSQL 17 reconstruction through migration `008` plus write/read/rollback proof |
 | Checkpoint C runtime verification | Current primary Arc/ERC-8004/Circle sources reviewed; configured private-testnet migration/proof through `008`, idempotent identity/payment/delivery replay, Arc RPC proof, and production HTTP `200` Business/Agent render plus expected unknown-Agent `404` passed. Automated visual browser proof remains unclaimed because `agent-browser` is not installed |
+| Checkpoint D implementation candidate | Migration `009` and the current branch implement a protocol-neutral service catalog, offer-bound generic x402 HTTP route with the legacy route retained, an ERC-8183 job/operation ledger, Circle per-leg idempotent reconciliation, historical-block Arc contract/receipt/USDC verification, exact terminal accounting, delivery, and payout/refund Evidence. This remains **IMPLEMENTED / LOCALLY VERIFIED / NOT YET ACCEPTED** until PR review, merge, and accepted-main CI pass |
+| Checkpoint D private-testnet proof candidate | Arc AgenticCommerce job `182088`, internal `job_commerce_readiness_8183_v1`, reached `COMPLETED` for exact `0.050000` testnet USDC. Funding transaction `0x0502a09790fa4127a0c6726492cfab00d1bcfa4c722bb4e9881690ae927e1ffa`, completion/payout transaction `0x21f84636a01ca34ee0d23743ebcb28140437b5a345032b777b17fd43f9b3c653`, and deliverable commitment `0x21e3af36011b6f9e30706a5159a5dc0428a792a2233f242bde4b414e13f4021a` were chain verified. Six-leg replay returned `ALREADY_COMPLETE`; exactly one Revenue/Service Cost pair exists. Existing x402 payments remain complete and both legacy/generic production HTTP routes returned the committed `402`/`200` flow. Provenance is `COMMON_CONTROL_TEST`; visual browser proof remains unclaimed because `agent-browser` is unavailable |
 | Authority migration local evidence | npm audit (0 vulnerabilities), lint, typecheck, 28/28 tests, Next.js `16.3.3` production build, migrations `001`-`006` already current, database write/read/rollback, local Markdown-link audit, and `git diff --check` passed; no product/provider/database behavior changed |
 | Authority migration acceptance evidence | Pull request `#19`; implementation commit `751bd4c4d5e75b7a6fc8087c99034ae05089cf4e`; final PR head `218cdd273e9b6d291703e930aada1e4b768f2057`; final PR verification run `32949059522`; merge commit `d3cba7871204ba91a20094ce4353db0a650933b9`; and accepted-main run `32949201003` completed successfully, including clean PostgreSQL reconstruction/proof |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
-| Product implementation boundary | Accepted `main` ends at Checkpoint C: the deterministic Business/economic kernel, generic Business system, generic Business-Agent model, ERC-8004 identity linkage, identity-bound economic activity, and Agent observability are accepted. Generic commerce/ERC-8183, Economic History UI, generic Capital, reference economy, and integrated verification remain later checkpoints |
-| Verified private-testnet state | `Signal Forge`, `Ops Pilot`, both Ops Pilot Agent records, and `Checkpoint B API Proof` remain synthetic/common-control. The proof database has four exact settled obligations totaling `0.370000` USDC, eight economic entries, four settlement Evidence facts, four service-delivery Evidence facts, and one ERC-8004 identity Evidence fact. The generic proof Business still has only a `PENDING` logical Treasury and no economic activity |
+| Product implementation boundary | Accepted `main` ends at Checkpoint C: the deterministic Business/economic kernel, generic Business system, generic Business-Agent model, ERC-8004 identity linkage, identity-bound economic activity, and Agent observability are accepted. Generic commerce/ERC-8183 is a locally verified Checkpoint D candidate awaiting acceptance; Economic History UI, generic Capital, reference economy, and integrated verification remain later checkpoints |
+| Verified private-testnet state | `Signal Forge`, `Ops Pilot`, both Ops Pilot Agent records, and `Checkpoint B API Proof` remain synthetic/common-control. The proof database now has five exact settled obligations totaling `0.420000` USDC, ten economic entries, five settlement Evidence facts, four x402/direct service-delivery Evidence facts, one ERC-8183 job-lifecycle Evidence fact, and one ERC-8004 identity Evidence fact. Five service executions are complete. The generic proof Business still has only a `PENDING` logical Treasury and no economic activity |
 | Repository continuity marker | `src/index.ts` `repositoryBaseline` is intentionally retained as a machine-readable descriptive marker maintained since B1. It is subordinate to the active authority documents and `PROJECT_STATE.md`, and it grants no runtime or product authority |
-| Current blocking gate | No blocker currently prevents Checkpoint D research and implementation. `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change; real ERC-8183 execution cannot be claimed until current primary-source verification and Arc Testnet proof pass |
+| Current blocking gate | No blocker currently prevents Checkpoint D review and acceptance. `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change. Checkpoint E remains sequentially held until D is accepted on GitHub `main` |
 | Baseline fixture/product-label status | Signal Forge, Ops Pilot, the buyer Agent, and the current shell's `CAPITAL / NEXT` label remain verified baseline fixtures/UI output. They are not generic product capacity or active roadmap authority and are unchanged by this migration |
 | Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
@@ -195,12 +197,13 @@ The repository now contains generic Business and Agent systems, a chain-verified
 Arc Testnet ERC-8004 identity path, Circle Developer-Controlled Wallet EOA and
 Gateway x402 adapters, and identity-bound economic activity. Private-testnet
 database state has two original common-control test Businesses, one generic proof
-Business, two Ops Pilot Agents, two active Circle Treasury bindings, four settled
-obligations, exact seller/buyer economic entries, and nine narrow Evidence facts.
+Business, two Ops Pilot Agents, two active Circle Treasury bindings, five settled
+obligations, exact seller/buyer economic entries, and eleven narrow Evidence facts.
 Circle and Arc report successful direct `0.250000` and `0.100000` USDC transfers;
 Gateway reports two exact `0.010000` x402 payments and matching balances; all four
-settlement-gated services are complete. No credential is committed, and no hosted
-Agent, Agent wallet custody, LLM authority, ERC-8183 job, Production database, or
+settlement-gated services are complete, including one real funded ERC-8183 job
+candidate awaiting Checkpoint D acceptance. No credential is committed, and no
+hosted Agent, Agent wallet custody, LLM authority, Production database, or
 Production deployment exists.
 
 ## Recovery and takeover rules
@@ -218,11 +221,10 @@ Production deployment exists.
 
 ## Exact next step
 
-Begin **REV2 Checkpoint D — Commerce primitives** from accepted Checkpoint C.
-Re-read current authority and baseline, verify current primary x402/ERC-8183/Arc/
-Circle sources required by the execution, then implement and prove generic x402
-service capability, ERC-8183 job capability, and accounting/reconciliation
-integration before seeking Checkpoint D acceptance.
+Review and seek acceptance for the locally verified **REV2 Checkpoint D — Commerce
+primitives** candidate from accepted Checkpoint C. Merge only after focused review
+and green PR CI, then observe accepted-main CI and complete the persistent-state
+closeout before beginning Checkpoint E.
 
 Do not skip to Economic History or Capital, and do not expand beyond Checkpoint H to
 Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent

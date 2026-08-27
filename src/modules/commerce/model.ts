@@ -9,6 +9,7 @@ export type SettlementState =
   | 'COMPLETE'
   | 'FAILED'
   | 'OUTCOME_UNKNOWN'
+  | 'REFUNDED'
   | 'SUBMITTED';
 
 export interface ServiceOffer {
@@ -43,7 +44,7 @@ export interface SettlementOperation {
   readonly chainId: 5042002;
   readonly idempotencyKey: string;
   readonly obligationId: EconomicObligation['obligationId'];
-  readonly provider: 'CIRCLE_DEVELOPER_WALLETS' | 'CIRCLE_GATEWAY_X402';
+  readonly provider: 'CIRCLE_DEVELOPER_WALLETS' | 'CIRCLE_GATEWAY_X402' | 'ERC8183';
   readonly providerTransactionId?: string;
   readonly settlementId: `set_${string}`;
   readonly state: SettlementState;

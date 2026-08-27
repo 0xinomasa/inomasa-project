@@ -281,6 +281,49 @@ interface SettlementOperationTable {
   readonly updated_at: Timestamp;
 }
 
+interface Erc8183JobTable {
+  readonly budget_micro_usdc: string;
+  readonly chain_id: number;
+  readonly client_address: string;
+  readonly client_business_id: string;
+  readonly contract_address: string;
+  readonly created_at: Generated<Date>;
+  readonly deliverable_hash: string | null;
+  readonly description: string;
+  readonly evaluator_address: string;
+  readonly evaluation_hash: string | null;
+  readonly expired_at: Timestamp;
+  readonly hook_address: string;
+  readonly job_id: string;
+  readonly obligation_id: string;
+  readonly offer_id: string;
+  readonly payment_token_address: string;
+  readonly protocol_job_id: string | null;
+  readonly protocol_status: string;
+  readonly provenance: string;
+  readonly provider_address: string;
+  readonly provider_business_id: string;
+  readonly settlement_id: string;
+  readonly terminal_at: Timestamp | null;
+  readonly updated_at: Timestamp;
+}
+
+interface Erc8183JobOperationTable {
+  readonly actor_address: string;
+  readonly block_number: string | null;
+  readonly created_at: Generated<Date>;
+  readonly idempotency_key: string;
+  readonly job_id: string;
+  readonly leg: string;
+  readonly operation_id: string;
+  readonly provider_state: string | null;
+  readonly provider_transaction_id: string | null;
+  readonly source_provider_wallet_id: string;
+  readonly state: string;
+  readonly transaction_hash: string | null;
+  readonly updated_at: Timestamp;
+}
+
 interface GatewayFundingOperationTable {
   readonly amount_micro_usdc: string;
   readonly approval_idempotency_key: string;
@@ -361,6 +404,8 @@ export interface PersistenceDatabase {
   readonly business_templates: BusinessTemplateTable;
   readonly businesses: BusinessTable;
   readonly economic_entries: EconomicEntryTable;
+  readonly erc8183_job_operations: Erc8183JobOperationTable;
+  readonly erc8183_jobs: Erc8183JobTable;
   readonly erc8004_identity_operations: Erc8004IdentityOperationTable;
   readonly evidence_facts: EvidenceFactTable;
   readonly execution_authorizations: ExecutionAuthorizationTable;
