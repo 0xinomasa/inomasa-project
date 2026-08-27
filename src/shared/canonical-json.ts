@@ -3,7 +3,7 @@ function canonicalValue(value: unknown): unknown {
   if (value !== null && typeof value === 'object') {
     return Object.fromEntries(
       Object.entries(value)
-        .sort(([left], [right]) => left.localeCompare(right))
+        .sort(([left], [right]) => (left < right ? -1 : left > right ? 1 : 0))
         .map(([key, child]) => [key, canonicalValue(child)]),
     );
   }
@@ -11,7 +11,7 @@ function canonicalValue(value: unknown): unknown {
 }
 
 export function canonicalJson(value: unknown): string {
-  const result = JSON.stringify(canonicalValue(value));
-  if (result === undefined) throw new Error('Value is not representable as canonical JSON.');
-  return result;
+  const serialized = JSON.stringify(value);
+  if (serialized === undefined) throw new Error('Value is not representable as canonical JSON.');
+  return JSON.stringify(canonicalValue(JSON.parse(serialized) as unknown));
 }

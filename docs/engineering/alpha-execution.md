@@ -259,6 +259,9 @@ Selected implementation:
 - the Arc adapter verifies chain, deployed contract/token/zero-fee profile, exact
   non-hooked job fields, successful receipts, historical contract state at each
   receipt block, and one exact USDC escrow/payout/refund transfer where required;
+- offchain delivery persists the exact JSON payload plus a canonical recursive-key
+  SHA-256, so its digest remains reconstructible after PostgreSQL `jsonb` reorders
+  object keys; the separate onchain `bytes32` commitment remains the protocol fact;
 - the bounded proof reuses the accepted Ops Pilot EOA as client/evaluator and
   Signal Forge EOA as provider. These accounts are platform-controlled execution
   infrastructure, not Business identity, Agent identity, user custody, Protected
