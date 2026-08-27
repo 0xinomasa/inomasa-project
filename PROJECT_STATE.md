@@ -13,8 +13,9 @@ This file is the concise repository-native entry point for a human or AI operato
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
 | Active realization program | **Controlled Arc Testnet Product Alpha REV2**; Checkpoint A — Product authority & genericization entry is complete through this documentation-only migration |
 | REV2 completion status | **IN PROGRESS**; Checkpoints A and B are accepted and verified within their scoped gates; Checkpoints C-H and the `CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED` completion gate are not verified |
-| Next implementation checkpoint | **Checkpoint C — Generic Agent + ERC-8004: NOT STARTED / NOT AUTHORIZED**; Capital remains Checkpoint F |
-| Current execution status | **STOPPED AFTER CHECKPOINT B ACCEPTANCE**; no Checkpoint C, ERC-8004, ERC-8183, Capital, or live MIGRATE execution is authorized without a separate explicit task |
+| Standing execution authorization | **ACTIVE — REV2 CHECKPOINTS C-H, SEQUENTIAL ONLY**. The owner authorized continuous execution from Checkpoint C through H on 27 August 2026. Each checkpoint still requires its predecessor accepted on GitHub `main`, checkpoint-specific research/proof/regression, persistent-state closeout, PR/CI/review/merge, and observed accepted-main evidence before advancing. This authorization does not extend beyond H or to Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent authority, or Production/public Capital exposure, and remains active until completed, revoked, or changed by the owner. |
+| Next implementation checkpoint | **Checkpoint C — Generic Agent + ERC-8004: AUTHORIZED / READY TO START**; Capital remains Checkpoint F and cannot be started before C-E are accepted |
+| Current execution status | **ACTIVE UNDER STANDING SEQUENTIAL AUTHORIZATION C-H**; begin Checkpoint C only, then advance through D-H strictly after each predecessor is accepted on GitHub `main` |
 | B5 result | `VERIFIED / PASS` historical decision-and-continuity evidence; Human-Controlled Business Entry is lineage rather than the current standalone realization boundary |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
 | B3 main CI evidence | Engineering verification run `32603268206`, `push/main`, completed successfully |
@@ -26,7 +27,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
 | Bounded Agent proof | Commits `262aa5f` and `8fc9657`; Agent `agt_ops_pilot_buyer_v1` is provider-attributed, operator-invoked, and non-custodial; exact offer/counterparty/per-action/cumulative/expiry/revocation policy issued and consumed authorization `xau_arc_snapshot_agent_v1`; settlement `set_arc_snapshot_agent_v1` completed for `0.100000` Arc Testnet USDC in transaction `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`; service `svc_arc_snapshot_agent_v1` completed from Arc block `58768105` |
 | Circle Gateway x402 proof | Implementation commit `1c15f7d2a98429d4c62f0ee718f30a624106cfee`, pull request `#16`, merge `8d60744ec7c330a0403ef4787bc21634fbf2ed01`; final PR run `32839024137` and accepted-main run `32839154514` completed successfully. Ops Pilot deposited `1.000000` Arc Testnet USDC to Gateway in transaction `0x2280402061b6a7960efd6d24804a753310eba5e3f193b0a5a66225c11b7c2c53`; Agent payment `pay_arc_snapshot_x402_v1` settled exact `0.010000` USDC through x402 v2 `exact`, provider receipt `3d6239e1-9d29-46a0-bfb8-117578b9d1d4`; Gateway balances became payer `0.990000`, seller `0.010000`, pending zero; service `svc_arc_snapshot_x402_v1` completed from Arc block `58771214` |
-| Current continuity checkpoint | REV2 Checkpoint B — Generic Business System is accepted on GitHub `main`; execution stops before Checkpoint C pending separate explicit authorization |
+| Current continuity checkpoint | REV2 Checkpoint B — Generic Business System is accepted on GitHub `main`; standing sequential authorization C-H is active and Checkpoint C is the current execution point |
 | Checkpoint B acceptance evidence | Pull request `#22`; implementation commit `97ad37446d2701adedd165de19d3e67acc198d3a`; PR verification run `33024043557`; merge commit `104a7e75ced8def6841e86603ef68778baaa2375`; and accepted-main run `33024149185` completed successfully, including 31/31 tests, lint, typecheck, Next.js `16.3.3` production build, and clean PostgreSQL reconstruction through migration `007` plus write/read/rollback proof |
 | Checkpoint B runtime evidence | Configured private-testnet migration/write-read/rollback passed; local production HTTP returned `200` for Home and `checkpoint-b-api-proof` plus expected `404` for an unknown site; automated visual browser proof remains unclaimed because `agent-browser` is not installed in the verified Ubuntu Proot profile |
 | Checkpoint B generic proof instance | `Checkpoint B API Proof`, Business `biz_checkpoint_b_api_proof_a9f2e7fabf34`, template `api-data-compute@1`, route `/business/checkpoint-b-api-proof`, provenance `COMMON_CONTROL_TEST`, logical Treasury `PENDING`; no wallet provisioning, transfer, independent demand, or new economic activity was claimed |
@@ -36,7 +37,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | Product implementation boundary | The prior deterministic Business/economic kernel, bounded Agent authority/allowance, Circle EOA Treasury, direct Arc transfer, Gateway x402 adapter, settlement/economic allocation, paid HTTP resource/service, narrow Evidence, and dashboard remain implemented. Accepted Checkpoint B adds four generic templates, generic creation/multiplicity, Business Package/Site, and the locked MIGRATE boundary; ERC-8004 and generic Agent remain unimplemented Checkpoint C work |
 | Verified private-testnet state | `Signal Forge`, `Ops Pilot`, the buyer Agent, and `Checkpoint B API Proof` remain synthetic/common-control. Three exact service obligations totaling `0.360000` USDC remain `SETTLED`; six economic entries, three settlement Evidence facts, and three service-delivery Evidence facts remain persisted exactly once. The new generic proof Business has only a `PENDING` logical Treasury and no economic activity |
 | Repository continuity marker | `src/index.ts` `repositoryBaseline` is intentionally retained as a machine-readable descriptive marker maintained since B1. It is subordinate to the active authority documents and `PROJECT_STATE.md`, and it grants no runtime or product authority |
-| Current blocking gate | No Checkpoint B blocker remains. Checkpoint C has not started and requires separate explicit authorization plus current primary-source ERC-8004 research; `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change |
+| Current blocking gate | No Checkpoint B blocker remains and Checkpoint C is authorized. Checkpoint C must start with current primary-source ERC-8004/Arc verification; `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change |
 | Baseline fixture/product-label status | Signal Forge, Ops Pilot, the buyer Agent, and the current shell's `CAPITAL / NEXT` label remain verified baseline fixtures/UI output. They are not generic product capacity or active roadmap authority and are unchanged by this migration |
 | Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
@@ -202,11 +203,14 @@ wallet custody, LLM authority, Production database, or Production deployment exi
 
 ## Exact next step
 
-Stop after accepted **REV2 Checkpoint B — Generic Business System**. Under a
-separate explicit execution task, begin only **Checkpoint C — Generic Agent +
-ERC-8004**, starting with current primary-source research and preserving the fixed
-Alpha economy as regression fixtures until generic replacement proof passes.
+Begin **REV2 Checkpoint C — Generic Agent + ERC-8004** under the active standing
+sequential authorization for Checkpoints C-H. Start with current primary-source
+research and preserve the fixed Alpha economy as regression fixtures until generic
+replacement proof passes. Advance to each later checkpoint only after the preceding
+checkpoint is accepted on GitHub `main` with its required proof and continuity
+closeout.
 
-Do not skip to ERC-8183, Capital, Production/mainnet, public anonymous
-access, live MIGRATE, unrestricted Agent authority, or Production/public Capital
-exposure. Follow the active [Alpha Realization guide](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
+Do not skip to ERC-8183 or Capital, and do not expand beyond Checkpoint H to
+Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent
+authority, or Production/public Capital exposure. Follow the active [Alpha
+Realization guide](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).

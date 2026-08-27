@@ -21,9 +21,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
 - The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
-  — REV2**. Authority/continuity migration is its Checkpoint A. After that
-  checkpoint, the exact next implementation point is Checkpoint B — Generic
-  Business System; it must not be skipped ahead to Capital.
+  — REV2**. Checkpoints A and B are accepted. Standing sequential authorization is
+  active for Checkpoints C-H; the exact current implementation point is Checkpoint
+  C — Generic Agent + ERC-8004, and each later checkpoint may begin only after its
+  predecessor is accepted on GitHub `main`. It must not be skipped ahead to Capital.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Capital is Checkpoint F after generic Business, Agent,
   commerce, and Economic History/observability capability; it is not automatic
