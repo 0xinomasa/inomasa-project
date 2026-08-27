@@ -341,6 +341,18 @@ export class PostgresGatewayX402Repository {
     return asPayment(row);
   }
 
+  async getPaymentOfferId(paymentId: `pay_${string}`): Promise<`off_${string}`> {
+    const row = await this.#persistence.databaseForApplication
+      .withSchema(applicationSchema)
+      .selectFrom('x402_payment_operations as payment')
+      .innerJoin('obligations as obligation', 'obligation.obligation_id', 'payment.obligation_id')
+      .select('obligation.offer_id as offerId')
+      .where('payment.payment_id', '=', paymentId)
+      .executeTakeFirstOrThrow();
+    if (!row.offerId.startsWith('off_')) throw new Error('Stored x402 offer ID is invalid.');
+    return row.offerId as `off_${string}`;
+  }
+
   async recordSigned(input: {
     readonly paymentId: `pay_${string}`;
     readonly paymentPayload: X402PaymentPayload;

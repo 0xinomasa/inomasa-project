@@ -4,6 +4,7 @@ import type {
 } from '../src/modules/authority/model.ts';
 import { acceptServiceOffer, authorizeSettlement, type ServiceOffer } from '../src/modules/commerce/model.ts';
 import { parseUsdcAmount } from '../src/modules/commerce/money.ts';
+import { alphaServiceCatalog } from '../src/modules/commerce/service-catalog.ts';
 import type { X402PaymentRequired } from '../src/modules/commerce/x402-port.ts';
 import { readCircleDeveloperWalletConfig } from '../src/platform/circle/config.ts';
 import { CircleGatewayX402Adapter } from '../src/platform/circle/gateway-x402.ts';
@@ -72,15 +73,7 @@ async function main(): Promise<void> {
       'Signal Forge',
     );
     const gateway = new CircleGatewayX402Adapter(circleConfig, payerAddress);
-    const offer: ServiceOffer = {
-      capabilityId: 'arc-market-snapshot',
-      description: 'Deterministic Arc network snapshot sold through Circle Gateway x402.',
-      offerId: 'off_arc_snapshot_x402_v1',
-      priceMicroUsdc: parseUsdcAmount('0.01'),
-      providerBusinessId: provider.businessId,
-      status: 'ACTIVE',
-      termsVersion: 1,
-    };
+    const offer: ServiceOffer = alphaServiceCatalog.arcMarketSnapshotX402.offer;
     const grant: StandingPurchaseAuthorityGrant = {
       actionType: 'PURCHASE_SERVICE',
       allowedCounterpartyBusinessId: provider.businessId,
@@ -127,7 +120,7 @@ async function main(): Promise<void> {
         resource: {
           description: offer.description,
           mimeType: 'application/json',
-          url: 'inomasa://signal-forge/arc-market-snapshot',
+          url: alphaServiceCatalog.arcMarketSnapshotX402.resourceUri,
         },
         x402Version: 2,
       };

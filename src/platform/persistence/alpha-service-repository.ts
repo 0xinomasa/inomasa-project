@@ -1,4 +1,5 @@
 import type { ArcNetworkSnapshot } from '../arc/rpc.ts';
+import { serviceCapabilityForOffer } from '../../modules/commerce/service-catalog.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
@@ -21,6 +22,7 @@ export interface AlphaServiceExecutionAuthorization {
   readonly buyerBusinessId: string;
   readonly capabilityId: string;
   readonly environment: string;
+  readonly offerId: string;
   readonly provenance: string;
   readonly sellerBusinessId: string;
   readonly settlementId: string;
@@ -51,6 +53,7 @@ export class PostgresAlphaServiceRepository {
         'obligation.buyer_business_id as buyerBusinessId',
         'offer.capability_id as capabilityId',
         'obligation.environment as environment',
+        'offer.offer_id as offerId',
         'obligation.provenance as provenance',
         'obligation.seller_business_id as sellerBusinessId',
         'settlement.settlement_id as settlementId',
@@ -63,8 +66,9 @@ export class PostgresAlphaServiceRepository {
     if (row.obligationState !== 'SETTLED' || row.settlementState !== 'COMPLETE') {
       throw new Error('Paid service execution requires a reconciled COMPLETE settlement.');
     }
-    if (row.capabilityId !== 'arc-market-snapshot') {
-      throw new Error('The Alpha executor does not support this capability.');
+    const capability = serviceCapabilityForOffer(row.offerId);
+    if (capability === null || capability.deliveryKind !== 'ARC_NETWORK_SNAPSHOT') {
+      throw new Error('The Alpha executor does not support this service offer.');
     }
 
     return {
@@ -72,6 +76,7 @@ export class PostgresAlphaServiceRepository {
       buyerBusinessId: row.buyerBusinessId,
       capabilityId: row.capabilityId,
       environment: row.environment,
+      offerId: row.offerId,
       provenance: row.provenance,
       sellerBusinessId: row.sellerBusinessId,
       settlementId: row.settlementId,
@@ -182,5 +187,64 @@ export class PostgresAlphaServiceRepository {
       ])
       .orderBy('completed_at', 'desc')
       .execute();
+  }
+
+  async getDeliveryForPaidOffer(input: {
+    readonly offerId: `off_${string}`;
+    readonly paymentId: `pay_${string}`;
+  }): Promise<AlphaServiceDeliverySummary | null> {
+    const row = await this.#persistence.databaseForApplication
+      .withSchema(applicationSchema)
+      .selectFrom('x402_payment_operations as payment')
+      .innerJoin('obligations as obligation', 'obligation.obligation_id', 'payment.obligation_id')
+      .innerJoin('service_offers as offer', 'offer.offer_id', 'obligation.offer_id')
+      .leftJoin('service_executions as execution', 'execution.obligation_id', 'obligation.obligation_id')
+      .select([
+        'execution.capability_id as capabilityId',
+        'execution.completed_at as completedAt',
+        'execution.consumer_business_id as consumerBusinessId',
+        'execution.execution_id as executionId',
+        'execution.obligation_id as obligationId',
+        'execution.output',
+        'execution.output_sha256 as outputSha256',
+        'execution.provenance',
+        'execution.provider_business_id as providerBusinessId',
+        'execution.source_reference as sourceReference',
+        'execution.state',
+        'payment.state as paymentState',
+      ])
+      .where('payment.payment_id', '=', input.paymentId)
+      .where('offer.offer_id', '=', input.offerId)
+      .executeTakeFirstOrThrow();
+    if (row.paymentState !== 'COMPLETE') {
+      throw new Error('x402 delivery requires a COMPLETE payment.');
+    }
+    if (
+      row.capabilityId === null ||
+      row.completedAt === null ||
+      row.consumerBusinessId === null ||
+      row.executionId === null ||
+      row.obligationId === null ||
+      row.outputSha256 === null ||
+      row.provenance === null ||
+      row.providerBusinessId === null ||
+      row.sourceReference === null ||
+      row.state === null
+    ) {
+      return null;
+    }
+    return {
+      capabilityId: row.capabilityId,
+      completedAt: row.completedAt,
+      consumerBusinessId: row.consumerBusinessId,
+      executionId: row.executionId,
+      obligationId: row.obligationId,
+      output: row.output,
+      outputSha256: row.outputSha256,
+      provenance: row.provenance,
+      providerBusinessId: row.providerBusinessId,
+      sourceReference: row.sourceReference,
+      state: row.state,
+    };
   }
 }

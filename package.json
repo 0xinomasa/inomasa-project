@@ -18,6 +18,8 @@
     "alpha:checkpoint-c:action": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-purchase.ts --erc8004",
     "alpha:checkpoint-c:delivery": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts svc_arc_snapshot_x402_8004_v1 obl_arc_snapshot_x402_8004_v1",
     "alpha:checkpoint-c:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-c-proof.ts",
+    "alpha:checkpoint-d:erc8183": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-d-erc8183.ts",
+    "alpha:checkpoint-d:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-d-proof.ts",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",
     "alpha:gateway-fund": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-gateway-fund.ts",
     "alpha:prepare-commerce": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-prepare-commerce.ts",

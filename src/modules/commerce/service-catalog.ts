@@ -1,0 +1,60 @@
+import type { ServiceOffer } from './model.ts';
+import { parseUsdcAmount } from './money.ts';
+
+export type CommerceProtocol = 'ERC8183' | 'X402';
+
+export interface ServiceCapabilityDefinition {
+  readonly deliveryKind: 'ARC_NETWORK_SNAPSHOT';
+  readonly mimeType: 'application/json';
+  readonly offer: ServiceOffer;
+  readonly protocol: CommerceProtocol;
+  readonly resourcePath: `/api/alpha/services/${string}`;
+  readonly resourceUri: `inomasa://${string}`;
+}
+
+export const alphaServiceCatalog = {
+  arcMarketSnapshotX402: {
+    deliveryKind: 'ARC_NETWORK_SNAPSHOT',
+    mimeType: 'application/json',
+    offer: {
+      capabilityId: 'arc-market-snapshot',
+      description: 'Deterministic Arc network snapshot sold through Circle Gateway x402.',
+      offerId: 'off_arc_snapshot_x402_v1',
+      priceMicroUsdc: parseUsdcAmount('0.01'),
+      providerBusinessId: 'biz_signal_forge',
+      status: 'ACTIVE',
+      termsVersion: 1,
+    },
+    protocol: 'X402',
+    resourcePath: '/api/alpha/services/off_arc_snapshot_x402_v1',
+    resourceUri: 'inomasa://signal-forge/arc-market-snapshot',
+  },
+  commerceReadinessJob: {
+    deliveryKind: 'ARC_NETWORK_SNAPSHOT',
+    mimeType: 'application/json',
+    offer: {
+      capabilityId: 'commerce-readiness-brief',
+      description: 'A scoped Arc commerce-readiness brief delivered as funded ERC-8183 work.',
+      offerId: 'off_commerce_readiness_8183_v1',
+      priceMicroUsdc: parseUsdcAmount('0.05'),
+      providerBusinessId: 'biz_signal_forge',
+      status: 'ACTIVE',
+      termsVersion: 1,
+    },
+    protocol: 'ERC8183',
+    resourcePath: '/api/alpha/services/off_commerce_readiness_8183_v1',
+    resourceUri: 'inomasa://signal-forge/commerce-readiness-brief',
+  },
+} as const satisfies Record<string, ServiceCapabilityDefinition>;
+
+export function serviceCapabilityForOffer(offerId: string): ServiceCapabilityDefinition | null {
+  return (
+    Object.values(alphaServiceCatalog).find(({ offer }) => offer.offerId === offerId) ?? null
+  );
+}
+
+export function selectCommerceProtocol(input: {
+  readonly requiresDeliverableEvaluation: boolean;
+}): CommerceProtocol {
+  return input.requiresDeliverableEvaluation ? 'ERC8183' : 'X402';
+}
