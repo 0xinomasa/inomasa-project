@@ -337,6 +337,12 @@ Observed Checkpoint D implementation proof on 28 August 2026:
 - this is real Arc Testnet escrow/payout under synthetic common control. It is not
   independent work demand, service quality, user custody, Production value, or a
   claim that every ERC-8183 implementation has the same ABI or fee profile.
+- acceptance: pull request `#27`; implementation commits
+  `b579dd7382d4e5512a9fac160e3a6dc80579296e`,
+  `f53d31bc13973f593f1e8d54797ae16ec7a9caba`, and
+  `56a9c7edfe14b6ad3ad7b73316797c635ad96c17`; PR run `33114737524`; merge
+  `ce4136a2997f7b4483b1d8d2d51d791ba2d7b2bf`; and accepted-main run
+  `33114924079` all completed successfully.
 
 ## Exact Arc registry
 
