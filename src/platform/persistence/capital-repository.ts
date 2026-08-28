@@ -201,8 +201,14 @@ export class PostgresCapitalRepository {
     readonly material: CapitalDecisionMaterial;
     readonly requestedMicroUsdc: UsdcMicroAmount;
   }): Promise<void> {
-    if (input.decision.providerId.length === 0) {
-      throw new Error('Capital decision requires a provider.');
+    if (
+      input.decision.providerId.length === 0 ||
+      !Number.isFinite(Date.parse(input.decidedAt)) ||
+      !Number.isFinite(Date.parse(input.material.observedAt)) ||
+      Date.parse(input.decidedAt) < Date.parse(input.material.observedAt) ||
+      input.requestedMicroUsdc <= 0n
+    ) {
+      throw new Error('Capital decision requires a provider, valid timestamps, and a positive request.');
     }
     const digest = materialDigest(input.material);
     await this.#persistence.transaction(async (transaction) => {
@@ -228,6 +234,10 @@ export class PostgresCapitalRepository {
         input.decision.outcome === 'APPROVED' &&
         (input.decision.approvedMicroUsdc !== input.requestedMicroUsdc ||
           input.decision.terms === null ||
+          input.decision.asset !== 'USDC' ||
+          input.decision.terms.instrument !== 'CONTROLLED_TEST_ALLOCATION' ||
+          input.decision.terms.returnProfile !== 'NONE' ||
+          BigInt(input.decision.terms.useCapMicroUsdc) <= 0n ||
           input.requestedMicroUsdc < BigInt(mandate.minimumMicroUsdc) ||
           input.requestedMicroUsdc > BigInt(mandate.maximumMicroUsdc) ||
           BigInt(input.decision.terms.useCapMicroUsdc) > input.requestedMicroUsdc)
@@ -250,12 +260,23 @@ export class PostgresCapitalRepository {
         .execute();
       const storedReview = await database
         .selectFrom('capital_reviews')
-        .select(['business_id', 'material_sha256', 'provider_id', 'requested_micro_usdc'])
+        .select([
+          'business_id',
+          'decision_material',
+          'mandate_id',
+          'material_sha256',
+          'observed_at',
+          'provider_id',
+          'requested_micro_usdc',
+        ])
         .where('review_id', '=', input.decision.reviewId)
         .executeTakeFirstOrThrow();
       if (
         storedReview.business_id !== input.material.businessId ||
+        canonicalJson(storedReview.decision_material) !== canonicalJson(input.material) ||
+        storedReview.mandate_id !== input.decision.mandateId ||
         storedReview.material_sha256 !== digest ||
+        storedReview.observed_at.toISOString() !== new Date(input.material.observedAt).toISOString() ||
         storedReview.provider_id !== input.decision.providerId ||
         storedReview.requested_micro_usdc !== input.requestedMicroUsdc.toString()
       ) {
@@ -280,7 +301,17 @@ export class PostgresCapitalRepository {
         .execute();
       const storedDecision = await database
         .selectFrom('capital_decisions')
-        .select(['approved_micro_usdc', 'outcome', 'reason_code', 'review_id', 'terms'])
+        .select([
+          'approved_micro_usdc',
+          'asset',
+          'decided_at',
+          'decided_by_principal_id',
+          'outcome',
+          'rationale',
+          'reason_code',
+          'review_id',
+          'terms',
+        ])
         .where('decision_id', '=', input.decision.decisionId)
         .executeTakeFirstOrThrow();
       if (
@@ -290,7 +321,11 @@ export class PostgresCapitalRepository {
         throw new Error('Capital decision ID already exists with a different approved amount.');
       }
       if (
+        storedDecision.asset !== input.decision.asset ||
+        storedDecision.decided_at.toISOString() !== new Date(input.decidedAt).toISOString() ||
+        storedDecision.decided_by_principal_id !== input.decidedByPrincipalId ||
         storedDecision.outcome !== input.decision.outcome ||
+        storedDecision.rationale !== input.decision.rationale ||
         storedDecision.reason_code !== input.decision.reasonCode ||
         storedDecision.review_id !== input.decision.reviewId ||
         canonicalJson(storedDecision.terms) !== canonicalJson(input.decision.terms)
@@ -417,10 +452,14 @@ export class PostgresCapitalRepository {
     readonly acceptedByPrincipalId: `usr_${string}`;
     readonly allocationId: `cal_${string}`;
   }): Promise<void> {
+    if (!Number.isFinite(Date.parse(input.acceptedAt))) {
+      throw new Error('Capital acceptance requires a valid timestamp.');
+    }
     await this.#persistence.transaction(async (transaction) => {
       const database = transaction.withSchema(applicationSchema);
       const allocation = await database
         .selectFrom('capital_allocations as allocation')
+        .innerJoin('capital_decisions as decision', 'decision.decision_id', 'allocation.decision_id')
         .innerJoin('business_controls as control', (join) =>
           join
             .onRef('control.business_id', '=', 'allocation.recipient_business_id')
@@ -431,6 +470,7 @@ export class PostgresCapitalRepository {
           'allocation.accepted_by_principal_id as acceptedByPrincipalId',
           'allocation.state',
           'control.controller_principal_id as controllerPrincipalId',
+          'decision.decided_at as decidedAt',
         ])
         .where('allocation.allocation_id', '=', input.allocationId)
         .forUpdate()
@@ -446,7 +486,8 @@ export class PostgresCapitalRepository {
       }
       if (
         allocation.state !== 'OFFERED' ||
-        allocation.controllerPrincipalId !== input.acceptedByPrincipalId
+        allocation.controllerPrincipalId !== input.acceptedByPrincipalId ||
+        new Date(input.acceptedAt) < allocation.decidedAt
       ) {
         throw new Error('Only the active Business controller may accept an offered allocation.');
       }
@@ -565,6 +606,9 @@ export class PostgresCapitalRepository {
     readonly allocationId: `cal_${string}`;
     readonly providerTransactionId: string;
   }): Promise<void> {
+    if (input.providerTransactionId.trim().length === 0) {
+      throw new Error('Capital submission requires a provider transaction ID.');
+    }
     const result = await this.#persistence.databaseForApplication
       .withSchema(applicationSchema)
       .updateTable('capital_allocations')
@@ -576,6 +620,7 @@ export class PostgresCapitalRepository {
       })
       .where('allocation_id', '=', input.allocationId)
       .where('state', 'in', ['AUTHORIZED', 'OUTCOME_UNKNOWN'])
+      .where('provider_transaction_id', 'is', null)
       .executeTakeFirstOrThrow();
     if (result.numUpdatedRows !== 1n) {
       throw new Error('Capital allocation submission was not recorded from an admissible state.');
@@ -587,23 +632,43 @@ export class PostgresCapitalRepository {
     readonly providerState: string;
     readonly providerTransactionId?: string;
   }): Promise<void> {
-    const result = await this.#persistence.databaseForApplication
-      .withSchema(applicationSchema)
-      .updateTable('capital_allocations')
-      .set({
-        provider_state: input.providerState,
-        ...(input.providerTransactionId === undefined
-          ? {}
-          : { provider_transaction_id: input.providerTransactionId }),
-        state: 'OUTCOME_UNKNOWN',
-        updated_at: new Date(),
-      })
-      .where('allocation_id', '=', input.allocationId)
-      .where('state', 'in', ['AUTHORIZED', 'SUBMITTED', 'OUTCOME_UNKNOWN'])
-      .executeTakeFirstOrThrow();
-    if (result.numUpdatedRows !== 1n) {
-      throw new Error('Capital ambiguity was not recorded from an admissible state.');
+    if (
+      input.providerState.trim().length === 0 ||
+      input.providerTransactionId?.trim().length === 0
+    ) {
+      throw new Error('Capital ambiguity requires non-empty provider state and transaction ID when present.');
     }
+    await this.#persistence.transaction(async (transaction) => {
+      const database = transaction.withSchema(applicationSchema);
+      const allocation = await database
+        .selectFrom('capital_allocations')
+        .select(['provider_transaction_id', 'state'])
+        .where('allocation_id', '=', input.allocationId)
+        .forUpdate()
+        .executeTakeFirstOrThrow();
+      if (!['AUTHORIZED', 'SUBMITTED', 'OUTCOME_UNKNOWN'].includes(allocation.state)) {
+        throw new Error('Capital ambiguity was not recorded from an admissible state.');
+      }
+      if (
+        allocation.provider_transaction_id !== null &&
+        input.providerTransactionId !== undefined &&
+        allocation.provider_transaction_id !== input.providerTransactionId
+      ) {
+        throw new Error('Capital ambiguity cannot replace an existing provider transaction ID.');
+      }
+      await database
+        .updateTable('capital_allocations')
+        .set({
+          provider_state: input.providerState,
+          ...(allocation.provider_transaction_id === null && input.providerTransactionId !== undefined
+            ? { provider_transaction_id: input.providerTransactionId }
+            : {}),
+          state: 'OUTCOME_UNKNOWN',
+          updated_at: new Date(),
+        })
+        .where('allocation_id', '=', input.allocationId)
+        .executeTakeFirstOrThrow();
+    });
   }
 
   async recordObservedOutcome(input: {
@@ -612,6 +677,9 @@ export class PostgresCapitalRepository {
     readonly observedAt: string;
     readonly outcome: CapitalTransferOutcome;
   }): Promise<void> {
+    if (!Number.isFinite(Date.parse(input.observedAt))) {
+      throw new Error('Capital observation requires a valid timestamp.');
+    }
     if (input.outcome.state !== 'COMPLETE') {
       const nextState = input.outcome.state === 'PENDING' ? undefined : input.outcome.state;
       const result = await this.#persistence.databaseForApplication
@@ -648,15 +716,27 @@ export class PostgresCapitalRepository {
         .selectFrom('capital_allocations')
         .select([
           'amount_micro_usdc',
+          'block_number',
           'provenance',
+          'provider_state',
           'provider_transaction_id',
           'recipient_business_id',
           'state',
+          'transaction_hash',
         ])
         .where('allocation_id', '=', input.allocationId)
         .forUpdate()
         .executeTakeFirstOrThrow();
-      if (allocation.state === 'COMPLETE') return;
+      if (allocation.state === 'COMPLETE') {
+        if (
+          allocation.block_number === blockNumber.toString() &&
+          allocation.provider_state === completed.providerState &&
+          allocation.transaction_hash?.toLowerCase() === completed.transactionHash.toLowerCase()
+        ) {
+          return;
+        }
+        throw new Error('Completed Capital allocation cannot be reconciled to different chain proof.');
+      }
       if (
         (allocation.state !== 'SUBMITTED' && allocation.state !== 'OUTCOME_UNKNOWN') ||
         allocation.provider_transaction_id === null

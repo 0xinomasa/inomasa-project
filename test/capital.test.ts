@@ -151,3 +151,18 @@ test('Capital provenance fails closed to common-control when either side is comm
     'INDEPENDENT',
   );
 });
+
+test('approved Capital terms cannot claim use beyond the requested allocation', () => {
+  assert.throws(
+    () =>
+      decideCapitalRequest({
+        decisionId: 'cpd_invalid_cap',
+        mandate: mandate('cap_alpha', ['COMMON_CONTROL_TEST']),
+        material,
+        requestedMicroUsdc: parseUsdcAmount('0.20'),
+        reviewId: 'cpr_invalid_cap',
+        terms: { ...terms, useCapMicroUsdc: '200001' },
+      }),
+    /use cap cannot exceed/i,
+  );
+});
