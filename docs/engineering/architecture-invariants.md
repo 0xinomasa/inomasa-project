@@ -16,11 +16,13 @@ resolved.
 - **BUILD, MIGRATE, and CAPITAL share one Business environment without becoming one
   truth system.** BUILD is active; MIGRATE is structurally anticipated and
   user-facing locked; Capital remains provider-driven. The controlled Checkpoint F
-  Capital scope is accepted, while Reference Economy composition is the exact next
-  REV2 point without authorizing Production/public Capital exposure.
+  Capital scope and Checkpoint G Reference Economy composition are accepted, while
+  Integrated Verification is the exact next REV2 point without authorizing
+  Production/public Capital exposure.
 - **Generic capability and fixtures are distinct.** Product capacity must not be
-  inferred from Signal Forge, Ops Pilot, or any fixed test population. Those objects
-  remain valid regression specimens with explicit common-control provenance.
+  inferred from Signal Forge, Ops Pilot, Reference Workbench, or any fixed test
+  population. Those objects remain valid regression specimens with explicit
+  common-control provenance.
 - **Use before rebuild.** Evaluate suitable Arc/Circle capabilities and external
   Agentic Economy standards before adding custom machinery. External primitives
   remain scoped sources, not owners of Inomasa Business semantics.

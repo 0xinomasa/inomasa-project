@@ -21,26 +21,29 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
 - The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
-  — REV2**. Checkpoints A-F are accepted. Standing sequential authorization is
+  — REV2**. Checkpoints A-G are accepted. Standing sequential authorization is
   active for Checkpoints C-H; the exact current implementation point is Checkpoint
-  G — Reference Economy & Proof Fixtures, and Checkpoint H may begin only after G
-  is accepted on GitHub `main`. It must not be skipped ahead to Integrated
-  Verification.
+  H — Integrated Verification. H is the final authorized checkpoint; its proof
+  matrix, protected Preview, runtime observation, and accepted-main gate must not
+  be replaced by the already accepted local/private-testnet evidence.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
-  History/observability capability. Reference Economy proof composition is now the
-  exact next checkpoint, not Production/public Capital exposure.
+  History/observability capability. Reference Economy proof composition is accepted
+  for the controlled Checkpoint G scope. Integrated Verification is now the exact
+  next checkpoint, not Production/public Capital exposure.
 - The accepted controlled Alpha implementation remains the regression baseline:
   deterministic Business genesis, explicit common-control provenance, logical
   Treasury bindings, Circle Developer-Controlled EOA execution, direct Arc USDC
   settlement, bounded Agent authority, Gateway x402 v2 `exact`, exact economic
   posting, paid service delivery, narrow Evidence, contextual Economic History,
   provider-attributable Capital allocation and later-use linkage, PostgreSQL, and
-  protected Preview.
-- Signal Forge, Ops Pilot, the buyer Agent, and both Capital Providers are
-  regression fixtures/control specimens. They are not the generic product model,
-  system-capacity limit, or proof that independent demand exists.
+  protected Preview. The fresh four-template common-control Reference Economy is
+  an accepted composition fixture, not proof of independent demand.
+- Signal Forge, Ops Pilot, the accepted Reference Economy Businesses/Agents, and
+  all Capital Providers are regression fixtures/control specimens. They are not
+  the generic product model, system-capacity limit, or proof that independent
+  demand exists.
 - The pre-F direct commerce settlements remain exact `0.250000` and `0.100000`
   Arc Testnet USDC. Checkpoint F adds one exact `0.200000` Capital allocation and
   one later exact `0.100000` direct commerce settlement. The two Gateway payments
