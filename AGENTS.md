@@ -21,25 +21,27 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
 - The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
-  — REV2**. Checkpoints A-D are accepted. Standing sequential authorization is
+  — REV2**. Checkpoints A-E are accepted. Standing sequential authorization is
   active for Checkpoints C-H; the exact current implementation point is Checkpoint
-  E — Economic History + UI observability, and each later checkpoint may begin only after its
-  predecessor is accepted on GitHub `main`. It must not be skipped ahead to Capital.
+  F — Generic CAPITAL, and each later checkpoint may begin only after its
+  predecessor is accepted on GitHub `main`. It must not be skipped ahead to the
+  Reference Economy or Integrated Verification.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Capital is Checkpoint F after generic Business, Agent,
-  commerce, and Economic History/observability capability; it is not automatic
-  next work.
+  commerce, and Economic History/observability capability. It is now the exact next
+  checkpoint, not Production/public Capital exposure.
 - The accepted controlled Alpha implementation remains the regression baseline:
   deterministic Business genesis, explicit common-control provenance, logical
   Treasury bindings, Circle Developer-Controlled EOA execution, direct Arc USDC
   settlement, bounded Agent authority, Gateway x402 v2 `exact`, exact economic
-  posting, paid service delivery, narrow Evidence, PostgreSQL, and protected Preview.
+  posting, paid service delivery, narrow Evidence, contextual Economic History,
+  PostgreSQL, and protected Preview.
 - Signal Forge, Ops Pilot, and the buyer Agent are regression fixtures/control
   specimens. They are not the generic product model, system-capacity limit, or
   proof that independent demand exists.
 - The verified direct settlements remain exact `0.250000` and `0.100000` Arc
-  Testnet USDC. The Gateway payment remains exact `0.010000` USDC with a
-  provider-reported receipt—not a direct per-payment Arc transaction hash.
+  Testnet USDC. The two Gateway payments remain exact `0.010000` USDC each with
+  provider-reported receipts—not direct per-payment Arc transaction hashes.
 - Circle Developer-Controlled EOA remains the verified Alpha execution account
   profile. It is platform-controlled external infrastructure, not Business or Agent
   identity, user custody, or a Protected Treasury claim.
