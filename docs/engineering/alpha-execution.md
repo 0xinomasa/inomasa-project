@@ -740,9 +740,8 @@ and accepted-main run `33152100522` completed successfully.
 
 ## Checkpoint G selected reference-economy route
 
-Status: `IMPLEMENTED / PROVEN LOCALLY / ACCEPTANCE PENDING`. This does not make G
-accepted; final acceptance belongs to `PROJECT_STATE.md` only after merge and
-accepted-main CI are observed.
+Status: `IMPLEMENTED / VERIFIED / ACCEPTED` within the bounded Checkpoint G scope.
+The focused review, PR CI, merge, and accepted-main CI have been observed.
 
 The reference economy is a bounded proof population over the accepted generic
 Business, Agent, commerce, Economic History, and Capital capabilities. It creates
@@ -804,7 +803,7 @@ Current primary sources rechecked on 28 August 2026 for this execution:
 - x402 v2 protocol specification:
   https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
 
-Observed pre-acceptance Checkpoint G proof on 28 August 2026:
+Observed Checkpoint G proof on 28 August 2026:
 
 - four fresh users and Businesses span `api-data-compute`, `saas-micro-saas`,
   `agent-as-a-service`, and `web3-native-digital`; four fresh Agents and two fresh
@@ -842,6 +841,15 @@ Observed pre-acceptance Checkpoint G proof on 28 August 2026:
   production build, migrations `001`-`011`, database write/read/rollback, baseline
   and reference x402 HTTP proof, and production-browser desktop/mobile checks
   passed with zero console warnings/errors and no 390-pixel overflow.
+
+Acceptance evidence: pull request `#34`; implementation commits
+`19aff7e58e15732c0e896cc3b73dd6ce27c19f16`,
+`16466823bc2aa6c43b7245732dfda0e85d5060fb`, and
+`c918565bd8c6dc4d633b933aad8f8bd09df3fb02`; focused review recorded PASS;
+PR verification run `33172052503`; merge
+`4f1f372ab029633e4eff4c1783fe81c0c4f0684c`; and accepted-main run
+`33172186280` completed successfully, including engineering checks and PostgreSQL
+migration/persistence proof.
 
 ## Completed external proof sequence
 

@@ -2,29 +2,27 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current implementation combines a verified controlled-Alpha regression baseline
-with a locally verified REV2 Checkpoint B Generic Business System. It includes four
-reusable BUILD templates, generic multi-user/multi-Business genesis, a reusable
-Business Package, data-driven Business Sites inside the same Next.js application,
-and a modeled but locked MIGRATE entry boundary. The accepted Signal Forge and Ops
-Pilot economy remains intact as regression evidence, with explicit control/Treasury
-bindings, exact USDC commerce and settlement state, a PostgreSQL Alpha schema, a
-Circle Developer-Controlled Wallet EOA adapter for Arc Testnet, and an application
-dashboard that reports what is connected versus pending. The paid service executor
-is settlement-gated and produces a digest-bound live Arc network snapshot. The first
-controlled vertical is now verified: two Circle EOA Treasuries, one real `0.250000`
-Arc Testnet USDC service settlement, exact revenue/cost allocation, narrow Evidence,
-and application-visible paid delivery. A second real `0.100000` settlement is also
-verified after an operator-invoked Agent request passed a persisted, non-delegable
-Human grant with exact offer, counterparty, amount, cumulative allowance, expiry,
-and revocation controls. The Agent has no wallet custody or LLM authority. All
-actors remain synthetic/common-control and the money remains testnet value.
+The current implementation is the accepted REV2 Checkpoint G controlled-Alpha
+baseline. It includes four reusable BUILD templates, generic multi-user and
+multi-Business genesis, reusable Business and Agent systems, generated Business
+Sites, bounded Agent authority, ERC-8004 identity linkage, direct Arc USDC and x402
+commerce, ERC-8183 funded work, exact economic posting, contextual Economic
+History, provider-specific Capital decisions/allocation/later use, PostgreSQL, and
+source-scoped proof observability. MIGRATE is modeled but remains user-facing
+locked.
+
+Signal Forge, Ops Pilot, and the fresh four-template Reference Economy remain
+common-control regression/proof fixtures rather than product-capacity or
+independent-demand evidence. Circle Developer-Controlled EOA accounts remain
+platform-controlled external execution infrastructure, not Business/Agent identity
+or user custody. All money is Arc Testnet USDC; no Production/mainnet authority is
+implied.
 
 B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
 active controlled-Alpha program is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
-The verified fixtures remain regression evidence while the system is generalized;
-Capital is Checkpoint F, not the automatic next implementation step.
+Checkpoints A-G are accepted on GitHub `main`; Checkpoint H Integrated Verification
+is the exact next and final authorized REV2 checkpoint.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
