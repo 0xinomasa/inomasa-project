@@ -14,6 +14,9 @@ import { PostgresAlphaServiceRepository } from '../src/platform/persistence/alph
 
 const identityId = 'aid_ops_pilot_buyer_arc_8004_v1' as const;
 const paymentId = 'pay_arc_snapshot_x402_8004_v1' as const;
+// Arc lists this public endpoint alongside the primary RPC. It retains the
+// historical receipts needed to re-prove the accepted Checkpoint C identity.
+const historicalProofRpcUrl = 'https://rpc.drpc.testnet.arc.io';
 
 function requireAddress(value: string | null, label: string): `0x${string}` {
   if (value === null || !/^0x[0-9a-fA-F]{40}$/.test(value)) {
@@ -95,7 +98,7 @@ async function main(): Promise<void> {
       throw new Error('ERC-8004 Evidence classification is incomplete.');
     }
 
-    const rpc = new ArcErc8004Rpc();
+    const rpc = new ArcErc8004Rpc({ rpcUrl: historicalProofRpcUrl });
     await rpc.verifyRegistration({
       ownerAddress: identity.ownerAddress,
       transactionHash: identity.registrationTransactionHash,

@@ -42,6 +42,9 @@
     "alpha:checkpoint-g:capital-use": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-f-use.ts --reference-economy",
     "alpha:checkpoint-g:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-g-proof.ts",
     "alpha:checkpoint-g:http-proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-http-proof.ts --reference-economy",
+    "alpha:checkpoint-h:matrix": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-h-proof.ts",
+    "alpha:checkpoint-h:proof": "npm run alpha:checkpoint-c:proof && npm run alpha:checkpoint-d:proof && npm run alpha:checkpoint-e:proof && npm run alpha:checkpoint-f:proof && npm run alpha:checkpoint-g:proof && npm run alpha:checkpoint-h:matrix",
+    "alpha:checkpoint-h:client-safety": "node scripts/checkpoint-h-client-safety.mjs",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",
     "alpha:gateway-fund": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-gateway-fund.ts",
     "alpha:prepare-commerce": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-prepare-commerce.ts",
@@ -58,7 +61,7 @@
     "test": "node --experimental-strip-types --test test/*.test.ts",
     "build": "npm run clean --silent && next build",
     "start": "next start",
-    "verify": "npm run lint && npm run typecheck && npm run test && npm run build"
+    "verify": "npm run lint && npm run typecheck && npm run test && npm run build && npm run alpha:checkpoint-h:client-safety"
   },
   "devDependencies": {
     "@eslint/js": "10.0.1",
