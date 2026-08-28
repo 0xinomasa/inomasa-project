@@ -1112,9 +1112,7 @@ Target completion status:
 
 Current status:
 
-**IN PROGRESS — Checkpoints A-E are accepted; Checkpoint F is implemented and
-private-testnet verified with accepted-main evidence pending; Checkpoints G-H are
-not verified.**
+**IN PROGRESS — Checkpoints A-F are accepted; Checkpoints G-H are not verified.**
 
 Target completion status hanya diberikan jika seluruh area berikut PASS.
 
