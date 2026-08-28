@@ -436,8 +436,13 @@ Observed local Checkpoint E proof on 28 August 2026:
   observed the expected counts and dynamic badges, opened proof disclosure, found
   no horizontal overflow at 390 CSS pixels, and reported zero console errors or
   warnings after the application icon was added;
-- PR/CI/accepted-main and protected Preview evidence are recorded only after
-  observed.
+- protected Preview evidence remains unclaimed until it is observed in a later
+  checkpoint;
+- acceptance: pull request `#30`; implementation commit
+  `5ad080f6beaa182c02fd784a32d08468376f65cb`; PR run `33134596722`; merge
+  `b43cfbd901c1906284d11722fc95d4e8ff585357`; and accepted-main run
+  `33134731453` all completed successfully. Protected Preview remains a later
+  integrated-verification obligation and is not implied by this Checkpoint E proof.
 
 ## Exact Arc registry
 
