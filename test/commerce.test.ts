@@ -111,6 +111,10 @@ test('an outcome-unknown settlement can later reconcile to the observed Arc fact
     'circle-unknown-transaction',
   );
   const unknown = reconcileSettlement(submitted, { state: 'OUTCOME_UNKNOWN' });
+  assert.throws(
+    () => recordSettlementSubmission(unknown, 'blind-retry-provider-transaction'),
+    /Only an authorized settlement/,
+  );
   const recovered = reconcileSettlement(unknown, {
     state: 'COMPLETE',
     transactionHash: `0x${'2'.repeat(64)}`,

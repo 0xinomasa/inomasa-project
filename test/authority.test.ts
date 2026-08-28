@@ -54,7 +54,7 @@ test('bounded Agent purchase is allowed with remaining allowance accounted', () 
   });
 });
 
-test('Agent purchase policy denies offer, counterparty, amount, allowance, requester, and expiry violations', () => {
+test('Agent purchase policy denies stale, invalid, and out-of-scope actions', () => {
   const cases: readonly [AgentPurchaseIntent, StandingPurchaseAuthorityGrant, string][] = [
     [{ ...intent, offerId: 'off_other' }, grant, 'OFFER_OUT_OF_SCOPE'],
     [{ ...intent, counterpartyBusinessId: 'biz_other' }, grant, 'COUNTERPARTY_OUT_OF_SCOPE'],
@@ -73,11 +73,22 @@ test('Agent purchase policy denies offer, counterparty, amount, allowance, reque
       grant,
       'REQUESTER_MISMATCH',
     ],
+    [
+      { ...intent, environment: 'AUTOMATED_TEST' },
+      grant,
+      'SCOPE_MISMATCH',
+    ],
+    [intent, grant, 'GRANT_NOT_YET_VALID'],
     [intent, grant, 'GRANT_EXPIRED'],
   ];
 
   for (const [candidate, candidateGrant, reason] of cases) {
-    const evaluatedAt = reason === 'GRANT_EXPIRED' ? grant.expiresAt : intent.requestedAt;
+    const evaluatedAt =
+      reason === 'GRANT_EXPIRED'
+        ? grant.expiresAt
+        : reason === 'GRANT_NOT_YET_VALID'
+          ? '2026-08-24T23:59:59.999Z'
+          : intent.requestedAt;
     assert.deepEqual(evaluateAgentPurchaseAuthority(candidateGrant, candidate, evaluatedAt), {
       outcome: 'DENY',
       reason,

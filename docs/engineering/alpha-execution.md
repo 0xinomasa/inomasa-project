@@ -851,6 +851,91 @@ PR verification run `33172052503`; merge
 `33172186280` completed successfully, including engineering checks and PostgreSQL
 migration/persistence proof.
 
+## Checkpoint H integrated-verification route
+
+Status: `IMPLEMENTED / ACCEPTANCE PENDING`. Checkpoint H is not accepted until
+its protected Preview, PR CI/review/merge, accepted-main CI, and continuity
+closeout are observed.
+
+The selected route adds an executable final proof matrix over the accepted
+private-testnet database instead of creating a second fixture population or a
+second economic truth system. It checks the complete seven-Business system,
+four reusable BUILD templates, generated protected Business Sites, six Agents,
+four Capital Providers, ERC-8004/x402/ERC-8183 composition, exact accounting,
+Capital separation and later use, source-scoped proof, and common-control
+provenance. The command first replays the accepted C-G proof scripts and then
+requires the integrated matrix to pass.
+
+Adversarial regression now explicitly covers not-yet-valid and environment-
+mismatched Agent authority, no blind settlement resubmission after an ambiguous
+outcome, and replay of an already accepted Capital allocation. Existing tests
+continue to cover locked MIGRATE creation, revoked/expired authority, invalid
+offers/counterparties/amounts, terminal ERC-8183 replay, exact Arc transfer
+verification, unresolved Capital material, and distinct pending/failed/unknown
+observability. A post-build client-artifact proof fails if any private database,
+Circle, or Vercel environment-variable name reaches `.next/static`; it is part of
+the normal `npm run verify` and therefore CI path.
+
+No schema, migration, dependency, contract, execution account, custody profile,
+or hosted service was added. A database-only checklist was rejected because it
+would not re-prove external protocol facts; a new end-to-end fixture was rejected
+because G already provides fresh composition and H is a verification checkpoint.
+The matrix is intentionally exact for the controlled proof database. It can be
+replaced when a later authorized proof population supplies equivalent or stronger
+evidence.
+
+Current primary sources rechecked on 29 August 2026:
+
+- Arc Testnet chain/RPC/explorer and USDC registry remain documented at
+  https://docs.arc.io/arc/references/connect-to-arc and
+  https://docs.arc.io/arc/references/contract-addresses;
+- Arc continues to list ERC-8004 and ERC-8183 for Agentic Economy composition at
+  https://docs.arc.io/build/agentic-economy and the selected ERC-8183 deployment
+  at https://docs.arc.io/arc/tutorials/create-your-first-erc-8183-job;
+- ERC-8004 and ERC-8183 remain Draft standards at
+  https://eips.ethereum.org/EIPS/eip-8004 and
+  https://eips.ethereum.org/EIPS/eip-8183;
+- Circle Gateway still documents Arc Testnet EOA nanopayments, exact x402
+  challenge/payment flow, and the EOA restriction at
+  https://developers.circle.com/gateway/nanopayments/quickstarts/buyer and
+  https://developers.circle.com/gateway/nanopayments/quickstarts/seller;
+- Vercel documents Standard Protection/Vercel Authentication and authenticated
+  Preview inspection through `vercel curl` at
+  https://vercel.com/docs/deployment-protection and
+  https://vercel.com/docs/cli/curl.
+
+Arc's primary public RPC no longer returned the historical Checkpoint C
+registration receipt during H replay. Arc's currently documented public dRPC
+endpoint returned and verified the same accepted receipt, event, owner, and token
+URI. The Checkpoint C proof therefore uses that endpoint only for read-only
+historical re-verification; current execution remains on the accepted primary Arc
+adapter, no effect was retried, and no persisted fact changed.
+
+Observed local/private-testnet H evidence:
+
+- the integrated matrix passed with seven Businesses, six Agents, four Capital
+  Providers, eleven complete Activities, exact commerce volume `0.680000` USDC,
+  separate Capital volume `0.400000` USDC, twenty exact economic entries,
+  twenty-two Evidence facts, and nine complete deliveries, all explicitly
+  `COMMON_CONTROL_TEST`;
+- one uninterrupted `npm run alpha:checkpoint-h:proof` passed C, D, E, F, G, and
+  the integrated H matrix. C replay used the documented historical RPC after an
+  earlier primary-RPC null result; two earlier combined attempts stopped on
+  transient external PostgreSQL connection termination without changing state;
+- npm audit reported zero vulnerabilities; lint, typecheck, 56/56 tests,
+  Next.js `16.3.3` production build, browser-artifact safety, migrations
+  `001`-`011`, and database write/read/rollback passed;
+- local production Home, Reference Workbench, its ERC-8004 Agent detail, Capital,
+  and Founder/System Dashboard rendered the expected system/economic state. The
+  System Dashboard showed `7 / 6 / 4 / 11` inventory/activity counts, exact
+  separated volumes, and common-control provenance; 390-pixel Capital had no
+  overflow and the browser console had zero warnings/errors;
+- baseline and reference x402 resources each returned the committed HTTP `402`
+  challenge and paid `200` response without a second economic effect.
+
+Protected Preview and accepted-main evidence remain pending and are not implied by
+the local results above.
+
 ## Completed external proof sequence
 
 All eleven steps below were observed successfully on 25 August 2026. They remain

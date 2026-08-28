@@ -103,6 +103,10 @@ test('Capital offer requires provider approval and explicit Business acceptance'
   assert.equal(accepted.acceptedByPrincipalId, 'usr_alpha_operator');
   assert.equal(accepted.instrument, 'CONTROLLED_TEST_ALLOCATION');
   assert.equal(accepted.returnProfile, 'NONE');
+  assert.throws(
+    () => acceptCapitalAllocation(accepted, 'usr_alpha_operator', '2026-08-28T00:01:01.000Z'),
+    /only be accepted from OFFERED/i,
+  );
 });
 
 test('unresolved activity and amount bounds fail provider-specific underwriting', () => {
