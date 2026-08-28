@@ -3,6 +3,7 @@ import Link from 'next/link';
 import {
   type ActivityProof,
   type ActivityProtocol,
+  type CommerceEconomicActivity,
   type EconomicActivity,
 } from '../../modules/economic-history/model.ts';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../modules/commerce/money.ts';
@@ -42,7 +43,7 @@ function compactReference(reference: string): string {
     : `${reference.slice(0, 14)}…${reference.slice(-10)}`;
 }
 
-function activityRole(activity: EconomicActivity, businessId?: `biz_${string}`): string {
+function activityRole(activity: CommerceEconomicActivity, businessId?: `biz_${string}`): string {
   if (businessId === undefined) return 'BUSINESS-TO-BUSINESS';
   return activity.buyer.businessId === businessId ? 'BUYER' : 'SELLER';
 }
@@ -82,6 +83,82 @@ export function EconomicActivityList({
   return (
     <div className="economic-history-list">
       {activities.map((activity) => {
+        if (activity.activityKind === 'CAPITAL') {
+          return (
+            <article className="economic-activity economic-activity--capital" key={activity.activityId}>
+              <div className="economic-activity__topline">
+                <div className="protocol-badges" aria-label="Protocols used">
+                  <span>CAPITAL</span>
+                  {activity.protocols.map((protocol) => (
+                    <span key={protocol}>{protocolLabels[protocol]}</span>
+                  ))}
+                </div>
+                <span className={`activity-status activity-status--${activity.status.toLowerCase()}`}>
+                  {humanize(activity.status)}
+                </span>
+              </div>
+              <div className="economic-activity__headline">
+                <div>
+                  <p className="eyebrow">PROVIDER-DRIVEN · {humanize(activity.provenance)}</p>
+                  <h3>Controlled Capital allocation</h3>
+                  <p>{activity.decision.rationale}</p>
+                </div>
+                <strong>{displayUsdc(activity.amountMicroUsdc)}</strong>
+              </div>
+              <dl className="economic-activity__context">
+                <div><dt>Recipient Business</dt><dd>{activity.recipient.displayName}</dd></div>
+                <div><dt>Capital Provider</dt><dd>{activity.provider.displayName}</dd></div>
+                <div><dt>Provider decision</dt><dd>{activity.decision.outcome} · {humanize(activity.decision.reasonCode)}</dd></div>
+                <div><dt>Instrument</dt><dd>{humanize(activity.allocation.instrument)}</dd></div>
+                <div><dt>Return profile</dt><dd>{humanize(activity.allocation.returnProfile)}</dd></div>
+                <div><dt>Economic meaning</dt><dd>{economicInterpretation(activity, businessId)}</dd></div>
+                <div><dt>Later bounded uses</dt><dd>{activity.uses.length}</dd></div>
+                <div>
+                  <dt>Observed</dt>
+                  <dd><time dateTime={activity.occurredAt.toISOString()}>{activity.occurredAt.toISOString()}</time></dd>
+                </div>
+              </dl>
+              {activity.uses.length === 0 ? null : (
+                <div className="economic-activity__capital-uses">
+                  {activity.uses.map((use) => (
+                    <p key={use.obligationId}>
+                      {displayUsdc(use.amountMicroUsdc)} → {use.obligationId} · {use.settlementState ?? use.obligationState}
+                    </p>
+                  ))}
+                </div>
+              )}
+              <details className="economic-activity__proofs">
+                <summary>Inspect {activity.proofs.length} source-scoped references</summary>
+                <div>
+                  {activity.proofs.map((proof, index) => {
+                    const href = proofHref(proof);
+                    return (
+                      <article key={`${proof.kind}-${proof.scope}-${proof.reference}-${index}`}>
+                        <span>{humanize(proof.scope)}</span>
+                        <strong>{proof.label}</strong>
+                        <small>{humanize(proof.verification)} · {humanize(proof.kind)}</small>
+                        {href === null ? (
+                          <code title={proof.reference}>{proof.reference}</code>
+                        ) : (
+                          <a href={href} rel="noreferrer" target="_blank">
+                            View on ArcScan · {compactReference(proof.reference)}
+                          </a>
+                        )}
+                      </article>
+                    );
+                  })}
+                </div>
+              </details>
+              <div className="economic-activity__footer">
+                <span>{activity.activityId}</span>
+                <span>{humanize(activity.allocation.state)}</span>
+                {businessId === undefined ? (
+                  <Link href={`/business/${activity.recipient.slug}`}>Business context</Link>
+                ) : null}
+              </div>
+            </article>
+          );
+        }
         const counterparty =
           businessId === undefined || activity.buyer.businessId === businessId
             ? activity.seller

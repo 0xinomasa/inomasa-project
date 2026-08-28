@@ -34,10 +34,11 @@ export interface AlphaCommerceSummary {
 export interface AlphaEconomicEntrySummary {
   readonly amountMicroUsdc: string;
   readonly businessId: string;
+  readonly capitalAllocationId: string | null;
   readonly category: string;
   readonly direction: string;
   readonly provenance: string;
-  readonly settlementId: string;
+  readonly settlementId: string | null;
 }
 
 export interface AlphaEvidenceSummary {
@@ -490,6 +491,7 @@ export class PostgresAlphaCommerceRepository {
       .select([
         'amount_micro_usdc as amountMicroUsdc',
         'business_id as businessId',
+        'capital_allocation_id as capitalAllocationId',
         'category',
         'direction',
         'provenance',

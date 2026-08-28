@@ -561,6 +561,29 @@ footer p {
   padding: 28px;
 }
 
+.economic-activity--capital {
+  border-left: 3px solid var(--lime);
+}
+
+.economic-activity__capital-uses,
+.capital-path-list {
+  display: grid;
+  gap: 14px;
+}
+
+.economic-activity__capital-uses {
+  border-top: 1px solid var(--line);
+  margin-top: 20px;
+  padding-top: 18px;
+}
+
+.economic-activity__capital-uses p {
+  color: var(--muted-strong);
+  font-family: 'Courier New', monospace;
+  font-size: 0.68rem;
+  margin: 0;
+}
+
 .economic-activity__topline,
 .economic-activity__footer,
 .economy-drilldown {

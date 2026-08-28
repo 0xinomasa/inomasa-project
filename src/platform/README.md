@@ -16,6 +16,12 @@ It reconstructs one contextual activity per accepted obligation from existing
 Business, commerce, Agent, protocol, Evidence, and accounting records; it does not
 create a competing ledger or copy external protocol state.
 
+Checkpoint F adds a Capital persistence repository and reuses the existing Circle
+Developer-Controlled Wallet adapter through a provider-neutral Capital execution
+port. Provider accounts are dedicated platform-controlled Arc Testnet EOAs, not
+Business Treasuries, Agent identities, custody claims, or a reason for vendor
+semantics to enter the Capital domain.
+
 Circle remains replaceable implementation machinery. Its wallet ID/address does not
 become Inomasa Principal or Business identity.
 

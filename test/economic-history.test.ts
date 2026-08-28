@@ -7,9 +7,11 @@ import {
   deriveActivityStatus,
   summarizeEconomicHistory,
   type EconomicActivity,
+  type CapitalEconomicActivity,
 } from '../src/modules/economic-history/model.ts';
 
 const completedActivity: EconomicActivity = {
+  activityKind: 'COMMERCE',
   activityId: 'obl_history_1',
   agent: null,
   amountMicroUsdc: '100000',
@@ -147,9 +149,48 @@ test('dynamic protocol participation includes only primitives linked to the acti
 test('economic summary counts one obligation once instead of doubling buyer and seller entries', () => {
   const summary = summarizeEconomicHistory([completedActivity]);
   assert.equal(summary.activityCount, 1);
+  assert.equal(summary.commerceActivityCount, 1);
+  assert.equal(summary.capitalActivityCount, 0);
+  assert.equal(summary.completedCapitalVolumeMicroUsdc, '0');
   assert.equal(summary.completedVolumeMicroUsdc, '100000');
   assert.equal(summary.statusCounts.COMPLETE, 1);
   assert.equal(summary.economicCategoryCounts['REVENUE'], 1);
   assert.equal(summary.economicCategoryCounts['SERVICE_COST'], 1);
   assert.equal(summary.protocolCounts.ARC_USDC, 1);
+});
+
+test('Capital activity is counted separately and never inflates commerce volume', () => {
+  const capitalActivity: CapitalEconomicActivity = {
+    activityId: 'cal_history_1',
+    activityKind: 'CAPITAL',
+    allocation: {
+      blockNumber: '10',
+      instrument: 'CONTROLLED_TEST_ALLOCATION',
+      returnProfile: 'NONE',
+      state: 'COMPLETE',
+      transactionHash: `0x${'1'.repeat(64)}`,
+    },
+    amountMicroUsdc: '200000',
+    asset: 'USDC',
+    decision: { outcome: 'APPROVED', rationale: 'Within mandate.', reasonCode: 'WITHIN_PROVIDER_MANDATE' },
+    economicEffects: [{ amountMicroUsdc: '200000', businessId: 'biz_buyer', category: 'CAPITAL', direction: 'INFLOW' }],
+    environment: 'PRIVATE_ARC_TESTNET',
+    occurredAt: new Date('2026-08-28T00:02:00.000Z'),
+    outcome: 'COMPLETE',
+    proofs: [],
+    protocols: ['ARC_USDC'],
+    provider: { displayName: 'Provider', providerId: 'cap_provider', provenance: 'COMMON_CONTROL_TEST' },
+    provenance: 'COMMON_CONTROL_TEST',
+    recipient: completedActivity.buyer,
+    status: 'COMPLETE',
+    terms: null,
+    uses: [],
+  };
+  const summary = summarizeEconomicHistory([completedActivity, capitalActivity]);
+  assert.equal(summary.activityCount, 2);
+  assert.equal(summary.commerceActivityCount, 1);
+  assert.equal(summary.capitalActivityCount, 1);
+  assert.equal(summary.completedVolumeMicroUsdc, '100000');
+  assert.equal(summary.completedCapitalVolumeMicroUsdc, '200000');
+  assert.equal(summary.economicCategoryCounts['CAPITAL'], 1);
 });

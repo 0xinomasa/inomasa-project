@@ -9,14 +9,14 @@ test('the application shell keeps the three entry paths distinct', () => {
     [
       { label: 'BUILD', status: 'ALPHA' },
       { label: 'MIGRATE', status: 'LOCKED' },
-      { label: 'CAPITAL', status: 'NEXT' },
+      { label: 'CAPITAL', status: 'ALPHA' },
     ],
   );
 });
 
-test('the application shell exposes unique structural anchors', () => {
-  const anchors = productPaths.map(({ href }) => href);
+test('the application shell exposes unique internal destinations', () => {
+  const destinations = productPaths.map(({ href }) => href);
 
-  assert.equal(new Set(anchors).size, anchors.length);
-  assert.ok(anchors.every((anchor) => anchor.startsWith('#')));
+  assert.equal(new Set(destinations).size, destinations.length);
+  assert.ok(destinations.every((destination) => destination.startsWith('#') || destination.startsWith('/')));
 });

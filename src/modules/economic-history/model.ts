@@ -45,38 +45,75 @@ export interface ActivityProof {
   readonly verification: string;
 }
 
-export interface EconomicActivity {
-  readonly activityId: `obl_${string}`;
-  readonly agent: ActivityAgent | null;
+interface BaseEconomicActivity {
+  readonly activityKind: 'CAPITAL' | 'COMMERCE';
   readonly amountMicroUsdc: string;
   readonly asset: 'USDC';
-  readonly buyer: ActivityParty;
   readonly economicEffects: readonly ActivityEconomicEffect[];
   readonly environment: string;
   readonly occurredAt: Date;
+  readonly outcome: string;
+  readonly proofs: readonly ActivityProof[];
+  readonly protocols: readonly ActivityProtocol[];
+  readonly provenance: EconomicProvenance;
+  readonly status: ActivityStatus;
+}
+
+export interface CommerceEconomicActivity extends BaseEconomicActivity {
+  readonly activityKind: 'COMMERCE';
+  readonly activityId: `obl_${string}`;
+  readonly agent: ActivityAgent | null;
+  readonly buyer: ActivityParty;
   readonly offer: {
     readonly capabilityId: string;
     readonly description: string;
     readonly offerId: `off_${string}`;
     readonly termsVersion: number;
   };
-  readonly outcome: string;
-  readonly proofs: readonly ActivityProof[];
-  readonly protocols: readonly ActivityProtocol[];
-  readonly provenance: EconomicProvenance;
   readonly seller: ActivityParty;
   readonly settlement: {
     readonly provider: string | null;
     readonly settlementId: `set_${string}` | null;
     readonly state: string | null;
   };
-  readonly status: ActivityStatus;
   readonly work: {
     readonly jobId: `job_${string}`;
     readonly protocolJobId: string | null;
     readonly protocolStatus: string;
   } | null;
 }
+
+export interface CapitalEconomicActivity extends BaseEconomicActivity {
+  readonly activityKind: 'CAPITAL';
+  readonly activityId: `cal_${string}`;
+  readonly allocation: {
+    readonly blockNumber: string | null;
+    readonly instrument: string;
+    readonly returnProfile: string;
+    readonly state: string;
+    readonly transactionHash: string | null;
+  };
+  readonly decision: {
+    readonly outcome: string;
+    readonly rationale: string;
+    readonly reasonCode: string;
+  };
+  readonly provider: {
+    readonly displayName: string;
+    readonly providerId: `cap_${string}`;
+    readonly provenance: string;
+  };
+  readonly recipient: ActivityParty;
+  readonly terms: unknown | null;
+  readonly uses: readonly {
+    readonly amountMicroUsdc: string;
+    readonly obligationId: `obl_${string}`;
+    readonly obligationState: string;
+    readonly settlementState: string | null;
+  }[];
+}
+
+export type EconomicActivity = CommerceEconomicActivity | CapitalEconomicActivity;
 
 export interface ActivityStatusInput {
   readonly deliveryState: string | null;
@@ -88,6 +125,9 @@ export interface ActivityStatusInput {
 
 export interface EconomicHistorySummary {
   readonly activityCount: number;
+  readonly capitalActivityCount: number;
+  readonly commerceActivityCount: number;
+  readonly completedCapitalVolumeMicroUsdc: string;
   readonly completedVolumeMicroUsdc: string;
   readonly economicCategoryCounts: Readonly<Record<string, number>>;
   readonly protocolCounts: Readonly<Record<ActivityProtocol, number>>;
@@ -97,6 +137,7 @@ export interface EconomicHistorySummary {
 export interface EconomicHistoryInventory {
   readonly agentCount: number;
   readonly businessCount: number;
+  readonly capitalProviderCount: number;
   readonly evidenceCount: number;
   readonly serviceDeliveryCount: number;
 }
@@ -173,21 +214,36 @@ export function summarizeEconomicHistory(
   };
   const economicCategoryCounts: Record<string, number> = {};
   let completedVolumeMicroUsdc = 0n;
+  let completedCapitalVolumeMicroUsdc = 0n;
+  let capitalActivityCount = 0;
+  let commerceActivityCount = 0;
 
   for (const activity of activities) {
+    if (activity.activityKind === 'CAPITAL') capitalActivityCount += 1;
+    else commerceActivityCount += 1;
     statusCounts[activity.status] += 1;
     for (const protocol of activity.protocols) protocolCounts[protocol] += 1;
     for (const effect of activity.economicEffects) {
       economicCategoryCounts[effect.category] =
         (economicCategoryCounts[effect.category] ?? 0) + 1;
     }
-    if (activity.status === 'COMPLETE' && activity.settlement.state === 'COMPLETE') {
+    if (
+      activity.activityKind === 'COMMERCE' &&
+      activity.status === 'COMPLETE' &&
+      activity.settlement.state === 'COMPLETE'
+    ) {
       completedVolumeMicroUsdc += BigInt(activity.amountMicroUsdc);
+    }
+    if (activity.activityKind === 'CAPITAL' && activity.status === 'COMPLETE') {
+      completedCapitalVolumeMicroUsdc += BigInt(activity.amountMicroUsdc);
     }
   }
 
   return {
     activityCount: activities.length,
+    capitalActivityCount,
+    commerceActivityCount,
+    completedCapitalVolumeMicroUsdc: completedCapitalVolumeMicroUsdc.toString(),
     completedVolumeMicroUsdc: completedVolumeMicroUsdc.toString(),
     economicCategoryCounts,
     protocolCounts,

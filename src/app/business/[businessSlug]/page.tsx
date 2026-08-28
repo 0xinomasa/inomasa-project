@@ -115,8 +115,8 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
             <h2>One reusable operating environment.</h2>
           </div>
           <p>
-            Capital remains a structural profile boundary until Checkpoint F; no allocation or
-            provider decision is implied here.
+            Capital is a provider-attributable profile. A decision or allocation appears only
+            when actually persisted for this Business; readiness is not entitlement.
           </p>
         </div>
         <div>
@@ -188,6 +188,11 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
             <span>COMPLETE</span>
             <strong>{history.summary.statusCounts.COMPLETE}</strong>
             <small>RECONSTRUCTED</small>
+          </article>
+          <article>
+            <span>CAPITAL INFLOW</span>
+            <strong>{displayUsdc(history.summary.completedCapitalVolumeMicroUsdc)}</strong>
+            <small>NOT REVENUE</small>
           </article>
           <article>
             <span>PENDING</span>

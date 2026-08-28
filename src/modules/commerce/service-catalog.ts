@@ -1,7 +1,7 @@
 import type { ServiceOffer } from './model.ts';
 import { parseUsdcAmount } from './money.ts';
 
-export type CommerceProtocol = 'ERC8183' | 'X402';
+export type CommerceProtocol = 'ARC_USDC' | 'ERC8183' | 'X402';
 
 export interface ServiceCapabilityDefinition {
   readonly deliveryKind: 'ARC_NETWORK_SNAPSHOT';
@@ -13,6 +13,22 @@ export interface ServiceCapabilityDefinition {
 }
 
 export const alphaServiceCatalog = {
+  capitalFundedArcSnapshot: {
+    deliveryKind: 'ARC_NETWORK_SNAPSHOT',
+    mimeType: 'application/json',
+    offer: {
+      capabilityId: 'capital-funded-arc-snapshot',
+      description: 'A later bounded operating service procured from an accepted Capital allocation.',
+      offerId: 'off_capital_funded_snapshot_v1',
+      priceMicroUsdc: parseUsdcAmount('0.10'),
+      providerBusinessId: 'biz_signal_forge',
+      status: 'ACTIVE',
+      termsVersion: 1,
+    },
+    protocol: 'ARC_USDC',
+    resourcePath: '/api/alpha/services/off_capital_funded_snapshot_v1',
+    resourceUri: 'inomasa://signal-forge/capital-funded-arc-snapshot',
+  },
   arcMarketSnapshotX402: {
     deliveryKind: 'ARC_NETWORK_SNAPSHOT',
     mimeType: 'application/json',

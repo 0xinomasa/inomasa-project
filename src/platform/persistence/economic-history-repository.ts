@@ -3,6 +3,8 @@ import {
   deriveActivityProtocols,
   deriveActivityStatus,
   type ActivityProof,
+  type CapitalEconomicActivity,
+  type CommerceEconomicActivity,
   type EconomicActivity,
   type EconomicHistoryInventory,
 } from '../../modules/economic-history/model.ts';
@@ -46,13 +48,17 @@ export class PostgresEconomicHistoryRepository {
 
   async loadInventory(): Promise<EconomicHistoryInventory> {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
-    const [agents, businesses, evidence, deliveries] = await Promise.all([
+    const [agents, businesses, capitalProviders, evidence, deliveries] = await Promise.all([
       database
         .selectFrom('agent_registrations')
         .select((expression) => expression.fn.countAll<string>().as('count'))
         .executeTakeFirstOrThrow(),
       database
         .selectFrom('businesses')
+        .select((expression) => expression.fn.countAll<string>().as('count'))
+        .executeTakeFirstOrThrow(),
+      database
+        .selectFrom('capital_providers')
         .select((expression) => expression.fn.countAll<string>().as('count'))
         .executeTakeFirstOrThrow(),
       database
@@ -67,12 +73,15 @@ export class PostgresEconomicHistoryRepository {
     return {
       agentCount: Number(agents.count),
       businessCount: Number(businesses.count),
+      capitalProviderCount: Number(capitalProviders.count),
       evidenceCount: Number(evidence.count),
       serviceDeliveryCount: Number(deliveries.count),
     };
   }
 
-  async listActivities(query: EconomicHistoryQuery = {}): Promise<readonly EconomicActivity[]> {
+  async listActivities(
+    query: EconomicHistoryQuery = {},
+  ): Promise<readonly CommerceEconomicActivity[]> {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
     const baseQuery = database
       .selectFrom('obligations as obligation')
@@ -326,6 +335,7 @@ export class PostgresEconomicHistoryRepository {
         row.createdAt;
 
       return {
+        activityKind: 'COMMERCE',
         activityId: row.obligationId as `obl_${string}`,
         agent:
           row.requesterPrincipalId === null || row.requesterPrincipalKind !== 'AGENT'
@@ -368,7 +378,7 @@ export class PostgresEconomicHistoryRepository {
           hasErc8183Job: row.jobId !== null,
           hasX402Payment: row.paymentId !== null,
         }),
-        provenance: row.provenance as EconomicActivity['provenance'],
+        provenance: row.provenance as CommerceEconomicActivity['provenance'],
         seller: {
           businessId: row.sellerBusinessId as `biz_${string}`,
           displayName: row.sellerDisplayName,
@@ -388,7 +398,199 @@ export class PostgresEconomicHistoryRepository {
                 protocolJobId: row.protocolJobId,
                 protocolStatus: row.jobStatus ?? 'UNCREATED',
               },
-      } satisfies EconomicActivity;
+      } satisfies CommerceEconomicActivity;
+    });
+  }
+
+  async listEconomicActivities(
+    query: EconomicHistoryQuery = {},
+  ): Promise<readonly EconomicActivity[]> {
+    const [commerce, capital] = await Promise.all([
+      this.listActivities(query.businessId === undefined ? {} : { businessId: query.businessId }),
+      this.#listCapitalActivities(query.businessId),
+    ]);
+    const combined = [...commerce, ...capital].sort(
+      (left, right) => right.occurredAt.getTime() - left.occurredAt.getTime(),
+    );
+    return query.limit === undefined ? combined : combined.slice(0, query.limit);
+  }
+
+  async #listCapitalActivities(
+    businessId?: `biz_${string}`,
+  ): Promise<readonly CapitalEconomicActivity[]> {
+    const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
+    const baseQuery = database
+      .selectFrom('capital_allocations as allocation')
+      .innerJoin('capital_decisions as decision', 'decision.decision_id', 'allocation.decision_id')
+      .innerJoin('capital_reviews as review', 'review.review_id', 'decision.review_id')
+      .innerJoin('capital_providers as provider', 'provider.provider_id', 'review.provider_id')
+      .innerJoin('businesses as recipient', 'recipient.business_id', 'allocation.recipient_business_id')
+      .select([
+        'allocation.allocation_id as allocationId',
+        'allocation.amount_micro_usdc as amountMicroUsdc',
+        'allocation.asset',
+        'allocation.block_number as blockNumber',
+        'allocation.completed_at as completedAt',
+        'allocation.created_at as createdAt',
+        'allocation.instrument',
+        'allocation.provenance',
+        'allocation.provider_transaction_id as providerTransactionId',
+        'allocation.return_profile as returnProfile',
+        'allocation.state',
+        'allocation.transaction_hash as transactionHash',
+        'allocation.updated_at as updatedAt',
+        'decision.outcome as decisionOutcome',
+        'decision.rationale',
+        'decision.reason_code as reasonCode',
+        'decision.terms',
+        'provider.display_name as providerDisplayName',
+        'provider.provider_id as providerId',
+        'provider.provenance as providerProvenance',
+        'recipient.business_id as recipientBusinessId',
+        'recipient.display_name as recipientDisplayName',
+        'recipient.environment',
+        'recipient.slug as recipientSlug',
+      ])
+      .orderBy('allocation.updated_at', 'desc');
+    const rows = await (businessId === undefined
+      ? baseQuery
+      : baseQuery.where('allocation.recipient_business_id', '=', businessId)
+    ).execute();
+    if (rows.length === 0) return [];
+
+    const allocationIds = rows.map(({ allocationId }) => allocationId);
+    const [effects, evidence, uses] = await Promise.all([
+      database
+        .selectFrom('economic_entries')
+        .select([
+          'amount_micro_usdc as amountMicroUsdc',
+          'business_id as businessId',
+          'capital_allocation_id as capitalAllocationId',
+          'category',
+          'direction',
+        ])
+        .where('capital_allocation_id', 'in', allocationIds)
+        .execute(),
+      database
+        .selectFrom('evidence_facts')
+        .select([
+          'coverage',
+          'fact_type as factType',
+          'source_reference as sourceReference',
+          'source_type as sourceType',
+          'subject_id as subjectId',
+          'verification',
+        ])
+        .where('subject_id', 'in', allocationIds)
+        .execute(),
+      database
+        .selectFrom('capital_use_links as use')
+        .innerJoin('obligations as obligation', 'obligation.obligation_id', 'use.obligation_id')
+        .leftJoin('settlement_operations as settlement', 'settlement.obligation_id', 'obligation.obligation_id')
+        .select([
+          'use.allocation_id as allocationId',
+          'use.amount_micro_usdc as amountMicroUsdc',
+          'use.obligation_id as obligationId',
+          'obligation.state as obligationState',
+          'settlement.state as settlementState',
+        ])
+        .where('use.allocation_id', 'in', allocationIds)
+        .orderBy('use.linked_at')
+        .execute(),
+    ]);
+
+    return rows.map((row) => {
+      const proofs: ActivityProof[] = [
+        {
+          kind: 'APPLICATION_RECORD',
+          label: 'Provider decision and Business acceptance',
+          reference: row.allocationId,
+          scope: 'CAPITAL_CONTEXT',
+          verification: 'APPLICATION_RECORDED',
+        },
+      ];
+      for (const fact of evidence) {
+        if (fact.subjectId !== row.allocationId) continue;
+        proofs.push({
+          kind: proofKind(fact.sourceType, fact.sourceReference),
+          label: fact.factType.replaceAll('_', ' '),
+          reference: fact.sourceReference,
+          scope: fact.coverage,
+          verification: fact.verification,
+        });
+      }
+      if (
+        row.transactionHash !== null &&
+        !proofs.some(({ reference }) => reference === row.transactionHash)
+      ) {
+        proofs.push({
+          kind: 'ARC_TRANSACTION',
+          label: 'Arc USDC Capital allocation',
+          reference: row.transactionHash,
+          scope: 'CAPITAL_ALLOCATION_ONLY',
+          verification: 'CHAIN_VERIFIED',
+        });
+      }
+      const status =
+        row.state === 'COMPLETE'
+          ? 'COMPLETE'
+          : row.state === 'FAILED'
+            ? 'FAILED'
+            : row.state === 'OUTCOME_UNKNOWN'
+              ? 'OUTCOME_UNKNOWN'
+              : 'PENDING';
+      return {
+        activityId: row.allocationId as `cal_${string}`,
+        activityKind: 'CAPITAL',
+        allocation: {
+          blockNumber: row.blockNumber,
+          instrument: row.instrument,
+          returnProfile: row.returnProfile,
+          state: row.state,
+          transactionHash: row.transactionHash,
+        },
+        amountMicroUsdc: row.amountMicroUsdc,
+        asset: 'USDC',
+        decision: {
+          outcome: row.decisionOutcome,
+          rationale: row.rationale,
+          reasonCode: row.reasonCode,
+        },
+        economicEffects: effects
+          .filter(({ capitalAllocationId }) => capitalAllocationId === row.allocationId)
+          .map((effect) => ({
+            amountMicroUsdc: effect.amountMicroUsdc,
+            businessId: effect.businessId as `biz_${string}`,
+            category: effect.category,
+            direction: effect.direction,
+          })),
+        environment: row.environment,
+        occurredAt: row.completedAt ?? row.updatedAt ?? row.createdAt,
+        outcome: row.state,
+        proofs: uniqueProofs(proofs),
+        protocols: row.providerTransactionId === null ? [] : ['ARC_USDC'],
+        provider: {
+          displayName: row.providerDisplayName,
+          providerId: row.providerId as `cap_${string}`,
+          provenance: row.providerProvenance,
+        },
+        provenance: row.provenance as CapitalEconomicActivity['provenance'],
+        recipient: {
+          businessId: row.recipientBusinessId as `biz_${string}`,
+          displayName: row.recipientDisplayName,
+          slug: row.recipientSlug,
+        },
+        status,
+        terms: row.terms,
+        uses: uses
+          .filter(({ allocationId }) => allocationId === row.allocationId)
+          .map((use) => ({
+            amountMicroUsdc: use.amountMicroUsdc,
+            obligationId: use.obligationId as `obl_${string}`,
+            obligationState: use.obligationState,
+            settlementState: use.settlementState,
+          })),
+      } satisfies CapitalEconomicActivity;
     });
   }
 }
