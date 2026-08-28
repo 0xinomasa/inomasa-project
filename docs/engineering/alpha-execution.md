@@ -659,9 +659,9 @@ new nonce.
 
 ## Checkpoint F selected implementation route
 
-Status: `IMPLEMENTED / PRIVATE-TESTNET VERIFIED / ACCEPTANCE PENDING`. The
-controlled allocation, later economic use, and replay/regression proof have been
-observed; PR, CI, review, merge, and accepted-main evidence remain required.
+Status: `IMPLEMENTED / VERIFIED / ACCEPTED` within the bounded Checkpoint F scope.
+The controlled allocation, later economic use, replay/regression proof, focused
+review, PR CI, merge, and accepted-main CI have been observed.
 
 Generic CAPITAL is represented by reusable Provider, mandate, review, decision,
 dedicated execution-account, allocation, and later-use records. Multiple Providers
@@ -733,6 +733,10 @@ All involved Businesses, Agents, Providers, demand, and funds remain controlled
 test fixtures with `COMMON_CONTROL_TEST` provenance. This evidence does not establish
 independent demand, investment performance, a legal Capital product, or Production
 authority.
+
+Acceptance evidence: pull request `#32`, final head `3c347eaf0547d187dfa7536836411a016fee388e`,
+PR verification run `33151927079`, merge `3a789f6b752808d790f121dc5ab5e46828964231`,
+and accepted-main run `33152100522` completed successfully.
 
 ## Completed external proof sequence
 

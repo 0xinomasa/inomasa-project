@@ -15,9 +15,9 @@ resolved.
   participate in Business activity; none replaces Business as the coordination object.
 - **BUILD, MIGRATE, and CAPITAL share one Business environment without becoming one
   truth system.** BUILD is active; MIGRATE is structurally anticipated and
-  user-facing locked; Capital remains provider-driven. Under REV2 sequential
-  execution it is the exact Checkpoint F implementation point after accepted
-  Economic History, without authorizing Production/public Capital exposure.
+  user-facing locked; Capital remains provider-driven. The controlled Checkpoint F
+  Capital scope is accepted, while Reference Economy composition is the exact next
+  REV2 point without authorizing Production/public Capital exposure.
 - **Generic capability and fixtures are distinct.** Product capacity must not be
   inferred from Signal Forge, Ops Pilot, or any fixed test population. Those objects
   remain valid regression specimens with explicit common-control provenance.
