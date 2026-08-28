@@ -6,6 +6,7 @@ import { ArcErc8004Rpc } from '../src/platform/arc/erc8004.ts';
 import { ArcErc8183Rpc } from '../src/platform/arc/erc8183.ts';
 import { ArcTestnetRpc } from '../src/platform/arc/rpc.ts';
 import { readDatabaseConnectionConfig } from '../src/platform/persistence/config.ts';
+import { PostgresAlphaCommerceRepository } from '../src/platform/persistence/alpha-commerce-repository.ts';
 import { PostgresCapitalRepository } from '../src/platform/persistence/capital-repository.ts';
 import { applicationSchema, PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { PostgresEconomicHistoryRepository } from '../src/platform/persistence/economic-history-repository.ts';
@@ -23,6 +24,7 @@ async function main(): Promise<void> {
     const database = persistence.databaseForApplication.withSchema(applicationSchema);
     const history = new PostgresEconomicHistoryRepository(persistence);
     const capital = new PostgresCapitalRepository(persistence);
+    const commerce = new PostgresAlphaCommerceRepository(persistence);
     const identities = new PostgresErc8004Repository(persistence);
     const jobs = new PostgresErc8183Repository(persistence);
     const payments = new PostgresGatewayX402Repository(persistence);
@@ -57,7 +59,13 @@ async function main(): Promise<void> {
     assert.ok(identity.agentId !== null);
     assert.ok(identity.registrationTransactionHash !== null);
     assert.ok(identity.metadataTransactionHash !== null);
-    await new ArcErc8004Rpc().verifyMetadata({
+    const identityRpc = new ArcErc8004Rpc();
+    const registered = await identityRpc.verifyRegistration({
+      ownerAddress: identity.ownerAddress,
+      transactionHash: identity.registrationTransactionHash!,
+    });
+    assert.equal(registered.agentId, identity.agentId);
+    await identityRpc.verifyMetadata({
       agentId: identity.agentId!,
       expectedOwner: identity.ownerAddress,
       expectedUri: identity.registrationUri!,
@@ -86,7 +94,37 @@ async function main(): Promise<void> {
     assert.ok(operations.every(({ state }) => state === 'COMPLETE'));
     assert.equal(new Set(operations.map(({ transactionHash }) => transactionHash)).size, 6);
     assert.ok(job.protocolJobId !== null);
-    const onchainJob = await new ArcErc8183Rpc().readJob(job.protocolJobId!);
+    const funding = operations.find(({ leg }) => leg === 'FUND');
+    const completion = operations.find(({ leg }) => leg === 'COMPLETE');
+    assert.ok(funding?.transactionHash !== null && funding !== undefined);
+    assert.ok(completion?.transactionHash !== null && completion !== undefined);
+    const jobRpc = new ArcErc8183Rpc();
+    const expiredAtUnix = BigInt(Math.floor(Date.parse(job.expiredAt) / 1_000));
+    await jobRpc.verifyJobState({
+      budgetMicroUsdc: job.budgetMicroUsdc,
+      client: job.clientAddress,
+      description: job.description,
+      evaluator: job.evaluatorAddress,
+      expectedStatus: 'FUNDED',
+      expiredAtUnix,
+      jobId: job.protocolJobId!,
+      provider: job.providerAddress,
+      transactionHash: funding.transactionHash!,
+      transfer: 'TO_ESCROW',
+    });
+    await jobRpc.verifyJobState({
+      budgetMicroUsdc: job.budgetMicroUsdc,
+      client: job.clientAddress,
+      description: job.description,
+      evaluator: job.evaluatorAddress,
+      expectedStatus: 'COMPLETED',
+      expiredAtUnix,
+      jobId: job.protocolJobId!,
+      provider: job.providerAddress,
+      transactionHash: completion.transactionHash!,
+      transfer: 'PAYOUT',
+    });
+    const onchainJob = await jobRpc.readJob(job.protocolJobId!);
     assert.equal(onchainJob.statusName, 'COMPLETED');
 
     const paths = (await capital.listCapitalPaths()).filter(({ providerId }) =>
@@ -112,6 +150,20 @@ async function main(): Promise<void> {
       destinationAddress: allocation.destinationAddress,
       sourceAddress: allocation.sourceAddress,
       transactionHash: approved.allocationTransactionHash as `0x${string}`,
+    });
+    const laterUse = await commerce.getSettlementExecutionContext('set_reference_capital_use_v1');
+    const laterUseSettlement = await database
+      .selectFrom('settlement_operations')
+      .select('transaction_hash')
+      .where('settlement_id', '=', laterUse.settlementId)
+      .executeTakeFirstOrThrow();
+    assert.equal(laterUse.state, 'COMPLETE');
+    assert.match(laterUseSettlement.transaction_hash ?? '', /^0x[0-9a-f]{64}$/);
+    await new ArcTestnetRpc().verifyUsdcTransfer({
+      amountMicroUsdc: laterUse.amountMicroUsdc,
+      destinationAddress: laterUse.destinationAddress,
+      sourceAddress: laterUse.sourceAddress,
+      transactionHash: laterUseSettlement.transaction_hash as `0x${string}`,
     });
 
     const activities = await history.listEconomicActivities({ businessId: 'biz_reference_workbench' });
