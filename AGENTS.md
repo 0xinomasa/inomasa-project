@@ -45,9 +45,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   demand exists.
 - The pre-F direct commerce settlements remain exact `0.250000` and `0.100000`
   Arc Testnet USDC. Checkpoint F adds one exact `0.200000` Capital allocation and
-  one later exact `0.100000` direct commerce settlement. The two Gateway payments
-  remain exact `0.010000` USDC each with provider-reported receipts—not direct
-  per-payment Arc transaction hashes.
+  one later exact `0.100000` direct commerce settlement; Checkpoint G adds a second
+  allocation and later settlement at those same exact amounts. The three Gateway
+  payments remain exact `0.010000` USDC each with provider-reported receipts—not
+  direct per-payment Arc transaction hashes.
 - Circle Developer-Controlled EOA remains the verified Alpha execution account
   profile. It is platform-controlled external infrastructure, not Business or Agent
   identity, user custody, or a Protected Treasury claim.
