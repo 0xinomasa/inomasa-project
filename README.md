@@ -21,8 +21,9 @@ implied.
 B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
 active controlled-Alpha program is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
-Checkpoints A-G are accepted on GitHub `main`; Checkpoint H Integrated Verification
-is the exact next and final authorized REV2 checkpoint.
+Checkpoints A-H are accepted on GitHub `main`, and the scoped completion state is
+`CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED`. The sequential C-H
+authorization is complete; no checkpoint or Production scope beyond H is implied.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 

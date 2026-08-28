@@ -853,9 +853,8 @@ migration/persistence proof.
 
 ## Checkpoint H integrated-verification route
 
-Status: `IMPLEMENTED / ACCEPTANCE PENDING`. Checkpoint H is not accepted until
-its protected Preview, PR CI/review/merge, accepted-main CI, and continuity
-closeout are observed.
+Status: `VERIFIED / ACCEPTED`. Checkpoint H reached accepted GitHub `main` after
+protected Preview, focused review, PR CI/merge, and accepted-main CI were observed.
 
 The selected route adds an executable final proof matrix over the accepted
 private-testnet database instead of creating a second fixture population or a
@@ -951,9 +950,13 @@ Observed protected Preview evidence:
 
 Focused review of the complete branch diff found no product-semantic, schema,
 dependency, custody, or execution-account change; no secret value or generated
-browser artifact is part of the candidate. PR CI passed in run `33205138368`.
-Merge, accepted-main CI, and continuity closeout remain pending and are not
-implied by the evidence above.
+browser artifact is part of the accepted change. Pull request `#36`, implementation
+commit `d4d5bc7c3a486b5e9a68e16be0de2e5c3e43e359`, final head
+`bffad0eda4fcb1d9a11170e697345c3bf2e06e7d`, PR CI run `33206484542`, merge
+`fcb80e96966f95a8c49cbf105f932c378910b39e`, and accepted-main run `33206624023`
+are the acceptance evidence. The controlled completion label is therefore
+`CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED`; all Production/public and
+post-H scope remains unauthorized.
 
 ## Completed external proof sequence
 

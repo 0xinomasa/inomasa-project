@@ -1110,10 +1110,12 @@ Target completion status:
 
 **CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED**
 
-Current status:
+Current accepted implementation status:
 
-**IN PROGRESS — Checkpoints A-G are accepted; Checkpoint H and the integrated
-completion gate are not verified.**
+**CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED.** Checkpoints A-H are accepted
+on GitHub `main` within the controlled Arc Testnet scope. This status does not
+authorize Production/mainnet, public access, live MIGRATE, unrestricted Agent
+authority, or Production/public Capital exposure.
 
 Target completion status hanya diberikan jika seluruh area berikut PASS.
 
