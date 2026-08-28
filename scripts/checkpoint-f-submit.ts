@@ -4,7 +4,9 @@ import { readDatabaseConnectionConfig } from '../src/platform/persistence/config
 import { PostgresCapitalRepository } from '../src/platform/persistence/capital-repository.ts';
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 
-const allocationId = 'cal_ops_pilot_northstar_v1';
+const allocationId = process.argv.includes('--reference-economy')
+  ? 'cal_reference_workbench_seed_v1'
+  : 'cal_ops_pilot_northstar_v1';
 
 async function main(): Promise<void> {
   const databaseConfig = readDatabaseConnectionConfig('runtime');

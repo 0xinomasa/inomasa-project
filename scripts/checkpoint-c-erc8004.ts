@@ -12,6 +12,7 @@ import { PostgresAlphaBusinessRepository } from '../src/platform/persistence/alp
 import { readDatabaseConnectionConfig } from '../src/platform/persistence/config.ts';
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { PostgresErc8004Repository } from '../src/platform/persistence/erc8004-repository.ts';
+import { checkpointGIdentity } from '../src/modules/reference-economy/fixtures.ts';
 
 const buyerAgent: BusinessAgent = {
   agentPrincipalId: 'agt_ops_pilot_buyer_v1',
@@ -38,6 +39,15 @@ const observerAgent: BusinessAgent = {
   status: 'ACTIVE',
 };
 const identityId = 'aid_ops_pilot_buyer_arc_8004_v1' as const;
+const referenceEconomy = process.argv.includes('--reference-economy');
+const identityProfile = referenceEconomy
+  ? checkpointGIdentity
+  : {
+      agent: buyerAgent,
+      identityId,
+      metadataIdempotencyKey: '879f031d-6018-4241-94ef-b4152ca5c2ce',
+      registrationIdempotencyKey: '4d239f0d-28d8-42a7-b7f6-5f69fc3918c3',
+    };
 
 function requireAddress(value: string | null): `0x${string}` {
   if (value === null || !/^0x[0-9a-fA-F]{40}$/.test(value)) {
@@ -65,14 +75,14 @@ async function main(): Promise<void> {
     const rpc = new ArcErc8004Rpc();
     const summaries = await businesses.listBusinesses();
     const ownerAddress = requireAddress(
-      summaries.find(({ businessId }) => businessId === buyerAgent.businessId)?.address ?? null,
+      summaries.find(({ businessId }) => businessId === identityProfile.agent.businessId)?.address ?? null,
     );
 
-    await agents.ensureAgent(buyerAgent);
-    await agents.ensureAgent(observerAgent);
+    await agents.ensureAgent(identityProfile.agent);
+    if (!referenceEconomy) await agents.ensureAgent(observerAgent);
     let operation = await identities.ensureIdentity({
-      agentPrincipalId: buyerAgent.agentPrincipalId,
-      identityId,
+      agentPrincipalId: identityProfile.agent.agentPrincipalId,
+      identityId: identityProfile.identityId,
       ownerAddress,
       registry: arcErc8004,
     });
@@ -82,16 +92,16 @@ async function main(): Promise<void> {
         abiFunctionSignature: 'register()',
         abiParameters: [],
         contractAddress: arcErc8004.identityRegistryAddress,
-        idempotencyKey: '4d239f0d-28d8-42a7-b7f6-5f69fc3918c3',
-        referenceId: identityId,
+        idempotencyKey: identityProfile.registrationIdempotencyKey,
+        referenceId: identityProfile.identityId,
         sourceAddress: ownerAddress,
       });
       await identities.recordRegistrationSubmitted({
-        identityId,
+        identityId: identityProfile.identityId,
         providerTransactionId: submission.providerTransactionId,
       });
-      operation = await identities.getIdentity(identityId);
-      console.log(`erc8004_identity=${identityId} state=REGISTER_SUBMITTED`);
+      operation = await identities.getIdentity(identityProfile.identityId);
+      console.log(`erc8004_identity=${identityProfile.identityId} state=REGISTER_SUBMITTED`);
     }
 
     if (
@@ -105,12 +115,12 @@ async function main(): Promise<void> {
       }
       const outcome = await execution.observe(operation.registrationProviderTransactionId);
       if (outcome.state === 'PENDING') {
-        console.log(`erc8004_identity=${identityId} state=PENDING provider=${outcome.providerState}`);
+        console.log(`erc8004_identity=${identityProfile.identityId} state=PENDING provider=${outcome.providerState}`);
         return;
       }
       if (outcome.state !== 'COMPLETE' || outcome.transactionHash === undefined) {
         await identities.recordOutcome({
-          identityId,
+          identityId: identityProfile.identityId,
           providerState: outcome.providerState,
           state: outcome.state === 'FAILED' ? 'FAILED' : 'OUTCOME_UNKNOWN',
         });
@@ -119,13 +129,13 @@ async function main(): Promise<void> {
       const identity = await rpc.verifyRegistration({ ownerAddress, transactionHash: outcome.transactionHash });
       await identities.recordIdentityRegistered({
         identity,
-        identityId,
+        identityId: identityProfile.identityId,
         providerState: outcome.providerState,
         transactionHash: outcome.transactionHash,
       });
-      operation = await identities.getIdentity(identityId);
+      operation = await identities.getIdentity(identityProfile.identityId);
       console.log(
-        `erc8004_identity=${identityId} state=IDENTITY_REGISTERED agent_id=${identity.agentId} tx=${outcome.transactionHash}`,
+        `erc8004_identity=${identityProfile.identityId} state=IDENTITY_REGISTERED agent_id=${identity.agentId} tx=${outcome.transactionHash}`,
       );
     }
 
@@ -135,14 +145,14 @@ async function main(): Promise<void> {
       }
       const registrationUri = encodeRegistrationDataUri(
         buildErc8004RegistrationFile({
-          agent: buyerAgent,
+          agent: identityProfile.agent,
           identity: {
             ...operation.registry,
             agentId: operation.agentId,
             agentRegistry: operation.agentRegistry as `eip155:${number}:0x${string}`,
           },
           image: 'data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA2NCA2NCI+PHJlY3QgZmlsbD0iIzA4MGEwOSIgd2lkdGg9IjY0IiBoZWlnaHQ9IjY0Ii8+PHBhdGggZmlsbD0iI2M4ZmY1MiIgZD0iTTE2IDEwaDh2NDRoLTh6TTI4IDEwaDh2NDRoLTh6TTQwIDEwaDh2NDRoLTh6Ii8+PC9zdmc+',
-          serviceEndpoint: `inomasa://agent/${buyerAgent.agentPrincipalId}`,
+          serviceEndpoint: `inomasa://agent/${identityProfile.agent.agentPrincipalId}`,
           x402Support: true,
         }),
       );
@@ -150,17 +160,17 @@ async function main(): Promise<void> {
         abiFunctionSignature: 'setAgentURI(uint256,string)',
         abiParameters: [operation.agentId.toString(), registrationUri],
         contractAddress: arcErc8004.identityRegistryAddress,
-        idempotencyKey: '879f031d-6018-4241-94ef-b4152ca5c2ce',
-        referenceId: `${identityId}:metadata`,
+        idempotencyKey: identityProfile.metadataIdempotencyKey,
+        referenceId: `${identityProfile.identityId}:metadata`,
         sourceAddress: ownerAddress,
       });
       await identities.recordMetadataSubmitted({
-        identityId,
+        identityId: identityProfile.identityId,
         providerTransactionId: submission.providerTransactionId,
         registrationUri,
       });
-      operation = await identities.getIdentity(identityId);
-      console.log(`erc8004_identity=${identityId} state=METADATA_SUBMITTED`);
+      operation = await identities.getIdentity(identityProfile.identityId);
+      console.log(`erc8004_identity=${identityProfile.identityId} state=METADATA_SUBMITTED`);
     }
 
     if (
@@ -178,12 +188,12 @@ async function main(): Promise<void> {
       }
       const outcome = await execution.observe(operation.metadataProviderTransactionId);
       if (outcome.state === 'PENDING') {
-        console.log(`erc8004_identity=${identityId} state=PENDING provider=${outcome.providerState}`);
+        console.log(`erc8004_identity=${identityProfile.identityId} state=PENDING provider=${outcome.providerState}`);
         return;
       }
       if (outcome.state !== 'COMPLETE' || outcome.transactionHash === undefined) {
         await identities.recordOutcome({
-          identityId,
+          identityId: identityProfile.identityId,
           providerState: outcome.providerState,
           state: outcome.state === 'FAILED' ? 'FAILED' : 'OUTCOME_UNKNOWN',
         });
@@ -196,20 +206,20 @@ async function main(): Promise<void> {
         transactionHash: outcome.transactionHash,
       });
       await identities.recordVerified({
-        identityId,
+        identityId: identityProfile.identityId,
         providerState: outcome.providerState,
         transactionHash: outcome.transactionHash,
         verifiedAt: new Date().toISOString(),
       });
-      operation = await identities.getIdentity(identityId);
+      operation = await identities.getIdentity(identityProfile.identityId);
     }
 
     if (operation.state !== 'VERIFIED') {
       throw new Error(`ERC-8004 identity is not verified from state ${operation.state}.`);
     }
-    await identities.ensureVerifiedEvidence(identityId);
+    await identities.ensureVerifiedEvidence(identityProfile.identityId);
     console.log(
-      `erc8004_identity=${identityId} state=VERIFIED registry=${operation.agentRegistry} agent_id=${operation.agentId} provenance=${operation.provenance}`,
+      `erc8004_identity=${identityProfile.identityId} state=VERIFIED registry=${operation.agentRegistry} agent_id=${operation.agentId} provenance=${operation.provenance}`,
     );
   } finally {
     await persistence.close();

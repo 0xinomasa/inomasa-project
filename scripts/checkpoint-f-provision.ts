@@ -19,9 +19,17 @@ async function main(): Promise<void> {
     const adapter = new CircleCapitalExecutionAdapter(circleConfig);
     const pending = await repository.listPendingAccounts();
     for (const account of pending) {
+      const idempotencyKeys: Readonly<Record<string, string>> = {
+        cpa_northstar_v1: 'bc09a0a7-6a7f-4b98-8531-828d191b6e94',
+        cpa_reference_seed_v1: 'db3c65b3-facb-405c-baf9-214d2da9815d',
+      };
+      const idempotencyKey = idempotencyKeys[account.providerAccountId];
+      if (idempotencyKey === undefined) {
+        throw new Error(`No reviewed Capital account provisioning profile exists for ${account.providerAccountId}.`);
+      }
       const wallet = await adapter.provisionCapitalAccount({
         displayName: account.displayName,
-        idempotencyKey: 'bc09a0a7-6a7f-4b98-8531-828d191b6e94',
+        idempotencyKey,
         providerId: account.providerId,
       });
       await repository.activateProviderAccount({

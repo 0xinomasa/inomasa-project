@@ -19,6 +19,9 @@ modular monolith:
 - `capital/` owns provider-specific mandates and decisions, Business acceptance,
   bounded allocation semantics, and the rule that Capital is never Revenue or
   automatic entitlement.
+- `reference-economy/` owns the bounded Checkpoint G proof population and its
+  cross-module fixture identifiers. It contains no reusable Business, commerce,
+  Agent, or Capital policy and does not define product capacity.
 
 These folders are implementation ownership boundaries, not microservices and not a
 mechanical copy of the active Concept & Architecture layers. Current Business and
