@@ -12,8 +12,13 @@ import {
 } from '../src/platform/persistence/gateway-x402-repository.ts';
 
 const baseUrl = process.env['INOMASA_ALPHA_BASE_URL']?.trim() ?? 'http://127.0.0.1:3000';
-const paymentId = 'pay_arc_snapshot_x402_v1' as const;
-const offerId = 'off_arc_snapshot_x402_v1' as const;
+const referenceEconomy = process.argv.includes('--reference-economy');
+const paymentId = referenceEconomy
+  ? ('pay_reference_arc_snapshot_x402_v1' as const)
+  : ('pay_arc_snapshot_x402_v1' as const);
+const offerId = referenceEconomy
+  ? ('off_reference_arc_snapshot_x402_v1' as const)
+  : ('off_arc_snapshot_x402_v1' as const);
 
 async function proveResource(input: {
   readonly paymentPayload: NonNullable<Awaited<ReturnType<PostgresGatewayX402Repository['getPayment']>>['paymentPayload']>;
@@ -73,20 +78,20 @@ async function main(): Promise<void> {
       throw new Error('x402 HTTP proof requires the completed committed Alpha payment.');
     }
 
-    const [legacy, generic] = await Promise.all([
-      proveResource({
-        paymentPayload: stored.paymentPayload,
-        paymentRequired: stored.paymentRequired,
-        resourceUrl: `${baseUrl}/api/alpha/services/arc-market-snapshot?paymentId=${paymentId}`,
-      }),
-      proveResource({
-        paymentPayload: stored.paymentPayload,
-        paymentRequired: stored.paymentRequired,
-        resourceUrl: `${baseUrl}/api/alpha/services/${offerId}?paymentId=${paymentId}`,
-      }),
-    ]);
+    const generic = await proveResource({
+      paymentPayload: stored.paymentPayload,
+      paymentRequired: stored.paymentRequired,
+      resourceUrl: `${baseUrl}/api/alpha/services/${offerId}?paymentId=${paymentId}`,
+    });
+    const legacy = referenceEconomy
+      ? null
+      : await proveResource({
+          paymentPayload: stored.paymentPayload,
+          paymentRequired: stored.paymentRequired,
+          resourceUrl: `${baseUrl}/api/alpha/services/arc-market-snapshot?paymentId=${paymentId}`,
+        });
     console.log(
-      `x402_http challenge=402 legacy=200 generic=200 payment=${generic.paymentId} offer=${generic.offerId} settlement=${generic.settlementState} execution=${legacy.executionId}`,
+      `x402_http challenge=402 legacy=${legacy === null ? 'NOT_APPLICABLE' : '200'} generic=200 payment=${generic.paymentId} offer=${generic.offerId} settlement=${generic.settlementState} execution=${generic.executionId ?? legacy?.executionId}`,
     );
   } finally {
     await persistence.close();

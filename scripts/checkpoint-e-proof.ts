@@ -132,6 +132,7 @@ async function main(): Promise<void> {
     const businesses = await database
       .selectFrom('businesses')
       .select(['business_id', 'slug'])
+      .where('business_id', 'in', ['biz_checkpoint_b_api_proof_a9f2e7fabf34', 'biz_ops_pilot', 'biz_signal_forge'])
       .execute();
     const activityCountsByBusiness = Object.fromEntries(
       await Promise.all(

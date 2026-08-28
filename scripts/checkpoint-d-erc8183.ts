@@ -19,14 +19,35 @@ import {
   PostgresErc8183Repository,
 } from '../src/platform/persistence/erc8183-repository.ts';
 
-const jobId = 'job_commerce_readiness_8183_v1' as const;
-const obligationId = 'obl_commerce_readiness_8183_v1' as const;
-const settlementId = 'set_commerce_readiness_8183_v1' as const;
-const serviceExecutionId = 'svc_commerce_readiness_8183_v1' as const;
+const referenceEconomy = process.argv.includes('--reference-economy');
+const profile = referenceEconomy
+  ? {
+      clientBusinessId: 'biz_reference_workbench' as const,
+      executionIds: {
+        APPROVE: { idempotencyKey: '0b5e7462-8e42-4d5c-b9d6-16ee0c42d28a', operationId: 'jop_reference_8183_approve_v1' as const },
+        COMPLETE: { idempotencyKey: '2143feb4-d230-407e-b7ba-77a986bb62a5', operationId: 'jop_reference_8183_complete_v1' as const },
+        CREATE: { idempotencyKey: '2021b351-0542-46c6-96ed-80e98f18c399', operationId: 'jop_reference_8183_create_v1' as const },
+        FUND: { idempotencyKey: 'cbaf4044-7d9b-42a4-af45-5005761963b5', operationId: 'jop_reference_8183_fund_v1' as const },
+        SET_BUDGET: { idempotencyKey: 'ba42a6bb-d354-4b25-8dd3-f8ce88194610', operationId: 'jop_reference_8183_budget_v1' as const },
+        SUBMIT: { idempotencyKey: '416ce9e4-e7dd-4ecb-a58f-b9d194d4d2b4', operationId: 'jop_reference_8183_submit_v1' as const },
+      },
+      jobId: 'job_reference_economy_8183_v1' as const,
+      obligationId: 'obl_reference_economy_8183_v1' as const,
+      offer: alphaServiceCatalog.referenceEvaluatedWork.offer,
+      providerBusinessId: 'biz_reference_signal' as const,
+      serviceExecutionId: 'svc_reference_economy_8183_v1' as const,
+      settlementId: 'set_reference_economy_8183_v1' as const,
+      settlementIdempotencyKey: 'ea542c7b-cf9b-4a93-88d2-fc076a48d653',
+    }
+  : null;
+const jobId = profile?.jobId ?? ('job_commerce_readiness_8183_v1' as const);
+const obligationId = profile?.obligationId ?? ('obl_commerce_readiness_8183_v1' as const);
+const settlementId = profile?.settlementId ?? ('set_commerce_readiness_8183_v1' as const);
+const serviceExecutionId = profile?.serviceExecutionId ?? ('svc_commerce_readiness_8183_v1' as const);
 const expiredAt = '2026-09-30T00:00:00.000Z';
 const zeroBytes = '0x';
 
-const executionIds = {
+const baselineExecutionIds = {
   APPROVE: {
     idempotencyKey: '86b58566-5008-408e-b459-770155ab1ad1',
     operationId: 'jop_commerce_readiness_8183_approve_v1',
@@ -52,6 +73,7 @@ const executionIds = {
     operationId: 'jop_commerce_readiness_8183_submit_v1',
   },
 } as const;
+const executionIds = profile?.executionIds ?? baselineExecutionIds;
 
 function requireAddress(value: string | null, label: string): `0x${string}` {
   if (value === null || !/^0x[0-9a-fA-F]{40}$/.test(value)) {
@@ -152,8 +174,8 @@ async function main(): Promise<void> {
     const jobs = new PostgresErc8183Repository(persistence);
     const execution = new CircleContractExecutionAdapter(circleConfig);
     const rpc = new ArcErc8183Rpc();
-    const provider = await businesses.getBusiness('biz_signal_forge');
-    const client = await businesses.getBusiness('biz_ops_pilot');
+    const provider = await businesses.getBusiness(profile?.providerBusinessId ?? 'biz_signal_forge');
+    const client = await businesses.getBusiness(profile?.clientBusinessId ?? 'biz_ops_pilot');
     const bindings = await persistence.databaseForApplication
       .withSchema(applicationSchema)
       .selectFrom('treasury_bindings')
@@ -171,10 +193,10 @@ async function main(): Promise<void> {
     }
     const clientAddress = requireAddress(clientBinding.address, 'ERC-8183 client');
     const providerAddress = requireAddress(providerBinding.address, 'ERC-8183 provider');
-    const offer = alphaServiceCatalog.commerceReadinessJob.offer;
+    const offer = profile?.offer ?? alphaServiceCatalog.commerceReadinessJob.offer;
     const obligation = acceptServiceOffer({ buyer: client, offer, obligationId, provider });
     const settlement = authorizeSettlement({
-      idempotencyKey: 'c8d0a73d-c972-4619-8e2c-38f03faef007',
+      idempotencyKey: profile?.settlementIdempotencyKey ?? 'c8d0a73d-c972-4619-8e2c-38f03faef007',
       obligation,
       provider: 'ERC8183',
       settlementId,
@@ -329,10 +351,12 @@ async function main(): Promise<void> {
 
     const deliverableOutput = {
       chainId: arcErc8183.chainId,
-      conclusion: 'Arc commerce capability is ready for bounded testnet execution.',
+      conclusion: referenceEconomy
+        ? 'The fresh reference economy composed bounded Arc commerce primitives.'
+        : 'Arc commerce capability is ready for bounded testnet execution.',
       jobId,
       provenance: 'COMMON_CONTROL_TEST',
-      scope: 'commerce-readiness-brief',
+      scope: referenceEconomy ? 'reference-economy-brief' : 'commerce-readiness-brief',
     } as const;
     const deliverable = JSON.stringify(deliverableOutput);
     const deliverableHash = keccak256(toBytes(deliverable));
@@ -419,7 +443,7 @@ async function main(): Promise<void> {
 
     job = await jobs.getJob(jobId);
     console.log(
-      `checkpoint_d_erc8183=PASS job=${job.jobId} protocol_job=${job.protocolJobId} state=${job.protocolStatus} amount_micro_usdc=${job.budgetMicroUsdc} deliverable=${job.deliverableHash} provenance=${job.provenance}`,
+      `${referenceEconomy ? 'checkpoint_g_erc8183' : 'checkpoint_d_erc8183'}=PASS job=${job.jobId} protocol_job=${job.protocolJobId} state=${job.protocolStatus} amount_micro_usdc=${job.budgetMicroUsdc} deliverable=${job.deliverableHash} provenance=${job.provenance}`,
     );
   } finally {
     await persistence.close();

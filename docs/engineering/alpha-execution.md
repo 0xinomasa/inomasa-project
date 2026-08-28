@@ -738,6 +738,111 @@ Acceptance evidence: pull request `#32`, final head `3c347eaf0547d187dfa75368364
 PR verification run `33151927079`, merge `3a789f6b752808d790f121dc5ab5e46828964231`,
 and accepted-main run `33152100522` completed successfully.
 
+## Checkpoint G selected reference-economy route
+
+Status: `IMPLEMENTED / PROVEN LOCALLY / ACCEPTANCE PENDING`. This does not make G
+accepted; final acceptance belongs to `PROJECT_STATE.md` only after merge and
+accepted-main CI are observed.
+
+The reference economy is a bounded proof population over the accepted generic
+Business, Agent, commerce, Economic History, and Capital capabilities. It creates
+four fresh common-control users and Businesses spanning the four BUILD templates,
+four Business-related Agents, and two fresh Capital Providers. Reference Workbench
+is the common Business composition point: its verified ERC-8004 buyer Agent buys a
+machine resource through x402, the Business commissions evaluated work through
+ERC-8183, two Providers inspect the resulting immutable history under distinct
+mandates, and an accepted allocation funds a later direct Arc service obligation.
+
+Fresh fixture Treasuries and the approving Provider use new Circle
+Developer-Controlled EOA accounts. Bounded starter transfers originate from the
+already accepted Northstar common-control test account and are explicitly
+`OPERATIONAL_TEST_SETUP`; they are verified on Arc but are not inserted as Revenue,
+commerce, Capital, independent demand, or Provider performance. All offers and
+external operations use stable identifiers and provider idempotency keys. Existing
+Checkpoint C/D/F scripts retain their baseline defaults and select the reference
+profile only through an explicit execution flag, preserving replay and regression
+truth rather than copying a second protocol implementation.
+
+Need, alternatives, consequences, cost/lock-in, and reversibility:
+
+- REV2 requires a fresh population that proves composition rather than treating
+  Signal Forge and Ops Pilot as the product model. Reusing only the old fixtures
+  would prove regression, not generic population or composition;
+- a synthetic database-only population would prove model breadth but not the
+  external protocol path. The selected route performs fresh Arc/ERC-8004,
+  Gateway x402, ERC-8183, direct USDC, and Capital operations while retaining
+  explicit common-control provenance;
+- separate one-off protocol adapters were rejected because they would duplicate
+  the accepted recovery and verification logic. Explicit profiles reuse the same
+  adapters and persistence boundaries, so G also exercises genericity;
+- no production dependency, hosted service, contract, custody profile, or schema
+  is added. The bounded cost is testnet USDC and provider/API calls across four EOA
+  Treasuries plus one Provider EOA. Circle/Arc lock-in remains confined to the
+  accepted platform adapters and is reversible by replacing those adapters after
+  equivalent registry, receipt, transfer, replay, and account-assurance proof;
+- the reference population is a control specimen. It does not authorize public
+  access, independent-demand claims, Production Capital, mainnet, hooks/fees,
+  unrestricted Agent authority, or live MIGRATE.
+
+Current primary sources rechecked on 28 August 2026 for this execution:
+
+- Arc Testnet connection, chain ID, RPC, explorer, and USDC registry:
+  https://docs.arc.io/arc/references/connect-to-arc and
+  https://docs.arc.io/arc/references/contract-addresses
+- Arc ERC-8004 registry deployments and AgenticCommerce ERC-8183 tutorial/profile:
+  https://docs.arc.io/build/agentic-economy and
+  https://docs.arc.io/arc/tutorials/create-your-first-erc-8183-job
+- ERC-8004 registration/identity semantics and ERC-8183 job-state semantics:
+  https://eips.ethereum.org/EIPS/eip-8004 and
+  https://eips.ethereum.org/EIPS/eip-8183
+- Circle Developer-Controlled EOA provisioning/transfer and Gateway Nanopayments
+  buyer/seller flow:
+  https://developers.circle.com/wallets/dev-controlled/create-your-first-wallet,
+  https://developers.circle.com/wallets/dev-controlled/transfer-tokens-across-wallets,
+  https://developers.circle.com/gateway/nanopayments/quickstarts/buyer, and
+  https://developers.circle.com/gateway/nanopayments/quickstarts/seller
+- x402 v2 protocol specification:
+  https://github.com/x402-foundation/x402/blob/main/specs/x402-specification-v2.md
+
+Observed pre-acceptance Checkpoint G proof on 28 August 2026:
+
+- four fresh users and Businesses span `api-data-compute`, `saas-micro-saas`,
+  `agent-as-a-service`, and `web3-native-digital`; four fresh Agents and two fresh
+  Capital Providers remain explicitly `COMMON_CONTROL_TEST`;
+- three exact setup transfers (`0.600000`, `0.100000`, and `0.500000` USDC) were
+  independently verified at Arc blocks `59244818`, `59244826`, and `59244833` and
+  remained outside economic entries as `OPERATIONAL_TEST_SETUP`;
+- Reference Workbench buyer Agent registered as ERC-8004 Agent `886972` in
+  transaction `0x31c76acf21dbfb2bc1e5d20b23a613d9ba6cff1bfd60cb6bbd450bd1ca661a35`;
+  metadata transaction
+  `0x25c7fd38be6b05cebef2cdc20d64e179b38181442f5f542ba033f65e16533078`
+  was owner/tokenURI verified;
+- the identity-bound x402 purchase completed exact `0.010000` USDC with Gateway
+  receipt `3d36d42a-5cfb-4f53-8012-a428514ba56b`; its generic HTTP resource returned
+  the committed `402` challenge and paid `200` response, while no direct
+  per-payment Arc transaction was claimed;
+- ERC-8183 job `182143` completed exact `0.050000` USDC through six unique Arc
+  lifecycle transactions. Funding was
+  `0x04c737a928069d57ff6d8cf6e9f5deb2c9cbf47a83c3e61c907fcdedd79af776`
+  and completion/payout was
+  `0x0e81736d4c863b3beca997beb11384830dd7e9c71b0bad348edfa43638521093`;
+- both fresh Providers inspected the same material digest over two complete
+  commerce Activities totaling `0.060000`; the common-control mandate approved
+  and the independent-only mandate declined. The accepted exact `0.200000`
+  allocation completed in
+  `0xd5efd5fb98e2d5269a03d37c5f8f4252d1598a86a6343937f4bacf743a2777ac`,
+  block `59273457`;
+- the linked later-use service completed exact `0.100000` in transaction
+  `0xff07c68236c84f233d6c853ff2c0d81285d97c7edbfb4c76002a53e0feeaf4a4`;
+  final Reference Workbench history contains three complete commerce Activities
+  totaling `0.160000` and one separate complete Capital Activity of `0.200000`;
+- full replay retained all provider transactions, chain transactions, job ID,
+  Agent ID, receipts, and deliveries. Final allocation and settlement resubmits
+  failed closed. Baseline E/F proofs, npm audit, lint, typecheck, 56/56 tests,
+  production build, migrations `001`-`011`, database write/read/rollback, baseline
+  and reference x402 HTTP proof, and production-browser desktop/mobile checks
+  passed with zero console warnings/errors and no 390-pixel overflow.
+
 ## Completed external proof sequence
 
 All eleven steps below were observed successfully on 25 August 2026. They remain

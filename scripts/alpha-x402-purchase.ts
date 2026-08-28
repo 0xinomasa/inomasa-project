@@ -17,25 +17,49 @@ import { PostgresGatewayX402Repository } from '../src/platform/persistence/gatew
 
 const agentPrincipalId = 'agt_ops_pilot_buyer_v1' as const;
 const checkpointC = process.argv.includes('--erc8004');
-const authorizationId = checkpointC
+const referenceEconomy = process.argv.includes('--reference-economy');
+const identityBound = checkpointC || referenceEconomy;
+const profile = referenceEconomy
+  ? {
+      agentDisplayName: 'Reference Workbench Buyer Agent',
+      agentCapabilities: ['purchase-service', 'commission-evaluated-work'] as const,
+      agentPrincipalId: 'agt_reference_workbench_buyer_v1' as const,
+      agentRole: 'BUYER_AND_JOB_CLIENT',
+      authorizationId: 'xau_reference_arc_snapshot_x402_v1' as const,
+      buyerBusinessId: 'biz_reference_workbench' as const,
+      decisionId: 'dec_reference_arc_snapshot_x402_v1' as const,
+      grantId: 'grt_reference_workbench_x402_v1' as const,
+      grantorPrincipalId: 'usr_reference_workbench' as const,
+      idempotencyKey: 'b80aca7c-9aba-4cbc-9827-32c6ea2ef177',
+      identityId: 'aid_reference_workbench_buyer_arc_8004_v1' as const,
+      intentId: 'int_reference_arc_snapshot_x402_v1' as const,
+      obligationId: 'obl_reference_arc_snapshot_x402_v1' as const,
+      offer: alphaServiceCatalog.referenceMachineResource.offer,
+      paymentId: 'pay_reference_arc_snapshot_x402_v1' as const,
+      providerBusinessId: 'biz_reference_signal' as const,
+      settlementId: 'set_reference_arc_snapshot_x402_v1' as const,
+      softwareVersion: 'reference-buyer@1',
+    }
+  : null;
+const authorizationId = profile?.authorizationId ?? (checkpointC
   ? ('xau_arc_snapshot_x402_8004_v1' as const)
-  : ('xau_arc_snapshot_x402_v1' as const);
-const decisionId = checkpointC
+  : ('xau_arc_snapshot_x402_v1' as const));
+const decisionId = profile?.decisionId ?? (checkpointC
   ? ('dec_arc_snapshot_x402_8004_v1' as const)
-  : ('dec_arc_snapshot_x402_v1' as const);
-const grantId = 'grt_ops_pilot_x402_v1' as const;
-const intentId = checkpointC
+  : ('dec_arc_snapshot_x402_v1' as const));
+const grantId = profile?.grantId ?? ('grt_ops_pilot_x402_v1' as const);
+const intentId = profile?.intentId ?? (checkpointC
   ? ('int_arc_snapshot_x402_8004_v1' as const)
-  : ('int_arc_snapshot_x402_v1' as const);
-const obligationId = checkpointC
+  : ('int_arc_snapshot_x402_v1' as const));
+const obligationId = profile?.obligationId ?? (checkpointC
   ? ('obl_arc_snapshot_x402_8004_v1' as const)
-  : ('obl_arc_snapshot_x402_v1' as const);
-const paymentId = checkpointC
+  : ('obl_arc_snapshot_x402_v1' as const));
+const paymentId = profile?.paymentId ?? (checkpointC
   ? ('pay_arc_snapshot_x402_8004_v1' as const)
-  : ('pay_arc_snapshot_x402_v1' as const);
-const settlementId = checkpointC
+  : ('pay_arc_snapshot_x402_v1' as const));
+const settlementId = profile?.settlementId ?? (checkpointC
   ? ('set_arc_snapshot_x402_8004_v1' as const)
-  : ('set_arc_snapshot_x402_v1' as const);
+  : ('set_arc_snapshot_x402_v1' as const));
 
 function requireAddress(value: string | null, label: string): `0x${string}` {
   if (value === null || !/^0x[0-9a-fA-F]{40}$/.test(value)) {
@@ -61,8 +85,8 @@ async function main(): Promise<void> {
   const payments = new PostgresGatewayX402Repository(persistence);
 
   try {
-    const provider = await businesses.getBusiness('biz_signal_forge');
-    const buyer = await businesses.getBusiness('biz_ops_pilot');
+    const provider = await businesses.getBusiness(profile?.providerBusinessId ?? 'biz_signal_forge');
+    const buyer = await businesses.getBusiness(profile?.buyerBusinessId ?? 'biz_ops_pilot');
     const summaries = await businesses.listBusinesses();
     const payerAddress = requireAddress(
       summaries.find((business) => business.businessId === buyer.businessId)?.address ?? null,
@@ -73,7 +97,7 @@ async function main(): Promise<void> {
       'Signal Forge',
     );
     const gateway = new CircleGatewayX402Adapter(circleConfig, payerAddress);
-    const offer: ServiceOffer = alphaServiceCatalog.arcMarketSnapshotX402.offer;
+    const offer: ServiceOffer = profile?.offer ?? alphaServiceCatalog.arcMarketSnapshotX402.offer;
     const grant: StandingPurchaseAuthorityGrant = {
       actionType: 'PURCHASE_SERVICE',
       allowedCounterpartyBusinessId: provider.businessId,
@@ -86,10 +110,10 @@ async function main(): Promise<void> {
       delegationAllowed: false,
       environment: databaseConfig.environment,
       expiresAt: '2026-09-05T00:00:00.000Z',
-      granteePrincipalId: agentPrincipalId,
+      granteePrincipalId: profile?.agentPrincipalId ?? agentPrincipalId,
       grantId,
       grantVersion: 1,
-      grantorPrincipalId: 'usr_alpha_operator',
+      grantorPrincipalId: profile?.grantorPrincipalId ?? 'usr_alpha_operator',
       maxPerActionMicroUsdc: offer.priceMicroUsdc,
       representedBusinessId: buyer.businessId,
       status: 'ACTIVE',
@@ -97,14 +121,14 @@ async function main(): Promise<void> {
     };
     await authorities.ensureAgentAndGrant({
       agentBusinessId: buyer.businessId,
-      agentCapabilities: ['purchase-service'],
-      agentDisplayName: 'Ops Pilot Buyer Agent',
-      agentPrincipalId,
-      agentRole: 'BUYER_AGENT',
+      agentCapabilities: profile?.agentCapabilities ?? ['purchase-service'],
+      agentDisplayName: profile?.agentDisplayName ?? 'Ops Pilot Buyer Agent',
+      agentPrincipalId: profile?.agentPrincipalId ?? agentPrincipalId,
+      agentRole: profile?.agentRole ?? 'BUYER_AGENT',
       grant,
       providerOfRecordPrincipalId: buyer.businessId,
       runtimeClass: 'OPERATOR_INVOKED',
-      softwareVersion: 'deterministic-buyer@1',
+      softwareVersion: profile?.softwareVersion ?? 'deterministic-buyer@1',
     });
 
     let payment;
@@ -132,15 +156,17 @@ async function main(): Promise<void> {
         authorityDomainBusinessId: buyer.businessId,
         counterpartyBusinessId: provider.businessId,
         environment: databaseConfig.environment,
-        ...(checkpointC ? { erc8004IdentityId: 'aid_ops_pilot_buyer_arc_8004_v1' as const } : {}),
+        ...(identityBound
+          ? { erc8004IdentityId: profile?.identityId ?? ('aid_ops_pilot_buyer_arc_8004_v1' as const) }
+          : {}),
         grantId,
         intentId,
         offerId: offer.offerId,
-        purpose: checkpointC
+        purpose: identityBound
           ? 'Use the verified ERC-8004 identity for one bounded x402 economic action.'
           : 'Buy a machine-priced Arc operating snapshot through x402.',
         requestedAt,
-        requesterPrincipalId: agentPrincipalId,
+        requesterPrincipalId: profile?.agentPrincipalId ?? agentPrincipalId,
         representedBusinessId: buyer.businessId,
       };
       const obligation = acceptServiceOffer({
@@ -155,9 +181,9 @@ async function main(): Promise<void> {
         provider,
       });
       const settlement = authorizeSettlement({
-        idempotencyKey: checkpointC
+        idempotencyKey: profile?.idempotencyKey ?? (checkpointC
           ? 'fe42eebc-a224-4ed4-b9b7-6df3dfe14fb0'
-          : 'b9849b77-0ee3-4d82-bde7-849ca822b18e',
+          : 'b9849b77-0ee3-4d82-bde7-849ca822b18e'),
         obligation,
         provider: 'CIRCLE_GATEWAY_X402',
         settlementId,
