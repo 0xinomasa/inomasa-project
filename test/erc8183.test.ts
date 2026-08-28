@@ -17,11 +17,16 @@ import { canonicalJson } from '../src/shared/canonical-json.ts';
 test('transaction shape selects x402 for instant resources and ERC-8183 for evaluated work', () => {
   assert.equal(selectCommerceProtocol({ requiresDeliverableEvaluation: false }), 'X402');
   assert.equal(selectCommerceProtocol({ requiresDeliverableEvaluation: true }), 'ERC8183');
+  assert.equal(alphaServiceCatalog.capitalFundedArcSnapshot.protocol, 'ARC_USDC');
   assert.equal(alphaServiceCatalog.arcMarketSnapshotX402.protocol, 'X402');
   assert.equal(alphaServiceCatalog.commerceReadinessJob.protocol, 'ERC8183');
   assert.equal(
     serviceCapabilityForOffer('off_arc_snapshot_x402_v1')?.resourcePath,
     '/api/alpha/services/off_arc_snapshot_x402_v1',
+  );
+  assert.equal(
+    serviceCapabilityForOffer('off_capital_funded_snapshot_v1')?.deliveryKind,
+    'ARC_NETWORK_SNAPSHOT',
   );
   assert.equal(serviceCapabilityForOffer('off_unknown'), null);
 });

@@ -659,8 +659,9 @@ new nonce.
 
 ## Checkpoint F selected implementation route
 
-Status: `IMPLEMENTED / EXTERNAL PROOF PENDING` until the controlled allocation,
-later economic use, full regression, and accepted-main evidence are observed.
+Status: `IMPLEMENTED / PRIVATE-TESTNET VERIFIED / ACCEPTANCE PENDING`. The
+controlled allocation, later economic use, and replay/regression proof have been
+observed; PR, CI, review, merge, and accepted-main evidence remain required.
 
 Generic CAPITAL is represented by reusable Provider, mandate, review, decision,
 dedicated execution-account, allocation, and later-use records. Multiple Providers
@@ -704,6 +705,34 @@ Current primary sources reviewed for execution:
 Circle's public faucet is an external funding dependency for the dedicated Provider
 EOA. Testnet faucet funding is operational setup, not Business revenue, independent
 demand, Provider performance, or a Capital allocation itself.
+
+Observed Checkpoint F proof on 28 August 2026:
+
+- two Provider-specific paths consumed the same immutable operating-history
+  material (`5` complete commerce Activities, exact `0.420000` USDC); Northstar
+  approved exact `0.200000` while the independent-only mandate declined it;
+- the controller-accepted allocation completed in Arc transaction
+  `0xadb90f8da6f304ddf36291c93c68e088db6adbcc6d4f71eb21c4eccfc107d35f`,
+  block `59239291`, and produced one `CAPITAL / INFLOW` entry with no Revenue;
+- bounded later use exact `0.100000` completed in Arc transaction
+  `0xe729821842011bc56d1a4f3a43f15ca3e331f41d746d3877fe72d1f03d1666eb`;
+  paid delivery completed from Arc block `59239769` with output digest
+  `c6dbabe7c90017b3ff5974040baef62a1a03d08f990888b6a0329a7132c657c2`;
+- final history contained seven complete Activities, exact commerce volume
+  `0.520000`, separate Capital volume `0.200000`, thirteen economic entries,
+  fourteen Evidence facts, and six service deliveries;
+- bootstrap/reconcile/use/delivery replay retained the stored material and
+  transactions; final-state allocation and settlement resubmission failed closed.
+- npm audit, lint, typecheck, 54/54 tests, production build, migrations `001`-`011`,
+  database proof, and Checkpoint E regression passed. Local production Home,
+  Business Workspace, Capital, and Founder/System renders showed the same counts,
+  separated volumes, and verified ArcScan target; the 390-pixel layout did not
+  overflow and the browser console had zero errors or warnings.
+
+All involved Businesses, Agents, Providers, demand, and funds remain controlled
+test fixtures with `COMMON_CONTROL_TEST` provenance. This evidence does not establish
+independent demand, investment performance, a legal Capital product, or Production
+authority.
 
 ## Completed external proof sequence
 

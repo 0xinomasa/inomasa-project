@@ -79,9 +79,15 @@ async function main(): Promise<void> {
     const history = new PostgresEconomicHistoryRepository(persistence);
     const capital = new PostgresCapitalRepository(persistence);
     const recipient = await businesses.getBusiness('biz_ops_pilot');
-    const summary = summarizeEconomicHistory(
-      await history.listActivities({ businessId: recipient.businessId }),
+    const observationCutoff = Date.parse(observedAt);
+    const decisionActivities = (
+      await history.listActivities({ businessId: recipient.businessId })
+    ).filter(
+      (activity) =>
+        activity.activityKind === 'COMMERCE' &&
+        activity.occurredAt.getTime() <= observationCutoff,
     );
+    const summary = summarizeEconomicHistory(decisionActivities);
     const material: CapitalDecisionMaterial = {
       businessId: recipient.businessId,
       businessTemplateId: recipient.templateId,
