@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 
 import { summarizeEconomicHistory } from '../src/modules/economic-history/model.ts';
+import { parseUsdcAmount } from '../src/modules/commerce/money.ts';
 import { checkpointGAgents, checkpointGBusinesses } from '../src/modules/reference-economy/fixtures.ts';
 import { ArcErc8004Rpc } from '../src/platform/arc/erc8004.ts';
 import { ArcErc8183Rpc } from '../src/platform/arc/erc8183.ts';
@@ -52,6 +53,58 @@ async function main(): Promise<void> {
     assert.equal(new Set(controllerRows.map(({ controller_principal_id }) => controller_principal_id)).size, 4);
     assert.equal(new Set(businessRows.map(({ template_id }) => template_id)).size, 4);
     assert.ok(businessRows.every(({ actor_classification }) => actor_classification === 'COMMON_CONTROL_TEST'));
+
+    const [setupSource, setupTreasuries, setupCapitalAccount] = await Promise.all([
+      database
+        .selectFrom('capital_provider_accounts')
+        .select('address')
+        .where('provider_account_id', '=', 'cpa_northstar_v1')
+        .where('status', '=', 'ACTIVE')
+        .executeTakeFirstOrThrow(),
+      database
+        .selectFrom('treasury_bindings')
+        .select(['address', 'business_id'])
+        .where('business_id', 'in', ['biz_reference_workbench', 'biz_reference_signal'])
+        .where('status', '=', 'ACTIVE')
+        .execute(),
+      database
+        .selectFrom('capital_provider_accounts')
+        .select('address')
+        .where('provider_account_id', '=', 'cpa_reference_seed_v1')
+        .where('status', '=', 'ACTIVE')
+        .executeTakeFirstOrThrow(),
+    ]);
+    assert.match(setupSource.address ?? '', /^0x[0-9a-f]{40}$/);
+    assert.match(setupCapitalAccount.address ?? '', /^0x[0-9a-f]{40}$/);
+    const workbenchAddress = setupTreasuries.find(
+      ({ business_id }) => business_id === 'biz_reference_workbench',
+    )?.address;
+    const signalAddress = setupTreasuries.find(
+      ({ business_id }) => business_id === 'biz_reference_signal',
+    )?.address;
+    assert.match(workbenchAddress ?? '', /^0x[0-9a-f]{40}$/);
+    assert.match(signalAddress ?? '', /^0x[0-9a-f]{40}$/);
+    const arcRpc = new ArcTestnetRpc();
+    await Promise.all([
+      arcRpc.verifyUsdcTransfer({
+        amountMicroUsdc: parseUsdcAmount('0.60'),
+        destinationAddress: workbenchAddress as `0x${string}`,
+        sourceAddress: setupSource.address as `0x${string}`,
+        transactionHash: '0x7301fb1853f6aaa3308206f2e3a9ddce3caa427e9c647e1e253e6fa7662416e7',
+      }),
+      arcRpc.verifyUsdcTransfer({
+        amountMicroUsdc: parseUsdcAmount('0.10'),
+        destinationAddress: signalAddress as `0x${string}`,
+        sourceAddress: setupSource.address as `0x${string}`,
+        transactionHash: '0x04fa322a74e0fe2f5a2dd7f6c12101f720f222f1e6e63b18d52b64cca839cf0f',
+      }),
+      arcRpc.verifyUsdcTransfer({
+        amountMicroUsdc: parseUsdcAmount('0.50'),
+        destinationAddress: setupCapitalAccount.address as `0x${string}`,
+        sourceAddress: setupSource.address as `0x${string}`,
+        transactionHash: '0x82c497171c0741db2ef1dc8f394b9855b65e25f16cb906630a4173b264fe49ff',
+      }),
+    ]);
 
     const identity = await identities.getIdentity('aid_reference_workbench_buyer_arc_8004_v1');
     assert.equal(identity.state, 'VERIFIED');
@@ -145,7 +198,7 @@ async function main(): Promise<void> {
     assert.equal(declined.allocationId, null);
     const allocation = await capital.getAllocationExecutionContext('cal_reference_workbench_seed_v1');
     assert.ok(approved.allocationTransactionHash !== null);
-    await new ArcTestnetRpc().verifyUsdcTransfer({
+    await arcRpc.verifyUsdcTransfer({
       amountMicroUsdc: allocation.amountMicroUsdc,
       destinationAddress: allocation.destinationAddress,
       sourceAddress: allocation.sourceAddress,
@@ -159,7 +212,7 @@ async function main(): Promise<void> {
       .executeTakeFirstOrThrow();
     assert.equal(laterUse.state, 'COMPLETE');
     assert.match(laterUseSettlement.transaction_hash ?? '', /^0x[0-9a-f]{64}$/);
-    await new ArcTestnetRpc().verifyUsdcTransfer({
+    await arcRpc.verifyUsdcTransfer({
       amountMicroUsdc: laterUse.amountMicroUsdc,
       destinationAddress: laterUse.destinationAddress,
       sourceAddress: laterUse.sourceAddress,
