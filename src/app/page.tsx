@@ -1,7 +1,9 @@
 import Link from 'next/link';
 
 import { Mark } from './_components/mark';
+import { EconomicActivityList } from './_components/economic-activity-list';
 import { loadAlphaDashboard } from './_alpha/dashboard';
+import { loadEconomicHistory } from './_economic-history/data';
 import { productPaths, shellNavigation } from './_shell/model';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../modules/commerce/money';
 
@@ -16,7 +18,10 @@ function displayUsdc(amountMicroUsdc: string): string {
 }
 
 export default async function Home() {
-  const dashboard = await loadAlphaDashboard();
+  const [dashboard, economy] = await Promise.all([
+    loadAlphaDashboard(),
+    loadEconomicHistory(),
+  ]);
   const latestCommerce = dashboard.commerce[0];
   const latestDelivery = dashboard.serviceDeliveries[0];
   const latestX402 = dashboard.x402Payments[0];
@@ -212,69 +217,46 @@ export default async function Home() {
       <section className="activity-section" id="activity">
         <div className="section-heading">
           <div>
-            <p className="eyebrow">Economic activity</p>
-            <h2>Obligation before revenue.</h2>
+            <p className="eyebrow">Home · Economy View</p>
+            <h2>Business activity, not a wall of hashes.</h2>
           </div>
           <p>
-            The Alpha records terms and authorization before a provider transfer. Revenue and
-            service cost remain absent until Circle state is reconciled against either an exact
-            Arc transfer receipt or a verified Gateway x402 settlement.
+            Each row reconstructs the Business, Agent when present, service or job, counterparty,
+            protocol, outcome, economic meaning, provenance, and scoped proof without counting
+            buyer cost and seller revenue as two separate transactions.
           </p>
         </div>
-
-        {dashboard.commerce.length === 0 ? (
-          <article className="activity-empty">
-            <span>NOT PREPARED</span>
-            <p>No service obligation exists in the connected environment.</p>
+        <div className="observability-summary" aria-label="Economy summary">
+          <article>
+            <span>ACTIVITIES</span>
+            <strong>{economy.summary.activityCount}</strong>
+            <small>{economy.state}</small>
           </article>
-        ) : (
-          <div className="activity-ledger">
-            {dashboard.commerce.map((activity) => (
-              <article key={activity.obligationId}>
-                <div>
-                  <span>{activity.obligationId}</span>
-                  <em>{activity.provenance.replaceAll('_', ' ')}</em>
-                </div>
-                <strong>{displayUsdc(activity.amountMicroUsdc)}</strong>
-                <dl>
-                  <div><dt>Buyer</dt><dd>{activity.buyerBusinessId}</dd></div>
-                  <div><dt>Seller</dt><dd>{activity.sellerBusinessId}</dd></div>
-                  <div><dt>Settlement</dt><dd>{activity.settlementState ?? 'NOT CREATED'}</dd></div>
-                  <div>
-                    <dt>Settlement rail</dt>
-                    <dd>{activity.provider?.replaceAll('_', ' ') ?? 'NOT SELECTED'}</dd>
-                  </div>
-                  <div>
-                    <dt>Settlement proof</dt>
-                    <dd>
-                      {activity.transactionHash !== null ? (
-                        <a
-                          href={`${dashboard.network.explorerUrl}/tx/${activity.transactionHash}`}
-                          rel="noreferrer"
-                          target="_blank"
-                        >
-                          Arc tx · {compactAddress(activity.transactionHash)}
-                        </a>
-                      ) : activity.providerTransactionId !== null ? (
-                        `Gateway receipt · ${activity.providerTransactionId}`
-                      ) : (
-                        'NOT OBSERVED'
-                      )}
-                    </dd>
-                  </div>
-                  <div>
-                    <dt>Paid service output</dt>
-                    <dd>
-                      {dashboard.serviceDeliveries.find(
-                        (delivery) => delivery.obligationId === activity.obligationId,
-                      )?.state ?? 'PENDING SETTLEMENT'}
-                    </dd>
-                  </div>
-                </dl>
-              </article>
-            ))}
-          </div>
-        )}
+          <article>
+            <span>COMPLETED VOLUME</span>
+            <strong>{displayUsdc(economy.summary.completedVolumeMicroUsdc)}</strong>
+            <small>ONE COUNT PER OBLIGATION</small>
+          </article>
+          <article>
+            <span>COMPLETE</span>
+            <strong>{economy.summary.statusCounts.COMPLETE}</strong>
+            <small>TERMINAL + RECONCILED</small>
+          </article>
+          <article>
+            <span>PENDING / UNKNOWN / FAILED</span>
+            <strong>
+              {economy.summary.statusCounts.PENDING} /{' '}
+              {economy.summary.statusCounts.OUTCOME_UNKNOWN} /{' '}
+              {economy.summary.statusCounts.FAILED}
+            </strong>
+            <small>DISTINCT STATES</small>
+          </article>
+        </div>
+        <EconomicActivityList activities={economy.activities} />
+        <div className="economy-drilldown">
+          <p>Need protocol counts, category totals, and system-wide status drill-down?</p>
+          <Link href="/system">Open Founder / System Dashboard →</Link>
+        </div>
       </section>
 
       <section className="evidence-section" id="x402">

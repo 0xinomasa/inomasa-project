@@ -344,6 +344,101 @@ Observed Checkpoint D implementation proof on 28 August 2026:
   `ce4136a2997f7b4483b1d8d2d51d791ba2d7b2bf`; and accepted-main run
   `33114924079` all completed successfully.
 
+## REV2 Checkpoint E Economic History execution profile
+
+This section records the selected Checkpoint E read model and its bounded local
+proof. Economic Activity is contextual observability over accepted economic and
+protocol facts; it is not a second ledger, a protocol-state clone, or a claim that
+common-control testnet activity is independent demand.
+
+Current primary sources were rechecked on 28 August 2026 before implementation:
+
+- Arc Testnet remains chain ID `5042002`, with ArcScan at
+  `https://testnet.arcscan.app`;
+- Arc's official connection and RPC references remain the registry authority for
+  chain identity and explorer routing. Only a syntactically valid Arc transaction,
+  address, or `arc-block:<number>` source can become a corresponding ArcScan link;
+- Circle Gateway x402 remains provider-reported at the per-payment boundary. Its
+  receipt must remain visible as a provider reference and must not be rendered as
+  a direct Arc transaction merely to produce an explorer link.
+
+Selected implementation:
+
+- `modules/economic-history` owns protocol-neutral contextual status, outcome,
+  protocol participation, and summary semantics. One obligation becomes one
+  Economic Activity even though exact accounting retains a seller Revenue entry
+  and buyer Service Cost entry;
+- a read-only PostgreSQL repository reconstructs each Activity from existing
+  Business, offer, obligation, settlement, x402, ERC-8004, ERC-8183, delivery,
+  Evidence, Agent, and economic-entry records. No migration, materialized activity
+  table, or duplicate write path was added;
+- conservative status precedence preserves `OUTCOME_UNKNOWN`, then `FAILED`, then
+  `PENDING`; only fully reconciled settlement and required delivery/job state can
+  become `COMPLETE`. Rejected or expired ERC-8183 work is terminal context only
+  after an observed refund and never becomes successful delivery;
+- Home exposes the system Economy view, each Business Workspace exposes activity
+  scoped to that Business and its counterparty/economic role, and `/system`
+  exposes Founder/System inventory, status, volume, protocol, and effect summaries;
+- protocol badges are derived per Activity. Technical proof is progressively
+  disclosed with source scope and verification class; application records,
+  provider receipts, and content digests remain plain references, while only real
+  Arc transaction/address/block references receive ArcScan links;
+- the completed-volume summary counts the obligation amount once. Revenue and
+  Service Cost category counts remain separately visible as accounting effects
+  without doubling the Activity or volume.
+
+Need, alternatives, consequences, cost/lock-in, and reversibility:
+
+- Checkpoint E requires a coherent economic history across the existing generic
+  Business, Agent, commerce, accounting, delivery, and Evidence boundaries. Keeping
+  this policy in the application composition root would couple UI routes to table
+  details; putting it in persistence would make infrastructure own economic
+  meaning. The bounded module plus read adapter preserves the repository boundary;
+- an append-only activity projection or external index could improve scale, but at
+  Alpha volume it would introduce synchronization, replay, migration, and truth
+  divergence risk without proof need. The selected join-based read model costs
+  several bounded queries and can later be replaced by a proven projection without
+  changing the Activity contract;
+- no dependency, vendor, hosted service, schema, or write-side behavior was added.
+  Lock-in is limited to the current PostgreSQL read adapter and ArcScan URL shape;
+  the domain model and UI consume provider-neutral Activity/proof types;
+- removal is reversible by deleting the read adapter and its three surfaces. The
+  accepted ledger, obligations, protocol operations, deliveries, Evidence, and
+  provider facts remain untouched;
+- public indexing, analytics claims, independent-demand claims, Production/mainnet,
+  Reputation inference, and Capital interpretation remain outside Checkpoint E.
+
+Primary sources:
+
+- https://docs.arc.io/arc/references/connect-to-arc
+- https://docs.arc.io/arc/references/rpc-endpoints
+- https://testnet.arcscan.app
+
+Observed local Checkpoint E proof on 28 August 2026:
+
+- five unique obligations reconstructed as five `COMPLETE` Activities with exact
+  non-doubled volume `0.420000 USDC` and `COMMON_CONTROL_TEST` provenance;
+- dynamic protocol counts: Arc USDC `5`, x402 `2`, ERC-8004 `1`, ERC-8183 `1`;
+- ten exact accounting effects remain visible as five Revenue and five Service
+  Cost entries; system inventory remains three Businesses, two Agents, eleven
+  Evidence facts, and five deliveries;
+- both x402 Activities expose provider-reported settlement receipts and no direct
+  settlement Arc transaction; the identity-bound payment may independently expose
+  its real ERC-8004 Arc transaction;
+- ERC-8183 job `182088` exposes six unique Arc lifecycle transactions plus its
+  contract, application delivery source, and content digest;
+- both fixture Businesses see five scoped Activities and generic Checkpoint B
+  proof Business sees zero, demonstrating empty-history behavior without inventing
+  commerce;
+- `npm run alpha:checkpoint-e:proof`, lint, typecheck, and 48/48 tests passed.
+- the accepted Ubuntu Proot Playwright wrapper opened the local production Home,
+  Ops Pilot Workspace, generic empty-history Business, and System Dashboard. It
+  observed the expected counts and dynamic badges, opened proof disclosure, found
+  no horizontal overflow at 390 CSS pixels, and reported zero console errors or
+  warnings after the application icon was added;
+- PR/CI/accepted-main and protected Preview evidence are recorded only after
+  observed.
+
 ## Exact Arc registry
 
 - network: Arc Testnet only;
