@@ -20,6 +20,7 @@
     "alpha:checkpoint-c:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-c-proof.ts",
     "alpha:checkpoint-d:erc8183": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-d-erc8183.ts",
     "alpha:checkpoint-d:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-d-proof.ts",
+    "alpha:checkpoint-e:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/checkpoint-e-proof.ts",
     "alpha:execute-service": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-execute-service.ts",
     "alpha:gateway-fund": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-gateway-fund.ts",
     "alpha:prepare-commerce": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-prepare-commerce.ts",

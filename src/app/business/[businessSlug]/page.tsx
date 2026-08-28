@@ -3,7 +3,9 @@ import Link from 'next/link';
 import { notFound } from 'next/navigation';
 
 import { Mark } from '../../_components/mark';
+import { EconomicActivityList } from '../../_components/economic-activity-list';
 import { loadBusinessAgents, loadBusinessSite } from '../../_business/site';
+import { loadBusinessEconomicHistory } from '../../_economic-history/data';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../../modules/commerce/money';
 
 export const dynamic = 'force-dynamic';
@@ -34,9 +36,10 @@ export async function generateMetadata({ params }: BusinessSitePageProps): Promi
 
 export default async function BusinessSitePage({ params }: BusinessSitePageProps) {
   const { businessSlug } = await params;
-  const [site, agents] = await Promise.all([
+  const [site, agents, history] = await Promise.all([
     loadBusinessSite(businessSlug),
     loadBusinessAgents(businessSlug),
+    loadBusinessEconomicHistory(businessSlug),
   ]);
 
   if (site === undefined) {
@@ -161,6 +164,49 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
             ))
           )}
         </div>
+      </section>
+
+      <section className="business-site__section business-history" id="economic-history">
+        <div className="section-heading">
+          <div>
+            <p className="eyebrow">Business Workspace · Economic History</p>
+            <h2>What happened, in this Business context.</h2>
+          </div>
+          <p>
+            Buyer and seller effects remain distinct, while one underlying obligation is counted
+            once. Protocol details and scoped proof are available on demand without replacing the
+            Business-level interpretation.
+          </p>
+        </div>
+        <div className="observability-summary observability-summary--business">
+          <article>
+            <span>ACTIVITIES</span>
+            <strong>{history.summary.activityCount}</strong>
+            <small>{history.state}</small>
+          </article>
+          <article>
+            <span>COMPLETE</span>
+            <strong>{history.summary.statusCounts.COMPLETE}</strong>
+            <small>RECONSTRUCTED</small>
+          </article>
+          <article>
+            <span>PENDING</span>
+            <strong>{history.summary.statusCounts.PENDING}</strong>
+            <small>NOT TERMINAL</small>
+          </article>
+          <article>
+            <span>UNKNOWN / FAILED</span>
+            <strong>
+              {history.summary.statusCounts.OUTCOME_UNKNOWN} / {history.summary.statusCounts.FAILED}
+            </strong>
+            <small>NEVER COLLAPSED</small>
+          </article>
+        </div>
+        <EconomicActivityList
+          activities={history.activities}
+          businessId={site.businessId}
+          emptyMessage="This Business has no economic activity in the connected environment."
+        />
       </section>
 
       <section className="business-site__treasury">

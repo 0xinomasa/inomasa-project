@@ -11,6 +11,11 @@ internal persistence implementation under `persistence/`. The Alpha adds:
   Gateway/x402 adapters, plus generic idempotent EVM contract execution;
 - application persistence repositories under `persistence/` behind module contracts.
 
+Checkpoint E adds a read-only economic-history repository under `persistence/`.
+It reconstructs one contextual activity per accepted obligation from existing
+Business, commerce, Agent, protocol, Evidence, and accounting records; it does not
+create a competing ledger or copy external protocol state.
+
 Circle remains replaceable implementation machinery. Its wallet ID/address does not
 become Inomasa Principal or Business identity.
 

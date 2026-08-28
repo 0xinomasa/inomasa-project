@@ -7,7 +7,7 @@ export interface BusinessPackage {
   readonly businessSite: 'READY';
   readonly capitalProfile: 'CHECKPOINT_F';
   readonly commerceAndJobs: 'READY';
-  readonly economicHistory: 'AVAILABLE';
+  readonly economicHistory: 'READY';
   readonly entryRoute: BusinessInstance['entryRoute'];
   readonly productTemplateId: BusinessTemplateId;
   readonly productsAndServices: 'READY';
@@ -23,7 +23,7 @@ export function createBusinessPackage(business: BusinessInstance): BusinessPacka
     businessSite: 'READY',
     capitalProfile: 'CHECKPOINT_F',
     commerceAndJobs: 'READY',
-    economicHistory: 'AVAILABLE',
+    economicHistory: 'READY',
     entryRoute: business.entryRoute,
     productTemplateId: getProductTemplateId(business.templateId),
     productsAndServices: 'READY',
