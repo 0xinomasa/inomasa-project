@@ -933,8 +933,27 @@ Observed local/private-testnet H evidence:
 - baseline and reference x402 resources each returned the committed HTTP `402`
   challenge and paid `200` response without a second economic effect.
 
-Protected Preview and accepted-main evidence remain pending and are not implied by
-the local results above.
+Observed protected Preview evidence:
+
+- Vercel deployment `dpl_BvBVwj2WrzD2jm57bit3i8BP8X7w` reached `READY` in
+  `iad1` from exact H commit `d4d5bc7c3a486b5e9a68e16be0de2e5c3e43e359`;
+- authenticated inspection rendered Home, Founder/System, Reference Workbench,
+  its ERC-8004 Agent detail, and Capital with the expected integrated inventory,
+  protocol, economic, provenance, provider-decision, and locked-MIGRATE state;
+- an anonymous `/system` request returned HTTP `302` to Vercel SSO without the
+  application shell. Standard Protection remained configured for all Previews;
+- temporary Preview environment values were removed after deployment and the
+  temporary automation bypass used for inspection was revoked. The final project
+  read reported zero Preview environment entries and zero automation bypasses;
+- no 5xx request was observed. Runtime logs contained the existing PostgreSQL
+  TLS-semantics warning governed by `PG-TLS-SEMANTICS-01`; this was not a failed
+  request and does not change that hold or authorize a dependency/TLS change.
+
+Focused review of the complete branch diff found no product-semantic, schema,
+dependency, custody, or execution-account change; no secret value or generated
+browser artifact is part of the candidate. PR CI passed in run `33205138368`.
+Merge, accepted-main CI, and continuity closeout remain pending and are not
+implied by the evidence above.
 
 ## Completed external proof sequence
 
