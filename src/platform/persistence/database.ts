@@ -369,13 +369,111 @@ interface EconomicEntryTable {
   readonly amount_micro_usdc: string;
   readonly asset: string;
   readonly business_id: string;
+  readonly capital_allocation_id: ColumnType<string | null, string | null | undefined, string | null>;
   readonly category: string;
   readonly direction: string;
   readonly entry_id: string;
-  readonly obligation_id: string;
+  readonly obligation_id: ColumnType<string | null, string | null | undefined, string | null>;
   readonly occurred_at: Timestamp;
   readonly provenance: string;
-  readonly settlement_id: string;
+  readonly settlement_id: ColumnType<string | null, string | null | undefined, string | null>;
+}
+
+interface CapitalProviderTable {
+  readonly controller_principal_id: string;
+  readonly created_at: Generated<Date>;
+  readonly display_name: string;
+  readonly environment: string;
+  readonly provenance: string;
+  readonly provider_id: string;
+  readonly risk_bearer_classification: string;
+  readonly status: string;
+}
+
+interface CapitalMandateTable {
+  readonly created_at: Generated<Date>;
+  readonly criteria: unknown;
+  readonly mandate_id: string;
+  readonly maximum_micro_usdc: string;
+  readonly minimum_micro_usdc: string;
+  readonly name: string;
+  readonly provider_id: string;
+  readonly status: string;
+  readonly strategy: string;
+  readonly version: number;
+}
+
+interface CapitalReviewTable {
+  readonly business_id: string;
+  readonly created_at: Generated<Date>;
+  readonly decision_material: unknown;
+  readonly mandate_id: string;
+  readonly material_sha256: string;
+  readonly observed_at: Timestamp;
+  readonly provider_id: string;
+  readonly requested_micro_usdc: string;
+  readonly review_id: string;
+}
+
+interface CapitalDecisionTable {
+  readonly approved_micro_usdc: string | null;
+  readonly asset: string | null;
+  readonly decided_at: Timestamp;
+  readonly decided_by_principal_id: string;
+  readonly decision_id: string;
+  readonly outcome: string;
+  readonly rationale: string;
+  readonly reason_code: string;
+  readonly review_id: string;
+  readonly terms: unknown | null;
+}
+
+interface CapitalProviderAccountTable {
+  readonly account_assurance: string;
+  readonly account_type: string;
+  readonly address: string | null;
+  readonly blockchain: string;
+  readonly created_at: Generated<Date>;
+  readonly custody_model: string;
+  readonly environment: string;
+  readonly provider: string;
+  readonly provider_account_id: string;
+  readonly provider_id: string;
+  readonly provider_wallet_id: string | null;
+  readonly status: string;
+  readonly updated_at: Timestamp;
+}
+
+interface CapitalAllocationTable {
+  readonly accepted_at: Timestamp | null;
+  readonly accepted_by_principal_id: string | null;
+  readonly allocation_id: string;
+  readonly amount_micro_usdc: string;
+  readonly asset: string;
+  readonly block_number: string | null;
+  readonly completed_at: Timestamp | null;
+  readonly created_at: Generated<Date>;
+  readonly decision_id: string;
+  readonly idempotency_key: string;
+  readonly instrument: string;
+  readonly provenance: string;
+  readonly provider_account_id: string;
+  readonly provider_state: string | null;
+  readonly provider_transaction_id: string | null;
+  readonly recipient_business_id: string;
+  readonly return_profile: string;
+  readonly state: string;
+  readonly transaction_hash: string | null;
+  readonly updated_at: Timestamp;
+}
+
+interface CapitalUseLinkTable {
+  readonly allocation_id: string;
+  readonly amount_micro_usdc: string;
+  readonly capital_use_id: string;
+  readonly linked_at: Timestamp;
+  readonly linked_by_principal_id: string;
+  readonly obligation_id: string;
 }
 
 interface EvidenceFactTable {
@@ -403,6 +501,13 @@ export interface PersistenceDatabase {
   readonly business_sites: BusinessSiteTable;
   readonly business_templates: BusinessTemplateTable;
   readonly businesses: BusinessTable;
+  readonly capital_allocations: CapitalAllocationTable;
+  readonly capital_decisions: CapitalDecisionTable;
+  readonly capital_mandates: CapitalMandateTable;
+  readonly capital_provider_accounts: CapitalProviderAccountTable;
+  readonly capital_providers: CapitalProviderTable;
+  readonly capital_reviews: CapitalReviewTable;
+  readonly capital_use_links: CapitalUseLinkTable;
   readonly economic_entries: EconomicEntryTable;
   readonly erc8183_job_operations: Erc8183JobOperationTable;
   readonly erc8183_jobs: Erc8183JobTable;

@@ -20,12 +20,12 @@ export const productPaths = [
   },
   {
     eyebrow: 'Provider path',
-    href: '#capital',
+    href: '/capital',
     id: 'capital',
     label: 'CAPITAL',
-    note: 'Follows credible commerce and Evidence',
-    status: 'NEXT',
-    summary: 'A provider-attributable path for later testnet capital allocation.',
+    note: 'Provider-attributable controlled testnet path',
+    status: 'ALPHA',
+    summary: 'Provider-specific review, decision, Business acceptance, allocation, and bounded-use observability.',
   },
 ] as const;
 

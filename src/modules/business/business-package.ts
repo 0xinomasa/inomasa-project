@@ -5,7 +5,7 @@ export interface BusinessPackage {
   readonly agents: 'CHECKPOINT_C';
   readonly businessId: BusinessInstance['businessId'];
   readonly businessSite: 'READY';
-  readonly capitalProfile: 'CHECKPOINT_F';
+  readonly capitalProfile: 'READY';
   readonly commerceAndJobs: 'READY';
   readonly economicHistory: 'READY';
   readonly entryRoute: BusinessInstance['entryRoute'];
@@ -21,7 +21,7 @@ export function createBusinessPackage(business: BusinessInstance): BusinessPacka
     agents: 'CHECKPOINT_C',
     businessId: business.businessId,
     businessSite: 'READY',
-    capitalProfile: 'CHECKPOINT_F',
+    capitalProfile: 'READY',
     commerceAndJobs: 'READY',
     economicHistory: 'READY',
     entryRoute: business.entryRoute,

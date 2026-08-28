@@ -8,6 +8,13 @@ import type {
   TreasuryTransferOutcome,
   TreasuryWalletPort,
 } from '../../modules/business/treasury-port.ts';
+import type {
+  CapitalExecutionPort,
+  CapitalTransferOutcome,
+  ProvisionCapitalAccountCommand,
+  ProvisionedCapitalAccount,
+  SubmitCapitalTransferCommand,
+} from '../../modules/capital/execution-port.ts';
 import {
   formatUsdcAmount,
   parseUsdcAmount,
@@ -27,6 +34,90 @@ function requireEvmAddress(value: string, label: string): `0x${string}` {
   }
 
   return value as `0x${string}`;
+}
+
+async function provisionEoa(
+  client: CircleWalletsClient,
+  walletSetId: string,
+  command: {
+    readonly displayName: string;
+    readonly idempotencyKey: string;
+    readonly referenceId: string;
+  },
+): Promise<ProvisionedTreasuryWallet> {
+  const response = await client.createWallets({
+    accountType: 'EOA',
+    blockchains: [arcTestnet.circleBlockchain],
+    count: 1,
+    idempotencyKey: command.idempotencyKey,
+    metadata: [{ name: command.displayName, refId: command.referenceId }],
+    walletSetId,
+  });
+  const wallet = response.data?.wallets[0];
+
+  if (wallet === undefined) {
+    throw new Error('Circle wallet provisioning returned no wallet.');
+  }
+  if (wallet.blockchain !== arcTestnet.circleBlockchain || wallet.accountType !== 'EOA') {
+    throw new Error('Circle wallet provisioning returned an unexpected chain or account type.');
+  }
+  return {
+    accountType: 'EOA',
+    address: requireEvmAddress(wallet.address, 'Wallet address'),
+    blockchain: arcTestnet.circleBlockchain,
+    providerWalletId: wallet.id,
+  };
+}
+
+async function getUsdcBalance(
+  client: CircleWalletsClient,
+  providerWalletId: string,
+): Promise<UsdcMicroAmount> {
+  const response = await client.getWalletTokenBalance({
+    id: providerWalletId,
+    tokenAddresses: [arcTestnet.usdc.address],
+  });
+  const balance = response.data?.tokenBalances?.find(
+    ({ token }) => token.tokenAddress?.toLowerCase() === arcTestnet.usdc.address.toLowerCase(),
+  );
+  return parseUsdcAmount(balance?.amount ?? '0');
+}
+
+async function submitTransfer(
+  client: CircleWalletsClient,
+  command: SubmitTreasuryTransferCommand,
+): Promise<SubmittedTreasuryTransfer> {
+  const response = await client.createTransaction(buildCircleTransferInput(command));
+  const transactionId = response.data?.id;
+  if (transactionId === undefined || transactionId.length === 0) {
+    throw new Error('Circle transfer submission returned no transaction ID.');
+  }
+  return { providerTransactionId: transactionId, state: 'SUBMITTED' };
+}
+
+async function observeTransfer(
+  client: CircleWalletsClient,
+  providerTransactionId: string,
+): Promise<TreasuryTransferOutcome> {
+  const response = await client.getTransaction({ id: providerTransactionId });
+  const transaction = response.data?.transaction;
+  if (transaction === undefined) {
+    return { providerState: 'EMPTY_RESPONSE', state: 'OUTCOME_UNKNOWN' };
+  }
+  if (transaction.state === 'COMPLETE') {
+    if (transaction.txHash === undefined) {
+      return { providerState: transaction.state, state: 'OUTCOME_UNKNOWN' };
+    }
+    return {
+      providerState: transaction.state,
+      state: 'COMPLETE',
+      transactionHash: requireEvmAddressLikeHash(transaction.txHash),
+    };
+  }
+  if (circleTerminalFailureStates.has(transaction.state)) {
+    return { providerState: transaction.state, state: 'FAILED' };
+  }
+  return { providerState: transaction.state, state: 'PENDING' };
 }
 
 export function buildCircleTransferInput(
@@ -59,82 +150,62 @@ export class CircleDeveloperWalletAdapter implements TreasuryWalletPort {
   async provisionWallet(
     command: ProvisionTreasuryWalletCommand,
   ): Promise<ProvisionedTreasuryWallet> {
-    const response = await this.#client.createWallets({
-      accountType: 'EOA',
-      blockchains: [arcTestnet.circleBlockchain],
-      count: 1,
+    return provisionEoa(this.#client, this.#walletSetId, {
+      displayName: command.displayName,
       idempotencyKey: command.idempotencyKey,
-      metadata: [{ name: command.displayName, refId: command.businessId }],
-      walletSetId: this.#walletSetId,
+      referenceId: command.businessId,
     });
-    const wallet = response.data?.wallets[0];
-
-    if (wallet === undefined) {
-      throw new Error('Circle wallet provisioning returned no wallet.');
-    }
-
-    if (wallet.blockchain !== arcTestnet.circleBlockchain || wallet.accountType !== 'EOA') {
-      throw new Error('Circle wallet provisioning returned an unexpected chain or account type.');
-    }
-
-    return {
-      accountType: 'EOA',
-      address: requireEvmAddress(wallet.address, 'Wallet address'),
-      blockchain: arcTestnet.circleBlockchain,
-      providerWalletId: wallet.id,
-    };
   }
 
   async getUsdcBalance(providerWalletId: string): Promise<UsdcMicroAmount> {
-    const response = await this.#client.getWalletTokenBalance({
-      id: providerWalletId,
-      tokenAddresses: [arcTestnet.usdc.address],
-    });
-    const balance = response.data?.tokenBalances?.find(
-      ({ token }) => token.tokenAddress?.toLowerCase() === arcTestnet.usdc.address.toLowerCase(),
-    );
-
-    return parseUsdcAmount(balance?.amount ?? '0');
+    return getUsdcBalance(this.#client, providerWalletId);
   }
 
   async submitTransfer(
     command: SubmitTreasuryTransferCommand,
   ): Promise<SubmittedTreasuryTransfer> {
-    const response = await this.#client.createTransaction(buildCircleTransferInput(command));
-    const transactionId = response.data?.id;
-
-    if (transactionId === undefined || transactionId.length === 0) {
-      throw new Error('Circle transfer submission returned no transaction ID.');
-    }
-
-    return { providerTransactionId: transactionId, state: 'SUBMITTED' };
+    return submitTransfer(this.#client, command);
   }
 
   async observeTransfer(providerTransactionId: string): Promise<TreasuryTransferOutcome> {
-    const response = await this.#client.getTransaction({ id: providerTransactionId });
-    const transaction = response.data?.transaction;
+    return observeTransfer(this.#client, providerTransactionId);
+  }
+}
 
-    if (transaction === undefined) {
-      return { providerState: 'EMPTY_RESPONSE', state: 'OUTCOME_UNKNOWN' };
-    }
+export class CircleCapitalExecutionAdapter implements CapitalExecutionPort {
+  readonly #client;
+  readonly #walletSetId: string;
 
-    if (transaction.state === 'COMPLETE') {
-      if (transaction.txHash === undefined) {
-        return { providerState: transaction.state, state: 'OUTCOME_UNKNOWN' };
-      }
+  constructor(config: CircleDeveloperWalletConfig) {
+    this.#client = initiateDeveloperControlledWalletsClient({
+      apiKey: config.apiKey,
+      entitySecret: config.entitySecret,
+    });
+    this.#walletSetId = config.walletSetId;
+  }
 
-      return {
-        providerState: transaction.state,
-        state: 'COMPLETE',
-        transactionHash: requireEvmAddressLikeHash(transaction.txHash),
-      };
-    }
+  async provisionCapitalAccount(
+    command: ProvisionCapitalAccountCommand,
+  ): Promise<ProvisionedCapitalAccount> {
+    return provisionEoa(this.#client, this.#walletSetId, {
+      displayName: command.displayName,
+      idempotencyKey: command.idempotencyKey,
+      referenceId: command.providerId,
+    });
+  }
 
-    if (circleTerminalFailureStates.has(transaction.state)) {
-      return { providerState: transaction.state, state: 'FAILED' };
-    }
+  async getUsdcBalance(providerWalletId: string): Promise<UsdcMicroAmount> {
+    return getUsdcBalance(this.#client, providerWalletId);
+  }
 
-    return { providerState: transaction.state, state: 'PENDING' };
+  async submitCapitalTransfer(
+    command: SubmitCapitalTransferCommand,
+  ): Promise<{ readonly providerTransactionId: string; readonly state: 'SUBMITTED' }> {
+    return submitTransfer(this.#client, command);
+  }
+
+  async observeTransfer(providerTransactionId: string): Promise<CapitalTransferOutcome> {
+    return observeTransfer(this.#client, providerTransactionId);
   }
 }
 

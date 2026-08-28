@@ -23,6 +23,7 @@ export interface EconomicHistoryView {
 const emptyInventory: EconomicHistoryInventory = {
   agentCount: 0,
   businessCount: 0,
+  capitalProviderCount: 0,
   evidenceCount: 0,
   serviceDeliveryCount: 0,
 };
@@ -48,7 +49,7 @@ export const loadEconomicHistory = cache(
     try {
       const repository = new PostgresEconomicHistoryRepository(persistence);
       const [activities, inventory] = await Promise.all([
-        repository.listActivities(businessId === undefined ? {} : { businessId }),
+        repository.listEconomicActivities(businessId === undefined ? {} : { businessId }),
         repository.loadInventory(),
       ]);
       return {

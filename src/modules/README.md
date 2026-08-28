@@ -16,6 +16,9 @@ modular monolith:
 - `economic-history/` owns the contextual activity read model, status/outcome
   interpretation, protocol participation, source-scoped proof references, and
   non-duplicating summaries reconstructed from accepted economic records.
+- `capital/` owns provider-specific mandates and decisions, Business acceptance,
+  bounded allocation semantics, and the rule that Capital is never Revenue or
+  automatic entitlement.
 
 These folders are implementation ownership boundaries, not microservices and not a
 mechanical copy of the active Concept & Architecture layers. Current Business and

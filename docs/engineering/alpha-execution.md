@@ -657,6 +657,54 @@ already handed-off EIP-3009 authorization or rewrite a completed result. Ambiguo
 settlement must retain and reconcile the same stored payload rather than sign a
 new nonce.
 
+## Checkpoint F selected implementation route
+
+Status: `IMPLEMENTED / EXTERNAL PROOF PENDING` until the controlled allocation,
+later economic use, full regression, and accepted-main evidence are observed.
+
+Generic CAPITAL is represented by reusable Provider, mandate, review, decision,
+dedicated execution-account, allocation, and later-use records. Multiple Providers
+inspect the same content-addressed decision material under their own mandates; the
+system persists attributable approval or decline instead of producing a platform
+score. An approved allocation becomes executable only after explicit acceptance by
+the active Business controller.
+
+The selected Alpha instrument is `CONTROLLED_TEST_ALLOCATION` with return profile
+`NONE`. This is a bounded testnet proof shape, not a loan, security, repayment
+promise, final legal product, or Production exposure. Capital provenance fails
+closed to `COMMON_CONTROL_TEST` when either the Provider fixture or reviewed
+Business history is common-control. A dedicated Circle Developer-Controlled EOA
+executes an exact direct Arc Testnet USDC allocation. Inomasa records exactly one
+`CAPITAL / INFLOW` effect only after Circle completion and exact Arc receipt/event
+verification; it never posts the allocation as Revenue.
+
+The schema change is needed because accepted economic entries previously required
+a commerce obligation and settlement, which would falsely make Capital look like a
+sale. Alternatives considered were embedding Capital in commerce, keeping it only
+in Evidence/JSON, or adding a separate Capital ledger. Those routes respectively
+misclassify meaning, weaken relational integrity, or create competing economic
+truth. The selected extension retains one economic-entry table with an exclusive
+commerce-or-Capital source constraint. It adds no dependency or hosted service.
+PostgreSQL and Circle lock-in do not increase beyond the accepted adapters; tables
+and ports remain vendor-neutral, the Circle implementation is replaceable, and the
+versioned migrations are reversible before any Production authority exists.
+
+Current primary sources reviewed for execution:
+
+- Circle Developer-Controlled Wallets overview and application-policy boundary:
+  https://developers.circle.com/wallets/dev-controlled
+- Circle EOA creation and idempotent wallet provisioning:
+  https://developers.circle.com/wallets/dev-controlled/create-your-first-wallet
+- Circle documented cross-wallet transfer shape:
+  https://developers.circle.com/wallets/dev-controlled/transfer-tokens-across-wallets
+- Arc deployment/faucet guide and Arc payment foundation:
+  https://docs.arc.io/arc/tutorials/deploy-on-arc and
+  https://docs.arc.io/build/payments
+
+Circle's public faucet is an external funding dependency for the dedicated Provider
+EOA. Testnet faucet funding is operational setup, not Business revenue, independent
+demand, Provider performance, or a Capital allocation itself.
+
 ## Completed external proof sequence
 
 All eleven steps below were observed successfully on 25 August 2026. They remain

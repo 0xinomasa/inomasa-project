@@ -59,10 +59,11 @@ export interface AlphaDashboard {
   readonly economicEntries: readonly {
     readonly amountMicroUsdc: string;
     readonly businessId: string;
+    readonly capitalAllocationId: string | null;
     readonly category: string;
     readonly direction: string;
     readonly provenance: string;
-    readonly settlementId: string;
+    readonly settlementId: string | null;
   }[];
   readonly evidence: readonly {
     readonly coverage: string;

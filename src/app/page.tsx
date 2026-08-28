@@ -54,7 +54,7 @@ export default async function Home() {
             <span>with real settlement.</span>
           </h1>
           <p className="hero__lede">
-            Two common-control test Businesses are being connected through deterministic terms,
+            Generic common-control test Businesses are connected through deterministic terms,
             Circle-compatible Treasury accounts, and Arc Testnet USDC. Software is real; actors
             and value remain explicitly test-classified.
           </p>
@@ -238,6 +238,11 @@ export default async function Home() {
             <small>ONE COUNT PER OBLIGATION</small>
           </article>
           <article>
+            <span>CAPITAL INFLOW</span>
+            <strong>{displayUsdc(economy.summary.completedCapitalVolumeMicroUsdc)}</strong>
+            <small>NEVER REVENUE</small>
+          </article>
+          <article>
             <span>COMPLETE</span>
             <strong>{economy.summary.statusCounts.COMPLETE}</strong>
             <small>TERMINAL + RECONCILED</small>
@@ -373,7 +378,9 @@ export default async function Home() {
             ) : (
               <div className="fact-list">
                 {dashboard.economicEntries.map((entry) => (
-                  <div key={`${entry.settlementId}-${entry.businessId}-${entry.category}`}>
+                  <div
+                    key={`${entry.settlementId ?? entry.capitalAllocationId}-${entry.businessId}-${entry.category}`}
+                  >
                     <span>{entry.category.replaceAll('_', ' ')}</span>
                     <strong>{entry.direction} · {displayUsdc(entry.amountMicroUsdc)}</strong>
                     <small>{entry.businessId} · {entry.provenance.replaceAll('_', ' ')}</small>
@@ -457,6 +464,7 @@ export default async function Home() {
               <span>{path.status}</span>
               <h3>{path.label}</h3>
               <p>{path.summary}</p>
+              {path.id === 'capital' ? <Link href="/capital">Open Provider path →</Link> : null}
             </article>
           ))}
         </div>

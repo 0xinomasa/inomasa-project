@@ -58,6 +58,7 @@ export default async function SystemDashboardPage() {
           <div><dt>Persistence</dt><dd>{economy.state}</dd></div>
           <div><dt>Businesses</dt><dd>{economy.inventory.businessCount}</dd></div>
           <div><dt>Agents</dt><dd>{economy.inventory.agentCount}</dd></div>
+          <div><dt>Capital Providers</dt><dd>{economy.inventory.capitalProviderCount}</dd></div>
           <div><dt>Activities</dt><dd>{economy.summary.activityCount}</dd></div>
           <div><dt>Evidence facts</dt><dd>{economy.inventory.evidenceCount}</dd></div>
           <div><dt>Service deliveries</dt><dd>{economy.inventory.serviceDeliveryCount}</dd></div>
@@ -80,6 +81,11 @@ export default async function SystemDashboardPage() {
             <span>COMPLETED VOLUME</span>
             <strong>{displayUsdc(economy.summary.completedVolumeMicroUsdc)}</strong>
             <small>NO LEDGER DOUBLE-COUNT</small>
+          </article>
+          <article>
+            <span>CAPITAL INFLOW</span>
+            <strong>{displayUsdc(economy.summary.completedCapitalVolumeMicroUsdc)}</strong>
+            <small>SEPARATE FROM REVENUE</small>
           </article>
           {activityStatuses.map((status) => (
             <article key={status}>
