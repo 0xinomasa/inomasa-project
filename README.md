@@ -2,14 +2,16 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-The current implementation is the accepted REV2 Checkpoint G controlled-Alpha
-baseline. It includes four reusable BUILD templates, generic multi-user and
-multi-Business genesis, reusable Business and Agent systems, generated Business
-Sites, bounded Agent authority, ERC-8004 identity linkage, direct Arc USDC and x402
-commerce, ERC-8183 funded work, exact economic posting, contextual Economic
-History, provider-specific Capital decisions/allocation/later use, PostgreSQL, and
-source-scoped proof observability. MIGRATE is modeled but remains user-facing
-locked.
+The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
+Economic/System Kernel**. It includes four reusable BUILD templates, generic
+multi-user and multi-Business genesis, reusable Business and Agent systems,
+generated Business Sites, bounded Agent authority, ERC-8004 identity linkage,
+direct Arc USDC and x402 commerce, ERC-8183 funded work, exact economic posting,
+contextual Economic History, provider-specific Capital decisions/allocation/later
+use, PostgreSQL, and source-scoped proof observability. MIGRATE is modeled but
+remains user-facing locked. Human-Operable Business Product Alpha is not yet
+verified; its normative realization contract is
+[`Post-H Product Realization`](docs/engineering/post-h-product-realization.md).
 
 Signal Forge, Ops Pilot, and the fresh four-template Reference Economy remain
 common-control regression/proof fixtures rather than product-capacity or
@@ -21,9 +23,12 @@ implied.
 B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
 active controlled-Alpha program is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
-Checkpoints A-H are accepted on GitHub `main`, and the scoped completion state is
-`CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED`. The sequential C-H
-authorization is complete; no checkpoint or Production scope beyond H is implied.
+Checkpoints A–H are accepted on GitHub `main` as a **Verified Controlled Arc Testnet
+Economic/System Kernel**. The Human-Operable Business Product Alpha remains
+`NOT YET VERIFIED / REALIZATION IN PROGRESS`. Work 1 implementation is started only
+on `codex/work-1-human-product-alpha` and is not accepted, complete, or merged;
+Work 2–5 have not started. No Production, mainnet, public anonymous access, live
+MIGRATE, unrestricted Agent authority, or public/Production Capital scope is implied.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
@@ -31,8 +36,9 @@ For takeover, current gate status, supported environments, external-provider inv
 
 [`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md)
 is the active product and system-architecture authority. The REV2 document above is
-the active Alpha implementation guide, while accepted GitHub `main` remains mutable
-engineering truth. Inomasa Canonical Architecture v1.0 is
+the active Alpha implementation guide, while [`Post-H Product Realization`](docs/engineering/post-h-product-realization.md)
+is the normative Human-Operable Product Alpha realization authority after A–H.
+Accepted GitHub `main` remains mutable engineering truth. Inomasa Canonical Architecture v1.0 is
 `SUPERSEDED / HISTORICAL`. See the complete
 [`source hierarchy`](docs/engineering/source-hierarchy.md).
 The lightweight [`engineering documentation index`](docs/engineering/README.md)

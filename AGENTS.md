@@ -20,11 +20,13 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
-- The active program is **Inomasa Alpha Implementation & Testnet Realization v1.0
-  — REV2**. Checkpoints A-H are accepted and the controlled Alpha completion gate
-  is verified. The standing sequential authorization for Checkpoints C-H is
-  completed and grants no authority beyond H. There is no authorized next
-  implementation checkpoint; await explicit owner direction.
+- The active kernel is **Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2**;
+  Checkpoints A–H are accepted as the **Verified Controlled Arc Testnet
+  Economic/System Kernel**. The normative post-H realization authority is
+  [`docs/engineering/post-h-product-realization.md`](docs/engineering/post-h-product-realization.md).
+  Human-Operable Business Product Alpha remains **NOT YET VERIFIED**. Work 1 is
+  implementation-in-progress only on `codex/work-1-human-product-alpha` and is not
+  accepted, complete, or merged; Work 2–5 are not started.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
@@ -72,6 +74,9 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - `docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md`
   is the active controlled-Alpha implementation guide and remains subordinate to
   the Concept & Architecture contract.
+- `docs/engineering/post-h-product-realization.md` is the normative Human-Operable
+  Product Alpha realization authority after A–H. It does not rewrite REV2 or
+  accepted kernel semantics and does not authorize broader exposure.
 - Accepted GitHub `main` is mutable engineering truth. Repository guidance cannot
   silently amend the active authority documents or falsify accepted evidence.
 - **Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`.** It and the

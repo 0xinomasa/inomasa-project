@@ -10,12 +10,13 @@ This file is the concise repository-native entry point for a human or AI operato
 | Accepted branch | `main` |
 | Active product/architecture authority | [`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md): `ACCEPTED / ACTIVE` |
 | Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
+| Post-H Product Realization authority | [`Post-H Product Realization Record`](docs/engineering/post-h-product-realization.md): `NORMATIVE / ACTIVE` for Human-Operable Business Product Alpha realization after A–H; subordinate to Concept & Architecture and not a rewrite of REV2 |
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
-| Active realization program | **Controlled Arc Testnet Product Alpha REV2**; Checkpoints A-H are accepted on GitHub `main`; the authorized REV2 sequence is complete |
-| REV2 completion status | **CONTROLLED ARC TESTNET PRODUCT ALPHA — VERIFIED** within the exact controlled Arc Testnet scope and evidence below |
-| Standing execution authorization | **COMPLETED AT CHECKPOINT H — NO FURTHER SCOPE IMPLIED**. The owner's sequential C-H authorization was fully consumed when H reached accepted GitHub `main` on 29 August 2026. It never extended beyond H or to Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent authority, or Production/public Capital exposure. Any further implementation requires new owner direction and the applicable authority/gates. |
-| Next implementation checkpoint | **NONE AUTHORIZED**. Stop at the accepted Checkpoint H boundary and await owner direction; do not infer Production, mainnet, public access, MIGRATE activation, broader Agent authority, or public Capital work |
-| Current execution status | **CHECKPOINTS A-H ACCEPTED / REV2 COMPLETE**. Implementation, proof, protected Preview, focused review, PR merge, and accepted-main CI are observed; repository continuity records the completed boundary |
+| Active realization program | **Verified Controlled Arc Testnet Economic/System Kernel**; A–H are accepted on GitHub `main`. The normative next realization is **Human-Operable Business Product Alpha**, currently in product-realization progress under the Post-H record |
+| REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
+| Standing execution authorization | A–H authorization was completed at Checkpoint H and does not authorize Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent authority, or Production/public Capital. Work 1 implementation is allowed only on `codex/work-1-human-product-alpha` under the Post-H record; it remains unaccepted, incomplete, and unmerged. Work 2–5 have not been executed. |
+| Next implementation checkpoint | **Work 1 implementation-in-progress on separate branch** `codex/work-1-human-product-alpha`; not accepted, not complete, and not merged. Work 2–5 are not started. The next action after this authority recording is to sync/review that branch against the newly accepted `main`; do not infer broader exposure or execute Work 2–5 automatically. |
+| Current execution status | **A–H KERNEL VERIFIED / HUMAN-OPERABLE BUSINESS PRODUCT ALPHA NOT YET VERIFIED**. Work 1 implementation started on a separate branch and is not accepted, complete, or merged; this `main` state records the realization authority and boundary only. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs and protected H Preview evidence are recorded separately; this capability fact alone does not prove hosted Preview or product readiness |
 | B5 result | `VERIFIED / PASS` historical decision-and-continuity evidence; Human-Controlled Business Entry is lineage rather than the current standalone realization boundary |
 | B3 merge evidence | `7dfa25b1d6ce005f7de7c3c06ea19a22e0136ec5` |
@@ -28,7 +29,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
 | Bounded Agent proof | Commits `262aa5f` and `8fc9657`; Agent `agt_ops_pilot_buyer_v1` is provider-attributed, operator-invoked, and non-custodial; exact offer/counterparty/per-action/cumulative/expiry/revocation policy issued and consumed authorization `xau_arc_snapshot_agent_v1`; settlement `set_arc_snapshot_agent_v1` completed for `0.100000` Arc Testnet USDC in transaction `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`; service `svc_arc_snapshot_agent_v1` completed from Arc block `58768105` |
 | Circle Gateway x402 proof | Implementation commit `1c15f7d2a98429d4c62f0ee718f30a624106cfee`, pull request `#16`, merge `8d60744ec7c330a0403ef4787bc21634fbf2ed01`; final PR run `32839024137` and accepted-main run `32839154514` completed successfully. Ops Pilot deposited `1.000000` Arc Testnet USDC to Gateway in transaction `0x2280402061b6a7960efd6d24804a753310eba5e3f193b0a5a66225c11b7c2c53`; Agent payment `pay_arc_snapshot_x402_v1` settled exact `0.010000` USDC through x402 v2 `exact`, provider receipt `3d6239e1-9d29-46a0-bfb8-117578b9d1d4`; Gateway balances became payer `0.990000`, seller `0.010000`, pending zero; service `svc_arc_snapshot_x402_v1` completed from Arc block `58771214` |
-| Current continuity checkpoint | REV2 Checkpoint H — Integrated Verification is accepted on GitHub `main`; there is no authorized checkpoint after H |
+| Current continuity checkpoint | REV2 Checkpoint H — Integrated Verification is accepted on GitHub `main` as the verified kernel. Post-H Product Realization is the current normative realization authority; Work 1 is in progress only on its separate unaccepted branch. |
 | Checkpoint B acceptance evidence | Pull request `#22`; implementation commit `97ad37446d2701adedd165de19d3e67acc198d3a`; PR verification run `33024043557`; merge commit `104a7e75ced8def6841e86603ef68778baaa2375`; and accepted-main run `33024149185` completed successfully, including 31/31 tests, lint, typecheck, Next.js `16.3.3` production build, and clean PostgreSQL reconstruction through migration `007` plus write/read/rollback proof |
 | Checkpoint B runtime evidence | Configured private-testnet migration/write-read/rollback passed; local production HTTP returned `200` for Home and `checkpoint-b-api-proof` plus expected `404` for an unknown site; automated visual browser proof remains unclaimed because `agent-browser` is not installed in the verified Ubuntu Proot profile |
 | Checkpoint B generic proof instance | `Checkpoint B API Proof`, Business `biz_checkpoint_b_api_proof_a9f2e7fabf34`, template `api-data-compute@1`, route `/business/checkpoint-b-api-proof`, provenance `COMMON_CONTROL_TEST`, logical Treasury `PENDING`; no wallet provisioning, transfer, independent demand, or new economic activity was claimed |
@@ -58,10 +59,10 @@ This file is the concise repository-native entry point for a human or AI operato
 | Authority migration local evidence | npm audit (0 vulnerabilities), lint, typecheck, 28/28 tests, Next.js `16.3.3` production build, migrations `001`-`006` already current, database write/read/rollback, local Markdown-link audit, and `git diff --check` passed; no product/provider/database behavior changed |
 | Authority migration acceptance evidence | Pull request `#19`; implementation commit `751bd4c4d5e75b7a6fc8087c99034ae05089cf4e`; final PR head `218cdd273e9b6d291703e930aada1e4b768f2057`; final PR verification run `32949059522`; merge commit `d3cba7871204ba91a20094ce4353db0a650933b9`; and accepted-main run `32949201003` completed successfully, including clean PostgreSQL reconstruction/proof |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
-| Product implementation boundary | Accepted `main` ends at Checkpoint H: the deterministic Business/economic kernel, generic Business and Agent systems, ERC-8004 identity linkage, generic x402 service capability, ERC-8183 funded-work/accounting, contextual Economic History/UI observability, generic provider-driven Capital, fresh four-template Reference Economy composition, and integrated verification are accepted. Production/mainnet and broader exposure remain unauthorized |
+| Product implementation boundary | Accepted `main` ends at the A–H verified controlled Arc Testnet Economic/System Kernel. Human-Operable Business Product Alpha realization is defined by the Post-H record and is not yet accepted on `main`; Work 1 exists only on its separate implementation branch. Production/mainnet and broader exposure remain unauthorized |
 | Verified private-testnet state | All accepted fixtures remain synthetic/common-control: Signal Forge, Ops Pilot, Checkpoint B API Proof, the four Reference Economy Businesses, six Agents, and four Capital Providers. The proof database has nine exact settled commerce obligations totaling `0.680000` USDC, two exact Capital allocations totaling `0.400000`, twenty economic entries, twenty-two narrow Evidence facts, and nine complete service executions. Checkpoint B API Proof still has only a `PENDING` logical Treasury and no economic activity; none of this proves independent demand, Production Capital, or real investment performance |
 | Repository continuity marker | `src/index.ts` `repositoryBaseline` is intentionally retained as a machine-readable descriptive marker maintained since B1. It is subordinate to the active authority documents and `PROJECT_STATE.md`, and it grants no runtime or product authority |
-| Current blocking gate | No incomplete gate remains inside the authorized REV2 C-H sequence. `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change; transient external PostgreSQL connection termination is a retryable execution observation, not an accepted product failure or permission to alter TLS semantics |
+| Current blocking gate | No incomplete gate remains inside the accepted A–H kernel sequence. Human Product Alpha closeout still requires the Post-H Product Acceptance gates: authentication/authorization and tenant isolation, human task completion, mobile/browser evidence, clean artifact provenance, honest failure states, and A–H regression. `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change. |
 | Baseline fixture/product-label status | Signal Forge, Ops Pilot, both accepted buyer Agents, all four Reference Economy Businesses, and all four Capital Providers remain controlled proof fixtures. Their rendered commerce/Capital state is not generic product capacity, independent demand or underwriting, public availability, or active roadmap authority |
 | Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
@@ -211,18 +212,16 @@ The expected proof is successful connection, migration observation, parameterize
 | Vercel | Deployment provider; project `inomasa` hosts the protected Alpha Preview | Provider implementation only, not an architecture boundary | Framework Preset `Next.js`, Node `22.x`, Vercel Authentication on all Previews, Git Fork Protection enabled, no Preview environment variables, and no remaining automation bypass after proof. `inomasa.vercel.app` remains intentionally unaliased because the current plan cannot protect production domains. See [`docs/engineering/deployment-foundation.md`](docs/engineering/deployment-foundation.md). |
 | Codex / OpenCode / ChatGPT | Optional engineering operators | Replaceable tools, never authority or state storage | Local/provider credentials remain outside Git; all tools follow `AGENTS.md`. |
 
-The repository now contains generic Business, Agent, commerce, Economic History,
-and provider-driven Capital systems; chain-verified Arc Testnet ERC-8004 and
-ERC-8183 paths; Circle Developer-Controlled EOA and Gateway x402 adapters; and
-identity-bound economic activity. Private-testnet state has three common-control
-Businesses, two Ops Pilot Agents, two Capital Providers, six settled commerce
-obligations totaling `0.520000` USDC, one exact `0.200000` Capital allocation,
-thirteen economic entries, fourteen narrow Evidence facts, and six complete
-service deliveries. Gateway reports two exact `0.010000` x402 receipts; the funded
-ERC-8183 job and all direct commerce/Capital transfers retain their scoped Arc
-proof. No credential is committed, and no hosted Agent, Agent wallet custody, LLM
-authority, independent demand, Production Capital, Production database, or
-Production deployment exists.
+The repository contains the accepted generic Business, Agent, commerce, Economic History,
+provider-driven Capital, Arc Testnet ERC-8004/ERC-8183, Circle EOA, and Gateway x402
+kernel paths described by A–H. The accepted private-testnet proof state is recorded
+above as seven Businesses, six Agents, four Capital Providers, `0.680000` USDC of
+settled commerce, `0.400000` USDC of separate Capital allocation, twenty economic
+entries, twenty-two Evidence facts, and nine complete service deliveries; all remain
+synthetic/common-control proof fixtures. The Post-H record defines the human product
+realization still required. No credential is committed, and no hosted Agent, Agent
+wallet custody, LLM authority, independent demand, Production Capital, Production
+database, or Production deployment exists.
 
 ## Recovery and takeover rules
 
@@ -239,10 +238,11 @@ Production deployment exists.
 
 ## Exact next step
 
-**No implementation checkpoint is authorized after accepted REV2 Checkpoint H.**
-Preserve the verified controlled-Alpha regression baseline and await explicit owner
-direction. Do not infer authorization for Production/mainnet, public anonymous
-access, live MIGRATE, unrestricted Agent authority, Production/public Capital
-exposure, or any new roadmap from the completed C-H sequence. Any future work must
-start by reconciling accepted `main`, current authority, provider truth, and the
-active holds in this file.
+**Record and accept the Post-H Product Realization authority, then stop.** Work 1
+is already implementation-in-progress on `codex/work-1-human-product-alpha`, but is
+not accepted, complete, or merged. After this authority change reaches accepted
+`main`, the exact next action is to sync/review that existing Work 1 branch against
+the new accepted `main`. Do not merge Work 1, execute Work 2–5, deploy, use hosted
+database credentials, change Vercel/environment state, or infer Production,
+mainnet, public access, live MIGRATE, unrestricted Agent authority, or public
+Capital authorization.

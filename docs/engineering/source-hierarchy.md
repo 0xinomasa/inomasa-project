@@ -13,26 +13,30 @@ or older document must never silently become current authority.
 2. **[Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2](inomasa-alpha-implementation-and-testnet-realization-v1.0.md)**
    is the active controlled-Alpha implementation guide. It may select and sequence
    implementation only within the Concept & Architecture contract.
-3. **Accepted GitHub `main`**—code, migrations, tests, lockfile, Git history, CI,
+3. **[Post-H Product Realization Record](post-h-product-realization.md)** is the
+   normative Human-Operable Business Product Alpha realization authority after
+   A–H. It is subordinate to the Concept & Architecture and does not rewrite REV2
+   kernel semantics.
+4. **Accepted GitHub `main`**—code, migrations, tests, lockfile, Git history, CI,
    and recorded provider/chain proof—is current mutable engineering truth.
    [`PROJECT_STATE.md`](../../PROJECT_STATE.md) is its takeover index, not a substitute
    for the underlying evidence.
-4. **Accepted repository engineering documents and decision records** provide
+5. **Accepted repository engineering documents and decision records** provide
    operational guidance within their stated scope.
-5. **Explicit task instructions and working plans** direct the current execution
-   but may not silently override the two active authority documents or falsify
-   accepted engineering evidence.
-6. **External primary sources and implementation observations** may expose a gap
+6. **Explicit task instructions and working plans** direct the current execution
+   but may not silently override the active authority documents or falsify accepted
+   engineering evidence.
+7. **External primary sources and implementation observations** may expose a gap
    or justify a proposed change. They are evidence, not automatically adopted
    Inomasa direction.
 
 ## Repository and mirror provenance
 
-The copies of the two active authority documents committed to accepted GitHub
-`main` are the normative engineering copies. Corresponding Second Brain copies are
-curated mirrors / working sources for durable project context. An edit made only to
-a mirror, draft, chat, or working branch does not change engineering authority; it
-becomes authoritative only after review and acceptance into GitHub `main`.
+The copies of the active authority documents committed to accepted GitHub `main`
+are the normative engineering copies. Corresponding Second Brain copies are curated
+mirrors / working sources for durable project context. An edit made only to a mirror,
+draft, chat, or working branch does not change engineering authority; it becomes
+authoritative only after review and acceptance into GitHub `main`.
 
 Formatting-only mirror differences do not change meaning. Any substantive drift
 must be reconciled explicitly rather than resolved by silently choosing the more
