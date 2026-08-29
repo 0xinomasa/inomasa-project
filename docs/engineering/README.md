@@ -9,12 +9,16 @@ this page is navigation only.
 - [`source-hierarchy.md`](source-hierarchy.md) — authority, mutable-truth, mirror,
   conflict, and status rules.
 - [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](inomasa-alpha-implementation-and-testnet-realization-v1.0.md)
-  — active controlled-Alpha implementation guide.
+  — active controlled-Alpha implementation guide and A–H kernel contract.
+- [`Post-H Product Realization Record`](post-h-product-realization.md)
+  — normative Human-Operable Business Product Alpha realization authority after A–H.
 - [`architecture-invariants.md`](architecture-invariants.md) — concise engineering
   guardrails derived from the active Concept and Realization documents.
 
 The active product and system-architecture authority lives in
 [`docs/architecture/inomasa-concept-and-architecture-v1.0.md`](../architecture/inomasa-concept-and-architecture-v1.0.md).
+The Post-H record governs product realization only; it does not replace the
+architecture authority or REV2 kernel contracts.
 
 ## Operational
 
