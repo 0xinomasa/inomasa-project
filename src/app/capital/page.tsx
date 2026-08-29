@@ -4,6 +4,7 @@ import Link from 'next/link';
 import { loadCapitalPaths } from '../_capital/data';
 import { CapitalPathList } from '../_components/capital-path-list';
 import { Mark } from '../_components/mark';
+import { requireProductSession } from '../_auth/server';
 
 export const dynamic = 'force-dynamic';
 
@@ -13,6 +14,7 @@ export const metadata: Metadata = {
 };
 
 export default async function CapitalPage() {
+  await requireProductSession('/capital');
   const capital = await loadCapitalPaths();
   const approved = capital.paths.filter(({ outcome }) => outcome === 'APPROVED').length;
   const declined = capital.paths.filter(({ outcome }) => outcome === 'DECLINED').length;

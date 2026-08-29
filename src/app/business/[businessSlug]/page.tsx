@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { Mark } from '../../_components/mark';
 import { EconomicActivityList } from '../../_components/economic-activity-list';
+import { requireProductSession } from '../../_auth/server';
 import { loadBusinessAgents, loadBusinessSite } from '../../_business/site';
 import { loadBusinessEconomicHistory } from '../../_economic-history/data';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../../modules/commerce/money';
@@ -23,23 +24,17 @@ function compactAddress(address: string | null): string {
 }
 
 export async function generateMetadata({ params }: BusinessSitePageProps): Promise<Metadata> {
-  const { businessSlug } = await params;
-  const site = await loadBusinessSite(businessSlug);
-
-  return site === undefined
-    ? { title: 'Business not found · Inomasa' }
-    : {
-        description: site.siteDescription,
-        title: `${site.displayName} · Inomasa`,
-      };
+  await params;
+  return { title: 'Protected Business Site · Inomasa' };
 }
 
 export default async function BusinessSitePage({ params }: BusinessSitePageProps) {
   const { businessSlug } = await params;
+  const session = await requireProductSession('/business/' + businessSlug);
   const [site, agents, history] = await Promise.all([
-    loadBusinessSite(businessSlug),
-    loadBusinessAgents(businessSlug),
-    loadBusinessEconomicHistory(businessSlug),
+    loadBusinessSite(businessSlug, session.principalId),
+    loadBusinessAgents(businessSlug, session.principalId),
+    loadBusinessEconomicHistory(businessSlug, session.principalId),
   ]);
 
   if (site === undefined) {
