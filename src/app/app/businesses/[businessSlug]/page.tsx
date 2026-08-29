@@ -18,8 +18,8 @@ function displayUsdc(value: string): string {
 }
 
 export async function generateMetadata({ params }: WorkspaceProps): Promise<Metadata> {
-  const { businessSlug } = await params;
-  return { title: 'Business Workspace · ' + businessSlug + ' · Inomasa' };
+  await params;
+  return { title: 'Business Workspace · Inomasa' };
 }
 
 export default async function BusinessWorkspacePage({ params }: WorkspaceProps) {

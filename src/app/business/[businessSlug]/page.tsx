@@ -24,8 +24,8 @@ function compactAddress(address: string | null): string {
 }
 
 export async function generateMetadata({ params }: BusinessSitePageProps): Promise<Metadata> {
-  const { businessSlug } = await params;
-  return { title: `Protected Business Site · ${businessSlug} · Inomasa` };
+  await params;
+  return { title: 'Protected Business Site · Inomasa' };
 }
 
 export default async function BusinessSitePage({ params }: BusinessSitePageProps) {

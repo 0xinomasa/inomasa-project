@@ -19,8 +19,8 @@ function compact(value: string | null): string {
 }
 
 export async function generateMetadata({ params }: AgentPageProps): Promise<Metadata> {
-  const { agentId, businessSlug } = await params;
-  return { title: `Protected Agent · ${agentId} · ${businessSlug} · Inomasa` };
+  await params;
+  return { title: 'Protected Agent · Inomasa' };
 }
 
 export default async function AgentPage({ params }: AgentPageProps) {
