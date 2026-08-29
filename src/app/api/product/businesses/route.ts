@@ -1,16 +1,15 @@
-import { randomUUID } from 'node:crypto';
-
 import { getProductSession } from '../../../_auth/server.ts';
 import {
   createBusinessGenesis,
   normalizeBusinessSlug,
   type HumanPrincipal,
 } from '../../../../modules/business/model.ts';
-import { isBusinessTemplateId } from '../../../../modules/business/templates.ts';
+import { getBusinessTemplate, isBusinessTemplateId } from '../../../../modules/business/templates.ts';
 import { createPendingCircleTreasuryBinding } from '../../../../modules/business/treasury.ts';
 import { readDatabaseConnectionConfig } from '../../../../platform/persistence/config.ts';
 import { PostgresAlphaBusinessRepository } from '../../../../platform/persistence/alpha-business-repository.ts';
 import { PostgresPersistence } from '../../../../platform/persistence/database.ts';
+import { deriveBusinessGenesisIdentity } from './request-identity.ts';
 
 export const dynamic = 'force-dynamic';
 
@@ -71,13 +70,25 @@ export async function POST(request: Request): Promise<Response> {
     }
 
     const displayName = textField(body['displayName'], 'Business name', 160);
-    const slug = normalizeBusinessSlug(textField(body['slug'] ?? displayName, 'Business slug', 96));
-    const summary = body['summary'] === undefined
+    const rawSlug = body['slug'];
+    const slugInput = rawSlug === undefined || rawSlug === null ||
+      (typeof rawSlug === 'string' && rawSlug.trim() === '')
+      ? displayName
+      : textField(rawSlug, 'Business slug', 96);
+    const slug = normalizeBusinessSlug(slugInput);
+    const rawSummary = body['summary'];
+    const summary = rawSummary === undefined || rawSummary === null ||
+      (typeof rawSummary === 'string' && rawSummary.trim() === '')
       ? undefined
-      : textField(body['summary'], 'Business description', 500);
-    const suffix = randomUUID().replaceAll('-', '').slice(0, 12);
-    const businessId = ('biz_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + suffix) as
-      `biz_${string}`;
+      : textField(rawSummary, 'Business description', 500);
+    const effectiveSummary = summary ?? getBusinessTemplate(templateId).description;
+    const identity = deriveBusinessGenesisIdentity({
+      displayName,
+      principalId: session.principalId,
+      slug,
+      summary: effectiveSummary,
+      templateId,
+    });
     const occurredAt = new Date().toISOString();
     const controller: HumanPrincipal = {
       actorClassification: session.actorClassification,
@@ -90,16 +101,16 @@ export async function POST(request: Request): Promise<Response> {
         commonControlGroupId: 'ccg_controlled_alpha',
         controller,
         displayName,
-        genesisRequestId: 'genesis-' + session.principalId + '-' + suffix,
+        genesisRequestId: identity.genesisRequestId,
         slug,
         ...(summary === undefined ? {} : { summary }),
         templateId,
       },
       {
-        businessId,
-        controlId: ('ctl_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + suffix) as
+        businessId: identity.businessId,
+        controlId: ('ctl_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + identity.genesisRequestId.slice(-16)) as
           `ctl_${string}`,
-        eventId: ('evt_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + suffix) as
+        eventId: ('evt_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + identity.genesisRequestId.slice(-16)) as
           `evt_${string}`,
       },
       occurredAt,
@@ -116,7 +127,7 @@ export async function POST(request: Request): Promise<Response> {
         controller,
         genesis,
         treasuryBinding: createPendingCircleTreasuryBinding({
-          bindingId: ('tbn_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + suffix) as
+          bindingId: ('tbn_' + slug.replaceAll('-', '_').slice(0, 40) + '_' + identity.genesisRequestId.slice(-16)) as
             `tbn_${string}`,
           business: genesis.business,
         }),

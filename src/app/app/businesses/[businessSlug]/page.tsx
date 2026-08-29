@@ -31,6 +31,8 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
     loadBusinessEconomicHistory(businessSlug, session.principalId),
   ]);
   if (site === undefined) notFound();
+  const activeOfferCount = site.offers.filter((offer) => offer.status === 'ACTIVE').length;
+  const activeAgentCount = agents.filter((agent) => agent.status === 'ACTIVE').length;
 
   return (
     <ProductShell active="businesses" session={session}>
@@ -55,13 +57,13 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             <div><span>Control</span><strong>YOU</strong></div>
             <div><span>Treasury</span><strong>{site.treasuryStatus}</strong></div>
             <div><span>Site</span><strong>{site.siteStatus}</strong></div>
-            <div><span>Environment</span><strong>{site.visibility.replaceAll('_', ' ')}</strong></div>
+            <div><span>Visibility</span><strong>{site.visibility.replaceAll('_', ' ')}</strong></div>
           </div>
         </section>
 
         <section className="workspace-section-grid">
           <article className="workspace-panel" id="products">
-            <div className="panel-heading"><div><p className="eyebrow">Products & Services</p><h2>What this Business offers.</h2></div><span>{site.offers.length} active</span></div>
+            <div className="panel-heading"><div><p className="eyebrow">Products & Services</p><h2>What this Business offers.</h2></div><span>{activeOfferCount} active</span></div>
             {site.offers.length === 0 ? (
               <div className="panel-empty"><strong>No product or service yet.</strong><p>The catalog surface is ready. Product creation is the next operational slice.</p><span>Next product slice</span></div>
             ) : site.offers.map((offer) => (
@@ -70,7 +72,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
           </article>
 
           <article className="workspace-panel" id="agents">
-            <div className="panel-heading"><div><p className="eyebrow">Agents</p><h2>Bounded capability.</h2></div><span>{agents.length} active</span></div>
+            <div className="panel-heading"><div><p className="eyebrow">Agents</p><h2>Bounded capability.</h2></div><span>{activeAgentCount} active</span></div>
             {agents.length === 0 ? (
               <div className="panel-empty"><strong>No Agent assigned yet.</strong><p>Agent object, identity, authority, runtime, and intelligence provider will remain separate.</p><span>Next product slice</span></div>
             ) : agents.map((agent) => <div className="agent-row" key={agent.agentPrincipalId}><div><strong>{agent.displayName}</strong><p>{agent.capabilities.join(' · ')}</p></div><span>{agent.identityState ?? 'OFFCHAIN ONLY'}</span></div>)}

@@ -17,6 +17,28 @@ export interface LiveEconomyView {
   readonly state: 'CONNECTED' | 'NOT_CONFIGURED' | 'UNAVAILABLE';
 }
 
+export function liveEconomyLabel(input: {
+  readonly activityKind: 'CAPITAL' | 'COMMERCE';
+  readonly hasJob: boolean;
+  readonly hasPayment: boolean;
+  readonly status: LiveEconomyCard['status'];
+}): string {
+  if (input.activityKind === 'CAPITAL') {
+    if (input.status === 'COMPLETE') return 'Capital allocated';
+    if (input.status === 'PENDING') return 'Capital allocation pending';
+    if (input.status === 'FAILED') return 'Capital allocation failed';
+    return 'Capital allocation outcome unknown';
+  }
+
+  const subject = input.hasJob ? 'Job' : input.hasPayment ? 'USDC payment' : 'Service activity';
+  if (input.status === 'COMPLETE') {
+    return input.hasJob ? 'Job completed' : input.hasPayment ? 'USDC payment settled' : 'Service purchased';
+  }
+  if (input.status === 'PENDING') return `${subject} pending`;
+  if (input.status === 'FAILED') return `${subject} failed`;
+  return `${subject} outcome unknown`;
+}
+
 function amount(value: string): string {
   return formatUsdcAmount(BigInt(value) as UsdcMicroAmount);
 }
@@ -28,7 +50,12 @@ function toCard(
     return {
       detail: amount(activity.amountMicroUsdc) + ' USDC · provider decision observed',
       id: activity.activityId,
-      label: 'Capital allocated',
+      label: liveEconomyLabel({
+        activityKind: activity.activityKind,
+        hasJob: false,
+        hasPayment: false,
+        status: activity.status,
+      }),
       observedAt: activity.occurredAt,
       protocols: activity.protocols,
       status: activity.status,
@@ -37,13 +64,15 @@ function toCard(
 
   const isJob = activity.work !== null;
   const isPayment = activity.protocols.includes('X402') || activity.settlement.provider !== null;
-  const label = isJob
-    ? activity.status === 'COMPLETE' ? 'Job completed' : 'Job activity'
-    : isPayment ? 'USDC payment settled' : 'Service purchased';
   return {
     detail: amount(activity.amountMicroUsdc) + ' USDC · ' + activity.status.toLowerCase().replaceAll('_', ' '),
     id: activity.activityId,
-    label,
+    label: liveEconomyLabel({
+      activityKind: activity.activityKind,
+      hasJob: isJob,
+      hasPayment: isPayment,
+      status: activity.status,
+    }),
     observedAt: activity.occurredAt,
     protocols: activity.protocols,
     status: activity.status,

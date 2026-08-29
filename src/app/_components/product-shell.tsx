@@ -45,6 +45,7 @@ export function ProductShell({
         <Link className={active === 'businesses' ? 'is-active' : ''} href="/app/businesses">Businesses</Link>
         <Link className={active === 'build' ? 'is-active' : ''} href="/build">Build</Link>
         <Link className={active === 'capital' ? 'is-active' : ''} href="/capital">Capital</Link>
+        <Link className={active === 'migrate' ? 'is-active is-locked' : 'is-locked'} href="/migrate">Migrate</Link>
       </nav>
     </div>
   );

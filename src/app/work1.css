@@ -212,8 +212,8 @@ body { background: var(--w-bg); color: var(--w-text); }
   .landing-footer { align-items: start; flex-direction: column; gap: 17px; justify-content: center; min-height: 140px; }
   .product-sidebar { display: none; }
   .product-content { padding-bottom: 72px; width: 100%; }
-  .product-mobile-nav { background: rgba(247,247,244,.96); border-top: 1px solid var(--w-line); bottom: 0; display: grid; grid-template-columns: repeat(4, 1fr); left: 0; padding: 7px 8px; position: fixed; right: 0; z-index: 10; }
-  .product-mobile-nav a { color: var(--w-muted); font-size: .68rem; min-height: 44px; padding-top: 14px; text-align: center; }
+  .product-mobile-nav { background: rgba(247,247,244,.96); border-top: 1px solid var(--w-line); bottom: 0; display: grid; grid-template-columns: repeat(5, 1fr); left: 0; padding: 7px 8px; position: fixed; right: 0; z-index: 10; }
+  .product-mobile-nav a { color: var(--w-muted); font-size: .875rem; min-height: 44px; padding-top: 12px; text-align: center; }
   .product-mobile-nav a.is-active { color: var(--w-text); font-weight: 600; }
   .workspace-page { padding: 36px 16px 90px; }
   .workspace-header { align-items: start; flex-direction: column; gap: 19px; margin-bottom: 30px; }
@@ -235,6 +235,12 @@ body { background: var(--w-bg); color: var(--w-text); }
   .auth-layout { align-content: start; gap: 40px; min-height: auto; padding-block: 58px 80px; }
   .auth-intro h1 { font-size: clamp(2.8rem, 14vw, 4.8rem); }
   .auth-card { padding: 21px; }
+  .landing-page .button, .landing-nav a, .product-content .button, .product-mobile-nav a, .auth-page .button { font-size: .875rem; }
+  .landing-scope, .landing-lede, .landing-section-heading > p, .live-economy-card p, .live-economy-state p, .landing-template-card p, .landing-principle-list p, .workspace-header p:not(.eyebrow), .dashboard-intro p:last-child, .business-summary-card p, .business-list-row p, .empty-workspace p, .panel-empty p, .treasury-state p, .panel-description, .form-submit-row p, .field small, .form-note, .state-card p { font-size: .875rem; }
+  .field label { font-size: .875rem; }
+  .template-choice strong { font-size: 1rem; }
+  .template-choice small { font-size: .875rem; }
+  .activity-status, .workspace-status, .kernel-chip, .locked-pill { font-size: .875rem; }
 }
 @media (max-width: 420px) {
   .landing-header .brand, .auth-header .brand { font-size: .72rem; gap: 8px; }
