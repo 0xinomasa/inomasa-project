@@ -24,7 +24,7 @@ export default async function BuildPage() {
             <h1>Start with a useful shape.</h1>
             <p>Choose a template, add the minimum context, and create a Business you can operate in one shared environment.</p>
           </div>
-          <Link className="quiet-link" href="/app/businesses">Back to My Businesses</Link>
+          <Link className="quiet-link" href="/app/businesses">Back to Businesses</Link>
         </header>
         <section className="workspace-card">
           <CreateBusinessForm templates={businessTemplates} />

@@ -15,6 +15,7 @@ export function CreateBusinessForm({ templates }: { readonly templates: readonly
   const [displayName, setDisplayName] = useState('');
   const [slug, setSlug] = useState('');
   const [summary, setSummary] = useState('');
+  const [summaryTouched, setSummaryTouched] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [submitting, setSubmitting] = useState(false);
 
@@ -53,7 +54,6 @@ export function CreateBusinessForm({ templates }: { readonly templates: readonly
               key={template.templateId}
               onClick={() => {
                 setTemplateId(template.templateId);
-                if (!displayName) setDisplayName(template.label);
               }}
               type="button"
             >
@@ -68,16 +68,17 @@ export function CreateBusinessForm({ templates }: { readonly templates: readonly
       <div className="form-fields">
         <div className="field">
           <label htmlFor="business-name">Business name</label>
-          <input id="business-name" maxLength={160} onChange={(event) => setDisplayName(event.target.value)} placeholder={selected?.label ?? 'Your Business'} required value={displayName} />
+          <input id="business-name" maxLength={160} onChange={(event) => setDisplayName(event.target.value)} placeholder="Your Business name" required value={displayName} />
         </div>
         <div className="field">
           <label htmlFor="business-slug">Workspace address</label>
           <input id="business-slug" maxLength={96} onChange={(event) => setSlug(event.target.value)} placeholder="your-business" value={slug} />
-          <small>Use letters, numbers, and hyphens. You can leave this blank.</small>
+          <small>Optional. If blank, a workspace address is generated from the Business name.</small>
         </div>
         <div className="field">
           <label htmlFor="business-summary">What does it do? <span>Optional</span></label>
-          <textarea id="business-summary" maxLength={500} onChange={(event) => setSummary(event.target.value)} placeholder={selected?.description ?? 'A short description'} rows={4} value={summary} />
+          <textarea id="business-summary" maxLength={500} onChange={(event) => { setSummaryTouched(true); setSummary(event.target.value); }} placeholder={selected?.description ?? 'A short description'} rows={4} value={summary} />
+          <small>{summaryTouched ? 'Your description is saved as entered.' : 'Suggestion based on the selected template; edit it to describe your Business.'}</small>
         </div>
       </div>
       {error === null ? null : <p aria-live="polite" className="form-error">{error}</p>}

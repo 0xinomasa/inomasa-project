@@ -12,6 +12,14 @@ export const metadata: Metadata = {
   title: 'My Businesses · Inomasa',
 };
 
+function statusText(label: string, value: string): string {
+  const readable = value
+    .replaceAll('_', ' ')
+    .toLowerCase()
+    .replace(/\b\w/g, (letter) => letter.toUpperCase());
+  return `${label}: ${readable}`;
+}
+
 export default async function MyBusinessesPage() {
   const session = await requireProductSession('/app/businesses');
   const owned = await loadOwnedBusinesses(session);
@@ -49,7 +57,8 @@ export default async function MyBusinessesPage() {
                   <p>{business.summary}</p>
                 </div>
                 <div className="business-list-row__side">
-                  <span>{business.treasuryStatus}</span>
+                  <span>{statusText('Treasury', business.treasuryStatus)}</span>
+                  <span>{statusText('Site', business.siteStatus)}</span>
                   <Link className="button button--secondary" href={'/app/businesses/' + business.slug}>Open workspace</Link>
                 </div>
               </article>

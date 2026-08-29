@@ -4,6 +4,7 @@ import { formatUsdcAmount, type UsdcMicroAmount } from '../../modules/commerce/m
 import { loadEconomicHistory } from '../_economic-history/data.ts';
 
 export interface LiveEconomyCard {
+  readonly amount: string;
   readonly id: string;
   readonly label: string;
   readonly detail: string;
@@ -48,7 +49,8 @@ function toCard(
 ): LiveEconomyCard {
   if (activity.activityKind === 'CAPITAL') {
     return {
-      detail: amount(activity.amountMicroUsdc) + ' USDC · provider decision observed',
+      amount: amount(activity.amountMicroUsdc),
+      detail: 'Provider decision observed',
       id: activity.activityId,
       label: liveEconomyLabel({
         activityKind: activity.activityKind,
@@ -65,7 +67,8 @@ function toCard(
   const isJob = activity.work !== null;
   const isPayment = activity.protocols.includes('X402') || activity.settlement.provider !== null;
   return {
-    detail: amount(activity.amountMicroUsdc) + ' USDC · ' + activity.status.toLowerCase().replaceAll('_', ' '),
+    amount: amount(activity.amountMicroUsdc),
+    detail: activity.status.toLowerCase().replaceAll('_', ' '),
     id: activity.activityId,
     label: liveEconomyLabel({
       activityKind: activity.activityKind,

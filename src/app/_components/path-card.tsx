@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type { ProductPath } from '../_shell/model';
 
 type PathCardProps = {
@@ -9,7 +10,7 @@ export function PathCard({ path, position }: PathCardProps) {
   const isAvailable = path.status === 'ALPHA';
 
   return (
-    <article className={`path-card path-card--${path.status.toLowerCase()}`} id={path.id}>
+    <Link className={`path-card path-card--${path.status.toLowerCase()}`} href={path.route} id={path.id}>
       <div className="path-card__topline">
         <span className="path-card__position">{position}</span>
         <span className="path-card__status">{path.status}</span>
@@ -17,7 +18,7 @@ export function PathCard({ path, position }: PathCardProps) {
 
       <div>
         <p className="eyebrow">{path.eyebrow}</p>
-        <h3>{path.label}</h3>
+        <h3>{path.title}</h3>
         <p className="path-card__summary">{path.summary}</p>
       </div>
 
@@ -27,6 +28,6 @@ export function PathCard({ path, position }: PathCardProps) {
           {isAvailable ? '↗' : '—'}
         </span>
       </div>
-    </article>
+    </Link>
   );
 }

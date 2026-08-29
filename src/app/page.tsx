@@ -3,6 +3,8 @@ import Link from 'next/link';
 
 import { loadLiveEconomy } from './_live-economy/data';
 import { Mark } from './_components/mark';
+import { PathCard } from './_components/path-card';
+import { productPaths } from './_shell/model';
 import { businessTemplates } from '../modules/business/templates';
 
 export const dynamic = 'force-dynamic';
@@ -14,8 +16,8 @@ export const metadata: Metadata = {
 
 function observedLabel(value: string): string {
   return new Intl.DateTimeFormat('en', {
-    dateStyle: 'medium',
-    timeStyle: 'short',
+    hour: '2-digit',
+    minute: '2-digit',
     timeZone: 'UTC',
   }).format(new Date(value));
 }
@@ -30,9 +32,10 @@ export default async function LandingPage() {
           <span>INOMASA</span>
         </Link>
         <nav aria-label="Landing navigation" className="landing-nav">
+          <Link href="/build">Build</Link>
+          <Link href="/migrate">Migrate</Link>
+          <Link href="/capital">Capital</Link>
           <a href="#economy">Live Economy</a>
-          <a href="#build">BUILD</a>
-          <Link className="header-login" href="/login">Sign in</Link>
         </nav>
       </header>
 
@@ -45,8 +48,8 @@ export default async function LandingPage() {
             USDC commerce, settlement, Capital, and an Economic History you can inspect.
           </p>
           <div className="landing-actions">
-            <Link className="button button--primary" href="/login">Enter protected Preview <span>↗</span></Link>
-            <a className="button button--secondary" href="#build">See how BUILD starts <span>↓</span></a>
+            <Link className="button button--primary" href="/build">Build your business <span>↗</span></Link>
+            <a className="button button--secondary" href="#paths">Explore the three paths <span>↓</span></a>
           </div>
           <p className="landing-scope">Protected Preview · Arc Testnet · Human Product Alpha in realization</p>
         </div>
@@ -59,10 +62,23 @@ export default async function LandingPage() {
         </aside>
       </section>
 
+      <section className="landing-paths" id="paths">
+        <div className="landing-section-heading">
+          <div><p className="eyebrow">Choose your path</p><h2>Start where the work is.</h2></div>
+          <p>Each path keeps its own boundary. BUILD is the current creation entry; MIGRATE stays locked; Capital shows only the controlled provider context that exists.</p>
+        </div>
+        <div className="landing-path-grid">
+          {productPaths.map((path, index) => <PathCard key={path.id} path={path} position={`0${index + 1}`} />)}
+        </div>
+      </section>
+
       <section className="landing-economy" id="economy">
         <div className="landing-section-heading">
           <div><p className="eyebrow">Live Economy · observer-safe</p><h2>A small economy, visibly moving.</h2></div>
-          <p>These cards are a read-only projection of accepted Economic History and Evidence. They are not a second ledger or synthetic activity feed.</p>
+          <p>
+            This compact view is a read-only projection of accepted Economic History and Evidence. It is not a second ledger or synthetic activity feed.
+            {economy.state === 'CONNECTED' && economy.cards.length > 6 ? <><br /><Link className="quiet-link" href="/system">View all activity →</Link></> : null}
+          </p>
         </div>
         {economy.state === 'UNAVAILABLE' ? (
           <article className="live-economy-state live-economy-state--error"><strong>Live Economy unavailable</strong><p>The canonical read model did not return a trustworthy result. No zero activity is inferred.</p></article>
@@ -71,20 +87,23 @@ export default async function LandingPage() {
         ) : economy.cards.length === 0 ? (
           <article className="live-economy-state"><strong>No observable activity yet</strong><p>The connected canonical source returned a valid empty result.</p></article>
         ) : (
-          <div className="live-economy-grid">
+          <div aria-label="Latest economic activity" className="live-economy-list">
             {economy.cards.map((card) => (
-              <article className="live-economy-card" key={card.id}>
-                <div className="live-economy-card__topline"><span className={'activity-status activity-status--' + card.status.toLowerCase()}>{card.status.replaceAll('_', ' ')}</span><time dateTime={card.observedAt.toISOString()}>{observedLabel(card.observedAt.toISOString())} UTC</time></div>
-                <h3>{card.label}</h3>
-                <p>{card.detail}</p>
-                <div className="protocol-badges">{card.protocols.map((protocol) => <span key={protocol}>{protocol.replaceAll('_', ' ')}</span>)}</div>
+              <article className="live-economy-row" key={card.id}>
+                <time dateTime={card.observedAt.toISOString()}>{observedLabel(card.observedAt.toISOString())} UTC</time>
+                <div className="live-economy-row__activity">
+                  <strong>{card.label}</strong>
+                  <span className={'activity-status activity-status--' + card.status.toLowerCase()}>{card.status.replaceAll('_', ' ')}</span>
+                  <small>{card.detail}</small>
+                </div>
+                <strong className="live-economy-row__amount">{card.amount} USDC</strong>
               </article>
             ))}
           </div>
         )}
       </section>
 
-      <section className="landing-build" id="build">
+      <section className="landing-build" id="build-templates">
         <div className="landing-section-heading">
           <div><p className="eyebrow">BUILD · four starting points</p><h2>Begin with the work you know.</h2></div>
           <p>Select a starting structure, then grow into the shared Business capability set. A template is not a permanent silo.</p>
