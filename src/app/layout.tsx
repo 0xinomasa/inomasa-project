@@ -2,6 +2,7 @@ import type { Metadata, Viewport } from 'next';
 import type { ReactNode } from 'react';
 
 import './globals.css';
+import './work1.css';
 
 export const metadata: Metadata = {
   description: 'Inomasa application skeleton for authorized economic activity.',
@@ -9,8 +10,8 @@ export const metadata: Metadata = {
 };
 
 export const viewport: Viewport = {
-  colorScheme: 'dark',
-  themeColor: '#080a09',
+  colorScheme: 'light',
+  themeColor: '#f7f7f4',
 };
 
 export default function RootLayout({ children }: Readonly<{ children: ReactNode }>) {

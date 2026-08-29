@@ -281,8 +281,10 @@ export class PostgresAlphaBusinessRepository {
     });
   }
 
-  async listBusinesses(): Promise<readonly AlphaBusinessSummary[]> {
-    return this.#persistence.databaseForApplication
+  async listBusinesses(
+    controllerPrincipalId?: `usr_${string}`,
+  ): Promise<readonly AlphaBusinessSummary[]> {
+    let query = this.#persistence.databaseForApplication
       .withSchema(applicationSchema)
       .selectFrom('businesses as business')
       .innerJoin('business_controls as control', (join) =>
@@ -310,8 +312,13 @@ export class PostgresAlphaBusinessRepository {
         'business.template_version as templateVersion',
         'treasury.status as treasuryStatus',
       ])
-      .orderBy('business.created_at', 'asc')
-      .execute()
+      .orderBy('business.created_at', 'asc');
+
+    if (controllerPrincipalId !== undefined) {
+      query = query.where('control.controller_principal_id', '=', controllerPrincipalId);
+    }
+
+    return query.execute()
       .then((rows) =>
         rows.map((row) => ({ ...row, treasuryStatus: row.treasuryStatus ?? 'UNBOUND' })),
       );
@@ -360,11 +367,19 @@ export class PostgresAlphaBusinessRepository {
     };
   }
 
-  async getBusinessSiteBySlug(slug: string): Promise<BusinessSiteView | undefined> {
+  async getBusinessSiteBySlug(
+    slug: string,
+    controllerPrincipalId?: `usr_${string}`,
+  ): Promise<BusinessSiteView | undefined> {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
-    const row = await database
+    let query = database
       .selectFrom('business_sites as site')
       .innerJoin('businesses as business', 'business.business_id', 'site.business_id')
+      .innerJoin('business_controls as control', (join) =>
+        join
+          .onRef('control.business_id', '=', 'business.business_id')
+          .on('control.status', '=', 'ACTIVE'),
+      )
       .leftJoin('treasury_bindings as treasury', (join) =>
         join
           .onRef('treasury.business_id', '=', 'business.business_id')
@@ -393,7 +408,13 @@ export class PostgresAlphaBusinessRepository {
       ])
       .where('site.slug', '=', slug)
       .where('site.status', '=', 'PUBLISHED')
-      .executeTakeFirst();
+      ;
+
+    if (controllerPrincipalId !== undefined) {
+      query = query.where('control.controller_principal_id', '=', controllerPrincipalId);
+    }
+
+    const row = await query.executeTakeFirst();
 
     if (row === undefined) {
       return undefined;

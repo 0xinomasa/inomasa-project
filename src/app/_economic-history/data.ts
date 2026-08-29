@@ -67,8 +67,11 @@ export const loadEconomicHistory = cache(
 );
 
 export const loadBusinessEconomicHistory = cache(
-  async (businessSlug: string): Promise<EconomicHistoryView> => {
-    const site = await loadBusinessSite(businessSlug);
+  async (
+    businessSlug: string,
+    controllerPrincipalId?: `usr_${string}`,
+  ): Promise<EconomicHistoryView> => {
+    const site = await loadBusinessSite(businessSlug, controllerPrincipalId);
     return site === undefined
       ? emptyView(hasRuntimeDatabaseConfiguration() ? 'UNAVAILABLE' : 'NOT_CONFIGURED')
       : loadEconomicHistory(site.businessId);

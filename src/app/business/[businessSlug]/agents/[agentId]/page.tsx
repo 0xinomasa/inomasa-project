@@ -4,6 +4,7 @@ import { notFound } from 'next/navigation';
 
 import { Mark } from '../../../../_components/mark';
 import { loadBusinessAgent, loadBusinessSite } from '../../../../_business/site';
+import { requireProductSession } from '../../../../_auth/server';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../../../../modules/commerce/money';
 import { arcTestnet } from '../../../../../platform/arc/config';
 
@@ -19,17 +20,15 @@ function compact(value: string | null): string {
 
 export async function generateMetadata({ params }: AgentPageProps): Promise<Metadata> {
   const { agentId, businessSlug } = await params;
-  const agent = await loadBusinessAgent(businessSlug, agentId);
-  return agent === undefined
-    ? { title: 'Agent not found · Inomasa' }
-    : { title: `${agent.displayName} · Inomasa` };
+  return { title: `Protected Agent · ${agentId} · ${businessSlug} · Inomasa` };
 }
 
 export default async function AgentPage({ params }: AgentPageProps) {
   const { agentId, businessSlug } = await params;
+  const session = await requireProductSession('/business/' + businessSlug + '/agents/' + agentId);
   const [agent, site] = await Promise.all([
-    loadBusinessAgent(businessSlug, agentId),
-    loadBusinessSite(businessSlug),
+    loadBusinessAgent(businessSlug, agentId, session.principalId),
+    loadBusinessSite(businessSlug, session.principalId),
   ]);
   if (agent === undefined || site === undefined) notFound();
 
