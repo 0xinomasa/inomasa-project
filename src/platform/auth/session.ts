@@ -139,14 +139,15 @@ export function verifyProductSession(token: string | undefined, now = Date.now()
 
   try {
     const session = JSON.parse(decoded) as ProductSession;
+    const environment = configuredEnvironment();
     if (
+      environment === null ||
       typeof session.email !== 'string' ||
       typeof session.displayName !== 'string' ||
       typeof session.principalId !== 'string' ||
       !session.principalId.startsWith('usr_') ||
       session.actorClassification !== 'COMMON_CONTROL_TEST' ||
-      (session.environment !== 'LOCAL_DEVELOPMENT' &&
-        session.environment !== 'PRIVATE_ARC_TESTNET') ||
+      session.environment !== environment ||
       !Number.isSafeInteger(session.expiresAt) ||
       session.expiresAt <= Math.floor(now / 1000)
     ) {

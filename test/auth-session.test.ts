@@ -74,6 +74,20 @@ test('tampered and expired sessions fail closed', () => {
   }
 });
 
+test('session fails closed when the runtime environment changes', () => {
+  setControlledAuth();
+  try {
+    const result = authenticateInvite('owner@example.com', 'alpha-code', 1_700_000_000_000);
+    assert.equal(result.ok, true);
+    if (!result.ok) return;
+    const token = serializeProductSession(result.session);
+    process.env['INOMASA_ENV'] = 'MAINNET';
+    assert.equal(verifyProductSession(token, 1_700_000_001_000), null);
+  } finally {
+    restoreAuth();
+  }
+});
+
 test('unconfigured or non-testnet authentication does not create a session', () => {
   delete process.env['INOMASA_AUTH_SECRET'];
   delete process.env['INOMASA_ALPHA_INVITES'];
