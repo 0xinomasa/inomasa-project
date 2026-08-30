@@ -24,9 +24,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   Checkpoints A–H are accepted as the **Verified Controlled Arc Testnet
   Economic/System Kernel**. The normative post-H realization authority is
   [`docs/engineering/post-h-product-realization.md`](docs/engineering/post-h-product-realization.md).
-  Human-Operable Business Product Alpha remains **NOT YET VERIFIED**. Work 1 is
-  implementation-in-progress only on `codex/work-1-human-product-alpha` and is not
-  accepted, complete, or merged; Work 2–5 are not started.
+  Human-Operable Business Product Alpha remains **NOT YET VERIFIED**. Work 1 —
+  Fresh human to Business Workspace — is accepted on `main` through pull request
+  `#40`: implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`,
+  merge `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`, with Engineering
+  verification run `33279953605` successful. Work 2–5 are not started.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
@@ -41,6 +43,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   provider-attributable Capital allocation and later-use linkage, PostgreSQL, and
   protected Preview. The fresh four-template common-control Reference Economy is
   an accepted composition fixture, not proof of independent demand.
+- Work 1 adds controlled invited product authentication/session, stable Human
+  Principal mapping, four-template BUILD entry, controller-scoped My Businesses,
+  Business creation/persistence/replay behavior, tenant-isolated Business Workspace
+  entry, and the accepted product shell. Preserve its server-side fail-closed
+  tenancy and client-secret boundary as regression requirements.
 - Signal Forge, Ops Pilot, the accepted Reference Economy Businesses/Agents, and
   all Capital Providers are regression fixtures/control specimens. They are not
   the generic product model, system-capacity limit, or proof that independent
@@ -63,7 +70,12 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   generic replacement passes regression evidence: replace by proof, not rewrite by
   assumption.
 - Production/mainnet, public anonymous access, unrestricted Agent authority, live
-  MIGRATE, and Production/public Capital exposure remain unauthorized.
+  MIGRATE, and Production/public Capital exposure remain unauthorized. After the
+  Work 1 merge unintentionally triggered a Vercel Production deployment through
+  Git integration, the Vercel project was paused and the project-level Git
+  repository connection was disconnected. Existing protected Preview artifacts
+  remain available. Do not reconnect Git auto-deployment or resume Production
+  without explicit owner authorization and the applicable exposure gates.
 - Never present local state, synthetic/common-control demand, testnet USDC, pending
   provider state, or an unexecuted adapter as real finalized Arc commerce.
 

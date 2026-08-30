@@ -3,14 +3,18 @@
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
 The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
-Economic/System Kernel**. It includes four reusable BUILD templates, generic
-multi-user and multi-Business genesis, reusable Business and Agent systems,
-generated Business Sites, bounded Agent authority, ERC-8004 identity linkage,
-direct Arc USDC and x402 commerce, ERC-8183 funded work, exact economic posting,
-contextual Economic History, provider-specific Capital decisions/allocation/later
-use, PostgreSQL, and source-scoped proof observability. MIGRATE is modeled but
-remains user-facing locked. Human-Operable Business Product Alpha is not yet
-verified; its normative realization contract is
+Economic/System Kernel** plus the accepted Work 1 Human Product Alpha entry slice.
+The kernel includes four reusable BUILD templates, generic multi-user and
+multi-Business genesis, reusable Business and Agent systems, generated Business
+Sites, bounded Agent authority, ERC-8004 identity linkage, direct Arc USDC and x402
+commerce, ERC-8183 funded work, exact economic posting, contextual Economic
+History, provider-specific Capital decisions/allocation/later use, PostgreSQL, and
+source-scoped proof observability. Work 1 adds controlled invited product
+authentication/session, stable Human Principal mapping, four-template BUILD entry,
+controller-scoped My Businesses, Business creation/persistence, tenant-isolated
+Business Workspace entry, and the accepted product shell. MIGRATE is modeled but
+remains user-facing locked. Human-Operable Business Product Alpha as a whole is not
+yet verified; its normative realization contract is
 [`Post-H Product Realization`](docs/engineering/post-h-product-realization.md).
 
 Signal Forge, Ops Pilot, and the fresh four-template Reference Economy remain
@@ -24,11 +28,14 @@ B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
 active controlled-Alpha program is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
 Checkpoints A–H are accepted on GitHub `main` as a **Verified Controlled Arc Testnet
-Economic/System Kernel**. The Human-Operable Business Product Alpha remains
-`NOT YET VERIFIED / REALIZATION IN PROGRESS`. Work 1 implementation is started only
-on `codex/work-1-human-product-alpha` and is not accepted, complete, or merged;
-Work 2–5 have not started. No Production, mainnet, public anonymous access, live
-MIGRATE, unrestricted Agent authority, or public/Production Capital scope is implied.
+Economic/System Kernel**. Work 1 — Fresh human to Business Workspace — is accepted
+through pull request `#40`, implementation head
+`b4e006e2114df3a045acc615b6b11f6a00355b5f`, merge
+`27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`, and successful Engineering
+verification run `33279953605`. Work 2–5 have not started. The Human-Operable
+Business Product Alpha therefore remains `NOT YET VERIFIED / REALIZATION IN
+PROGRESS`. No Production, mainnet, public anonymous access, live MIGRATE,
+unrestricted Agent authority, or public/Production Capital scope is implied.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
 
@@ -224,13 +231,20 @@ Run this only against an isolated development/test database. Clean reconstructio
 
 ## Deployment foundation
 
-B4 remains `VERIFIED — PASS` historical foundation evidence. The current controlled
-Alpha also has a verified protected Vercel Preview recorded in
-[`PROJECT_STATE.md`](PROJECT_STATE.md) and the historical
-[`Alpha execution record`](docs/engineering/alpha-execution.md). No Production
-deployment or public anonymous access is authorized. A significant hosted-runtime
-change requires new protected Preview evidence before that change is considered
-runtime-verified.
+B4 remains `VERIFIED — PASS` historical foundation evidence. Work 1 also has a
+protected Vercel Preview recorded in [`PROJECT_STATE.md`](PROJECT_STATE.md). The
+accepted Work 1 Preview source is commit
+`b4e006e2114df3a045acc615b6b11f6a00355b5f`; its protected runtime evidence remains
+valid after the Git connection was removed.
+
+The Work 1 merge briefly triggered a Vercel Production deployment because the
+project was Git-connected with `main` as its Production branch. This was an
+operational side effect, not Production authority. The Vercel project was then
+paused and verified to return `503 DEPLOYMENT_PAUSED`, and the project-level Git
+repository connection was disconnected so future Git pushes/merges do not
+automatically deploy. Existing Preview artifacts remain available and protected.
+Production/public exposure remains unauthorized. A future reconnect or Production
+resume requires explicit owner authorization and the applicable exposure gates.
 
 ## Local environment
 
