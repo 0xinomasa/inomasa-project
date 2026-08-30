@@ -508,6 +508,7 @@ export class PostgresAlphaBusinessRepository {
 
   async activateTreasuryBinding(input: {
     readonly activeBinding: TreasuryBinding;
+    readonly controllerPrincipalId?: `usr_${string}`;
     readonly pendingBindingId: `tbn_${string}`;
     readonly occurredAt: string;
   }): Promise<void> {
@@ -519,6 +520,19 @@ export class PostgresAlphaBusinessRepository {
         .where('binding_id', '=', input.pendingBindingId)
         .forUpdate()
         .executeTakeFirstOrThrow();
+
+      if (input.controllerPrincipalId !== undefined) {
+        const control = await database
+          .selectFrom('business_controls')
+          .select('control_id')
+          .where('business_id', '=', pending.business_id)
+          .where('controller_principal_id', '=', input.controllerPrincipalId)
+          .where('status', '=', 'ACTIVE')
+          .executeTakeFirst();
+        if (control === undefined) {
+          throw new Error('Business control is required to activate this Treasury binding.');
+        }
+      }
 
       if (
         input.activeBinding.businessId !== pending.business_id ||

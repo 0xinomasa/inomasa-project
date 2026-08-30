@@ -1,7 +1,7 @@
 import type { BusinessAgent } from '../../modules/agent/model.ts';
 import { validateBusinessAgent } from '../../modules/agent/model.ts';
 import type { PostgresPersistence } from './database.ts';
-import { applicationSchema } from './database.ts';
+import { applicationSchema, type PersistenceTransaction } from './database.ts';
 
 export interface AgentListItem {
   readonly agentPrincipalId: string;
@@ -55,34 +55,54 @@ export class PostgresAgentRepository {
     this.#persistence = persistence;
   }
 
-  async ensureAgent(input: BusinessAgent): Promise<{ readonly created: boolean }> {
+  async ensureAgent(
+    input: BusinessAgent,
+    controllerPrincipalId?: `usr_${string}`,
+    transaction?: PersistenceTransaction,
+  ): Promise<{ readonly created: boolean }> {
     const agent = validateBusinessAgent(input);
-    return this.#persistence.transaction(async (transaction) => {
-      const database = transaction.withSchema(applicationSchema);
-      const business = await database
-        .selectFrom('businesses')
-        .select(['actor_classification', 'environment'])
+    if (transaction === undefined) {
+      return this.#persistence.transaction((activeTransaction) =>
+        this.ensureAgent(agent, controllerPrincipalId, activeTransaction),
+      );
+    }
+    const database = transaction.withSchema(applicationSchema);
+    const business = await database
+      .selectFrom('businesses')
+      .select(['actor_classification', 'environment'])
+      .where('business_id', '=', agent.businessId)
+      .executeTakeFirstOrThrow();
+    if (controllerPrincipalId !== undefined) {
+      const control = await database
+        .selectFrom('business_controls')
+        .select('control_id')
         .where('business_id', '=', agent.businessId)
-        .executeTakeFirstOrThrow();
-      if (business.environment !== agent.environment) {
-        throw new Error('Agent environment does not match its related Business.');
+        .where('controller_principal_id', '=', controllerPrincipalId)
+        .where('status', '=', 'ACTIVE')
+        .executeTakeFirst();
+      if (control === undefined) {
+        throw new Error('Business control is required to create this Agent.');
       }
+    }
+    if (business.environment !== agent.environment) {
+      throw new Error('Agent environment does not match its related Business.');
+    }
 
-      const created = await database
-        .insertInto('principals')
-        .values({
+    const created = await database
+      .insertInto('principals')
+      .values({
           actor_classification: business.actor_classification,
           display_name: agent.displayName,
           environment: agent.environment,
           principal_id: agent.agentPrincipalId,
           principal_kind: 'AGENT',
-        })
-        .onConflict((conflict) => conflict.column('principal_id').doNothing())
-        .returning('principal_id')
-        .executeTakeFirst();
-      await database
-        .insertInto('agent_registrations')
-        .values({
+      })
+      .onConflict((conflict) => conflict.column('principal_id').doNothing())
+      .returning('principal_id')
+      .executeTakeFirst();
+    await database
+      .insertInto('agent_registrations')
+      .values({
           agent_principal_id: agent.agentPrincipalId,
           business_id: agent.businessId,
           capabilities: JSON.stringify(agent.capabilities),
@@ -91,14 +111,14 @@ export class PostgresAgentRepository {
           runtime_class: agent.runtimeClass,
           software_version: agent.softwareVersion,
           status: agent.status,
-        })
-        .onConflict((conflict) => conflict.column('agent_principal_id').doNothing())
-        .execute();
+      })
+      .onConflict((conflict) => conflict.column('agent_principal_id').doNothing())
+      .execute();
 
-      const stored = await database
-        .selectFrom('agent_registrations as registration')
-        .innerJoin('principals as principal', 'principal.principal_id', 'registration.agent_principal_id')
-        .select([
+    const stored = await database
+      .selectFrom('agent_registrations as registration')
+      .innerJoin('principals as principal', 'principal.principal_id', 'registration.agent_principal_id')
+      .select([
           'registration.business_id',
           'registration.capabilities',
           'principal.display_name',
@@ -108,24 +128,23 @@ export class PostgresAgentRepository {
           'registration.runtime_class',
           'registration.software_version',
           'registration.status',
-        ])
-        .where('registration.agent_principal_id', '=', agent.agentPrincipalId)
-        .executeTakeFirstOrThrow();
-      if (
-        stored.business_id !== agent.businessId ||
-        JSON.stringify(capabilities(stored.capabilities)) !== JSON.stringify(agent.capabilities) ||
-        stored.display_name !== agent.displayName ||
-        stored.environment !== agent.environment ||
-        stored.provider_of_record_principal_id !== agent.providerOfRecordPrincipalId ||
-        stored.role !== agent.role ||
-        stored.runtime_class !== agent.runtimeClass ||
-        stored.software_version !== agent.softwareVersion ||
-        stored.status !== agent.status
-      ) {
-        throw new Error('Agent principal already exists with different Business semantics.');
-      }
-      return { created: created !== undefined };
-    });
+      ])
+      .where('registration.agent_principal_id', '=', agent.agentPrincipalId)
+      .executeTakeFirstOrThrow();
+    if (
+      stored.business_id !== agent.businessId ||
+      JSON.stringify(capabilities(stored.capabilities)) !== JSON.stringify(agent.capabilities) ||
+      stored.display_name !== agent.displayName ||
+      stored.environment !== agent.environment ||
+      stored.provider_of_record_principal_id !== agent.providerOfRecordPrincipalId ||
+      stored.role !== agent.role ||
+      stored.runtime_class !== agent.runtimeClass ||
+      stored.software_version !== agent.softwareVersion ||
+      stored.status !== agent.status
+    ) {
+      throw new Error('Agent principal already exists with different Business semantics.');
+    }
+    return { created: created !== undefined };
   }
 
   async listAgentsForBusiness(businessId: `biz_${string}`): Promise<readonly AgentListItem[]> {
