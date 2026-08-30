@@ -26,9 +26,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   [`docs/engineering/post-h-product-realization.md`](docs/engineering/post-h-product-realization.md).
   Human-Operable Business Product Alpha remains **NOT YET VERIFIED**. Work 1 —
   Fresh human to Business Workspace — is accepted on `main` through pull request
-  `#40`: implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`,
-  merge `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`, with Engineering
-  verification run `33279953605` successful. Work 2–5 are not started.
+  `#40`. Work 2 — Operational Workspace — is accepted through pull request `#42`:
+  implementation head `66dfffd8c8ad21dc0fcc4c9e74d8e7dc53e76e91`, merge
+  `9fc197895a2db49398620d7355cbb7d79f549364`, with PR Engineering verification
+  run `33289735811` and accepted-main run `33303102348` successful. Work 3–5 are
+  not started.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
@@ -48,6 +50,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   Business creation/persistence/replay behavior, tenant-isolated Business Workspace
   entry, and the accepted product shell. Preserve its server-side fail-closed
   tenancy and client-secret boundary as regression requirements.
+- Work 2 adds controller-operated Product/Service drafts, bounded Agents, Circle
+  Developer-Controlled EOA Treasury provisioning, and controlled funding-state
+  refresh inside the tenant-scoped Business Workspace. Preserve its server-side
+  tenancy, exact replay/idempotency, platform-controlled execution-account meaning,
+  and honest provider-unavailable state as regression requirements.
 - Signal Forge, Ops Pilot, the accepted Reference Economy Businesses/Agents, and
   all Capital Providers are regression fixtures/control specimens. They are not
   the generic product model, system-capacity limit, or proof that independent
