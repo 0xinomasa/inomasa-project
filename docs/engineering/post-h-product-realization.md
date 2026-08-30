@@ -1,7 +1,7 @@
 # Post-H Product Realization Record
 
 **Status:** NORMATIVE PRODUCT-REALIZATION AUTHORITY AFTER A–H
-**Current state:** `KERNEL VERIFIED` · `HUMAN-OPERABLE BUSINESS PRODUCT ALPHA NOT YET VERIFIED / REALIZATION IN PROGRESS`
+**Current state:** `KERNEL VERIFIED` · `WORK 1 ACCEPTED` · `HUMAN-OPERABLE BUSINESS PRODUCT ALPHA NOT YET VERIFIED / REALIZATION IN PROGRESS`
 **Scope:** controlled Arc Testnet, Protected Preview, owner/common-control Alpha only
 **Baseline:** accepted GitHub `main` at `3647e3462bf0c77024209b5550a6f04ca5e53e1e`
 
@@ -29,9 +29,10 @@ The authority hierarchy is:
    historical lineage unless an active authority explicitly carries a meaning
    forward.
 
-The record does not claim that the product layer is already implemented. It
-defines what the next engineering work must realize and how that realization will
-be proven.
+The record does not claim that the product layer is already fully implemented. It
+defines what the product-realization work must realize and how that realization
+will be proven. Work 1 is now an accepted implementation slice; Work 2–5 remain
+unexecuted.
 
 ## 2. Current truth and status semantics
 
@@ -51,24 +52,39 @@ be proven.
   of independent demand or public product readiness.
 - Observer-facing and Founder/System read-only views exist within their accepted
   scope. They are observability/proof surfaces, not a complete operator workspace.
+- Work 1 — Fresh human to Business Workspace — is accepted on GitHub `main` through
+  pull request `#40`. Its implementation head is
+  `b4e006e2114df3a045acc615b6b11f6a00355b5f`, merge commit is
+  `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`, and Engineering verification run
+  `33279953605` completed successfully. The accepted slice provides controlled
+  invited product authentication/session, stable Human Principal mapping,
+  controller-scoped My Businesses, direct selection of the four BUILD templates,
+  Business creation/persistence, tenant-isolated Business Workspace entry, and the
+  accepted product shell without changing the A–H semantic kernel.
+- Work 1 product acceptance observed fresh invited-user login, template selection,
+  Business creation, persistence, Workspace entry, and two-way second-user tenant
+  isolation from the application. The corrected protected Vercel Preview
+  `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9` was built from the exact Work 1 head commit and
+  remained protected by Vercel Authentication.
 
 ### 2.2 Not verified yet
 
-**Human-Operable Business Product Alpha is NOT YET VERIFIED.** The following are
-product-realization requirements, not claims about the current accepted `main`:
+**Human-Operable Business Product Alpha as a whole is NOT YET VERIFIED.** Work 1
+acceptance does not imply completion of the following remaining product-realization
+requirements:
 
-- a fresh invited human can complete the product journey without CLI, database,
-  GitHub, or developer help;
-- product authentication maps the human to a stable Inomasa Human Principal and
-  enforces tenant/resource control;
-- BUILD, four-template selection, Business creation, My Businesses, and a usable
-  Business Workspace work end-to-end;
 - Product/Service, Agent, Treasury/funding, commerce/jobs, and Economic History
-  are operable from the product at their stated Alpha scope;
+  must become operable from the product at their stated Alpha scope;
 - failures, unknown outcomes, permissions, loading, empty states, and degraded
-  dependencies are understandable;
-- the same journey works for another authorized user and on an Android browser;
-- a final hosted proof is reproducible from a clean accepted commit.
+  dependencies must remain understandable across those operational journeys;
+- controlled x402 and ERC-8183 economic operations must be executable and
+  reconstruct correctly from the human product;
+- controlled Capital must become product-operable while remaining separate from
+  Revenue and from Founder/System/Audit observability;
+- final integrated fresh-user and second-user journeys must work on desktop and
+  Android from a clean accepted hosted artifact;
+- a final hosted proof must be reproducible from a clean accepted commit while all
+  A–H and Work 1 regressions remain passing.
 
 Do not convert a fixture into a product claim, a proof into a user journey, a
 Vercel Deployment Protection gate into product authentication, or a declarative
@@ -76,13 +92,67 @@ Vercel Deployment Protection gate into product authentication, or a declarative
 
 ### 2.3 Current Work 1 state
 
-Work 1 implementation was started on the separate branch
-`codex/work-1-human-product-alpha`. It is:
+Work 1 was implemented on `codex/work-1-human-product-alpha` and is now:
 
-`IMPLEMENTATION STARTED ON SEPARATE BRANCH · NOT ACCEPTED · NOT COMPLETE · NOT MERGED`.
+`IMPLEMENTED · OWNER-ACCEPTED WITH DEFERRED NON-BLOCKING UX FINDINGS · MERGED TO MAIN`.
 
-That branch is deliberately not part of this authority-recording change. Work 2–5
-are not executed by this record.
+Acceptance evidence:
+
+- implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`;
+- pull request `#40`;
+- merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`;
+- Engineering verification run `33279953605`, successful;
+- corrected protected Preview `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9`, sourced from
+  the exact implementation head;
+- owner-observed two-user persistence and two-way tenant isolation, plus mobile
+  product-path checks.
+
+Work 1 acceptance closes only the Fresh-human-to-Business-Workspace slice. Work
+2–5 have not started.
+
+The following owner UX findings are deliberately deferred to an integrated product
+UX corrective pass rather than treated as Work 1 blockers:
+
+- improve contrast and visual treatment of the three primary Build / Migrate /
+  Capital choices; the product intent does not require those choices to remain
+  literal boxes/cards unless the owner explicitly requires that primitive;
+- make Live Economy materially more compact, especially on desktop and mobile,
+  while restoring useful protocol-context signals such as x402, ERC-8004 and
+  ERC-8183 without turning the landing into a protocol dashboard;
+- evaluate whether `Live Economy` belongs as a peer top-navigation item when the
+  three primary product paths are Build, Migrate and Capital;
+- remove or progressively disclose engineering-facing copy that still leaks into
+  normal product surfaces;
+- improve landing hierarchy and page length while preserving the accepted calm,
+  workspace-oriented direction;
+- perform final desktop acceptance at normal browser zoom in addition to overview
+  screenshots.
+
+### 2.4 Deployment containment after Work 1 merge
+
+The Work 1 merge exposed an operational deployment side effect that was not part
+of the accepted product scope. Because Vercel Git integration treated `main` as
+the Production branch, merge commit
+`27b30747c4a2fd14b1b29a1ee221fb99c893bd1a` automatically created Production
+deployment `dpl_8Uwgxnw5bNSCgrY3Spa868RUnDgp`. This did **not** grant Production
+authority and did not change the product acceptance boundary.
+
+Containment was completed without rollback or product-code changes:
+
+- the Vercel project `inomasa` was paused; direct verification of the Production
+  domain returned HTTP `503` with `DEPLOYMENT_PAUSED`;
+- the project-level GitHub repository connection was removed, so ordinary Git
+  pushes/merges no longer automatically trigger Vercel deployments;
+- existing protected Preview artifacts remain available and continue to require
+  Vercel Authentication;
+- the Neon development PostgreSQL connection and its existing environment
+  configuration were intentionally left unchanged;
+- no `vercel.json`, new deployment project, Production secret, database change, or
+  kernel change was introduced as part of containment.
+
+Production, public anonymous Product Alpha, and Production/public Capital remain
+unauthorized. Reconnecting Git auto-deployment or resuming Production requires a
+separate explicit owner decision and the applicable exposure gates.
 
 ## 3. Access, identity, ownership, and tenancy
 
@@ -290,8 +360,13 @@ does not claim confidential onchain execution or current APS integration.
 Work proceeds in vertical, dependency-aware slices. Each work must preserve the
 kernel, use existing application capabilities, and prove an observable user task.
 
-### Work 1 — Fresh human to Business Workspace
+### Work 1 — Fresh human to Business Workspace — ACCEPTED
 
+- **Accepted evidence:** pull request `#40`; implementation head
+  `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge
+  `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run
+  `33279953605`; protected Preview `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9`; owner
+  product acceptance including two-user tenant isolation.
 - **Goal:** authenticate an invited human, map a stable Human Principal, show
   controller-scoped My Businesses, select one of four templates, create a BUILD
   Business, and enter its Workspace.
@@ -301,20 +376,22 @@ kernel, use existing application capabilities, and prove an observable user task
   Business control/read model, and Treasury binding semantics.
 - **Protected boundaries:** no MIGRATE, no fixture-as-product shortcut, no second
   Business engine, no unscoped tenant reads, no Production/mainnet authority.
-- **User outcome:** a fresh invited user can repeat the flow without developer or
-  CLI assistance and sees honest connected/not-configured/degraded states.
+- **User outcome:** an invited user can complete the accepted entry flow without
+  developer or CLI assistance, with persistence and tenant isolation observed.
 - **Engineering acceptance:** lint, typecheck, tests, build, auth/session security,
   authorization and tenant-isolation tests, persistence/replay proof, and client
-  secret boundary pass.
+  secret boundary passed for the accepted slice.
 - **Product acceptance:** fresh login, template choice, Create Business, My
-  Businesses appearance, Workspace entry, second-user isolation, and mobile task
-  completion are observed from the application.
+  Businesses appearance, Workspace entry, second-user isolation, and mobile path
+  behavior were observed from the application. Deferred visual findings above do
+  not reopen Work 1 unless a real regression is found.
 
 ### Work 2 — Operational Workspace
 
+- **Status:** not started.
 - **Goal:** make Product/Service, Agent, Treasury, and controlled test-funding
   surfaces operable in Business context.
-- **Depends on:** Work 1 identity/ownership and Workspace shell.
+- **Depends on:** accepted Work 1 identity/ownership and Workspace shell.
 - **Uses:** existing catalog/offer, Agent identity/capability/authority/runtime,
   Treasury/Circle adapter and testnet funding capabilities.
 - **Protected boundaries:** Agent identity/runtime/wallet separation, Business
@@ -330,6 +407,7 @@ kernel, use existing application capabilities, and prove an observable user task
 
 ### Work 3 — Human-triggered economic operations
 
+- **Status:** not started.
 - **Goal:** complete one x402 purchase and one ERC-8183 job through the product,
   including settlement and Economic History.
 - **Depends on:** Work 2 and existing accepted economic kernel.
@@ -347,6 +425,7 @@ kernel, use existing application capabilities, and prove an observable user task
 
 ### Work 4 — Controlled Capital and separated observability
 
+- **Status:** not started.
 - **Goal:** expose a controlled provider-driven Capital journey while keeping
   Founder/System/Audit separate from Business operations.
 - **Depends on:** Work 3 Economic History and accepted Capital kernel.
@@ -364,6 +443,7 @@ kernel, use existing application capabilities, and prove an observable user task
 
 ### Work 5 — Integrated Human Product Alpha acceptance
 
+- **Status:** not started.
 - **Goal:** prove the complete human journey and hosted artifact from a clean
   accepted source while preserving A–H.
 - **Depends on:** Work 1–4 slices, configured authorized test environment, and
@@ -402,6 +482,12 @@ replay/idempotency, exact accounting, and clean artifact provenance.
 - another authorized user can repeat the journey without a code change;
 - all A–H kernel regressions remain PASS.
 
+Work 1 has satisfied the subset covering invited authentication, stable product
+identity, owned-resource visibility, four-template Business creation, My Businesses,
+Workspace entry, second-user isolation, and the observed mobile entry path. The
+remaining bullets are still required for Work 2–5 and final Human Product Alpha
+acceptance.
+
 Verification must therefore include full browser E2E, authentication,
 authorization, tenant isolation, React/component behavior, accessibility, mobile
 browser regression, form interactions, loading/error/empty/permission/unknown
@@ -413,22 +499,25 @@ Product Acceptance.
 
 | Observation | Classification | Required treatment |
 | --- | --- | --- |
-| H Preview `gitDirty=1`; functional evidence remains valid | Blocker before Human Product Alpha closeout/final hosted proof | produce a clean accepted-commit build and record source commit, clean tree/build, CI, deployment ID, environment, and hosted runtime proof |
-| Protected Preview is not yet a clean reproducible final Human Product Alpha artifact | Blocker before Human Product Alpha acceptance | do not invalidate historical H; create new provenance-backed hosted proof |
-| Artifact-to-commit provenance gap | Blocker before Human Product Alpha acceptance | bind hosted artifact to accepted commit and observed CI |
-| Documentation drift, stale counts/status, README/PROJECT_STATE inconsistency | Blocker before Human Product Alpha closeout | reconcile current status without rewriting historical records |
+| H Preview `gitDirty=1`; functional evidence remains valid | Historical blocker superseded for Work 1 entry-slice provenance, still relevant to final Human Product Alpha hosted proof | retain historical H evidence; final Work 5 proof must still bind a clean accepted integrated source |
+| Work 1 protected Preview is source-bound to exact implementation head | Accepted Work 1 evidence | preserve deployment/source/CI evidence; do not reinterpret it as final Work 5 proof |
+| Final integrated Protected Preview is not yet a clean reproducible Human Product Alpha artifact | Blocker before Work 5 / Human Product Alpha acceptance | create new provenance-backed hosted proof only at the appropriate integrated stage |
+| Documentation drift, stale Work 1 status, README/PROJECT_STATE inconsistency | Resolved by the Work 1 continuity closeout once merged | keep future accepted merges synchronized through Continuity Closeout |
+| Deferred integrated UX findings from Work 1 | Non-blocking for accepted Work 1; required input to later integrated UX correction | preserve findings in §2.3 and address them before final Product Alpha owner acceptance unless superseded by an explicit owner decision |
+| Accidental Git-triggered Production deployment after Work 1 merge | Contained operational incident; no Production authority | keep Vercel project paused and Git auto-deployment disconnected until a separately authorized deployment model is selected; existing protected Previews may remain |
 | Generic runtime error masking / misleading empty states | Blocker before Human Product Alpha acceptance when it obscures a user task | distinguish failure, unavailable, empty, pending, permission, and unknown states |
 | Explicit provider/RPC timeout behavior | Blocker before economic Product Acceptance for affected operations | document bounded timeout/unknown handling and prove no blind retry |
 | `PG-TLS-SEMANTICS-01` | Non-blocking Alpha debt unless the blocked dependency/TLS change is attempted | preserve current pinned behavior; re-prove certificate/hostname semantics before changing `pg` family or equivalent |
 | GitHub Actions internal runtime deprecation warning | Non-blocking Alpha maintenance debt | review current GitHub guidance in a separate focused change |
 | Single-operator review/governance | Non-blocking for controlled owner/common-control self-acceptance; gate before broader/private exposure | obtain independent review according to exposure risk |
-| Branch/ruleset protection state not fully verifiable from available API/plan evidence | Gate before broader/private-user exposure | verify required checks and governance hardening; never state `main protected: false` from absence of evidence |
+| Branch/ruleset protection state not fully verifiable from available API/plan evidence | Gate before broader/private-user exposure | verify required checks and governance hardening; do not infer protection state from unrelated evidence |
 | Independent review | Gate before broader/private-user exposure; stronger review/security/governance before public/Production | not a blocker for controlled owner Alpha self-testing |
 | Production, mainnet, public anonymous access, public/Production Capital, unrestricted Agent authority, live MIGRATE | Blocker before any public/Production exposure; unauthorized now | require new owner authorization and applicable architecture/security gates |
 | External DNS or provider observations already scoped as environment-specific | Informational/monitoring unless they block a selected operation | preserve TLS fail-closed behavior and record only observed scope |
 
-Historical H functional proof is valid. It is not final hosted Human Product Alpha
-proof until the clean provenance gate is met.
+Historical H functional proof remains valid. Work 1 has its own accepted protected
+Preview evidence. Neither is the final hosted Human Product Alpha proof required by
+Work 5.
 
 ## 11. Source/media limits and document relationship
 
