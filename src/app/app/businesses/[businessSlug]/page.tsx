@@ -6,8 +6,10 @@ import { requireProductSession } from '../../../_auth/server';
 import { loadBusinessAgents, loadBusinessSite } from '../../../_business/site';
 import { loadBusinessEconomicHistory } from '../../../_economic-history/data';
 import { EconomicActivityList } from '../../../_components/economic-activity-list';
+import { EconomicOperations } from '../../../_components/economic-operations';
 import { OperationalWorkspace } from '../../../_components/operational-workspace';
 import { ProductShell } from '../../../_components/product-shell';
+import { loadProductCommerce } from '../../../_commerce/data';
 import { loadOperationalWorkspace } from '../../../_operational/data';
 
 export const dynamic = 'force-dynamic';
@@ -30,11 +32,12 @@ export async function generateMetadata({ params }: WorkspaceProps): Promise<Meta
 export default async function BusinessWorkspacePage({ params }: WorkspaceProps) {
   const { businessSlug } = await params;
   const session = await requireProductSession('/app/businesses/' + businessSlug);
-  const [site, agents, history, operational] = await Promise.all([
+  const [site, agents, history, operational, commerce] = await Promise.all([
     loadBusinessSite(businessSlug, session.principalId),
     loadBusinessAgents(businessSlug, session.principalId),
     loadBusinessEconomicHistory(businessSlug, session.principalId),
     loadOperationalWorkspace(businessSlug, session.principalId),
+    loadProductCommerce(businessSlug, session.principalId),
   ]);
   if (site === undefined) notFound();
   return (
@@ -80,8 +83,19 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
         )}
 
         <section className="workspace-panel commerce-preview" id="commerce">
-          <div className="panel-heading"><div><p className="eyebrow">Commerce & Jobs</p><h2>Economic actions remain confirmation-gated.</h2></div><span>Kernel connected</span></div>
-          <div className="panel-empty"><strong>Human-triggered purchase and job execution starts in Work 3.</strong><p>Work 2 prepares the controller-scoped offers, bounded Agents, and Treasury state without introducing a simulation or second economic path.</p><span>Next operating dependency</span></div>
+          <div className="panel-heading"><div><p className="eyebrow">Commerce & Jobs</p><h2>Confirm and follow real testnet operations.</h2></div><span>{commerce.state === 'CONNECTED' ? 'Kernel connected' : commerce.state.replaceAll('_', ' ')}</span></div>
+          <p className="panel-description">Purchase an instant resource or commission evaluated work from a controlled test provider. Every confirmation creates one canonical obligation; exact settlement and delivery appear in Economic History below.</p>
+          {commerce.state === 'CONNECTED' ? (
+            <EconomicOperations
+              agents={agents}
+              businessSlug={businessSlug}
+              offers={commerce.offers}
+              providerConfigured={commerce.providerConfigured}
+              requests={commerce.requests}
+            />
+          ) : (
+            <div className="operational-notice"><strong>Commerce is {commerce.state.replaceAll('_', ' ').toLowerCase()}.</strong><p>No empty, paid, or failed state is inferred. Existing kernel records remain unchanged.</p></div>
+          )}
         </section>
 
         <section className="workspace-panel history-panel" id="history">

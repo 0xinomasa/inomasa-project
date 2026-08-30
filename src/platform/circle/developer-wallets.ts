@@ -21,6 +21,7 @@ import {
   type UsdcMicroAmount,
 } from '../../modules/commerce/money.ts';
 import { arcTestnet } from '../arc/config.ts';
+import { withExternalOperationTimeout } from '../provider-timeout.ts';
 import type { CircleDeveloperWalletConfig } from './config.ts';
 
 const circleTerminalFailureStates = new Set(['CANCELLED', 'DENIED', 'FAILED', 'STUCK']);
@@ -45,14 +46,17 @@ async function provisionEoa(
     readonly referenceId: string;
   },
 ): Promise<ProvisionedTreasuryWallet> {
-  const response = await client.createWallets({
-    accountType: 'EOA',
-    blockchains: [arcTestnet.circleBlockchain],
-    count: 1,
-    idempotencyKey: command.idempotencyKey,
-    metadata: [{ name: command.displayName, refId: command.referenceId }],
-    walletSetId,
-  });
+  const response = await withExternalOperationTimeout(
+    client.createWallets({
+      accountType: 'EOA',
+      blockchains: [arcTestnet.circleBlockchain],
+      count: 1,
+      idempotencyKey: command.idempotencyKey,
+      metadata: [{ name: command.displayName, refId: command.referenceId }],
+      walletSetId,
+    }),
+    'Circle wallet provisioning',
+  );
   const wallet = response.data?.wallets[0];
 
   if (wallet === undefined) {
@@ -73,10 +77,13 @@ async function getUsdcBalance(
   client: CircleWalletsClient,
   providerWalletId: string,
 ): Promise<UsdcMicroAmount> {
-  const response = await client.getWalletTokenBalance({
-    id: providerWalletId,
-    tokenAddresses: [arcTestnet.usdc.address],
-  });
+  const response = await withExternalOperationTimeout(
+    client.getWalletTokenBalance({
+      id: providerWalletId,
+      tokenAddresses: [arcTestnet.usdc.address],
+    }),
+    'Circle wallet balance read',
+  );
   const balance = response.data?.tokenBalances?.find(
     ({ token }) => token.tokenAddress?.toLowerCase() === arcTestnet.usdc.address.toLowerCase(),
   );
@@ -87,7 +94,10 @@ async function submitTransfer(
   client: CircleWalletsClient,
   command: SubmitTreasuryTransferCommand,
 ): Promise<SubmittedTreasuryTransfer> {
-  const response = await client.createTransaction(buildCircleTransferInput(command));
+  const response = await withExternalOperationTimeout(
+    client.createTransaction(buildCircleTransferInput(command)),
+    'Circle transfer submission',
+  );
   const transactionId = response.data?.id;
   if (transactionId === undefined || transactionId.length === 0) {
     throw new Error('Circle transfer submission returned no transaction ID.');
@@ -99,7 +109,10 @@ async function observeTransfer(
   client: CircleWalletsClient,
   providerTransactionId: string,
 ): Promise<TreasuryTransferOutcome> {
-  const response = await client.getTransaction({ id: providerTransactionId });
+  const response = await withExternalOperationTimeout(
+    client.getTransaction({ id: providerTransactionId }),
+    'Circle transfer observation',
+  );
   const transaction = response.data?.transaction;
   if (transaction === undefined) {
     return { providerState: 'EMPTY_RESPONSE', state: 'OUTCOME_UNKNOWN' };

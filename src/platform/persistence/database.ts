@@ -373,6 +373,23 @@ interface X402PaymentOperationTable {
   readonly updated_at: Timestamp;
 }
 
+interface ProductEconomicRequestTable {
+  readonly agent_principal_id: string | null;
+  readonly buyer_business_id: string;
+  readonly controller_principal_id: string;
+  readonly created_at: Generated<Date>;
+  readonly gateway_funding_id: string | null;
+  readonly job_id: string | null;
+  readonly obligation_id: string;
+  readonly offer_id: string;
+  readonly operation_kind: string;
+  readonly payment_id: string | null;
+  readonly request_id: string;
+  readonly requested_at: Timestamp;
+  readonly service_execution_id: string;
+  readonly settlement_id: string;
+}
+
 interface EconomicEntryTable {
   readonly amount_micro_usdc: string;
   readonly asset: string;
@@ -526,6 +543,7 @@ export interface PersistenceDatabase {
   readonly genesis_requests: GenesisRequestTable;
   readonly obligations: ObligationTable;
   readonly principals: PrincipalTable;
+  readonly product_economic_requests: ProductEconomicRequestTable;
   readonly persistence_probe: EngineeringPersistenceProbeTable;
   readonly service_offers: ServiceOfferTable;
   readonly service_executions: ServiceExecutionTable;

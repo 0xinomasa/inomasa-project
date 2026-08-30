@@ -14,6 +14,7 @@ import type {
 } from '../../modules/commerce/x402-port.ts';
 import { parseUsdcAmount, type UsdcMicroAmount } from '../../modules/commerce/money.ts';
 import { arcTestnet } from '../arc/config.ts';
+import { withExternalOperationTimeout } from '../provider-timeout.ts';
 import type { CircleDeveloperWalletConfig } from './config.ts';
 
 export const arcGatewayTestnet = {
@@ -83,7 +84,10 @@ export class CircleGatewayFacilitatorAdapter {
     readonly amountMicroUsdc: UsdcMicroAmount;
     readonly payToAddress: `0x${string}`;
   }): Promise<X402PaymentRequirements> {
-    const supported = await this.#facilitator.getSupported();
+    const supported = await withExternalOperationTimeout(
+      this.#facilitator.getSupported(),
+      'Circle Gateway capability discovery',
+    );
     const kind = supported.kinds.find(
       (candidate) =>
         candidate.x402Version === 2 &&
@@ -126,9 +130,12 @@ export class CircleGatewayFacilitatorAdapter {
     payload: X402PaymentPayload,
     requirements: X402PaymentRequirements,
   ): Promise<X402VerificationResult> {
-    return this.#facilitator.verify(
-      payload as unknown as FacilitatorPaymentPayload,
-      requirements as unknown as FacilitatorPaymentRequirements,
+    return withExternalOperationTimeout(
+      this.#facilitator.verify(
+        payload as unknown as FacilitatorPaymentPayload,
+        requirements as unknown as FacilitatorPaymentRequirements,
+      ),
+      'Circle Gateway payment verification',
     );
   }
 
@@ -136,10 +143,13 @@ export class CircleGatewayFacilitatorAdapter {
     payload: X402PaymentPayload,
     requirements: X402PaymentRequirements,
   ): Promise<X402SettlementResult> {
-    return this.#facilitator.settle(
-      payload as unknown as FacilitatorPaymentPayload,
-      requirements as unknown as FacilitatorPaymentRequirements,
-    ) as Promise<X402SettlementResult>;
+    return withExternalOperationTimeout(
+      this.#facilitator.settle(
+        payload as unknown as FacilitatorPaymentPayload,
+        requirements as unknown as FacilitatorPaymentRequirements,
+      ) as Promise<X402SettlementResult>,
+      'Circle Gateway settlement',
+    );
   }
 }
 
@@ -192,16 +202,19 @@ export class CircleGatewayX402Adapter implements GatewayX402Port {
     readonly referenceId: string;
     readonly sourceAddress: `0x${string}`;
   }): Promise<{ readonly providerTransactionId: string }> {
-    const response = await this.#client.createContractExecutionTransaction({
-      abiFunctionSignature: input.abiFunctionSignature,
-      abiParameters: input.abiParameters,
-      blockchain: arcTestnet.circleBlockchain,
-      contractAddress: input.contractAddress,
-      fee: { config: { feeLevel: 'MEDIUM' }, type: 'level' },
-      idempotencyKey: input.idempotencyKey,
-      refId: input.referenceId,
-      walletAddress: input.sourceAddress,
-    });
+    const response = await withExternalOperationTimeout(
+      this.#client.createContractExecutionTransaction({
+        abiFunctionSignature: input.abiFunctionSignature,
+        abiParameters: input.abiParameters,
+        blockchain: arcTestnet.circleBlockchain,
+        contractAddress: input.contractAddress,
+        fee: { config: { feeLevel: 'MEDIUM' }, type: 'level' },
+        idempotencyKey: input.idempotencyKey,
+        refId: input.referenceId,
+        walletAddress: input.sourceAddress,
+      }),
+      'Circle Gateway funding submission',
+    );
     const providerTransactionId = response.data?.id;
     if (providerTransactionId === undefined || providerTransactionId.length === 0) {
       throw new Error('Circle contract execution returned no transaction ID.');
@@ -212,7 +225,10 @@ export class CircleGatewayX402Adapter implements GatewayX402Port {
   async observeFundingTransaction(
     providerTransactionId: string,
   ): Promise<GatewayFundingTransactionOutcome> {
-    const response = await this.#client.getTransaction({ id: providerTransactionId });
+    const response = await withExternalOperationTimeout(
+      this.#client.getTransaction({ id: providerTransactionId }),
+      'Circle Gateway funding observation',
+    );
     const transaction = response.data?.transaction;
     if (transaction === undefined) {
       return { providerState: 'EMPTY_RESPONSE', state: 'OUTCOME_UNKNOWN' };
@@ -234,14 +250,17 @@ export class CircleGatewayX402Adapter implements GatewayX402Port {
   }
 
   async getBalance(depositorAddress: `0x${string}`): Promise<GatewayBalance> {
-    const response = await fetch(`${arcGatewayTestnet.apiUrl}/v1/balances`, {
-      body: JSON.stringify({
-        sources: [{ depositor: depositorAddress, domain: arcGatewayTestnet.domain }],
-        token: 'USDC',
+    const response = await withExternalOperationTimeout(
+      fetch(`${arcGatewayTestnet.apiUrl}/v1/balances`, {
+        body: JSON.stringify({
+          sources: [{ depositor: depositorAddress, domain: arcGatewayTestnet.domain }],
+          token: 'USDC',
+        }),
+        headers: { 'Content-Type': 'application/json' },
+        method: 'POST',
       }),
-      headers: { 'Content-Type': 'application/json' },
-      method: 'POST',
-    });
+      'Circle Gateway balance read',
+    );
     const data = (await response.json()) as {
       readonly balances?: readonly { readonly balance?: string; readonly pendingBatch?: string }[];
       readonly message?: string;
@@ -269,12 +288,15 @@ export class CircleGatewayX402Adapter implements GatewayX402Port {
     const scheme = new BatchEvmScheme({
       address: this.#payerAddress,
       signTypedData: async (params) => {
-        const response = await this.#client.signTypedData({
-          blockchain: arcTestnet.circleBlockchain,
-          data: serializeCircleTypedData(params),
-          memo: 'Inomasa bounded Agent x402 payment authorization',
-          walletAddress: this.#payerAddress,
-        });
+        const response = await withExternalOperationTimeout(
+          this.#client.signTypedData({
+            blockchain: arcTestnet.circleBlockchain,
+            data: serializeCircleTypedData(params),
+            memo: 'Inomasa bounded Agent x402 payment authorization',
+            walletAddress: this.#payerAddress,
+          }),
+          'Circle typed-data signature',
+        );
         return requireSignature(response.data?.signature);
       },
     });

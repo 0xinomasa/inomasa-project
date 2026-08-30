@@ -12,7 +12,7 @@ import type { ServiceOffer } from '../../modules/commerce/model.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
 import { canonicalJson } from '../../shared/canonical-json.ts';
 import { arcErc8183 } from '../arc/erc8183.ts';
-import type { PostgresPersistence } from './database.ts';
+import type { PersistenceTransaction, PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
 export type PersistedErc8183Status = 'UNCREATED' | Erc8183JobStatus;
@@ -130,16 +130,26 @@ export class PostgresErc8183Repository {
   async ensureJob(input: {
     readonly commitment: Erc8183JobCommitment;
     readonly offer: ServiceOffer;
-  }): Promise<Erc8183JobRecord> {
+  }, transaction?: PersistenceTransaction): Promise<Erc8183JobRecord> {
+    if (transaction === undefined) {
+      return this.#persistence.transaction((activeTransaction) =>
+        this.ensureJob(input, activeTransaction),
+      );
+    }
     const { commitment, offer } = input;
+    const database = transaction.withSchema(applicationSchema);
+    const obligation = await database
+      .selectFrom('obligations')
+      .select('offer_id')
+      .where('obligation_id', '=', commitment.obligationId)
+      .executeTakeFirstOrThrow();
     if (
-      offer.offerId !== (await this.#offerIdForObligation(commitment.obligationId)) ||
+      offer.offerId !== obligation.offer_id ||
       offer.priceMicroUsdc !== commitment.budgetMicroUsdc ||
       offer.providerBusinessId !== commitment.providerBusinessId
     ) {
       throw new Error('ERC-8183 job does not match its accepted service offer and obligation.');
     }
-    const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
     await database
       .insertInto('erc8183_jobs')
       .values({
@@ -169,7 +179,12 @@ export class PostgresErc8183Repository {
       })
       .onConflict((conflict) => conflict.column('job_id').doNothing())
       .execute();
-    const stored = await this.getJob(commitment.jobId);
+    const row = await database
+      .selectFrom('erc8183_jobs')
+      .selectAll()
+      .where('job_id', '=', commitment.jobId)
+      .executeTakeFirstOrThrow();
+    const stored = asJob(row);
     if (
       stored.budgetMicroUsdc !== commitment.budgetMicroUsdc ||
       stored.clientAddress.toLowerCase() !== commitment.clientAddress.toLowerCase() ||
@@ -464,16 +479,6 @@ export class PostgresErc8183Repository {
         .where('execution_id', '=', input.serviceExecutionId)
         .executeTakeFirstOrThrow();
     });
-  }
-
-  async #offerIdForObligation(obligationId: `obl_${string}`): Promise<string> {
-    const row = await this.#persistence.databaseForApplication
-      .withSchema(applicationSchema)
-      .selectFrom('obligations')
-      .select('offer_id')
-      .where('obligation_id', '=', obligationId)
-      .executeTakeFirstOrThrow();
-    return row.offer_id;
   }
 
   async #recordPayout(

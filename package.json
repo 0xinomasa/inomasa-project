@@ -52,6 +52,7 @@
     "alpha:x402-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-purchase.ts",
     "alpha:x402-http-proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-x402-http-proof.ts",
     "alpha:reconcile-settlement": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-reconcile-settlement.ts",
+    "product:work3:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/work-3-product-proof.ts",
     "alpha:wallets": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/circle-provision-alpha-wallets.ts",
     "db:migrate": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/db-migrate.ts",
     "db:proof": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/db-proof.ts",

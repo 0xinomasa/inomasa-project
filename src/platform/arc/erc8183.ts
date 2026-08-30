@@ -12,6 +12,10 @@ import {
   type Erc8183JobStatus,
 } from '../../modules/commerce/erc8183.ts';
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import {
+  externalReadTimeoutMs,
+  withExternalOperationTimeout,
+} from '../provider-timeout.ts';
 import { arcTestnet } from './config.ts';
 
 const zeroAddress = '0x0000000000000000000000000000000000000000' as const;
@@ -287,11 +291,15 @@ export class ArcErc8183Rpc {
   }
 
   async #request<T>(method: string, params: readonly unknown[]): Promise<T> {
-    const response = await this.#fetch(this.#rpcUrl, {
-      body: JSON.stringify({ id: 1, jsonrpc: '2.0', method, params }),
-      headers: { 'content-type': 'application/json' },
-      method: 'POST',
-    });
+    const response = await withExternalOperationTimeout(
+      this.#fetch(this.#rpcUrl, {
+        body: JSON.stringify({ id: 1, jsonrpc: '2.0', method, params }),
+        headers: { 'content-type': 'application/json' },
+        method: 'POST',
+      }),
+      `Arc ERC-8183 RPC ${method}`,
+      externalReadTimeoutMs,
+    );
     if (!response.ok) throw new ArcErc8183RpcError(`Arc RPC HTTP ${response.status}.`);
     const payload = (await response.json()) as JsonRpcResponse<T>;
     if (payload.error !== undefined) {
