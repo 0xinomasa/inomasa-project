@@ -2,9 +2,11 @@ import {
   DatabaseConfigurationError,
   readDatabaseConnectionConfig,
 } from '../src/platform/persistence/config.ts';
+import { loadProductEconomicRequests } from '../src/app/_commerce/application.ts';
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { runEngineeringPersistenceProof } from '../src/platform/persistence/engineering-proof.ts';
 import { runOperationalWorkspacePersistenceProof } from '../src/platform/persistence/operational-workspace-proof.ts';
+import { runProductEconomicOperationPersistenceProof } from '../src/platform/persistence/product-economic-operation-proof.ts';
 
 async function main(): Promise<void> {
   const config = readDatabaseConnectionConfig('runtime');
@@ -31,6 +33,19 @@ async function main(): Promise<void> {
     console.log('work_2_tenant_isolation=PASS');
     console.log('work_2_treasury_isolation=PASS');
     console.log('work_2_transaction_rollback=PASS');
+
+    const productEconomicProof = await runProductEconomicOperationPersistenceProof(
+      persistence,
+      loadProductEconomicRequests,
+    );
+    if (Object.values(productEconomicProof).some((verified) => !verified)) {
+      throw new Error('The Work 3 product economic operation persistence proof did not satisfy all assertions.');
+    }
+    console.log('work_3_canonical_economic_read=PASS');
+    console.log('work_3_application_persistence_lifecycle=PASS');
+    console.log('work_3_request_idempotency=PASS');
+    console.log('work_3_request_semantic_replay=PASS');
+    console.log('work_3_tenant_isolation=PASS');
   } finally {
     await persistence.close();
   }

@@ -141,7 +141,7 @@ export class PostgresAgentAuthorityRepository {
     readonly providerOfRecordPrincipalId: `biz_${string}`;
     readonly runtimeClass: 'OPERATOR_INVOKED';
     readonly softwareVersion: string;
-  }): Promise<{ readonly created: boolean }> {
+  }, transaction?: PersistenceTransaction): Promise<{ readonly created: boolean }> {
     validateBusinessAgent({
       agentPrincipalId: input.agentPrincipalId,
       businessId: input.agentBusinessId,
@@ -164,7 +164,11 @@ export class PostgresAgentAuthorityRepository {
       throw new Error('The Agent Business relationship must match represented authority.');
     }
 
-    return this.#persistence.transaction(async (transaction) => {
+    if (transaction === undefined) {
+      return this.#persistence.transaction((activeTransaction) =>
+        this.ensureAgentAndGrant(input, activeTransaction),
+      );
+    }
       const database = transaction.withSchema(applicationSchema);
       const control = await database
         .selectFrom('business_controls as control')
@@ -282,8 +286,7 @@ export class PostgresAgentAuthorityRepository {
         throw new Error('Authority Grant ID already exists with different bounded scope.');
       }
 
-      return { created: principal !== undefined };
-    });
+    return { created: principal !== undefined };
   }
 
   async authorizePurchaseInTransaction(

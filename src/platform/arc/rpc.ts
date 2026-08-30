@@ -1,6 +1,10 @@
 import { createHash } from 'node:crypto';
 
 import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import {
+  externalReadTimeoutMs,
+  withExternalOperationTimeout,
+} from '../provider-timeout.ts';
 import { arcTestnet } from './config.ts';
 
 const erc20TransferTopic =
@@ -129,11 +133,15 @@ export class ArcTestnetRpc {
   }
 
   async #request<T>(method: string, params: readonly unknown[]): Promise<T> {
-    const response = await this.#fetch(this.#rpcUrl, {
-      body: JSON.stringify({ id: 1, jsonrpc: '2.0', method, params }),
-      headers: { 'content-type': 'application/json' },
-      method: 'POST',
-    });
+    const response = await withExternalOperationTimeout(
+      this.#fetch(this.#rpcUrl, {
+        body: JSON.stringify({ id: 1, jsonrpc: '2.0', method, params }),
+        headers: { 'content-type': 'application/json' },
+        method: 'POST',
+      }),
+      `Arc RPC ${method}`,
+      externalReadTimeoutMs,
+    );
 
     if (!response.ok) {
       throw new ArcRpcError(`Arc RPC HTTP request failed with status ${response.status}.`);

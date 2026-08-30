@@ -209,6 +209,16 @@ export class PostgresGatewayX402Repository {
     return asFunding(row);
   }
 
+  async findFunding(fundingId: `gwf_${string}`): Promise<GatewayFundingOperation | undefined> {
+    const row = await this.#persistence.databaseForApplication
+      .withSchema(applicationSchema)
+      .selectFrom('gateway_funding_operations')
+      .selectAll()
+      .where('funding_id', '=', fundingId)
+      .executeTakeFirst();
+    return row === undefined ? undefined : asFunding(row);
+  }
+
   async recordFundingSubmitted(input: {
     readonly leg: 'APPROVAL' | 'DEPOSIT';
     readonly providerTransactionId: string;

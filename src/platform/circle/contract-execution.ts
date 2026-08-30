@@ -6,6 +6,7 @@ import type {
   EvmAddress,
 } from '../../modules/agent/erc8004.ts';
 import { arcTestnet } from '../arc/config.ts';
+import { withExternalOperationTimeout } from '../provider-timeout.ts';
 import type { CircleDeveloperWalletConfig } from './config.ts';
 
 const terminalFailureStates = new Set(['CANCELLED', 'DENIED', 'FAILED', 'STUCK']);
@@ -54,8 +55,9 @@ export class CircleContractExecutionAdapter implements ContractExecutionPort {
   async submit(
     input: Parameters<ContractExecutionPort['submit']>[0],
   ): Promise<{ readonly providerTransactionId: string }> {
-    const response = await this.#client.createContractExecutionTransaction(
-      buildCircleContractExecutionInput(input),
+    const response = await withExternalOperationTimeout(
+      this.#client.createContractExecutionTransaction(buildCircleContractExecutionInput(input)),
+      'Circle contract submission',
     );
     const providerTransactionId = response.data?.id;
     if (providerTransactionId === undefined || providerTransactionId.length === 0) {
@@ -65,7 +67,10 @@ export class CircleContractExecutionAdapter implements ContractExecutionPort {
   }
 
   async observe(providerTransactionId: string): Promise<ContractExecutionOutcome> {
-    const response = await this.#client.getTransaction({ id: providerTransactionId });
+    const response = await withExternalOperationTimeout(
+      this.#client.getTransaction({ id: providerTransactionId }),
+      'Circle transaction observation',
+    );
     const transaction = response.data?.transaction;
     if (transaction === undefined) {
       return { providerState: 'EMPTY_RESPONSE', state: 'OUTCOME_UNKNOWN' };
