@@ -19,6 +19,83 @@ function sum(values: readonly string[]): bigint {
   return values.reduce((total, value) => total + BigInt(value), 0n);
 }
 
+const kernelBusinessIds = [
+  'biz_signal_forge',
+  'biz_ops_pilot',
+  'biz_checkpoint_b_api_proof_a9f2e7fabf34',
+  ...checkpointGBusinesses.map(({ businessId }) => businessId),
+] as const;
+const kernelAgentIds = [
+  'agt_ops_pilot_buyer_v1',
+  'agt_ops_pilot_observer_v1',
+  'agt_reference_workbench_buyer_v1',
+  'agt_reference_signal_service_v1',
+  'agt_reference_agent_labs_operator_v1',
+  'agt_reference_chain_studio_observer_v1',
+] as const;
+const kernelIdentityIds = [
+  'aid_ops_pilot_buyer_arc_8004_v1',
+  'aid_reference_workbench_buyer_arc_8004_v1',
+] as const;
+const kernelPaymentIds = [
+  'pay_arc_snapshot_x402_8004_v1',
+  'pay_arc_snapshot_x402_v1',
+  'pay_reference_arc_snapshot_x402_v1',
+] as const;
+const kernelJobIds = [
+  'job_commerce_readiness_8183_v1',
+  'job_reference_economy_8183_v1',
+] as const;
+const kernelObligationIds = [
+  'obl_arc_snapshot_agent_v1',
+  'obl_arc_snapshot_v1',
+  'obl_arc_snapshot_x402_8004_v1',
+  'obl_arc_snapshot_x402_v1',
+  'obl_capital_funded_snapshot_v1',
+  'obl_commerce_readiness_8183_v1',
+  'obl_reference_arc_snapshot_x402_v1',
+  'obl_reference_capital_use_v1',
+  'obl_reference_economy_8183_v1',
+] as const;
+const kernelProviderIds = [
+  'cap_independent_only_v1',
+  'cap_northstar_v1',
+  'cap_reference_independent_v1',
+  'cap_reference_seed_v1',
+] as const;
+const kernelAllocationIds = [
+  'cal_ops_pilot_northstar_v1',
+  'cal_reference_workbench_seed_v1',
+] as const;
+const kernelActivityIds = new Set<string>([
+  ...kernelObligationIds,
+  ...kernelAllocationIds,
+]);
+const kernelEvidenceIds = [
+  'evi_cal_ops_pilot_northstar_v1_arc',
+  'evi_cal_reference_workbench_seed_v1_arc',
+  'evi_job_commerce_readiness_8183_v1_complete',
+  'evi_job_reference_economy_8183_v1_complete',
+  'evi_ops_pilot_buyer_arc_8004_v1',
+  'evi_reference_workbench_buyer_arc_8004_v1',
+  'evi_set_arc_snapshot_agent_v1_arc',
+  'evi_set_arc_snapshot_v1_arc',
+  'evi_set_arc_snapshot_x402_8004_v1_x402',
+  'evi_set_arc_snapshot_x402_v1_x402',
+  'evi_set_capital_funded_snapshot_v1_arc',
+  'evi_set_commerce_readiness_8183_v1_erc8183',
+  'evi_set_reference_arc_snapshot_x402_v1_x402',
+  'evi_set_reference_capital_use_v1_arc',
+  'evi_set_reference_economy_8183_v1_erc8183',
+  'evi_svc_arc_snapshot_agent_v1_delivery',
+  'evi_svc_arc_snapshot_v1_delivery',
+  'evi_svc_arc_snapshot_x402_8004_v1_delivery',
+  'evi_svc_arc_snapshot_x402_v1_delivery',
+  'evi_svc_capital_funded_snapshot_v1_delivery',
+  'evi_svc_reference_arc_snapshot_x402_v1_delivery',
+  'evi_svc_reference_capital_use_v1_delivery',
+] as const;
+
 async function main(): Promise<void> {
   const config = readDatabaseConnectionConfig('runtime');
   if (config.environment !== 'PRIVATE_ARC_TESTNET') {
@@ -49,36 +126,53 @@ async function main(): Promise<void> {
       deliveries,
       activities,
     ] = await Promise.all([
+      database.selectFrom('businesses').selectAll().where('business_id', 'in', kernelBusinessIds).execute(),
+      database.selectFrom('business_controls').selectAll().where('business_id', 'in', kernelBusinessIds).where('status', '=', 'ACTIVE').execute(),
+      database.selectFrom('business_sites').selectAll().where('business_id', 'in', kernelBusinessIds).execute(),
+      database.selectFrom('agent_registrations').selectAll().where('agent_principal_id', 'in', kernelAgentIds).execute(),
+      database.selectFrom('erc8004_identity_operations').selectAll().where('identity_id', 'in', kernelIdentityIds).execute(),
+      database.selectFrom('action_intents').selectAll().execute(),
+      database.selectFrom('obligations').selectAll().where('obligation_id', 'in', kernelObligationIds).execute(),
+      database.selectFrom('settlement_operations').selectAll().where('obligation_id', 'in', kernelObligationIds).execute(),
+      database.selectFrom('x402_payment_operations').selectAll().where('payment_id', 'in', kernelPaymentIds).execute(),
+      database.selectFrom('erc8183_jobs').selectAll().where('job_id', 'in', kernelJobIds).execute(),
+      database.selectFrom('erc8183_job_operations').selectAll().where('job_id', 'in', kernelJobIds).execute(),
+      database.selectFrom('economic_entries').selectAll().where((expression) => expression.or([
+        expression('obligation_id', 'in', kernelObligationIds),
+        expression('capital_allocation_id', 'in', kernelAllocationIds),
+      ])).execute(),
+      database.selectFrom('capital_providers').selectAll().where('provider_id', 'in', kernelProviderIds).execute(),
+      database.selectFrom('capital_allocations').selectAll().where('allocation_id', 'in', kernelAllocationIds).execute(),
+      database.selectFrom('capital_use_links').selectAll().where('allocation_id', 'in', kernelAllocationIds).execute(),
+      database.selectFrom('evidence_facts').selectAll().where('evidence_id', 'in', kernelEvidenceIds).execute(),
+      database.selectFrom('service_executions').selectAll().where('obligation_id', 'in', kernelObligationIds).execute(),
+      history.listEconomicActivities().then((rows) =>
+        rows.filter(({ activityId }) => kernelActivityIds.has(activityId)),
+      ),
+    ]);
+
+    const [allBusinesses, allControls, allSites, allAgents] = await Promise.all([
       database.selectFrom('businesses').selectAll().execute(),
       database.selectFrom('business_controls').selectAll().where('status', '=', 'ACTIVE').execute(),
       database.selectFrom('business_sites').selectAll().execute(),
       database.selectFrom('agent_registrations').selectAll().execute(),
-      database.selectFrom('erc8004_identity_operations').selectAll().execute(),
-      database.selectFrom('action_intents').selectAll().execute(),
-      database.selectFrom('obligations').selectAll().execute(),
-      database.selectFrom('settlement_operations').selectAll().execute(),
-      database.selectFrom('x402_payment_operations').selectAll().execute(),
-      database.selectFrom('erc8183_jobs').selectAll().execute(),
-      database.selectFrom('erc8183_job_operations').selectAll().execute(),
-      database.selectFrom('economic_entries').selectAll().execute(),
-      database.selectFrom('capital_providers').selectAll().execute(),
-      database.selectFrom('capital_allocations').selectAll().execute(),
-      database.selectFrom('capital_use_links').selectAll().execute(),
-      database.selectFrom('evidence_facts').selectAll().execute(),
-      database.selectFrom('service_executions').selectAll().execute(),
-      history.listEconomicActivities(),
     ]);
 
     // System: generic population, generated sites, reusable capability, and locked MIGRATE boundary.
     assert.equal(businesses.length, 7);
     assert.equal(controls.length, businesses.length);
     assert.equal(sites.length, businesses.length);
+    assert.ok(allBusinesses.length >= businesses.length);
+    assert.equal(allControls.length, allBusinesses.length);
+    assert.equal(allSites.length, allBusinesses.length);
     assert.ok(
-      sites.every(
+      allSites.every(
         ({ status, visibility }) => status === 'PUBLISHED' && visibility === 'PROTECTED_ALPHA',
       ),
     );
-    assert.ok(businesses.every(({ entry_route }) => entry_route === 'BUILD'));
+    assert.ok(allBusinesses.every(({ entry_route, status }) =>
+      entry_route === 'BUILD' && status === 'ACTIVE',
+    ));
     assert.deepEqual(
       businessTemplates.map(({ templateId }) => templateId),
       ['api-data-compute', 'saas-micro-saas', 'agent-as-a-service', 'web3-native-digital'],
@@ -99,7 +193,7 @@ async function main(): Promise<void> {
       4,
     );
     assert.equal(agents.length, 6);
-    assert.ok(agents.every(({ business_id, provider_of_record_principal_id }) =>
+    assert.ok(allAgents.every(({ business_id, provider_of_record_principal_id }) =>
       business_id === provider_of_record_principal_id,
     ));
     const migratePath = productPaths.find(({ label }) => label === 'MIGRATE');
@@ -247,8 +341,10 @@ async function main(): Promise<void> {
         'product_data=PASS',
         'economics=PASS',
         'safety_data=PASS',
-        'businesses=7',
-        'agents=6',
+        `kernel_businesses=${businesses.length}`,
+        `product_businesses=${allBusinesses.length}`,
+        `kernel_agents=${agents.length}`,
+        `product_agents=${allAgents.length}`,
         'providers=4',
         'activities=11',
         'commerce_volume_micro_usdc=680000',

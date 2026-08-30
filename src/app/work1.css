@@ -311,6 +311,49 @@ body { overflow-x: hidden; }
 .button { gap: 12px; padding-inline: 16px; }
 .business-create-form .button { padding-inline: 18px; }
 
+/* Work 2 operational controls: Business-first forms over accepted kernel state. */
+.operational-stack { display: grid; gap: 10px; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 10px; }
+.operational-stack > .operational-panel:last-child { grid-column: 1 / -1; }
+.operational-panel { scroll-margin-top: 92px; }
+.operational-list { border-top: 1px solid var(--w-line); }
+.operational-empty { color: var(--w-muted); font-size: .82rem; margin: 0; padding-block: 22px; }
+.operational-row { align-items: center; border-bottom: 1px solid var(--w-line); display: flex; gap: 18px; justify-content: space-between; padding-block: 17px; }
+.operational-row > div { min-width: 0; }
+.operational-row__title { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+.operational-row__title strong { font-size: .9rem; font-weight: 500; text-transform: capitalize; }
+.operational-row__title span { background: var(--w-bg); border: 1px solid var(--w-line); border-radius: 999px; color: var(--w-muted); font-family: 'Courier New', monospace; font-size: .6rem; padding: 4px 7px; }
+.operational-row p { color: var(--w-muted); font-size: .78rem; line-height: 1.55; margin: 6px 0; }
+.operational-row small { color: #73796f; font-family: 'Courier New', monospace; font-size: .66rem; line-height: 1.5; }
+.operational-create { border-top: 1px solid var(--w-strong); margin-top: 22px; padding-top: 6px; }
+.operational-create summary { align-items: center; cursor: pointer; display: flex; font-size: .86rem; font-weight: 500; justify-content: space-between; min-height: 48px; }
+.operational-create summary::after { content: '+'; font-size: 1.2rem; font-weight: 400; }
+.operational-create[open] summary::after { content: '−'; }
+.form-fields--compact { gap: 15px; margin-top: 18px; max-width: none; }
+.operational-field-grid { display: grid; gap: 12px; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.field select { appearance: none; background: var(--w-surface); border: 1px solid var(--w-strong); border-radius: 5px; color: var(--w-text); font: inherit; font-size: 16px; line-height: 1.5; min-height: 50px; padding: 12px 34px 12px 13px; width: 100%; }
+.field select:focus { border-color: #86b53d; outline: 3px solid #dff4bd; }
+.button--quiet { background: transparent; border: 1px solid var(--w-strong); color: var(--w-text); cursor: pointer; flex: 0 0 auto; }
+.button:disabled { cursor: wait; opacity: .55; }
+.operation-message { border-radius: 5px; font-size: .78rem; line-height: 1.55; margin: 18px 0 0; padding: 12px; }
+.operation-message--success { background: var(--w-soft); border: 1px solid #c6e99c; color: #426b14; }
+.operation-message--error { background: #fff0ed; border: 1px solid #edc0b9; color: var(--w-danger); }
+.treasury-separation { border-top: 1px solid var(--w-line); display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); }
+.treasury-separation > div { border-bottom: 1px solid var(--w-line); display: grid; gap: 6px; padding: 14px 12px 14px 0; }
+.treasury-separation span, .treasury-address > span, .funding-balance > span { color: var(--w-muted); font-size: .7rem; }
+.treasury-separation strong { font-size: .76rem; font-weight: 500; text-transform: capitalize; }
+.treasury-address { align-items: center; background: var(--w-bg); border-radius: 6px; display: grid; gap: 8px; grid-template-columns: minmax(0, 1fr) auto; margin-top: 18px; padding: 15px; }
+.treasury-address > span { grid-column: 1 / -1; }
+.treasury-address code { font-size: .75rem; overflow-wrap: anywhere; }
+.funding-balance { align-items: baseline; border-bottom: 1px solid var(--w-line); display: flex; gap: 14px; padding-block: 20px; }
+.funding-balance strong { font-size: 1.2rem; font-weight: 400; }
+.funding-balance small { color: #638e18; font-family: 'Courier New', monospace; font-size: .65rem; margin-left: auto; }
+.funding-actions { align-items: center; display: flex; gap: 30px; justify-content: space-between; padding-top: 22px; }
+.funding-actions > div { max-width: 680px; }
+.funding-actions strong, .operational-notice strong { font-size: .9rem; font-weight: 500; }
+.funding-actions p, .operational-notice p { color: var(--w-muted); font-size: .78rem; line-height: 1.6; margin: 7px 0 10px; }
+.operational-notice { background: #fff6d7; border: 1px solid #eed99a; border-radius: 6px; margin-top: 20px; padding: 16px; }
+.commerce-preview { margin: 0 0 58px; scroll-margin-top: 92px; }
+
 @media (max-width: 900px) {
   .product-topbar { padding-inline: 20px; }
   .product-layout { gap: 12px; grid-template-columns: minmax(0, 1fr) 176px; }
@@ -318,6 +361,8 @@ body { overflow-x: hidden; }
   .landing-path-grid { grid-template-columns: 1fr; }
   .path-card { min-height: 260px; }
   .dashboard-signal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
+  .operational-stack { grid-template-columns: 1fr; }
+  .operational-stack > .operational-panel:last-child { grid-column: auto; }
 }
 
 @media (max-width: 760px) {
@@ -369,4 +414,15 @@ body { overflow-x: hidden; }
   .live-economy-list { max-height: 410px; overflow: hidden; }
   .live-economy-row:nth-child(n+7) { display: none; }
   .business-facts { width: 100%; }
+  .operational-field-grid, .treasury-separation { grid-template-columns: 1fr; }
+  .operational-row, .funding-actions { align-items: stretch; flex-direction: column; }
+  .operational-row .button, .funding-actions .button { width: 100%; }
+  .operational-row p, .operational-empty, .operation-message, .funding-actions p, .operational-notice p { font-size: .875rem; }
+  .operational-row small, .treasury-separation span, .treasury-address > span, .funding-balance > span, .funding-balance small { font-size: .75rem; }
+  .operational-row__title span { font-size: .75rem; }
+  .treasury-address { grid-template-columns: 1fr; }
+  .treasury-address > span { grid-column: auto; }
+  .treasury-address .button { width: 100%; }
+  .funding-balance { align-items: start; flex-direction: column; }
+  .funding-balance small { margin-left: 0; }
 }

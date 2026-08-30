@@ -221,13 +221,21 @@ interface TreasuryBindingTable {
 
 interface ServiceOfferTable {
   readonly capability_id: string;
+  readonly commerce_protocol: Generated<string>;
   readonly created_at: Generated<Date>;
+  readonly created_by_principal_id: ColumnType<
+    string | null,
+    string | null | undefined,
+    string | null
+  >;
   readonly description: string;
+  readonly idempotency_key: ColumnType<string | null, string | null | undefined, string | null>;
   readonly offer_id: string;
   readonly price_micro_usdc: string;
   readonly provider_business_id: string;
   readonly status: string;
   readonly terms_version: number;
+  readonly updated_at: Generated<Date>;
 }
 
 interface ServiceExecutionTable {
