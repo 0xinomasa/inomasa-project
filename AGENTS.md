@@ -29,7 +29,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   `#40`. Work 2 — Operational Workspace — is accepted through pull request `#42`:
   implementation head `66dfffd8c8ad21dc0fcc4c9e74d8e7dc53e76e91`, merge
   `9fc197895a2db49398620d7355cbb7d79f549364`, with PR Engineering verification
-  run `33289735811` and accepted-main run `33303102348` successful. Work 3–5 are
+  run `33289735811` and accepted-main run `33303102348` successful. Work 3 —
+  Human-triggered economic operation — is accepted through pull request `#44`:
+  final implementation head `43faec172ec23990a6762f054f43e77003be0e17`, merge
+  `72318b4b99385af431d529c22a5f518733bb719b`, final PR Engineering verification
+  run `33337590302`, and accepted-main run `33337675145` successful. Work 4–5 are
   not started.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
@@ -55,6 +59,12 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   refresh inside the tenant-scoped Business Workspace. Preserve its server-side
   tenancy, exact replay/idempotency, platform-controlled execution-account meaning,
   and honest provider-unavailable state as regression requirements.
+- Work 3 adds human-confirmed canonical x402 purchases and ERC-8183 evaluated jobs,
+  persisted product-to-kernel linkage, honest failure/unknown handling, and
+  contextual Economic History inside the tenant-scoped Business Workspace. Preserve
+  its bounded authority, exact replay, no-second-ledger rule, provider-receipt versus
+  direct-Arc proof distinction, delivery/accounting coupling, and external-call
+  timeout/reconciliation behavior as regression requirements.
 - Signal Forge, Ops Pilot, the accepted Reference Economy Businesses/Agents, and
   all Capital Providers are regression fixtures/control specimens. They are not
   the generic product model, system-capacity limit, or proof that independent
