@@ -3,7 +3,7 @@
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
 The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
-Economic/System Kernel** plus accepted Work 1–3 Human Product Alpha realization.
+Economic/System Kernel** plus accepted Work 1–4 Human Product Alpha realization.
 The kernel includes four reusable BUILD templates, generic multi-user and
 multi-Business genesis, reusable Business and Agent systems, generated Business
 Sites, bounded Agent authority, ERC-8004 identity linkage, direct Arc USDC and x402
@@ -17,7 +17,10 @@ Product/Service drafts, bounded Agents, Treasury provisioning, and controlled
 funding-state refresh in Business context. Work 3 adds human-confirmed canonical
 x402 purchases and ERC-8183 evaluated jobs, honest failure/unknown handling, and
 contextual Economic History without a second ledger. MIGRATE is modeled but
-remains user-facing locked. Human-Operable Business Product Alpha as a whole is not
+remains user-facing locked. Work 4 adds controller-scoped provider decisions,
+explicit offered-allocation acceptance, exact allocation/proof state, and bounded
+later-use visibility in the Capital and Business Workspace surfaces while keeping
+Capital separate from Revenue. Human-Operable Business Product Alpha as a whole is not
 yet verified; its normative realization contract is
 [`Post-H Product Realization`](docs/engineering/post-h-product-realization.md).
 
@@ -44,7 +47,11 @@ through pull request `#42`, implementation head
 economic operation — is accepted through pull request `#44`, final head
 `43faec172ec23990a6762f054f43e77003be0e17`, merge
 `72318b4b99385af431d529c22a5f518733bb719b`, final PR run `33337590302`, and
-accepted-main run `33337675145`. Work 4–5 have not started. The Human-Operable
+accepted-main run `33337675145`. Work 4 — Capital product interface — is accepted
+through pull request `#46`, final implementation head
+`251e999d7353d2a64dcd7e7e7568a3dedac76f42`, merge
+`b7879be06d70b299c43ba6eef7c62483c1cf2a31`, final PR run `33353646282`, and
+accepted-main run `33353765607`. Work 5 has not started. The Human-Operable
 Business Product Alpha therefore remains `NOT YET VERIFIED / REALIZATION IN
 PROGRESS`. No Production, mainnet, public anonymous access, live MIGRATE,
 unrestricted Agent authority, or public/Production Capital scope is implied.

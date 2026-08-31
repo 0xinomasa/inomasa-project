@@ -33,8 +33,12 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   Human-triggered economic operation — is accepted through pull request `#44`:
   final implementation head `43faec172ec23990a6762f054f43e77003be0e17`, merge
   `72318b4b99385af431d529c22a5f518733bb719b`, final PR Engineering verification
-  run `33337590302`, and accepted-main run `33337675145` successful. Work 4–5 are
-  not started.
+  run `33337590302`, and accepted-main run `33337675145` successful. Work 4 —
+  Capital product interface — is accepted through pull request `#46`: final
+  implementation head `251e999d7353d2a64dcd7e7e7568a3dedac76f42`, merge
+  `b7879be06d70b299c43ba6eef7c62483c1cf2a31`, final PR Engineering verification
+  run `33353646282`, and accepted-main run `33353765607` successful. Work 5 is not
+  started.
 - BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
   `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
@@ -65,6 +69,12 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   its bounded authority, exact replay, no-second-ledger rule, provider-receipt versus
   direct-Arc proof distinction, delivery/accounting coupling, and external-call
   timeout/reconciliation behavior as regression requirements.
+- Work 4 adds controller-scoped provider decisions, explicit offered-allocation
+  acceptance, allocation/proof state, and bounded later-use visibility in the
+  Capital and Business Workspace surfaces. Preserve provider/risk-bearer
+  attribution, server-side tenant isolation, replay-safe acceptance without
+  implicit transfer, dedicated platform-controlled execution-account meaning,
+  and Capital/Revenue separation as regression requirements.
 - Signal Forge, Ops Pilot, the accepted Reference Economy Businesses/Agents, and
   all Capital Providers are regression fixtures/control specimens. They are not
   the generic product model, system-capacity limit, or proof that independent
