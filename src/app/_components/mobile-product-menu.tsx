@@ -1,11 +1,12 @@
 'use client';
 
 import Link from 'next/link';
-import { useState } from 'react';
+import { useEffect, useId, useRef, useState } from 'react';
 
 import { SignOutButton } from './sign-out-button';
 
 export interface ProductMenuLink {
+  readonly active?: boolean;
   readonly href: string;
   readonly label: string;
   readonly locked?: boolean;
@@ -23,15 +24,32 @@ export function MobileProductMenu({
   readonly email: string;
 }) {
   const [open, setOpen] = useState(false);
+  const drawerId = useId();
+  const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const triggerRef = useRef<HTMLButtonElement>(null);
+
+  useEffect(() => {
+    if (!open) return;
+    closeButtonRef.current?.focus();
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === 'Escape') {
+        setOpen(false);
+        triggerRef.current?.focus();
+      }
+    };
+    window.addEventListener('keydown', closeOnEscape);
+    return () => window.removeEventListener('keydown', closeOnEscape);
+  }, [open]);
 
   return (
     <div className="mobile-product-menu">
       <button
-        aria-controls="product-mobile-drawer"
+        aria-controls={drawerId}
         aria-expanded={open}
         aria-label={open ? 'Close menu' : 'Open menu'}
         className="mobile-menu-trigger"
         onClick={() => setOpen((current) => !current)}
+        ref={triggerRef}
         type="button"
       >
         <span aria-hidden="true" className="mobile-menu-icon"><i /><i /><i /></span>
@@ -41,21 +59,24 @@ export function MobileProductMenu({
         <div className="mobile-menu-backdrop" onClick={() => setOpen(false)}>
           <aside
             aria-label="Product menu"
+            aria-modal="true"
             className="mobile-menu-drawer"
-            id="product-mobile-drawer"
+            id={drawerId}
             onClick={(event) => event.stopPropagation()}
+            role="dialog"
           >
             <div className="mobile-menu-drawer__heading">
               <div>
                 <span className="mobile-menu-drawer__caption">Inomasa</span>
                 <strong>{context ?? 'Product navigation'}</strong>
               </div>
-              <button aria-label="Close menu" className="mobile-menu-close" onClick={() => setOpen(false)} type="button">×</button>
+              <button aria-label="Close menu" className="mobile-menu-close" onClick={() => { setOpen(false); triggerRef.current?.focus(); }} ref={closeButtonRef} type="button">×</button>
             </div>
             <nav aria-label="Mobile product navigation" className="mobile-menu-links">
               {links.map((link) => (
                 <Link
-                  className={link.locked ? 'is-locked' : undefined}
+                  aria-current={link.active ? 'page' : undefined}
+                  className={`${link.active ? 'is-active ' : ''}${link.locked ? 'is-locked' : ''}`.trim() || undefined}
                   href={link.href}
                   key={link.href}
                   onClick={() => setOpen(false)}

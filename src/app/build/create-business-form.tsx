@@ -83,7 +83,7 @@ export function CreateBusinessForm({ templates }: { readonly templates: readonly
       </div>
       {error === null ? null : <p aria-live="polite" className="form-error">{error}</p>}
       <div className="form-submit-row">
-        <p>Creates a BUILD Business with a pending Treasury binding in the controlled environment.</p>
+        <p>Your Business opens in its Workspace. Treasury remains pending until you connect it there.</p>
         <button className="button button--primary" disabled={submitting || !templateId} type="submit">
           {submitting ? 'Creating…' : 'Create Business'}
         </button>

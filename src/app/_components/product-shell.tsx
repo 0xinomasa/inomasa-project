@@ -17,11 +17,11 @@ export function ProductShell({
   readonly businessSlug?: string;
 }) {
   const globalLinks: readonly ProductMenuLink[] = [
-    { href: '/app', label: 'Dashboard' },
-    { href: '/app/businesses', label: 'Businesses' },
-    { href: '/build', label: 'BUILD' },
-    { href: '/capital', label: 'Capital' },
-    { href: '/migrate', label: 'MIGRATE', locked: true },
+    { active: active === 'dashboard', href: '/app', label: 'Dashboard' },
+    { active: active === 'businesses', href: '/app/businesses', label: 'Businesses' },
+    { active: active === 'build', href: '/build', label: 'BUILD' },
+    { active: active === 'capital', href: '/capital', label: 'Capital' },
+    { active: active === 'migrate', href: '/migrate', label: 'MIGRATE', locked: true },
   ];
   const workspaceLinks: readonly ProductMenuLink[] = businessSlug === undefined ? [] : [
     { href: `/app/businesses/${businessSlug}`, label: 'Overview' },
@@ -47,12 +47,9 @@ export function ProductShell({
           <nav aria-label="Product navigation" className="product-global-nav">
             {globalLinks.map((link) => (
               <Link
+                aria-current={link.active ? 'page' : undefined}
                 className={`${(
-                  (link.href === '/app' && active === 'dashboard') ||
-                  (link.href === '/app/businesses' && active === 'businesses') ||
-                  (link.href === '/build' && active === 'build') ||
-                  (link.href === '/capital' && active === 'capital') ||
-                  (link.href === '/migrate' && active === 'migrate')
+                  link.active
                 ) ? 'is-active ' : ''}${link.locked ? 'is-locked' : ''}`}
                 href={link.href}
                 key={link.href}

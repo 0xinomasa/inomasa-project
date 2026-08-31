@@ -47,9 +47,11 @@ function allocationTone(state: string | null, outcome: string): string {
 export function CapitalPathList({
   paths,
   enableAcceptance = false,
+  presentation = 'full',
 }: {
   readonly paths: readonly CapitalPathSummary[];
   readonly enableAcceptance?: boolean;
+  readonly presentation?: 'full' | 'workspace';
 }) {
   if (paths.length === 0) {
     return (
@@ -65,24 +67,8 @@ export function CapitalPathList({
         const purpose = termsValue(path.terms, 'purpose');
         const useCap = termsValue(path.terms, 'useCapMicroUsdc');
         const currentState = path.allocationState ?? path.outcome;
-        return (
-          <article className="capital-path" key={path.decisionId}>
-            <div className="capital-path__topline">
-              <div>
-                <p className="eyebrow">{path.providerDisplayName}</p>
-                <h3>{path.businessName}</h3>
-              </div>
-              <span className={`activity-status activity-status--${allocationTone(path.allocationState, path.outcome)}`}>
-                {readable(currentState)}
-              </span>
-            </div>
-
-            <div className="capital-path__amount">
-              <span>{path.outcome === 'APPROVED' ? 'Provider-approved allocation' : 'Provider decision'}</span>
-              <strong>{displayUsdc(path.approvedMicroUsdc)}</strong>
-              <p>{path.rationale}</p>
-            </div>
-
+        const supportingDetail = (
+          <>
             <dl className="capital-path__facts">
               <div><dt>Risk bearer</dt><dd>{path.providerDisplayName}</dd></div>
               <div><dt>Decision</dt><dd>{readable(path.reasonCode)}</dd></div>
@@ -115,10 +101,6 @@ export function CapitalPathList({
                 ))}
               </div>
             )}
-
-            {enableAcceptance && path.allocationState === 'OFFERED' && path.allocationId !== null ? (
-              <CapitalAllocationAcceptance allocationId={path.allocationId} businessSlug={path.businessSlug} />
-            ) : null}
 
             <details className="capital-path__proof">
               <summary>Provider decision and system proof</summary>
@@ -153,6 +135,35 @@ export function CapitalPathList({
               <span>Capital remains separate from Revenue.</span>
               <Link href={`/app/businesses/${path.businessSlug}#capital`}>Open Business context</Link>
             </div>
+          </>
+        );
+        return (
+          <article className="capital-path" key={path.decisionId}>
+            <div className="capital-path__topline">
+              <div>
+                <p className="eyebrow">{path.providerDisplayName}</p>
+                <h3>{path.businessName}</h3>
+              </div>
+              <span className={`activity-status activity-status--${allocationTone(path.allocationState, path.outcome)}`}>
+                {readable(currentState)}
+              </span>
+            </div>
+
+            <div className="capital-path__amount">
+              <span>{path.outcome === 'APPROVED' ? 'Provider-approved allocation' : 'Provider decision'}</span>
+              <strong>{displayUsdc(path.approvedMicroUsdc)}</strong>
+              <p>{path.rationale}</p>
+            </div>
+
+            {enableAcceptance && path.allocationState === 'OFFERED' && path.allocationId !== null ? (
+              <CapitalAllocationAcceptance allocationId={path.allocationId} businessSlug={path.businessSlug} />
+            ) : null}
+            {presentation === 'workspace' ? (
+              <details className="capital-path__workspace-details">
+                <summary>Terms, later use, and proof</summary>
+                {supportingDetail}
+              </details>
+            ) : supportingDetail}
           </article>
         );
       })}

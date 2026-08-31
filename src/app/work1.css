@@ -439,6 +439,8 @@ body { overflow-x: hidden; }
 .capital-path__proof code { overflow-wrap: anywhere; }
 .capital-path__proof > a, .capital-path__footer a { color: #4f7715; font-size: .72rem; text-decoration: underline; text-underline-offset: 3px; }
 .capital-path__footer { align-items: center; border-top: 1px solid var(--w-line); display: flex; gap: 20px; justify-content: space-between; margin-top: 19px; padding-top: 15px; }
+.capital-path__workspace-details { border-top: 1px solid var(--w-line); margin-top: 18px; padding-top: 12px; }
+.capital-path__workspace-details > summary { color: #4f7715; cursor: pointer; font-size: .76rem; font-weight: 500; min-height: 40px; padding-top: 8px; }
 .product-content .activity-empty { background: var(--w-bg); border: 1px dashed var(--w-strong); border-radius: 7px; padding: 26px; }
 .product-content .activity-empty span { color: #638e18; font-family: 'Courier New', monospace; font-size: .65rem; text-transform: uppercase; }
 .product-content .activity-empty p { color: var(--w-muted); font-size: .8rem; margin: 8px 0 0; }
@@ -528,4 +530,234 @@ body { overflow-x: hidden; }
   .capital-path__uses p { text-align: left; }
   .capital-acceptance .button { width: 100%; }
   .capital-path__proof dl > div { grid-template-columns: 1fr; }
+}
+
+/* Work 5 corrective pass: distinct paths, compact product history, and task-first flow. */
+.landing-path-grid .path-card {
+  background: var(--w-surface);
+  border-color: var(--w-line);
+  border-radius: 9px;
+  color: var(--w-text);
+  min-height: 330px;
+  overflow: hidden;
+  padding: 24px;
+}
+.landing-path-grid .path-card::before {
+  content: '';
+  height: 4px;
+  inset: 0 0 auto;
+  position: absolute;
+}
+.landing-path-grid .path-card--build {
+  background: linear-gradient(145deg, #f2ffe2, var(--w-surface) 54%);
+  border-color: #badf8c;
+}
+.landing-path-grid .path-card--build::before { background: #83b93b; }
+.landing-path-grid .path-card--migrate {
+  background: #f1f2ee;
+  border-style: dashed;
+  color: #5f645c;
+  opacity: 1;
+}
+.landing-path-grid .path-card--migrate::before {
+  background: repeating-linear-gradient(90deg, #a8aca3 0 12px, transparent 12px 20px);
+}
+.landing-path-grid .path-card--capital {
+  background: linear-gradient(145deg, #fff9e9, var(--w-surface) 56%);
+  border-color: #d9cda9;
+}
+.landing-path-grid .path-card--capital::before { background: #9b7e33; }
+.landing-path-grid .path-card__status {
+  border-color: var(--w-strong);
+  color: var(--w-muted);
+}
+.landing-path-grid .path-card--alpha .path-card__status {
+  background: var(--w-soft);
+  border-color: #c6e99c;
+  color: #426b14;
+}
+.landing-path-grid .path-card h3 { font-size: clamp(2.1rem, 3.6vw, 3.35rem); }
+.landing-path-grid .path-card__summary { color: var(--w-muted); }
+.landing-path-grid .path-card__footer { border-color: var(--w-line); color: var(--w-muted); }
+.landing-path-grid .path-card__arrow { color: var(--w-text); }
+
+.live-economy-row__protocols { display: inline-flex; flex-wrap: wrap; gap: 4px; }
+.live-economy-row__protocols > span {
+  border: 1px solid #cbd7bb;
+  border-radius: 999px;
+  color: #547525;
+  font-family: 'Courier New', monospace;
+  font-size: .58rem;
+  line-height: 1;
+  padding: 4px 6px;
+  text-transform: uppercase;
+}
+
+.pathway-page { position: relative; }
+.pathway-page::before {
+  content: '';
+  height: 4px;
+  left: 42px;
+  position: absolute;
+  right: 42px;
+  top: 0;
+}
+.pathway-page--build::before { background: #83b93b; }
+.pathway-page--capital::before { background: #9b7e33; }
+.pathway-page--migrate::before {
+  background: repeating-linear-gradient(90deg, #a8aca3 0 12px, transparent 12px 20px);
+}
+.pathway-cue {
+  border-block: 1px solid var(--w-line);
+  display: grid;
+  gap: 1px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin: -10px 0 30px;
+}
+.pathway-cue span {
+  color: var(--w-muted);
+  font-size: .76rem;
+  min-width: 0;
+  padding: 14px 12px 14px 0;
+}
+.pathway-cue span + span { border-left: 1px solid var(--w-line); padding-left: 14px; }
+.pathway-cue--locked span:last-child { color: var(--w-text); font-weight: 600; }
+
+.workspace-task-flow {
+  display: grid;
+  gap: 8px;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-bottom: 10px;
+}
+.workspace-task-flow a {
+  align-items: center;
+  background: var(--w-surface);
+  border: 1px solid var(--w-line);
+  border-radius: 7px;
+  display: grid;
+  gap: 4px 12px;
+  grid-template-columns: auto minmax(0, 1fr);
+  min-height: 68px;
+  padding: 11px 14px;
+}
+.workspace-task-flow a:hover, .workspace-task-flow a:focus-visible { border-color: #94bd5c; }
+.workspace-task-flow span {
+  color: #638e18;
+  font-family: 'Courier New', monospace;
+  font-size: .65rem;
+  grid-row: 1 / 3;
+}
+.workspace-task-flow strong { font-size: .85rem; font-weight: 500; }
+.workspace-task-flow small { color: var(--w-muted); font-size: .7rem; }
+
+.workspace-page--business .operational-stack,
+.workspace-page--business .commerce-preview,
+.workspace-page--business .history-panel,
+.workspace-page--business .capital-workspace { margin-bottom: 38px; }
+.product-content .economic-history-list--workspace { gap: 9px; }
+.product-content .economic-history-list--workspace .economic-activity {
+  background: var(--w-surface);
+  border: 1px solid var(--w-line);
+  border-radius: 7px;
+  color: var(--w-text);
+  padding: 20px;
+}
+.product-content .economic-history-list--workspace .economic-activity--capital { border-left: 3px solid #83b93b; }
+.product-content .economic-history-list--workspace .protocol-badges { gap: 5px; }
+.product-content .economic-history-list--workspace .protocol-badges span,
+.product-content .economic-history-list--workspace .activity-status {
+  border-color: var(--w-line);
+  color: var(--w-muted);
+  padding: 5px 7px;
+}
+.product-content .economic-history-list--workspace .protocol-badges span {
+  border-color: #cbd7bb;
+  color: #547525;
+}
+.product-content .economic-history-list--workspace .activity-status--complete {
+  background: var(--w-soft);
+  border-color: #c6e99c;
+  color: #426b14;
+}
+.product-content .economic-history-list--workspace .activity-status--pending,
+.product-content .economic-history-list--workspace .activity-status--outcome_unknown { color: #7c6017; }
+.product-content .economic-history-list--workspace .activity-status--failed { color: var(--w-danger); }
+.product-content .economic-history-list--workspace .economic-activity__headline {
+  align-items: end;
+  gap: 24px;
+  margin-block: 24px 18px;
+}
+.product-content .economic-history-list--workspace .economic-activity__headline h3 {
+  font-size: 1.35rem;
+  margin-bottom: 7px;
+}
+.product-content .economic-history-list--workspace .economic-activity__headline p:last-child {
+  color: var(--w-muted);
+  font-size: .78rem;
+}
+.product-content .economic-history-list--workspace .economic-activity__headline > strong {
+  font-size: 1.55rem;
+  white-space: nowrap;
+}
+.product-content .economic-history-list--workspace .economic-activity__context {
+  gap: 0;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+}
+.product-content .economic-history-list--workspace .economic-activity__context div {
+  border-color: var(--w-line);
+  padding: 11px;
+}
+.product-content .economic-history-list--workspace .economic-activity__context dt { color: var(--w-muted); }
+.product-content .economic-history-list--workspace .economic-activity__context dd { color: var(--w-text); }
+.product-content .economic-history-list--workspace .economic-activity__capital-uses,
+.product-content .economic-history-list--workspace .economic-activity__proofs,
+.product-content .economic-history-list--workspace .economic-activity__footer { border-color: var(--w-line); }
+.product-content .economic-history-list--workspace .economic-activity__capital-uses p,
+.product-content .economic-history-list--workspace .economic-activity__footer { color: var(--w-muted); }
+.product-content .economic-history-list--workspace .economic-activity__proofs { margin-top: 16px; padding-top: 15px; }
+.product-content .economic-history-list--workspace .economic-activity__workspace-details {
+  border-top: 1px solid var(--w-line);
+  margin-top: 16px;
+  padding-top: 13px;
+}
+.product-content .economic-history-list--workspace .economic-activity__workspace-details > summary {
+  color: #4f7715;
+  cursor: pointer;
+  font-size: .76rem;
+  font-weight: 500;
+  min-height: 38px;
+  padding-top: 8px;
+}
+.product-content .economic-history-list--workspace .economic-activity__workspace-details > .economic-activity__context { margin-top: 12px; }
+.product-content .economic-history-list--workspace .economic-activity__proofs summary,
+.product-content .economic-history-list--workspace .economic-activity__proofs a,
+.product-content .economic-history-list--workspace .economic-activity__footer a { color: #4f7715; }
+.product-content .economic-history-list--workspace .economic-activity__proofs article { border-color: var(--w-line); }
+.product-content .economic-history-list--workspace .economic-activity__proofs span,
+.product-content .economic-history-list--workspace .economic-activity__proofs small,
+.product-content .economic-history-list--workspace .economic-activity__proofs code { color: var(--w-muted); }
+.product-content .economic-history-list--workspace .economic-activity__proofs strong { color: var(--w-text); }
+.product-content .economic-history-list--workspace .economic-activity__footer { margin-top: 14px; padding-top: 13px; }
+.mobile-menu-links a.is-active { background: var(--w-bg); font-weight: 600; }
+
+@media (max-width: 760px) {
+  .pathway-page::before { left: 16px; right: 16px; }
+  .pathway-cue { grid-template-columns: 1fr; margin-top: -4px; }
+  .pathway-cue span { font-size: .875rem; padding: 12px 0; }
+  .pathway-cue span + span { border-left: 0; border-top: 1px solid var(--w-line); padding-left: 0; }
+  .workspace-task-flow { grid-template-columns: 1fr; }
+  .workspace-task-flow a { min-height: 62px; }
+  .workspace-task-flow strong { font-size: 1rem; }
+  .workspace-task-flow small { font-size: .875rem; }
+  .live-economy-row { grid-template-columns: 62px minmax(0, 1fr); }
+  .live-economy-row__amount { grid-column: 2; }
+  .live-economy-row__protocols > span { font-size: .7rem; }
+  .product-content .economic-history-list--workspace .economic-activity { padding: 17px; }
+  .product-content .economic-history-list--workspace .economic-activity__headline,
+  .product-content .economic-history-list--workspace .economic-activity__topline,
+  .product-content .economic-history-list--workspace .economic-activity__footer { align-items: start; }
+  .product-content .economic-history-list--workspace .economic-activity__headline { grid-template-columns: 1fr; }
+  .product-content .economic-history-list--workspace .economic-activity__headline > strong { white-space: normal; }
+  .product-content .economic-history-list--workspace .economic-activity__context,
+  .product-content .economic-history-list--workspace .economic-activity__proofs > div { grid-template-columns: 1fr; }
 }

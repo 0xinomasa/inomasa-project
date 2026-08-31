@@ -17,7 +17,7 @@ export default async function BuildPage() {
   const session = await requireProductSession('/build');
   return (
     <ProductShell active="build" session={session}>
-      <main className="workspace-page">
+      <main className="workspace-page pathway-page pathway-page--build">
         <header className="workspace-header">
           <div>
             <p className="eyebrow">BUILD · Business entry</p>
@@ -26,6 +26,7 @@ export default async function BuildPage() {
           </div>
           <Link className="quiet-link" href="/app/businesses">Back to Businesses</Link>
         </header>
+        <div className="pathway-cue"><span>01 · Choose a template</span><span>02 · Add Business context</span><span>03 · Enter Workspace</span></div>
         <section className="workspace-card">
           <CreateBusinessForm templates={businessTemplates} />
         </section>

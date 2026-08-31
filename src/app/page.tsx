@@ -22,6 +22,13 @@ function observedLabel(value: string): string {
   }).format(new Date(value));
 }
 
+function protocolLabel(protocol: string): string {
+  if (protocol === 'ARC_USDC') return 'Arc · USDC';
+  if (protocol === 'ERC_8004') return 'ERC-8004';
+  if (protocol === 'ERC_8183') return 'ERC-8183';
+  return protocol.toLowerCase();
+}
+
 export default async function LandingPage() {
   const economy = await loadLiveEconomy();
   return (
@@ -76,7 +83,7 @@ export default async function LandingPage() {
         <div className="landing-section-heading">
           <div><p className="eyebrow">Live Economy · observer-safe</p><h2>A small economy, visibly moving.</h2></div>
           <p>
-            This compact view is a read-only projection of accepted Economic History and Evidence. It is not a second ledger or synthetic activity feed.
+            Recent testnet activity, summarized from each accepted Business record. Protocol labels remain visible without turning the landing page into an explorer.
             {economy.state === 'CONNECTED' && economy.cards.length > 6 ? <><br /><Link className="quiet-link" href="/system">View all activity →</Link></> : null}
           </p>
         </div>
@@ -88,13 +95,16 @@ export default async function LandingPage() {
           <article className="live-economy-state"><strong>No observable activity yet</strong><p>The connected canonical source returned a valid empty result.</p></article>
         ) : (
           <div aria-label="Latest economic activity" className="live-economy-list">
-            {economy.cards.map((card) => (
+            {economy.cards.slice(0, 6).map((card) => (
               <article className="live-economy-row" key={card.id}>
                 <time dateTime={card.observedAt.toISOString()}>{observedLabel(card.observedAt.toISOString())} UTC</time>
                 <div className="live-economy-row__activity">
                   <strong>{card.label}</strong>
                   <span className={'activity-status activity-status--' + card.status.toLowerCase()}>{card.status.replaceAll('_', ' ')}</span>
                   <small>{card.detail}</small>
+                  <span className="live-economy-row__protocols" aria-label="Protocols used">
+                    {card.protocols.map((protocol) => <span key={protocol}>{protocolLabel(protocol)}</span>)}
+                  </span>
                 </div>
                 <strong className="live-economy-row__amount">{card.amount} USDC</strong>
               </article>
