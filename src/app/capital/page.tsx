@@ -21,7 +21,7 @@ export default async function CapitalPage() {
 
   return (
     <ProductShell active="capital" session={session}>
-      <main className="workspace-page capital-page">
+      <main className="workspace-page capital-page pathway-page pathway-page--capital">
         <header className="workspace-header capital-page__header">
           <div>
             <p className="eyebrow">Controlled Capital · Arc Testnet</p>
@@ -34,6 +34,8 @@ export default async function CapitalPage() {
           </div>
           <span className="kernel-chip">{capital.state === 'CONNECTED' ? 'Kernel connected' : capital.state.replaceAll('_', ' ')}</span>
         </header>
+
+        <div className="pathway-cue"><span>Provider reviews</span><span>You accept an offer</span><span>Allocation use stays attributable</span></div>
 
         <section aria-label="Capital summary" className="capital-summary">
           <article><span>Providers</span><strong>{providers}</strong><p>Independent decisions remain attributable.</p></article>

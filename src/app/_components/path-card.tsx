@@ -10,7 +10,11 @@ export function PathCard({ path, position }: PathCardProps) {
   const isAvailable = path.status === 'ALPHA';
 
   return (
-    <Link className={`path-card path-card--${path.status.toLowerCase()}`} href={path.route} id={path.id}>
+    <Link
+      className={`path-card path-card--${path.id} path-card--${path.status.toLowerCase()}`}
+      href={path.route}
+      id={path.id}
+    >
       <div className="path-card__topline">
         <span className="path-card__position">{position}</span>
         <span className="path-card__status">{path.status}</span>

@@ -52,7 +52,7 @@ export default async function ProductDashboardPage() {
             <h1>Good to see you, {session.displayName}.</h1>
             <p>Your Businesses, agents, money, and economic history will meet in one calm workspace.</p>
           </div>
-          <div className="kernel-chip"><span className="status-dot" /> Kernel verified · Product Alpha in realization</div>
+          <div className="kernel-chip"><span className="status-dot" /> Workspace connected · Arc Testnet</div>
         </header>
 
         <section className="workspace-card dashboard-intro">
@@ -68,7 +68,7 @@ export default async function ProductDashboardPage() {
           <article className="dashboard-signal-card">
             <span>Businesses</span>
             <strong>{owned.state === 'CONNECTED' ? owned.businesses.length : '—'}</strong>
-            <p>Controller-scoped to your Human Principal.</p>
+            <p>Only Businesses you control appear here.</p>
           </article>
           <article className="dashboard-signal-card">
             <span>Needs attention</span>
@@ -78,7 +78,7 @@ export default async function ProductDashboardPage() {
           <article className="dashboard-signal-card">
             <span>Economic activity</span>
             <strong>{firstBusinessHistory?.state === 'CONNECTED' ? firstBusinessHistory.summary.activityCount : '—'}</strong>
-            <p>{firstBusinessHistory?.state === 'UNAVAILABLE' ? 'History is temporarily unavailable.' : 'Canonical Business History, counted once per activity.'}</p>
+            <p>{firstBusinessHistory?.state === 'UNAVAILABLE' ? 'History is temporarily unavailable.' : 'Business outcomes, counted once per activity.'}</p>
           </article>
           <article className="dashboard-signal-card">
             <span>Agent activity</span>

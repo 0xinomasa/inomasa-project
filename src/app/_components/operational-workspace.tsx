@@ -239,7 +239,7 @@ export function OperationalWorkspace({
           <div><p className="eyebrow">Agents</p><h2>Add bounded operating capacity.</h2></div>
           <span>{activeAgents.length} active</span>
         </div>
-        <p className="panel-description">Agent object, runtime, identity, intelligence provider, authority, and execution account remain separate. Work 2 creates an operator-invoked Agent object only.</p>
+        <p className="panel-description">Create an Agent for one clear role and capability. It runs only when you invoke it; identity, intelligence, money access, and broader authority are not added automatically.</p>
         <div className="operational-list">
           {agents.length === 0 ? <p className="operational-empty">No Agent is assigned to this Business.</p> : agents.map((agent) => (
             <div className="operational-row" key={agent.agentPrincipalId}>
@@ -262,7 +262,7 @@ export function OperationalWorkspace({
               </div>
             </div>
             {agentState === null ? null : <p aria-live="polite" className={`operation-message operation-message--${agentState.kind}`}>{agentState.message}</p>}
-            <div className="form-submit-row"><p>No wallet, economic allowance, ERC-8004 identity, hosted runtime, or LLM access is granted by this action.</p><button className="button button--primary" disabled={agentPending} type="submit">{agentPending ? 'Creating…' : 'Create Agent'}</button></div>
+            <div className="form-submit-row"><p>This action creates the bounded Agent only. It does not grant a wallet, spending authority, hosted runtime, or intelligence provider.</p><button className="button button--primary" disabled={agentPending} type="submit">{agentPending ? 'Creating…' : 'Create Agent'}</button></div>
           </form>
         </details>
       </article>

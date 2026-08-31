@@ -70,6 +70,12 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
           </div>
         </section>
 
+        <nav aria-label="Workspace task flow" className="workspace-task-flow">
+          <a href="#products"><span>01</span><strong>Set up</strong><small>Offers, Agents, Treasury</small></a>
+          <a href="#commerce"><span>02</span><strong>Operate</strong><small>Purchases and jobs</small></a>
+          <a href="#history"><span>03</span><strong>Review</strong><small>Outcomes and proof</small></a>
+        </nav>
+
         {operational.state === 'CONNECTED' ? (
           <OperationalWorkspace
             agents={agents}
@@ -101,6 +107,12 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
           )}
         </section>
 
+        <section className="workspace-panel history-panel" id="history">
+          <div className="panel-heading"><div><p className="eyebrow">Economic History</p><h2>What happened in this Business.</h2></div><span>{history.summary.activityCount} activities</span></div>
+          <p className="panel-description">Review the outcome first. Protocol, provider, chain, accounting, and source references remain available under proof details.</p>
+          <EconomicActivityList activities={history.activities} businessId={site.businessId} emptyMessage="No economic activity exists for this Business yet." presentation="workspace" />
+        </section>
+
         <section className="workspace-panel capital-workspace" id="capital">
           <div className="panel-heading">
             <div><p className="eyebrow">Capital</p><h2>Provider decisions in this Business context.</h2></div>
@@ -111,7 +123,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             follow any later Business use. Capital remains distinct from customer Revenue.
           </p>
           {capital.state === 'CONNECTED' ? (
-            <CapitalPathList enableAcceptance paths={capital.paths} />
+            <CapitalPathList enableAcceptance paths={capital.paths} presentation="workspace" />
           ) : (
             <div className="operational-notice">
               <strong>Capital is {capital.state.replaceAll('_', ' ').toLowerCase()}.</strong>
@@ -120,11 +132,6 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
           )}
         </section>
 
-        <section className="workspace-panel history-panel" id="history">
-          <div className="panel-heading"><div><p className="eyebrow">Economic History</p><h2>What happened in this Business context.</h2></div><span>{history.summary.activityCount} activities</span></div>
-          <p className="panel-description">Activities are reconstructed from the accepted kernel. One obligation is counted once; proof remains progressively disclosed.</p>
-          <EconomicActivityList activities={history.activities} businessId={site.businessId} emptyMessage="No economic activity exists for this Business yet." />
-        </section>
         <section className="workspace-section-grid workspace-section-grid--secondary">
           <article className="workspace-panel" id="site">
             <div className="panel-heading"><div><p className="eyebrow">Site</p><h2>Business presence.</h2></div><span>{statusText('Site', site.siteStatus)}</span></div>

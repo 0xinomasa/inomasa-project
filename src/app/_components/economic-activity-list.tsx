@@ -62,14 +62,43 @@ function economicInterpretation(
     .join(' / ');
 }
 
+function ActivityProofs({ proofs }: { readonly proofs: readonly ActivityProof[] }) {
+  return (
+    <details className="economic-activity__proofs">
+      <summary>Inspect {proofs.length} source-scoped references</summary>
+      <div>
+        {proofs.map((proof, index) => {
+          const href = proofHref(proof);
+          return (
+            <article key={`${proof.kind}-${proof.scope}-${proof.reference}-${index}`}>
+              <span>{humanize(proof.scope)}</span>
+              <strong>{proof.label}</strong>
+              <small>{humanize(proof.verification)} · {humanize(proof.kind)}</small>
+              {href === null ? (
+                <code title={proof.reference}>{proof.reference}</code>
+              ) : (
+                <a href={href} rel="noreferrer" target="_blank">
+                  View on ArcScan · {compactReference(proof.reference)}
+                </a>
+              )}
+            </article>
+          );
+        })}
+      </div>
+    </details>
+  );
+}
+
 export function EconomicActivityList({
   activities,
   businessId,
   emptyMessage = 'No economic activity exists in this context.',
+  presentation = 'observability',
 }: {
   readonly activities: readonly EconomicActivity[];
   readonly businessId?: `biz_${string}`;
   readonly emptyMessage?: string;
+  readonly presentation?: 'observability' | 'workspace';
 }) {
   if (activities.length === 0) {
     return (
@@ -81,9 +110,41 @@ export function EconomicActivityList({
   }
 
   return (
-    <div className="economic-history-list">
+    <div className={`economic-history-list economic-history-list--${presentation}`}>
       {activities.map((activity) => {
         if (activity.activityKind === 'CAPITAL') {
+          const context = (
+            <dl className="economic-activity__context">
+              <div><dt>Recipient Business</dt><dd>{activity.recipient.displayName}</dd></div>
+              <div><dt>Capital Provider</dt><dd>{activity.provider.displayName}</dd></div>
+              <div><dt>Provider decision</dt><dd>{activity.decision.outcome} · {humanize(activity.decision.reasonCode)}</dd></div>
+              <div><dt>Instrument</dt><dd>{humanize(activity.allocation.instrument)}</dd></div>
+              <div><dt>Return profile</dt><dd>{humanize(activity.allocation.returnProfile)}</dd></div>
+              <div><dt>Economic meaning</dt><dd>{economicInterpretation(activity, businessId)}</dd></div>
+              <div><dt>Later bounded uses</dt><dd>{activity.uses.length}</dd></div>
+              <div>
+                <dt>Observed</dt>
+                <dd><time dateTime={activity.occurredAt.toISOString()}>{activity.occurredAt.toISOString()}</time></dd>
+              </div>
+            </dl>
+          );
+          const uses = activity.uses.length === 0 ? null : (
+            <div className="economic-activity__capital-uses">
+              {activity.uses.map((use) => (
+                <p key={use.obligationId}>
+                  {displayUsdc(use.amountMicroUsdc)} → {use.obligationId} · {use.settlementState ?? use.obligationState}
+                </p>
+              ))}
+            </div>
+          );
+          const detail = presentation === 'workspace' ? (
+            <details className="economic-activity__workspace-details">
+              <summary>Activity context and proof</summary>
+              {context}
+              {uses}
+              <ActivityProofs proofs={activity.proofs} />
+            </details>
+          ) : <>{context}{uses}<ActivityProofs proofs={activity.proofs} /></>;
           return (
             <article className="economic-activity economic-activity--capital" key={activity.activityId}>
               <div className="economic-activity__topline">
@@ -105,50 +166,7 @@ export function EconomicActivityList({
                 </div>
                 <strong>{displayUsdc(activity.amountMicroUsdc)}</strong>
               </div>
-              <dl className="economic-activity__context">
-                <div><dt>Recipient Business</dt><dd>{activity.recipient.displayName}</dd></div>
-                <div><dt>Capital Provider</dt><dd>{activity.provider.displayName}</dd></div>
-                <div><dt>Provider decision</dt><dd>{activity.decision.outcome} · {humanize(activity.decision.reasonCode)}</dd></div>
-                <div><dt>Instrument</dt><dd>{humanize(activity.allocation.instrument)}</dd></div>
-                <div><dt>Return profile</dt><dd>{humanize(activity.allocation.returnProfile)}</dd></div>
-                <div><dt>Economic meaning</dt><dd>{economicInterpretation(activity, businessId)}</dd></div>
-                <div><dt>Later bounded uses</dt><dd>{activity.uses.length}</dd></div>
-                <div>
-                  <dt>Observed</dt>
-                  <dd><time dateTime={activity.occurredAt.toISOString()}>{activity.occurredAt.toISOString()}</time></dd>
-                </div>
-              </dl>
-              {activity.uses.length === 0 ? null : (
-                <div className="economic-activity__capital-uses">
-                  {activity.uses.map((use) => (
-                    <p key={use.obligationId}>
-                      {displayUsdc(use.amountMicroUsdc)} → {use.obligationId} · {use.settlementState ?? use.obligationState}
-                    </p>
-                  ))}
-                </div>
-              )}
-              <details className="economic-activity__proofs">
-                <summary>Inspect {activity.proofs.length} source-scoped references</summary>
-                <div>
-                  {activity.proofs.map((proof, index) => {
-                    const href = proofHref(proof);
-                    return (
-                      <article key={`${proof.kind}-${proof.scope}-${proof.reference}-${index}`}>
-                        <span>{humanize(proof.scope)}</span>
-                        <strong>{proof.label}</strong>
-                        <small>{humanize(proof.verification)} · {humanize(proof.kind)}</small>
-                        {href === null ? (
-                          <code title={proof.reference}>{proof.reference}</code>
-                        ) : (
-                          <a href={href} rel="noreferrer" target="_blank">
-                            View on ArcScan · {compactReference(proof.reference)}
-                          </a>
-                        )}
-                      </article>
-                    );
-                  })}
-                </div>
-              </details>
+              {detail}
               <div className="economic-activity__footer">
                 <span>{activity.activityId}</span>
                 <span>{humanize(activity.allocation.state)}</span>
@@ -163,6 +181,25 @@ export function EconomicActivityList({
           businessId === undefined || activity.buyer.businessId === businessId
             ? activity.seller
             : activity.buyer;
+        const context = (
+          <dl className="economic-activity__context">
+            <div><dt>Buyer</dt><dd>{activity.buyer.displayName}</dd></div>
+            <div><dt>Seller</dt><dd>{activity.seller.displayName}</dd></div>
+            <div><dt>Agent</dt><dd>{activity.agent?.displayName ?? 'HUMAN / SYSTEM ACTION'}</dd></div>
+            <div><dt>{businessId === undefined ? 'Parties' : 'Counterparty'}</dt><dd>{businessId === undefined ? 'BUYER + SELLER' : counterparty.displayName}</dd></div>
+            <div><dt>Service / job</dt><dd>{activity.work === null ? activity.offer.offerId : `${activity.work.jobId} · ${activity.work.protocolJobId ?? 'NOT CREATED'}`}</dd></div>
+            <div><dt>Outcome</dt><dd>{humanize(activity.outcome)}</dd></div>
+            <div><dt>Economic meaning</dt><dd>{economicInterpretation(activity, businessId)}</dd></div>
+            <div><dt>Observed</dt><dd><time dateTime={activity.occurredAt.toISOString()}>{activity.occurredAt.toISOString()}</time></dd></div>
+          </dl>
+        );
+        const detail = presentation === 'workspace' ? (
+          <details className="economic-activity__workspace-details">
+            <summary>Activity context and proof</summary>
+            {context}
+            <ActivityProofs proofs={activity.proofs} />
+          </details>
+        ) : <>{context}<ActivityProofs proofs={activity.proofs} /></>;
         return (
           <article className="economic-activity" key={activity.activityId}>
             <div className="economic-activity__topline">
@@ -187,71 +224,7 @@ export function EconomicActivityList({
               <strong>{displayUsdc(activity.amountMicroUsdc)}</strong>
             </div>
 
-            <dl className="economic-activity__context">
-              <div>
-                <dt>Buyer</dt>
-                <dd>{activity.buyer.displayName}</dd>
-              </div>
-              <div>
-                <dt>Seller</dt>
-                <dd>{activity.seller.displayName}</dd>
-              </div>
-              <div>
-                <dt>Agent</dt>
-                <dd>{activity.agent?.displayName ?? 'HUMAN / SYSTEM ACTION'}</dd>
-              </div>
-              <div>
-                <dt>{businessId === undefined ? 'Parties' : 'Counterparty'}</dt>
-                <dd>{businessId === undefined ? 'BUYER + SELLER' : counterparty.displayName}</dd>
-              </div>
-              <div>
-                <dt>Service / job</dt>
-                <dd>
-                  {activity.work === null
-                    ? activity.offer.offerId
-                    : `${activity.work.jobId} · ${activity.work.protocolJobId ?? 'NOT CREATED'}`}
-                </dd>
-              </div>
-              <div>
-                <dt>Outcome</dt>
-                <dd>{humanize(activity.outcome)}</dd>
-              </div>
-              <div>
-                <dt>Economic meaning</dt>
-                <dd>{economicInterpretation(activity, businessId)}</dd>
-              </div>
-              <div>
-                <dt>Observed</dt>
-                <dd>
-                  <time dateTime={activity.occurredAt.toISOString()}>
-                    {activity.occurredAt.toISOString()}
-                  </time>
-                </dd>
-              </div>
-            </dl>
-
-            <details className="economic-activity__proofs">
-              <summary>Inspect {activity.proofs.length} source-scoped references</summary>
-              <div>
-                {activity.proofs.map((proof, index) => {
-                  const href = proofHref(proof);
-                  return (
-                    <article key={`${proof.kind}-${proof.scope}-${proof.reference}-${index}`}>
-                      <span>{humanize(proof.scope)}</span>
-                      <strong>{proof.label}</strong>
-                      <small>{humanize(proof.verification)} · {humanize(proof.kind)}</small>
-                      {href === null ? (
-                        <code title={proof.reference}>{proof.reference}</code>
-                      ) : (
-                        <a href={href} rel="noreferrer" target="_blank">
-                          View on ArcScan · {compactReference(proof.reference)}
-                        </a>
-                      )}
-                    </article>
-                  );
-                })}
-              </div>
-            </details>
+            {detail}
 
             <div className="economic-activity__footer">
               <span>{activity.activityId}</span>
