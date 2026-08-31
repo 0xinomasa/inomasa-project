@@ -4,7 +4,9 @@ import { notFound } from 'next/navigation';
 
 import { requireProductSession } from '../../../_auth/server';
 import { loadBusinessAgents, loadBusinessSite } from '../../../_business/site';
+import { loadCapitalPaths } from '../../../_capital/data';
 import { loadBusinessEconomicHistory } from '../../../_economic-history/data';
+import { CapitalPathList } from '../../../_components/capital-path-list';
 import { EconomicActivityList } from '../../../_components/economic-activity-list';
 import { EconomicOperations } from '../../../_components/economic-operations';
 import { OperationalWorkspace } from '../../../_components/operational-workspace';
@@ -32,12 +34,13 @@ export async function generateMetadata({ params }: WorkspaceProps): Promise<Meta
 export default async function BusinessWorkspacePage({ params }: WorkspaceProps) {
   const { businessSlug } = await params;
   const session = await requireProductSession('/app/businesses/' + businessSlug);
-  const [site, agents, history, operational, commerce] = await Promise.all([
+  const [site, agents, history, operational, commerce, capital] = await Promise.all([
     loadBusinessSite(businessSlug, session.principalId),
     loadBusinessAgents(businessSlug, session.principalId),
     loadBusinessEconomicHistory(businessSlug, session.principalId),
     loadOperationalWorkspace(businessSlug, session.principalId),
     loadProductCommerce(businessSlug, session.principalId),
+    loadCapitalPaths(session.principalId, businessSlug),
   ]);
   if (site === undefined) notFound();
   return (
@@ -95,6 +98,25 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             />
           ) : (
             <div className="operational-notice"><strong>Commerce is {commerce.state.replaceAll('_', ' ').toLowerCase()}.</strong><p>No empty, paid, or failed state is inferred. Existing kernel records remain unchanged.</p></div>
+          )}
+        </section>
+
+        <section className="workspace-panel capital-workspace" id="capital">
+          <div className="panel-heading">
+            <div><p className="eyebrow">Capital</p><h2>Provider decisions in this Business context.</h2></div>
+            <span>{capital.state === 'CONNECTED' ? `${capital.paths.length} decisions` : capital.state.replaceAll('_', ' ')}</span>
+          </div>
+          <p className="panel-description">
+            Inspect provider-specific review, authorize an offered controlled allocation, and
+            follow any later Business use. Capital remains distinct from customer Revenue.
+          </p>
+          {capital.state === 'CONNECTED' ? (
+            <CapitalPathList enableAcceptance paths={capital.paths} />
+          ) : (
+            <div className="operational-notice">
+              <strong>Capital is {capital.state.replaceAll('_', ' ').toLowerCase()}.</strong>
+              <p>No provider or allocation outcome is inferred while the kernel read is unavailable.</p>
+            </div>
           )}
         </section>
 

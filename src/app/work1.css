@@ -394,6 +394,55 @@ body { overflow-x: hidden; }
 .job-lifecycle li { align-items: center; background: var(--w-bg); border-radius: 4px; display: grid; font-size: .68rem; gap: 10px; grid-template-columns: minmax(0, 1fr) auto auto; padding: 8px 10px; }
 .job-lifecycle strong { font-weight: 500; }
 
+/* Work 4 Capital: provider-attributable decisions inside controller-scoped product context. */
+.capital-page__header { align-items: start; }
+.capital-summary { display: grid; gap: 10px; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-bottom: 32px; }
+.capital-summary article { border-top: 1px solid var(--w-strong); min-width: 0; padding: 17px 2px 8px; }
+.capital-summary span { color: var(--w-muted); font-size: .7rem; }
+.capital-summary strong { display: block; font-size: 2rem; font-weight: 400; letter-spacing: -.05em; margin: 18px 0 7px; }
+.capital-summary p { color: var(--w-muted); font-size: .75rem; line-height: 1.5; margin: 0; }
+.capital-page__paths, .capital-workspace { scroll-margin-top: 92px; }
+.capital-workspace { margin-bottom: 58px; }
+.capital-path-list { display: grid; gap: 12px; margin-top: 24px; }
+.capital-path { border: 1px solid var(--w-line); border-radius: 7px; min-width: 0; padding: 22px; }
+.capital-path__topline { align-items: start; display: flex; gap: 24px; justify-content: space-between; }
+.capital-path__topline .eyebrow { margin: 0 0 8px; }
+.capital-path__topline h3 { font-size: 1.2rem; font-weight: 500; letter-spacing: -.03em; margin: 0; }
+.capital-path__amount { border-top: 1px solid var(--w-line); margin-top: 20px; padding-top: 19px; }
+.capital-path__amount > span, .capital-path__purpose > span, .capital-path__no-use, .capital-path__footer, .capital-path__proof span { color: var(--w-muted); font-family: 'Courier New', monospace; font-size: .65rem; line-height: 1.5; }
+.capital-path__amount > strong { display: block; font-size: 1.7rem; font-weight: 400; letter-spacing: -.045em; margin: 10px 0 6px; }
+.capital-path__amount > p, .capital-path__purpose p, .capital-path__proof > p { color: var(--w-muted); font-size: .78rem; line-height: 1.6; margin: 0; }
+.capital-path__facts { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin: 22px 0 0; }
+.capital-path__facts > div { border-top: 1px solid var(--w-line); display: grid; gap: 5px; min-width: 0; padding: 12px 10px 10px 0; }
+.capital-path__facts dt, .capital-path__proof dt { color: var(--w-muted); font-size: .66rem; }
+.capital-path__facts dd, .capital-path__proof dd { font-size: .72rem; margin: 0; overflow-wrap: anywhere; }
+.capital-path__purpose { background: var(--w-bg); border-radius: 6px; margin-top: 18px; padding: 15px; }
+.capital-path__purpose > strong, .capital-path__uses > strong { display: block; font-size: .77rem; font-weight: 500; margin-bottom: 6px; }
+.capital-path__purpose > span { display: block; margin-top: 8px; }
+.capital-path__uses { border-top: 1px solid var(--w-line); margin-top: 20px; padding-top: 17px; }
+.capital-path__uses > div { align-items: baseline; border-bottom: 1px solid var(--w-line); display: flex; gap: 18px; justify-content: space-between; padding-block: 10px; }
+.capital-path__uses span { font-family: 'Courier New', monospace; font-size: .7rem; }
+.capital-path__uses p { color: var(--w-muted); font-size: .7rem; margin: 0; overflow-wrap: anywhere; text-align: right; }
+.capital-path__no-use { border-top: 1px solid var(--w-line); margin: 20px 0 0; padding-top: 15px; }
+.capital-acceptance { background: #f2f9e8; border: 1px solid #c6e99c; border-radius: 6px; display: grid; gap: 14px; margin-top: 20px; padding: 17px; }
+.capital-acceptance .button { justify-self: start; }
+.capital-acceptance .operation-message { margin: 0; }
+.capital-path__proof { border-top: 1px dashed var(--w-line); margin-top: 20px; padding-top: 15px; }
+.capital-path__proof summary { cursor: pointer; font-size: .76rem; font-weight: 500; min-height: 38px; }
+.capital-path__proof-grid { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); margin-top: 12px; }
+.capital-path__proof-grid > div { display: grid; gap: 5px; min-width: 0; padding: 10px 10px 10px 0; }
+.capital-path__proof-grid span { font-family: inherit; }
+.capital-path__proof-grid strong { font-size: .7rem; font-weight: 500; overflow-wrap: anywhere; }
+.capital-path__proof > p { margin-top: 10px; }
+.capital-path__proof dl { display: grid; gap: 7px; margin: 16px 0; }
+.capital-path__proof dl > div { display: grid; gap: 10px; grid-template-columns: 110px minmax(0, 1fr); }
+.capital-path__proof code { overflow-wrap: anywhere; }
+.capital-path__proof > a, .capital-path__footer a { color: #4f7715; font-size: .72rem; text-decoration: underline; text-underline-offset: 3px; }
+.capital-path__footer { align-items: center; border-top: 1px solid var(--w-line); display: flex; gap: 20px; justify-content: space-between; margin-top: 19px; padding-top: 15px; }
+.product-content .activity-empty { background: var(--w-bg); border: 1px dashed var(--w-strong); border-radius: 7px; padding: 26px; }
+.product-content .activity-empty span { color: #638e18; font-family: 'Courier New', monospace; font-size: .65rem; text-transform: uppercase; }
+.product-content .activity-empty p { color: var(--w-muted); font-size: .8rem; margin: 8px 0 0; }
+
 @media (max-width: 900px) {
   .product-topbar { padding-inline: 20px; }
   .product-layout { gap: 12px; grid-template-columns: minmax(0, 1fr) 176px; }
@@ -404,6 +453,7 @@ body { overflow-x: hidden; }
   .operational-stack { grid-template-columns: 1fr; }
   .operational-stack > .operational-panel:last-child { grid-column: auto; }
   .commerce-offer-grid { grid-template-columns: 1fr; }
+  .capital-path__facts, .capital-path__proof-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); }
 }
 
 @media (max-width: 760px) {
@@ -472,4 +522,10 @@ body { overflow-x: hidden; }
   .economic-proof dl > div { grid-template-columns: 1fr; }
   .job-lifecycle li { align-items: start; grid-template-columns: minmax(0, 1fr) auto; }
   .job-lifecycle li a { grid-column: 1 / -1; }
+  .capital-summary, .capital-path__facts, .capital-path__proof-grid { grid-template-columns: 1fr; }
+  .capital-path { padding: 18px; }
+  .capital-path__topline, .capital-path__uses > div, .capital-path__footer { align-items: start; flex-direction: column; }
+  .capital-path__uses p { text-align: left; }
+  .capital-acceptance .button { width: 100%; }
+  .capital-path__proof dl > div { grid-template-columns: 1fr; }
 }

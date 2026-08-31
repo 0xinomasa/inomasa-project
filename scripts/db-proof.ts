@@ -7,6 +7,7 @@ import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { runEngineeringPersistenceProof } from '../src/platform/persistence/engineering-proof.ts';
 import { runOperationalWorkspacePersistenceProof } from '../src/platform/persistence/operational-workspace-proof.ts';
 import { runProductEconomicOperationPersistenceProof } from '../src/platform/persistence/product-economic-operation-proof.ts';
+import { runCapitalProductPersistenceProof } from '../src/platform/persistence/capital-product-proof.ts';
 
 async function main(): Promise<void> {
   const config = readDatabaseConnectionConfig('runtime');
@@ -46,6 +47,16 @@ async function main(): Promise<void> {
     console.log('work_3_request_idempotency=PASS');
     console.log('work_3_request_semantic_replay=PASS');
     console.log('work_3_tenant_isolation=PASS');
+
+    const capitalProductProof = await runCapitalProductPersistenceProof(persistence);
+    if (Object.values(capitalProductProof).some((verified) => !verified)) {
+      throw new Error('The Work 4 Capital product persistence proof did not satisfy all assertions.');
+    }
+    console.log('work_4_capital_business_context=PASS');
+    console.log('work_4_capital_tenant_isolation=PASS');
+    console.log('work_4_capital_explicit_acceptance=PASS');
+    console.log('work_4_capital_acceptance_replay=PASS');
+    console.log('work_4_capital_fixture_cleanup=PASS');
   } finally {
     await persistence.close();
   }

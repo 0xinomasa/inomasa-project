@@ -30,7 +30,7 @@ export function ProductShell({
     { href: `/app/businesses/${businessSlug}#treasury`, label: 'Treasury' },
     { href: `/app/businesses/${businessSlug}#commerce`, label: 'Commerce & Jobs' },
     { href: `/app/businesses/${businessSlug}#history`, label: 'Economic History' },
-    { href: '/capital', label: 'Capital' },
+    { href: `/app/businesses/${businessSlug}#capital`, label: 'Capital' },
     { href: `/app/businesses/${businessSlug}#site`, label: 'Site' },
     { href: `/app/businesses/${businessSlug}#settings`, label: 'Settings' },
   ];

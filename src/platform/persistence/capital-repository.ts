@@ -37,28 +37,48 @@ export interface CapitalAllocationExecutionContext {
 export interface CapitalUseSummary {
   readonly amountMicroUsdc: string;
   readonly capitalUseId: string;
+  readonly linkedAt: string;
   readonly obligationId: string;
   readonly obligationState: string;
   readonly settlementState: string | null;
 }
 
 export interface CapitalPathSummary {
+  readonly acceptedAt: string | null;
   readonly allocationId: string | null;
+  readonly allocationProvenance: string | null;
   readonly allocationState: string | null;
   readonly allocationTransactionHash: string | null;
   readonly approvedMicroUsdc: string | null;
   readonly businessId: string;
   readonly businessName: string;
   readonly businessSlug: string;
+  readonly completedAt: string | null;
+  readonly decidedAt: string;
   readonly decisionId: string;
   readonly instrument: string | null;
+  readonly mandateCriteria: unknown;
+  readonly mandateId: string;
+  readonly mandateMaximumMicroUsdc: string;
+  readonly mandateMinimumMicroUsdc: string;
+  readonly mandateName: string;
+  readonly mandateStrategy: string;
+  readonly mandateVersion: number;
   readonly materialSha256: string;
+  readonly observedAt: string;
   readonly outcome: string;
   readonly providerDisplayName: string;
+  readonly providerAccountAssurance: string | null;
+  readonly providerAccountBlockchain: string | null;
+  readonly providerAccountCustodyModel: string | null;
+  readonly providerAccountInfrastructure: string | null;
+  readonly providerAccountStatus: string | null;
   readonly providerId: string;
   readonly providerProvenance: string;
+  readonly providerRiskBearerClassification: string;
   readonly rationale: string;
   readonly reasonCode: string;
+  readonly reviewId: string;
   readonly requestedMicroUsdc: string;
   readonly returnProfile: string | null;
   readonly terms: unknown | null;
@@ -451,6 +471,7 @@ export class PostgresCapitalRepository {
     readonly acceptedAt: string;
     readonly acceptedByPrincipalId: `usr_${string}`;
     readonly allocationId: `cal_${string}`;
+    readonly businessSlug?: string;
   }): Promise<void> {
     if (!Number.isFinite(Date.parse(input.acceptedAt))) {
       throw new Error('Capital acceptance requires a valid timestamp.');
@@ -465,28 +486,32 @@ export class PostgresCapitalRepository {
             .onRef('control.business_id', '=', 'allocation.recipient_business_id')
             .on('control.status', '=', 'ACTIVE'),
         )
+        .innerJoin('businesses as business', 'business.business_id', 'allocation.recipient_business_id')
         .select([
           'allocation.accepted_at as acceptedAt',
           'allocation.accepted_by_principal_id as acceptedByPrincipalId',
           'allocation.state',
           'control.controller_principal_id as controllerPrincipalId',
           'decision.decided_at as decidedAt',
+          'business.slug as businessSlug',
         ])
         .where('allocation.allocation_id', '=', input.allocationId)
         .forUpdate()
         .executeTakeFirstOrThrow();
+      if (
+        allocation.controllerPrincipalId !== input.acceptedByPrincipalId ||
+        (input.businessSlug !== undefined && allocation.businessSlug !== input.businessSlug)
+      ) {
+        throw new Error('Only the active Business controller may accept an offered allocation.');
+      }
       if (allocation.state !== 'OFFERED') {
-        if (
-          allocation.acceptedByPrincipalId === input.acceptedByPrincipalId &&
-          allocation.acceptedAt?.toISOString() === new Date(input.acceptedAt).toISOString()
-        ) {
+        if (allocation.acceptedByPrincipalId === input.acceptedByPrincipalId) {
           return;
         }
         throw new Error('Capital allocation was already accepted with different semantics.');
       }
       if (
         allocation.state !== 'OFFERED' ||
-        allocation.controllerPrincipalId !== input.acceptedByPrincipalId ||
         new Date(input.acceptedAt) < allocation.decidedAt
       ) {
         throw new Error('Only the active Business controller may accept an offered allocation.');
@@ -889,39 +914,80 @@ export class PostgresCapitalRepository {
     });
   }
 
-  async listCapitalPaths(): Promise<readonly CapitalPathSummary[]> {
+  async listCapitalPaths(input?: {
+    readonly businessSlug?: string;
+    readonly controllerPrincipalId: `usr_${string}`;
+  }): Promise<readonly CapitalPathSummary[]> {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
-    const [paths, uses] = await Promise.all([
-      database
+    const controllerPrincipalId = input?.controllerPrincipalId;
+    const businessSlug = input?.businessSlug;
+    const paths = await database
         .selectFrom('capital_decisions as decision')
         .innerJoin('capital_reviews as review', 'review.review_id', 'decision.review_id')
         .innerJoin('capital_providers as provider', 'provider.provider_id', 'review.provider_id')
+        .innerJoin('capital_mandates as mandate', 'mandate.mandate_id', 'review.mandate_id')
         .innerJoin('businesses as business', 'business.business_id', 'review.business_id')
         .leftJoin('capital_allocations as allocation', 'allocation.decision_id', 'decision.decision_id')
+        .leftJoin(
+          'capital_provider_accounts as provider_account',
+          'provider_account.provider_account_id',
+          'allocation.provider_account_id',
+        )
         .select([
+          'allocation.accepted_at as acceptedAt',
           'allocation.allocation_id as allocationId',
+          'allocation.provenance as allocationProvenance',
           'allocation.state as allocationState',
           'allocation.transaction_hash as allocationTransactionHash',
           'decision.approved_micro_usdc as approvedMicroUsdc',
           'review.business_id as businessId',
           'business.display_name as businessName',
           'business.slug as businessSlug',
+          'allocation.completed_at as completedAt',
+          'decision.decided_at as decidedAt',
           'decision.decision_id as decisionId',
           'allocation.instrument',
+          'mandate.criteria as mandateCriteria',
+          'mandate.mandate_id as mandateId',
+          'mandate.maximum_micro_usdc as mandateMaximumMicroUsdc',
+          'mandate.minimum_micro_usdc as mandateMinimumMicroUsdc',
+          'mandate.name as mandateName',
+          'mandate.strategy as mandateStrategy',
+          'mandate.version as mandateVersion',
           'review.material_sha256 as materialSha256',
+          'review.observed_at as observedAt',
           'decision.outcome',
           'provider.display_name as providerDisplayName',
+          'provider_account.account_assurance as providerAccountAssurance',
+          'provider_account.blockchain as providerAccountBlockchain',
+          'provider_account.custody_model as providerAccountCustodyModel',
+          'provider_account.provider as providerAccountInfrastructure',
+          'provider_account.status as providerAccountStatus',
           'provider.provider_id as providerId',
           'provider.provenance as providerProvenance',
+          'provider.risk_bearer_classification as providerRiskBearerClassification',
           'decision.rationale',
           'decision.reason_code as reasonCode',
+          'review.review_id as reviewId',
           'review.requested_micro_usdc as requestedMicroUsdc',
           'allocation.return_profile as returnProfile',
           'decision.terms',
         ])
+        .$if(controllerPrincipalId !== undefined, (query) =>
+          query
+            .innerJoin('business_controls as active_control', (join) =>
+              join
+                .onRef('active_control.business_id', '=', 'business.business_id')
+                .on('active_control.status', '=', 'ACTIVE'),
+            )
+            .where('active_control.controller_principal_id', '=', controllerPrincipalId as string),
+        )
+        .$if(businessSlug !== undefined, (query) =>
+          query.where('business.slug', '=', businessSlug as string),
+        )
         .orderBy('provider.display_name')
-        .execute(),
-      database
+        .execute();
+    const uses = await database
         .selectFrom('capital_use_links as use')
         .innerJoin('obligations as obligation', 'obligation.obligation_id', 'use.obligation_id')
         .leftJoin('settlement_operations as settlement', 'settlement.obligation_id', 'obligation.obligation_id')
@@ -929,20 +995,25 @@ export class PostgresCapitalRepository {
           'use.allocation_id as allocationId',
           'use.amount_micro_usdc as amountMicroUsdc',
           'use.capital_use_id as capitalUseId',
+          'use.linked_at as linkedAt',
           'use.obligation_id as obligationId',
           'obligation.state as obligationState',
           'settlement.state as settlementState',
         ])
         .orderBy('use.linked_at')
-        .execute(),
-    ]);
+        .execute();
     return paths.map((path) => ({
       ...path,
+      acceptedAt: path.acceptedAt?.toISOString() ?? null,
+      completedAt: path.completedAt?.toISOString() ?? null,
+      decidedAt: path.decidedAt.toISOString(),
+      observedAt: path.observedAt.toISOString(),
       uses: uses
         .filter((use) => use.allocationId === path.allocationId)
         .map((use) => ({
           amountMicroUsdc: use.amountMicroUsdc,
           capitalUseId: use.capitalUseId,
+          linkedAt: use.linkedAt.toISOString(),
           obligationId: use.obligationId,
           obligationState: use.obligationState,
           settlementState: use.settlementState,
