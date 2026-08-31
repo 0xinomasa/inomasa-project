@@ -247,10 +247,7 @@ export async function runCapitalProductPersistenceProof(
 ): Promise<CapitalProductPersistenceProof> {
   const fixture = createFixture();
   const repository = new PostgresCapitalRepository(persistence);
-  let acceptanceReplayVerified = false;
-  let businessContextVerified = false;
-  let explicitAcceptanceVerified = false;
-  let tenantIsolationVerified = false;
+  let verified: Omit<CapitalProductPersistenceProof, 'selfCleaningVerified'> | undefined;
 
   try {
     await insertBusiness(persistence, fixture);
@@ -260,7 +257,7 @@ export async function runCapitalProductPersistenceProof(
       businessSlug: fixture.slug,
       controllerPrincipalId: fixture.controllerPrincipalId,
     });
-    businessContextVerified = scoped.length === 1 &&
+    const businessContextVerified = scoped.length === 1 &&
       scoped[0]?.allocationId === fixture.allocationId &&
       scoped[0]?.allocationState === 'OFFERED';
 
@@ -281,7 +278,7 @@ export async function runCapitalProductPersistenceProof(
       allocationId: fixture.allocationId,
       businessSlug: `${fixture.slug}-wrong`,
     }));
-    tenantIsolationVerified = intruderPaths.length === 0 && intruderRejected && wrongContextRejected;
+    const tenantIsolationVerified = intruderPaths.length === 0 && intruderRejected && wrongContextRejected;
 
     await repository.acceptAllocation({
       acceptedAt: '2026-08-31T01:03:00.000Z',
@@ -293,7 +290,7 @@ export async function runCapitalProductPersistenceProof(
       businessSlug: fixture.slug,
       controllerPrincipalId: fixture.controllerPrincipalId,
     });
-    explicitAcceptanceVerified = authorized[0]?.allocationState === 'AUTHORIZED' &&
+    const explicitAcceptanceVerified = authorized[0]?.allocationState === 'AUTHORIZED' &&
       authorized[0]?.acceptedAt === '2026-08-31T01:03:00.000Z';
 
     await repository.acceptAllocation({
@@ -306,10 +303,20 @@ export async function runCapitalProductPersistenceProof(
       businessSlug: fixture.slug,
       controllerPrincipalId: fixture.controllerPrincipalId,
     });
-    acceptanceReplayVerified = replayed[0]?.allocationState === 'AUTHORIZED' &&
+    const acceptanceReplayVerified = replayed[0]?.allocationState === 'AUTHORIZED' &&
       replayed[0]?.acceptedAt === '2026-08-31T01:03:00.000Z';
+    verified = {
+      acceptanceReplayVerified,
+      businessContextVerified,
+      explicitAcceptanceVerified,
+      tenantIsolationVerified,
+    };
   } finally {
     await deleteFixture(persistence, fixture);
+  }
+
+  if (verified === undefined) {
+    throw new Error('Work 4 Capital product proof did not complete its assertions.');
   }
 
   const remaining = await persistence.databaseForApplication
@@ -320,10 +327,7 @@ export async function runCapitalProductPersistenceProof(
     .executeTakeFirstOrThrow();
 
   return {
-    acceptanceReplayVerified,
-    businessContextVerified,
-    explicitAcceptanceVerified,
+    ...verified,
     selfCleaningVerified: Number(remaining.count) === 0,
-    tenantIsolationVerified,
   };
 }
