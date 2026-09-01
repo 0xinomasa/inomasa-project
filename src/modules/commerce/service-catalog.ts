@@ -117,6 +117,22 @@ export function serviceCapabilityForOffer(offerId: string): ServiceCapabilityDef
   );
 }
 
+export function supportsAlphaSnapshotExecution(input: {
+  readonly commerceProtocol: string;
+  readonly createdByPrincipalId: string | null;
+  readonly offerId: string;
+  readonly status: string;
+}): boolean {
+  const catalogCapability = serviceCapabilityForOffer(input.offerId);
+  if (catalogCapability?.deliveryKind === 'ARC_NETWORK_SNAPSHOT') return true;
+  return (
+    input.offerId.startsWith('off_product_') &&
+    input.createdByPrincipalId !== null &&
+    input.commerceProtocol === 'X402' &&
+    input.status === 'ACTIVE'
+  );
+}
+
 export function selectCommerceProtocol(input: {
   readonly requiresDeliverableEvaluation: boolean;
 }): CommerceProtocol {

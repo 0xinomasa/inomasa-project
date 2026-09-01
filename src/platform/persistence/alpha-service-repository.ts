@@ -1,5 +1,5 @@
 import type { ArcNetworkSnapshot } from '../arc/rpc.ts';
-import { serviceCapabilityForOffer } from '../../modules/commerce/service-catalog.ts';
+import { supportsAlphaSnapshotExecution } from '../../modules/commerce/service-catalog.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
@@ -52,6 +52,8 @@ export class PostgresAlphaServiceRepository {
       .select([
         'obligation.buyer_business_id as buyerBusinessId',
         'offer.capability_id as capabilityId',
+        'offer.commerce_protocol as commerceProtocol',
+        'offer.created_by_principal_id as createdByPrincipalId',
         'obligation.environment as environment',
         'offer.offer_id as offerId',
         'obligation.provenance as provenance',
@@ -59,6 +61,7 @@ export class PostgresAlphaServiceRepository {
         'settlement.settlement_id as settlementId',
         'settlement.state as settlementState',
         'obligation.state as obligationState',
+        'offer.status as offerStatus',
       ])
       .where('obligation.obligation_id', '=', obligationId)
       .executeTakeFirstOrThrow();
@@ -66,8 +69,12 @@ export class PostgresAlphaServiceRepository {
     if (row.obligationState !== 'SETTLED' || row.settlementState !== 'COMPLETE') {
       throw new Error('Paid service execution requires a reconciled COMPLETE settlement.');
     }
-    const capability = serviceCapabilityForOffer(row.offerId);
-    if (capability === null || capability.deliveryKind !== 'ARC_NETWORK_SNAPSHOT') {
+    if (!supportsAlphaSnapshotExecution({
+      commerceProtocol: row.commerceProtocol,
+      createdByPrincipalId: row.createdByPrincipalId,
+      offerId: row.offerId,
+      status: row.offerStatus,
+    })) {
       throw new Error('The Alpha executor does not support this service offer.');
     }
 

@@ -9,6 +9,7 @@ import {
   clearBrowserEconomicIntent,
   getOrCreateBrowserEconomicIntent,
 } from '../src/app/_commerce/browser-intent.ts';
+import { currentProductEconomicState } from '../src/app/_commerce/presentation.ts';
 import { createBusinessGenesis } from '../src/modules/business/model.ts';
 import {
   assertProductEconomicRequestId,
@@ -18,7 +19,10 @@ import {
   providerHandoffDisposition,
   productErc8183Legs,
 } from '../src/modules/commerce/product-operations.ts';
-import { alphaServiceCatalog } from '../src/modules/commerce/service-catalog.ts';
+import {
+  alphaServiceCatalog,
+  supportsAlphaSnapshotExecution,
+} from '../src/modules/commerce/service-catalog.ts';
 
 const controller = {
   actorClassification: 'COMMON_CONTROL_TEST',
@@ -78,6 +82,50 @@ test('an activated controller-created offer enters the same canonical commerce s
   assert.equal(selection?.capability.offer.offerId, 'off_product_custom');
   assert.equal(selection?.capability.offer.priceMicroUsdc, 25_000n);
   assert.equal(selection?.createdByProduct, true);
+});
+
+test('activated controller-created x402 offers use the existing deterministic Alpha executor', () => {
+  assert.equal(supportsAlphaSnapshotExecution({
+    commerceProtocol: 'X402',
+    createdByPrincipalId: 'usr_product_controller',
+    offerId: 'off_product_custom',
+    status: 'ACTIVE',
+  }), true);
+  assert.equal(supportsAlphaSnapshotExecution({
+    commerceProtocol: 'X402',
+    createdByPrincipalId: 'usr_product_controller',
+    offerId: 'off_product_custom',
+    status: 'DRAFT',
+  }), false);
+  assert.equal(supportsAlphaSnapshotExecution({
+    commerceProtocol: 'ERC8183',
+    createdByPrincipalId: 'usr_product_controller',
+    offerId: 'off_product_custom',
+    status: 'ACTIVE',
+  }), false);
+  assert.equal(supportsAlphaSnapshotExecution({
+    commerceProtocol: 'X402',
+    createdByPrincipalId: null,
+    offerId: 'off_unknown',
+    status: 'ACTIVE',
+  }), false);
+});
+
+test('completed x402 payment remains actionable until delivery is complete', () => {
+  const request = {
+    deliveryState: null,
+    gatewayFundingState: 'DEPOSIT_COMPLETE',
+    jobOperations: [],
+    jobStatus: null,
+    kind: 'X402_PURCHASE' as const,
+    paymentState: 'COMPLETE',
+  };
+  assert.equal(currentProductEconomicState(request), 'DELIVERY_PENDING');
+  assert.equal(currentProductEconomicState({ ...request, deliveryState: 'COMPLETE' }), 'COMPLETE');
+  assert.equal(
+    currentProductEconomicState({ ...request, gatewayFundingState: 'DEPOSIT_SUBMITTED' }),
+    'RAIL_RECONCILIATION',
+  );
 });
 
 test('lost browser response reuses the unresolved request ID and canonical obligation', () => {

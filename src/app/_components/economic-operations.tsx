@@ -7,6 +7,7 @@ import {
   clearBrowserEconomicIntent,
   getOrCreateBrowserEconomicIntent,
 } from '../_commerce/browser-intent.ts';
+import { currentProductEconomicState } from '../_commerce/presentation.ts';
 
 interface CommerceOfferView {
   readonly amountUsdc: string;
@@ -76,25 +77,6 @@ function exactUsdc(microUsdc: string): string {
 
 function readable(value: string): string {
   return value.replaceAll('_', ' ').toLowerCase().replace(/\b\w/g, (letter) => letter.toUpperCase());
-}
-
-function currentState(request: CommerceRequestView): string {
-  if (request.kind === 'X402_PURCHASE') {
-    if (
-      request.paymentState === 'COMPLETE' &&
-      (request.gatewayFundingState === 'APPROVAL_SUBMITTED' ||
-        request.gatewayFundingState === 'DEPOSIT_SUBMITTED' ||
-        request.gatewayFundingState === 'OUTCOME_UNKNOWN')
-    ) return 'RAIL_RECONCILIATION';
-    if (request.deliveryState === 'COMPLETE') return 'COMPLETE';
-    if (request.paymentState === 'OUTCOME_UNKNOWN') return 'OUTCOME_UNKNOWN';
-    if (request.gatewayFundingState === 'FAILED') return 'FAILED';
-    if (request.gatewayFundingState === 'OUTCOME_UNKNOWN') return 'RAIL_OUTCOME_UNKNOWN';
-    return request.paymentState ?? 'PREPARED';
-  }
-  if (request.deliveryState === 'COMPLETE') return 'COMPLETE';
-  const unresolved = request.jobOperations.find(({ state }) => state === 'OUTCOME_UNKNOWN' || state === 'FAILED');
-  return unresolved?.state ?? request.jobStatus ?? 'PREPARED';
 }
 
 function stateTone(state: string): string {
@@ -246,7 +228,7 @@ export function EconomicOperations({
           <span>{requests.length} requests</span>
         </div>
         {requests.length === 0 ? <p className="operational-empty">No purchase or funded job has been confirmed from this Business yet.</p> : requests.map((request) => {
-          const state = currentState(request);
+          const state = currentProductEconomicState(request);
           const x402Unknown = request.kind === 'X402_PURCHASE' && state === 'OUTCOME_UNKNOWN';
           const railFailed = request.kind === 'X402_PURCHASE' && request.gatewayFundingState === 'FAILED';
           const railUnknown = request.kind === 'X402_PURCHASE' && request.gatewayFundingState === 'OUTCOME_UNKNOWN';
