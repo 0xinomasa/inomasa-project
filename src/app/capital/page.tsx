@@ -18,6 +18,7 @@ export default async function CapitalPage() {
   const approved = capital.paths.filter(({ outcome }) => outcome === 'APPROVED').length;
   const completed = capital.paths.filter(({ allocationState }) => allocationState === 'COMPLETE').length;
   const providers = new Set(capital.paths.map(({ providerId }) => providerId)).size;
+  const connected = capital.state === 'CONNECTED';
 
   return (
     <ProductShell active="capital" session={session}>
@@ -38,9 +39,9 @@ export default async function CapitalPage() {
         <div className="pathway-cue"><span>Provider reviews</span><span>You accept an offer</span><span>Allocation use stays attributable</span></div>
 
         <section aria-label="Capital summary" className="capital-summary">
-          <article><span>Providers</span><strong>{providers}</strong><p>Independent decisions remain attributable.</p></article>
-          <article><span>Approved decisions</span><strong>{approved}</strong><p>Approval does not imply allocation settlement.</p></article>
-          <article><span>Completed allocations</span><strong>{completed}</strong><p>Finalized Arc Testnet Capital, separate from Revenue.</p></article>
+          <article><span>Providers</span><strong>{connected ? providers : '—'}</strong><p>Independent decisions remain attributable.</p></article>
+          <article><span>Approved decisions</span><strong>{connected ? approved : '—'}</strong><p>Approval does not imply allocation settlement.</p></article>
+          <article><span>Completed allocations</span><strong>{connected ? completed : '—'}</strong><p>Finalized Arc Testnet Capital, separate from Revenue.</p></article>
         </section>
 
         {capital.state === 'CONNECTED' ? (

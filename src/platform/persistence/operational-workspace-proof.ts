@@ -12,6 +12,8 @@ import { PostgresOperationalWorkspaceRepository } from './operational-workspace-
 const rollbackSignal = Symbol('WORK_2_ROLLBACK_PROOF');
 
 export interface OperationalWorkspacePersistenceProof {
+  readonly activatedOfferBuyerVisibilityVerified: boolean;
+  readonly activatedOfferReplayVerified: boolean;
   readonly agentReplayVerified: boolean;
   readonly offerReplayVerified: boolean;
   readonly rollbackVerified: boolean;
@@ -26,7 +28,11 @@ export async function runOperationalWorkspacePersistenceProof(
   const owner = `usr_w2_${suffix}` as const;
   const intruder = `usr_w2_intruder_${suffix}` as const;
   const businessId = `biz_w2_${suffix}` as const;
+  const buyerBusinessId = `biz_w2_buyer_${suffix}` as const;
+  const buyerSlug = `work-2-buyer-proof-${suffix}`;
   const slug = `work-2-proof-${suffix}`;
+  let activatedOfferBuyerVisibilityVerified = false;
+  let activatedOfferReplayVerified = false;
   let agentReplayVerified = false;
   let offerReplayVerified = false;
   let tenantIsolationVerified = false;
@@ -57,39 +63,84 @@ export async function runOperationalWorkspacePersistenceProof(
           principal_id: businessId,
           principal_kind: 'BUSINESS',
         },
+        {
+          actor_classification: 'COMMON_CONTROL_TEST',
+          display_name: 'Work 2 proof buyer Business',
+          environment: 'AUTOMATED_TEST',
+          principal_id: buyerBusinessId,
+          principal_kind: 'BUSINESS',
+        },
       ]).execute();
-      await database.insertInto('genesis_requests').values({
-        consumed_at: new Date(),
-        genesis_request_id: `genesis-w2-${suffix}`,
-        requester_principal_id: owner,
-        state: 'CONSUMED',
-        template_id: 'api-data-compute',
-        template_version: 1,
-      }).execute();
-      await database.insertInto('businesses').values({
-        actor_classification: 'COMMON_CONTROL_TEST',
-        business_id: businessId,
-        business_principal_id: businessId,
-        common_control_group_id: 'ccg_work_2_proof',
-        display_name: 'Work 2 proof Business',
-        entry_route: 'BUILD',
-        environment: 'AUTOMATED_TEST',
-        genesis_request_id: `genesis-w2-${suffix}`,
-        slug,
-        status: 'ACTIVE',
-        summary: 'Transactional Work 2 persistence proof.',
-        template_id: 'api-data-compute',
-        template_version: 1,
-      }).execute();
-      await database.insertInto('business_controls').values({
-        accepted_at: new Date(),
-        business_id: businessId,
-        control_id: `ctl_w2_${suffix}`,
-        control_version: 1,
-        controller_principal_id: owner,
-        ended_at: null,
-        status: 'ACTIVE',
-      }).execute();
+      await database.insertInto('genesis_requests').values([
+        {
+          consumed_at: new Date(),
+          genesis_request_id: `genesis-w2-${suffix}`,
+          requester_principal_id: owner,
+          state: 'CONSUMED',
+          template_id: 'api-data-compute',
+          template_version: 1,
+        },
+        {
+          consumed_at: new Date(),
+          genesis_request_id: `genesis-w2-buyer-${suffix}`,
+          requester_principal_id: owner,
+          state: 'CONSUMED',
+          template_id: 'professional-service',
+          template_version: 1,
+        },
+      ]).execute();
+      await database.insertInto('businesses').values([
+        {
+          actor_classification: 'COMMON_CONTROL_TEST',
+          business_id: businessId,
+          business_principal_id: businessId,
+          common_control_group_id: 'ccg_work_2_proof',
+          display_name: 'Work 2 proof Business',
+          entry_route: 'BUILD',
+          environment: 'AUTOMATED_TEST',
+          genesis_request_id: `genesis-w2-${suffix}`,
+          slug,
+          status: 'ACTIVE',
+          summary: 'Transactional Work 2 persistence proof.',
+          template_id: 'api-data-compute',
+          template_version: 1,
+        },
+        {
+          actor_classification: 'COMMON_CONTROL_TEST',
+          business_id: buyerBusinessId,
+          business_principal_id: buyerBusinessId,
+          common_control_group_id: 'ccg_work_2_proof',
+          display_name: 'Work 2 proof buyer Business',
+          entry_route: 'BUILD',
+          environment: 'AUTOMATED_TEST',
+          genesis_request_id: `genesis-w2-buyer-${suffix}`,
+          slug: buyerSlug,
+          status: 'ACTIVE',
+          summary: 'Controlled buyer for activated-offer persistence proof.',
+          template_id: 'professional-service',
+          template_version: 1,
+        },
+      ]).execute();
+      await database.insertInto('business_controls').values([
+        {
+          accepted_at: new Date(),
+          business_id: businessId,
+          control_id: `ctl_w2_${suffix}`,
+          control_version: 1,
+          controller_principal_id: owner,
+          ended_at: null,
+          status: 'ACTIVE',
+        },
+        {
+          accepted_at: new Date(),
+          business_id: buyerBusinessId,
+          control_id: `ctl_w2_buyer_${suffix}`,
+          control_version: 1,
+          controller_principal_id: owner,
+          ended_at: null,
+          status: 'ACTIVE',
+        },
+      ]).execute();
       await database.insertInto('business_sites').values({
         business_id: businessId,
         description: 'Work 2 proof site.',
@@ -134,6 +185,32 @@ export async function runOperationalWorkspacePersistenceProof(
         transaction,
       );
       offerReplayVerified = firstOffer.created && !replayOffer.created;
+      activatedOfferReplayVerified =
+        await operational.activateOffer({
+          controllerPrincipalId: owner,
+          offerId: draft.offerId,
+          slug,
+        }, transaction) === 'ACTIVATED' &&
+        await operational.activateOffer({
+          controllerPrincipalId: owner,
+          offerId: draft.offerId,
+          slug,
+        }, transaction) === 'ALREADY_ACTIVE';
+      const activatedForBuyer = await operational.listActivatedProductOffersForBuyer({
+        controllerPrincipalId: owner,
+        slug: buyerSlug,
+      }, transaction);
+      const hiddenFromProvider = await operational.listActivatedProductOffersForBuyer({
+        controllerPrincipalId: owner,
+        slug,
+      }, transaction);
+      activatedOfferBuyerVisibilityVerified =
+        activatedForBuyer?.some((offer) => offer.offerId === draft.offerId) === true &&
+        hiddenFromProvider?.some((offer) => offer.offerId === draft.offerId) === false &&
+        await operational.listActivatedProductOffersForBuyer({
+          controllerPrincipalId: intruder,
+          slug: buyerSlug,
+        }, transaction) === undefined;
 
       const agent = createOperationalAgent({
         businessId,
@@ -177,6 +254,8 @@ export async function runOperationalWorkspacePersistenceProof(
     .executeTakeFirstOrThrow();
 
   return {
+    activatedOfferBuyerVisibilityVerified,
+    activatedOfferReplayVerified,
     agentReplayVerified,
     offerReplayVerified,
     rollbackVerified: Number(remaining.count) === 0,

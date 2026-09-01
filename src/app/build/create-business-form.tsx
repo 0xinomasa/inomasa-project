@@ -9,6 +9,16 @@ type Template = {
   readonly capabilities: readonly string[];
 };
 
+function capabilityLabel(capability: string): string {
+  const labels: Record<string, string> = {
+    ARC_READY: 'Arc-compatible structure',
+    COMMERCE_READY: 'Commerce structure',
+    IDENTITY_READY: 'Identity-compatible structure',
+    X402_READY: 'x402-compatible structure',
+  };
+  return labels[capability] ?? capability.replaceAll('_', ' ').toLowerCase();
+}
+
 export function CreateBusinessForm({ templates }: { readonly templates: readonly Template[] }) {
   const [templateId, setTemplateId] = useState(templates[0]?.templateId ?? '');
   const selected = templates.find((template) => template.templateId === templateId);
@@ -60,7 +70,7 @@ export function CreateBusinessForm({ templates }: { readonly templates: readonly
               <span>0{index + 1}</span>
               <strong>{template.label}</strong>
               <small>{template.description}</small>
-              <em>{template.capabilities.join(' · ').replaceAll('_', ' ')}</em>
+              <em>{template.capabilities.map(capabilityLabel).join(' · ')}</em>
             </button>
           ))}
         </div>

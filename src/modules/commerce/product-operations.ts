@@ -16,6 +16,26 @@ import {
 
 export type ProductEconomicOperationKind = 'ERC8183_JOB' | 'X402_PURCHASE';
 
+export type ProviderHandoffDisposition = 'HOLD' | 'RECONCILE' | 'SUBMIT';
+
+export function providerHandoffDisposition(input: {
+  readonly providerTransactionId: string | null;
+  readonly state: string;
+}): ProviderHandoffDisposition {
+  if (input.state === 'AUTHORIZED' || input.state === 'APPROVAL_AUTHORIZED' || input.state === 'APPROVAL_COMPLETE') {
+    return 'SUBMIT';
+  }
+  if (
+    input.state === 'SUBMITTED' ||
+    input.state === 'APPROVAL_SUBMITTED' ||
+    input.state === 'DEPOSIT_SUBMITTED' ||
+    input.state === 'OUTCOME_UNKNOWN'
+  ) {
+    return input.providerTransactionId === null ? 'HOLD' : 'RECONCILE';
+  }
+  return 'HOLD';
+}
+
 const executableErc8183Legs = [
   'CREATE',
   'SET_BUDGET',
@@ -128,6 +148,7 @@ export function createProductX402Plan(input: {
   readonly agentPrincipalId: `agt_${string}`;
   readonly buyer: BusinessInstance;
   readonly controllerPrincipalId: `usr_${string}`;
+  readonly erc8004IdentityId: `aid_${string}`;
   readonly identity: ProductOperationIdentity;
   readonly offer: ServiceOffer;
   readonly provider: BusinessInstance;
@@ -167,6 +188,7 @@ export function createProductX402Plan(input: {
     authorityDomainBusinessId: input.buyer.businessId,
     counterpartyBusinessId: input.provider.businessId,
     environment: input.buyer.environment,
+    erc8004IdentityId: input.erc8004IdentityId,
     grantId: grant.grantId,
     intentId: input.identity.intentId,
     offerId: input.offer.offerId,

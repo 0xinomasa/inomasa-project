@@ -24,6 +24,12 @@ export interface OperationalOfferSummary {
   readonly termsVersion: number;
 }
 
+export interface ActivatedProductOfferSummary extends OperationalOfferSummary {
+  readonly providerBusinessId: `biz_${string}`;
+  readonly providerDisplayName: string;
+  readonly providerSlug: string;
+}
+
 export interface OperationalTreasurySummary {
   readonly accountAssurance: string;
   readonly accountType: string;
@@ -195,7 +201,8 @@ export class PostgresOperationalWorkspaceRepository {
         .select(['created_by_principal_id', 'provider_business_id', 'status'])
         .where('offer_id', '=', input.offerId)
         .forUpdate()
-        .executeTakeFirstOrThrow();
+        .executeTakeFirst();
+      if (offer === undefined) throw new Error('Product or Service not found.');
       if (
         offer.provider_business_id !== business.businessId ||
         offer.created_by_principal_id === null
@@ -214,6 +221,89 @@ export class PostgresOperationalWorkspaceRepository {
         .executeTakeFirstOrThrow();
       return 'RETIRED';
     });
+  }
+
+  async activateOffer(input: {
+    readonly controllerPrincipalId: `usr_${string}`;
+    readonly offerId: string;
+    readonly slug: string;
+  }, transaction?: PersistenceTransaction): Promise<'ACTIVATED' | 'ALREADY_ACTIVE'> {
+    if (transaction === undefined) {
+      return this.#persistence.transaction((activeTransaction) =>
+        this.activateOffer(input, activeTransaction),
+      );
+    }
+    const business = await this.getBusinessForController(input, transaction);
+    if (business === undefined) throw new Error('Business control is required to activate this offer.');
+    const database = transaction.withSchema(applicationSchema);
+    const offer = await database
+      .selectFrom('service_offers')
+      .select(['commerce_protocol', 'created_by_principal_id', 'provider_business_id', 'status'])
+      .where('offer_id', '=', input.offerId)
+      .forUpdate()
+      .executeTakeFirst();
+    if (offer === undefined) throw new Error('Product or Service not found.');
+    if (
+      offer.provider_business_id !== business.businessId ||
+      offer.created_by_principal_id !== input.controllerPrincipalId
+    ) {
+      throw new Error('Only the controlling principal can activate this Product or Service.');
+    }
+    if (offer.status === 'ACTIVE') return 'ALREADY_ACTIVE';
+    if (offer.status !== 'DRAFT') throw new Error('Only a draft can be activated.');
+    if (!isProductCommerceProtocol(offer.commerce_protocol)) {
+      throw new Error('The draft has no supported canonical commerce path.');
+    }
+    await database
+      .updateTable('service_offers')
+      .set({ status: 'ACTIVE', updated_at: new Date() })
+      .where('offer_id', '=', input.offerId)
+      .where('status', '=', 'DRAFT')
+      .executeTakeFirstOrThrow();
+    return 'ACTIVATED';
+  }
+
+  async listActivatedProductOffersForBuyer(input: {
+    readonly controllerPrincipalId: `usr_${string}`;
+    readonly slug: string;
+  }, transaction?: PersistenceTransaction): Promise<readonly ActivatedProductOfferSummary[] | undefined> {
+    const buyer = await this.getBusinessForController(input, transaction);
+    if (buyer === undefined) return undefined;
+    const rows = await (transaction ?? this.#persistence.databaseForApplication)
+      .withSchema(applicationSchema)
+      .selectFrom('service_offers as offer')
+      .innerJoin('businesses as provider', 'provider.business_id', 'offer.provider_business_id')
+      .innerJoin('business_controls as control', (join) =>
+        join
+          .onRef('control.business_id', '=', 'provider.business_id')
+          .on('control.status', '=', 'ACTIVE'),
+      )
+      .select([
+        'offer.capability_id as capabilityId',
+        'offer.commerce_protocol as commerceProtocol',
+        'offer.created_by_principal_id as createdByPrincipalId',
+        'offer.description',
+        'offer.offer_id as offerId',
+        'offer.price_micro_usdc as priceMicroUsdc',
+        'provider.business_id as providerBusinessId',
+        'provider.display_name as providerDisplayName',
+        'provider.slug as providerSlug',
+        'offer.status',
+        'offer.terms_version as termsVersion',
+      ])
+      .where('offer.created_by_principal_id', '=', input.controllerPrincipalId)
+      .where('offer.provider_business_id', '<>', buyer.businessId)
+      .where('offer.status', '=', 'ACTIVE')
+      .where('offer.commerce_protocol', 'in', ['X402', 'ERC8183'])
+      .where('provider.status', '=', 'ACTIVE')
+      .where('control.controller_principal_id', '=', input.controllerPrincipalId)
+      .orderBy('offer.updated_at', 'desc')
+      .execute();
+    return rows.map(({ createdByPrincipalId, ...row }) => ({
+      ...row,
+      createdByProduct: createdByPrincipalId !== null,
+      providerBusinessId: row.providerBusinessId as `biz_${string}`,
+    }));
   }
 
   async getTreasury(input: {

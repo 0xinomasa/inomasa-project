@@ -19,6 +19,7 @@ interface AgentView {
   readonly agentPrincipalId: string;
   readonly capabilities: readonly string[];
   readonly displayName: string;
+  readonly identityId: string | null;
   readonly identityState: string | null;
   readonly role: string;
   readonly runtimeClass: string;
@@ -104,18 +105,24 @@ export function OperationalWorkspace({
     }
   }
 
-  async function retireOffer(offerId: string): Promise<void> {
+  async function manageOffer(offerId: string, action: 'ACTIVATE' | 'RETIRE'): Promise<void> {
     setProductPending(true);
     setProductState(null);
     try {
       const result = await resultJson(await fetch(`${endpoint}/offers`, {
-        body: JSON.stringify({ offerId }),
+        body: JSON.stringify({ action, offerId }),
         headers: { 'content-type': 'application/json' },
         method: 'PATCH',
       }));
       setProductState({
         kind: 'success',
-        message: result['result'] === 'ALREADY_RETIRED' ? 'Draft was already retired.' : 'Draft retired.',
+        message: action === 'ACTIVATE'
+          ? result['result'] === 'ALREADY_ACTIVE'
+            ? 'This offer is already active; no duplicate activation occurred.'
+            : 'Offer activated. It is now available to another Business you control through the selected canonical commerce path.'
+          : result['result'] === 'ALREADY_RETIRED'
+            ? 'Draft was already retired.'
+            : 'Draft retired.',
       });
       router.refresh();
     } catch (error: unknown) {
@@ -154,6 +161,36 @@ export function OperationalWorkspace({
     } finally {
       setAgentPending(false);
     }
+  }
+
+  async function operateAgentIdentity(agent: AgentView): Promise<void> {
+    setAgentPending(true);
+    setAgentState(null);
+    const action = agent.identityId === null ? 'PREPARE_IDENTITY' : 'ADVANCE_IDENTITY';
+    try {
+      const result = await resultJson(await fetch(`${endpoint}/agents`, {
+        body: JSON.stringify({ action, agentPrincipalId: agent.agentPrincipalId }),
+        headers: { 'content-type': 'application/json' },
+        method: 'PATCH',
+      }));
+      setAgentState({
+        kind: 'success',
+        message: typeof result['message'] === 'string' ? result['message'] : 'Agent identity state updated.',
+      });
+      router.refresh();
+    } catch (error: unknown) {
+      setAgentState({ kind: 'error', message: error instanceof Error ? error.message : 'Agent identity operation failed.' });
+    } finally {
+      setAgentPending(false);
+    }
+  }
+
+  function identityLabel(agent: AgentView): string {
+    if (agent.identityState === 'VERIFIED') return 'Onchain identity: Active';
+    if (agent.identityState === 'OUTCOME_UNKNOWN') return 'Onchain identity: Outcome unknown';
+    if (agent.identityState === null) return 'Onchain identity: Not active';
+    if (agent.identityState === 'REGISTER_AUTHORIZED') return 'Onchain identity: Prepared';
+    return 'Onchain identity: Activation in progress';
   }
 
   async function operateTreasury(action: 'CHECK_BALANCE' | 'PROVISION'): Promise<void> {
@@ -202,7 +239,7 @@ export function OperationalWorkspace({
           <div><p className="eyebrow">Products & Services</p><h2>Define what this Business offers.</h2></div>
           <span>{activeOffers.length} current</span>
         </div>
-        <p className="panel-description">Create a priced draft and choose the transaction shape. Drafts do not become purchasable until an explicit delivery/economic activation path is ready.</p>
+        <p className="panel-description">Create a priced draft, then activate it explicitly. An active offer becomes available to another Business you control through the selected canonical testnet commerce path; creation alone never makes it purchasable.</p>
         <div className="operational-list">
           {offers.length === 0 ? <p className="operational-empty">No Product or Service draft exists yet.</p> : offers.map((offer) => (
             <div className="operational-row" key={offer.offerId}>
@@ -212,7 +249,10 @@ export function OperationalWorkspace({
                 <small>{usdc(offer.priceMicroUsdc)} · {offer.commerceProtocol === 'X402' ? 'Instant resource' : offer.commerceProtocol === 'ERC8183' ? 'Evaluated work' : 'Direct settlement'}</small>
               </div>
               {offer.createdByProduct && offer.status === 'DRAFT' ? (
-                <button className="button button--quiet" disabled={productPending} onClick={() => void retireOffer(offer.offerId)} type="button">Retire draft</button>
+                <div className="operational-row__actions">
+                  <button className="button button--primary" disabled={productPending} onClick={() => void manageOffer(offer.offerId, 'ACTIVATE')} type="button">Activate offer</button>
+                  <button className="button button--quiet" disabled={productPending} onClick={() => void manageOffer(offer.offerId, 'RETIRE')} type="button">Retire draft</button>
+                </div>
               ) : null}
             </div>
           ))}
@@ -246,8 +286,14 @@ export function OperationalWorkspace({
               <div>
                 <div className="operational-row__title"><strong>{agent.displayName}</strong><span>{agent.status}</span></div>
                 <p>{agent.role.replaceAll('_', ' ').toLowerCase()} · {agent.capabilities.join(' · ')}</p>
-                <small>{agent.runtimeClass.replaceAll('_', ' ')} · Identity {agent.identityState ?? 'not registered'} · Intelligence not configured</small>
+                <small>{agent.runtimeClass.replaceAll('_', ' ')} · {identityLabel(agent)} · Intelligence not configured</small>
+                {agent.identityId === null ? null : <details className="agent-identity-detail"><summary>Identity details</summary><code>{agent.identityId}</code><span>ERC-8004 · Arc Testnet · execution account remains separate</span></details>}
               </div>
+              {agent.capabilities.includes('purchase-service') && agent.identityState !== 'VERIFIED' && agent.identityState !== 'FAILED' ? (
+                <button className="button button--quiet" disabled={agentPending || treasury?.status !== 'ACTIVE'} onClick={() => void operateAgentIdentity(agent)} type="button">
+                  {agent.identityId === null ? 'Prepare onchain identity' : agent.identityState === 'OUTCOME_UNKNOWN' ? 'Review identity outcome' : 'Continue identity activation'}
+                </button>
+              ) : null}
             </div>
           ))}
         </div>

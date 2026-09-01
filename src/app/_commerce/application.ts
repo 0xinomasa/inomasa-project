@@ -7,6 +7,7 @@ import {
   createProductX402Plan,
   deriveProductOperationIdentity,
   assertProductEconomicRequestId,
+  providerHandoffDisposition,
   productErc8183Legs,
   type ProductEconomicOperationKind,
   type ProductErc8183Leg,
@@ -113,11 +114,6 @@ async function prepareOperation(
 ): Promise<ProductEconomicActionResult> {
   const kind = requestedKind(input.kind);
   const offerId = asOfferId(input.offerId);
-  const selection = productCommerceSelectionForOffer(offerId);
-  if (selection === undefined || selection.kind !== kind) {
-    throw new Error('The selected offer does not match this controlled transaction shape.');
-  }
-  const capability = selection.capability;
   const requestRepository = new PostgresProductEconomicOperationRepository(persistence);
   const existing = (await requestRepository.listRequests({
     controllerPrincipalId: input.controllerPrincipalId,
@@ -139,6 +135,15 @@ async function prepareOperation(
   if (businessContext.environment !== 'PRIVATE_ARC_TESTNET') {
     throw new Error('Product economic operation is restricted to PRIVATE_ARC_TESTNET.');
   }
+  const activatedOffers = await workspaces.listActivatedProductOffersForBuyer({
+    controllerPrincipalId: input.controllerPrincipalId,
+    slug: input.businessSlug,
+  });
+  const selection = productCommerceSelectionForOffer(offerId, activatedOffers ?? []);
+  if (selection === undefined || selection.kind !== kind) {
+    throw new Error('The selected offer is not active for this controlled transaction shape.');
+  }
+  const capability = selection.capability;
   const businesses = new PostgresAlphaBusinessRepository(persistence);
   const buyer = await businesses.getBusiness(businessContext.businessId);
   const provider = await businesses.getBusiness(capability.offer.providerBusinessId);
@@ -179,9 +184,11 @@ async function prepareOperation(
       agent === undefined ||
       agent.status !== 'ACTIVE' ||
       agent.runtimeClass !== 'OPERATOR_INVOKED' ||
-      !agent.capabilities.includes('purchase-service')
+      !agent.capabilities.includes('purchase-service') ||
+      agent.identityId === null ||
+      agent.identityState !== 'VERIFIED'
     ) {
-      throw new Error('The selected Agent lacks active bounded purchase-service capability.');
+      throw new Error('The selected Agent requires active bounded purchase-service capability and an active onchain identity.');
     }
     const gateway = new CircleGatewayX402Adapter(readCircleDeveloperWalletConfig(), buyerAddress);
     const requirements = await gateway.getRequirements({
@@ -201,6 +208,7 @@ async function prepareOperation(
       agentPrincipalId,
       buyer,
       controllerPrincipalId: input.controllerPrincipalId,
+      erc8004IdentityId: agent.identityId as `aid_${string}`,
       identity,
       offer: capability.offer,
       provider,
@@ -336,30 +344,42 @@ async function advanceGatewayFunding(input: {
     gatewayContractAddress: arcGatewayTestnet.contractAddress,
   });
   if (operation.state === 'OUTCOME_UNKNOWN') {
-    const leg = operation.depositProviderTransactionId === null ? 'APPROVAL' : 'DEPOSIT';
+    const leg = operation.providerState === 'DEPOSIT_HANDOFF_STARTED' ||
+      operation.depositProviderTransactionId !== null
+      ? 'DEPOSIT'
+      : 'APPROVAL';
     const providerTransactionId = leg === 'APPROVAL'
       ? operation.approvalProviderTransactionId
       : operation.depositProviderTransactionId;
-    if (providerTransactionId === null) {
+    if (providerHandoffDisposition({
+      providerTransactionId,
+      state: operation.state,
+    }) === 'HOLD') {
       return 'Gateway funding outcome is unknown and has no provider transaction to reconcile. No resubmission occurred.';
     }
+    if (providerTransactionId === null) throw new Error('Gateway reconciliation has no provider transaction.');
     const outcome = await input.gateway.observeFundingTransaction(providerTransactionId);
     await input.repository.recordFundingOutcome({ fundingId: operation.fundingId, leg, outcome });
     return `Gateway ${leg.toLowerCase()} reconciliation observed ${outcome.state}. No new transaction was submitted.`;
   }
   if (operation.state === 'FAILED') return 'Gateway funding failed terminally. No retry was submitted.';
   if (operation.state === 'APPROVAL_AUTHORIZED') {
-    const submitted = await input.gateway.submitApproval({
-      amountMicroUsdc: operation.amountMicroUsdc,
-      idempotencyKey: operation.approvalIdempotencyKey,
-      referenceId: `${operation.fundingId}:approval`,
-      sourceAddress: operation.depositorAddress,
-    });
-    await input.repository.recordFundingSubmitted({
-      fundingId: operation.fundingId,
-      leg: 'APPROVAL',
-      providerTransactionId: submitted.providerTransactionId,
-    });
+    await input.repository.recordFundingHandoffStarted({ fundingId: operation.fundingId, leg: 'APPROVAL' });
+    try {
+      const submitted = await input.gateway.submitApproval({
+        amountMicroUsdc: operation.amountMicroUsdc,
+        idempotencyKey: operation.approvalIdempotencyKey,
+        referenceId: `${operation.fundingId}:approval`,
+        sourceAddress: operation.depositorAddress,
+      });
+      await input.repository.recordFundingSubmitted({
+        fundingId: operation.fundingId,
+        leg: 'APPROVAL',
+        providerTransactionId: submitted.providerTransactionId,
+      });
+    } catch {
+      return 'Gateway approval handoff is outcome unknown. Its intent is persisted and no replacement submission will occur.';
+    }
     return 'Gateway USDC approval submitted. Continue to reconcile the existing provider transaction.';
   }
   if (operation.state === 'APPROVAL_SUBMITTED') {
@@ -370,17 +390,22 @@ async function advanceGatewayFunding(input: {
     return `Gateway approval reconciliation observed ${outcome.state}.`;
   }
   if (operation.state === 'APPROVAL_COMPLETE') {
-    const submitted = await input.gateway.submitDeposit({
-      amountMicroUsdc: operation.amountMicroUsdc,
-      idempotencyKey: operation.depositIdempotencyKey,
-      referenceId: `${operation.fundingId}:deposit`,
-      sourceAddress: operation.depositorAddress,
-    });
-    await input.repository.recordFundingSubmitted({
-      fundingId: operation.fundingId,
-      leg: 'DEPOSIT',
-      providerTransactionId: submitted.providerTransactionId,
-    });
+    await input.repository.recordFundingHandoffStarted({ fundingId: operation.fundingId, leg: 'DEPOSIT' });
+    try {
+      const submitted = await input.gateway.submitDeposit({
+        amountMicroUsdc: operation.amountMicroUsdc,
+        idempotencyKey: operation.depositIdempotencyKey,
+        referenceId: `${operation.fundingId}:deposit`,
+        sourceAddress: operation.depositorAddress,
+      });
+      await input.repository.recordFundingSubmitted({
+        fundingId: operation.fundingId,
+        leg: 'DEPOSIT',
+        providerTransactionId: submitted.providerTransactionId,
+      });
+    } catch {
+      return 'Gateway deposit handoff is outcome unknown. Its intent is persisted and no replacement submission will occur.';
+    }
     return 'Gateway exact deposit submitted. Continue to reconcile the existing provider transaction.';
   }
   if (operation.state === 'DEPOSIT_SUBMITTED') {
@@ -709,7 +734,10 @@ async function advanceErc8183(
   const rpc = new ArcErc8183Rpc();
   await rpc.verifyContractProfile();
   if (operation.state === 'SUBMITTED' || operation.state === 'OUTCOME_UNKNOWN') {
-    if (operation.providerTransactionId === null) {
+    if (providerHandoffDisposition({
+      providerTransactionId: operation.providerTransactionId,
+      state: operation.state,
+    }) === 'HOLD') {
       return `ERC-8183 ${nextLeg.replaceAll('_', ' ')} is ${operation.state} without a provider transaction; no resubmission occurred.`;
     }
     return reconcileErc8183Leg({
@@ -764,16 +792,21 @@ async function advanceErc8183(
     },
   } as const;
   const selected = call[nextLeg];
-  const submission = await execution.submit({
-    ...selected,
-    idempotencyKey: operation.idempotencyKey,
-    referenceId: `${job.jobId}:${nextLeg.toLowerCase()}`,
-    sourceAddress: operation.actorAddress,
-  });
-  await jobs.recordSubmitted({
-    operationId: operation.operationId,
-    providerTransactionId: submission.providerTransactionId,
-  });
+  await jobs.recordHandoffStarted(operation.operationId);
+  try {
+    const submission = await execution.submit({
+      ...selected,
+      idempotencyKey: operation.idempotencyKey,
+      referenceId: `${job.jobId}:${nextLeg.toLowerCase()}`,
+      sourceAddress: operation.actorAddress,
+    });
+    await jobs.recordSubmitted({
+      operationId: operation.operationId,
+      providerTransactionId: submission.providerTransactionId,
+    });
+  } catch {
+    return `ERC-8183 ${nextLeg.replaceAll('_', ' ')} handoff is outcome unknown. The intent is durable and no replacement submission will occur.`;
+  }
   operation = await jobs.getOperation(operation.operationId);
   return `ERC-8183 ${nextLeg.replaceAll('_', ' ')} submitted as provider transaction ${operation.providerTransactionId}. Continue to reconcile it; no duplicate will be submitted.`;
 }

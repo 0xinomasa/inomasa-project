@@ -1,9 +1,15 @@
+import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { requireProductSession } from '../_auth/server';
 import { ProductShell } from '../_components/product-shell';
 
 export const dynamic = 'force-dynamic';
+
+export const metadata: Metadata = {
+  description: 'The controlled Alpha MIGRATE boundary remains locked and preserves external provenance.',
+  title: 'MIGRATE · Inomasa',
+};
 
 export default async function MigratePage() {
   const session = await requireProductSession('/migrate');

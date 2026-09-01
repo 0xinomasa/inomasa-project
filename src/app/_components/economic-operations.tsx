@@ -3,9 +3,16 @@
 import { useRouter } from 'next/navigation';
 import { useState, useTransition, type FormEvent } from 'react';
 
+import {
+  clearBrowserEconomicIntent,
+  getOrCreateBrowserEconomicIntent,
+} from '../_commerce/browser-intent.ts';
+
 interface CommerceOfferView {
   readonly amountUsdc: string;
+  readonly createdByProduct: boolean;
   readonly description: string;
+  readonly displayName: string;
   readonly kind: 'ERC8183_JOB' | 'X402_PURCHASE';
   readonly offerId: string;
   readonly providerDisplayName: string;
@@ -29,6 +36,7 @@ interface CommerceRequestView {
   readonly jobStatus: string | null;
   readonly kind: 'ERC8183_JOB' | 'X402_PURCHASE';
   readonly obligationId: string;
+  readonly offerCapabilityId: string;
   readonly offerDescription: string;
   readonly offerId: string;
   readonly paymentId: string | null;
@@ -46,6 +54,7 @@ interface PurchaseAgentView {
   readonly agentPrincipalId: string;
   readonly capabilities: readonly string[];
   readonly displayName: string;
+  readonly identityState: string | null;
   readonly runtimeClass: string;
   readonly status: string;
 }
@@ -115,7 +124,8 @@ export function EconomicOperations({
   const purchaseAgents = agents.filter((agent) =>
     agent.status === 'ACTIVE' &&
     agent.runtimeClass === 'OPERATOR_INVOKED' &&
-    agent.capabilities.includes('purchase-service'),
+    agent.capabilities.includes('purchase-service') &&
+    agent.identityState === 'VERIFIED',
   );
   const endpoint = `/api/product/businesses/${encodeURIComponent(businessSlug)}/commerce`;
 
@@ -123,16 +133,29 @@ export function EconomicOperations({
     event.preventDefault();
     const form = new FormData(event.currentTarget);
     const key = `prepare:${offer.offerId}`;
+    const agentPrincipalId = offer.kind === 'X402_PURCHASE'
+      ? String(form.get('agentPrincipalId') ?? '')
+      : null;
+    const intent = getOrCreateBrowserEconomicIntent(
+      window.localStorage,
+      {
+        agentPrincipalId,
+        businessSlug,
+        kind: offer.kind,
+        offerId: offer.offerId,
+      },
+      () => crypto.randomUUID(),
+    );
     setPendingKey(key);
     setActionState(null);
     try {
       const result = await resultJson(await fetch(endpoint, {
         body: JSON.stringify({
           action: 'PREPARE',
-          ...(offer.kind === 'X402_PURCHASE' ? { agentPrincipalId: form.get('agentPrincipalId') } : {}),
+          ...(offer.kind === 'X402_PURCHASE' ? { agentPrincipalId } : {}),
           kind: offer.kind,
           offerId: offer.offerId,
-          requestId: crypto.randomUUID(),
+          requestId: intent.requestId,
         }),
         headers: { 'content-type': 'application/json' },
         method: 'POST',
@@ -141,9 +164,11 @@ export function EconomicOperations({
         kind: 'success',
         message: typeof result['message'] === 'string' ? result['message'] : 'Economic confirmation persisted.',
       });
+      clearBrowserEconomicIntent(window.localStorage, intent);
       startRefresh(() => router.refresh());
     } catch (error: unknown) {
-      setActionState({ kind: 'error', message: error instanceof Error ? error.message : 'Economic confirmation failed.' });
+      const detail = error instanceof Error ? error.message : 'Economic confirmation failed.';
+      setActionState({ kind: 'error', message: `${detail} Retry this unchanged confirmation to recover the same request; Inomasa will not create a new intent automatically.` });
     } finally {
       setPendingKey(null);
     }
@@ -182,15 +207,15 @@ export function EconomicOperations({
                 <span>{offer.kind === 'X402_PURCHASE' ? 'Instant purchase' : 'Evaluated job'}</span>
                 <strong>{offer.amountUsdc} USDC</strong>
               </div>
-              <h3>{offer.kind === 'X402_PURCHASE' ? 'Arc network snapshot' : 'Commerce readiness brief'}</h3>
+              <h3>{readable(offer.displayName)}</h3>
               <p>{offer.description}</p>
-              <small>{offer.providerDisplayName}</small>
+              <small>{offer.providerDisplayName}{offer.createdByProduct ? ' · activated from Products & Services' : ''}</small>
               <form onSubmit={(event) => void prepare(event, offer)}>
                 {offer.kind === 'X402_PURCHASE' ? (
                   <div className="field">
                     <label htmlFor={`agent-${offer.offerId}`}>Bounded purchase Agent</label>
                     <select disabled={unavailableAgent} id={`agent-${offer.offerId}`} name="agentPrincipalId" required>
-                      {purchaseAgents.length === 0 ? <option value="">Create an Agent with purchase-service first</option> : null}
+                      {purchaseAgents.length === 0 ? <option value="">Activate onchain identity for a purchase Agent first</option> : null}
                       {purchaseAgents.map((agent) => <option key={agent.agentPrincipalId} value={agent.agentPrincipalId}>{agent.displayName}</option>)}
                     </select>
                   </div>
@@ -239,7 +264,7 @@ export function EconomicOperations({
             <article className="economic-request" key={request.requestId}>
               <div className="economic-request__summary">
                 <div>
-                  <div className="operational-row__title"><strong>{request.kind === 'X402_PURCHASE' ? 'Arc network snapshot' : 'Commerce readiness brief'}</strong><span className={`economic-state economic-state--${stateTone(state)}`}>{readable(state)}</span></div>
+                  <div className="operational-row__title"><strong>{readable(request.offerCapabilityId)}</strong><span className={`economic-state economic-state--${stateTone(state)}`}>{readable(state)}</span></div>
                   <p>{exactUsdc(request.amountMicroUsdc)} · {request.providerDisplayName}</p>
                   <small>{new Date(request.requestedAt).toLocaleString()} · common-control test</small>
                 </div>

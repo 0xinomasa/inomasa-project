@@ -88,6 +88,7 @@ async function main(): Promise<void> {
     });
 
     if (operation.state === 'REGISTER_AUTHORIZED') {
+      await identities.recordHandoffStarted({ identityId: identityProfile.identityId, leg: 'REGISTRATION' });
       const submission = await execution.submit({
         abiFunctionSignature: 'register()',
         abiParameters: [],
@@ -156,6 +157,7 @@ async function main(): Promise<void> {
           x402Support: true,
         }),
       );
+      await identities.recordHandoffStarted({ identityId: identityProfile.identityId, leg: 'METADATA' });
       const submission = await execution.submit({
         abiFunctionSignature: 'setAgentURI(uint256,string)',
         abiParameters: [operation.agentId.toString(), registrationUri],

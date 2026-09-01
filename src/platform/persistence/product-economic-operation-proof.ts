@@ -1,12 +1,21 @@
 import { randomUUID } from 'node:crypto';
 
+import { providerHandoffDisposition } from '../../modules/commerce/product-operations.ts';
+import type { UsdcMicroAmount } from '../../modules/commerce/money.ts';
+import { arcGatewayTestnet } from '../circle/gateway-x402.ts';
 import type { PersistenceTransaction, PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
+import { PostgresErc8183Repository } from './erc8183-repository.ts';
+import { PostgresGatewayX402Repository } from './gateway-x402-repository.ts';
 import { PostgresProductEconomicOperationRepository } from './product-economic-operation-repository.ts';
 
 export interface ProductEconomicOperationPersistenceProof {
   readonly applicationLifecycleVerified: boolean;
   readonly canonicalReadVerified: boolean;
+  readonly erc8183AmbiguousHandoffVerified: boolean;
+  readonly gatewayAmbiguousHandoffVerified: boolean;
+  readonly genericActivatedOfferCanonicalVerified: boolean;
+  readonly noBlindProviderResubmitVerified: boolean;
   readonly replayVerified: boolean;
   readonly semanticMismatchRejected: boolean;
   readonly tenantIsolationVerified: boolean;
@@ -144,9 +153,9 @@ async function insertFixture(
   await database.insertInto('service_offers').values({
     capability_id: 'work-3-proof-service',
     commerce_protocol: 'ERC8183',
-    created_by_principal_id: null,
+    created_by_principal_id: fixture.controllerPrincipalId,
     description: 'Isolated canonical Work 3 persistence proof.',
-    idempotency_key: null,
+    idempotency_key: fixture.requestId,
     offer_id: fixture.offerId,
     price_micro_usdc: '50000',
     provider_business_id: fixture.providerBusinessId,
@@ -231,7 +240,9 @@ async function deleteFixture(
 ): Promise<void> {
   const database = persistence.databaseForApplication.withSchema(applicationSchema);
   await database.deleteFrom('product_economic_requests').where('request_id', '=', fixture.requestId).execute();
+  await database.deleteFrom('gateway_funding_operations').where('business_id', '=', fixture.buyerBusinessId).execute();
   await database.deleteFrom('service_executions').where('execution_id', '=', fixture.serviceExecutionId).execute();
+  await database.deleteFrom('erc8183_job_operations').where('job_id', '=', fixture.jobId).execute();
   await database.deleteFrom('erc8183_jobs').where('job_id', '=', fixture.jobId).execute();
   await database.deleteFrom('settlement_operations').where('settlement_id', '=', fixture.settlementId).execute();
   await database.deleteFrom('obligations').where('obligation_id', '=', fixture.obligationId).execute();
@@ -278,6 +289,51 @@ export async function runProductEconomicOperationPersistenceProof(
   };
   try {
     await persistence.transaction((transaction) => insertFixture(transaction, fixture));
+    const jobs = new PostgresErc8183Repository(persistence);
+    const ambiguousOperationId = `jop_w5_${fixture.requestId.slice(0, 16)}` as const;
+    await jobs.ensureOperation({
+      actorAddress: '0x1111111111111111111111111111111111111111',
+      idempotencyKey: randomUUID(),
+      jobId: fixture.jobId,
+      leg: 'REJECT',
+      operationId: ambiguousOperationId,
+      sourceProviderWalletId: `wallet-w5-${fixture.requestId}`,
+    });
+    await jobs.recordHandoffStarted(ambiguousOperationId);
+    await jobs.recordHandoffStarted(ambiguousOperationId);
+    const ambiguousOperation = await jobs.getOperation(ambiguousOperationId);
+    const erc8183AmbiguousHandoffVerified =
+      ambiguousOperation.state === 'OUTCOME_UNKNOWN' &&
+      ambiguousOperation.providerState === 'HANDOFF_STARTED' &&
+      ambiguousOperation.providerTransactionId === null;
+
+    const gateway = new PostgresGatewayX402Repository(persistence);
+    const fundingId = `gwf_w5_${fixture.requestId.slice(0, 16)}` as const;
+    const funding = await gateway.ensureFunding({
+      amountMicroUsdc: 50_000n as UsdcMicroAmount,
+      approvalIdempotencyKey: randomUUID(),
+      businessId: fixture.buyerBusinessId,
+      depositIdempotencyKey: randomUUID(),
+      depositorAddress: '0x1111111111111111111111111111111111111111',
+      fundingId,
+      gatewayContractAddress: arcGatewayTestnet.contractAddress,
+    });
+    await gateway.recordFundingHandoffStarted({ fundingId: funding.fundingId, leg: 'APPROVAL' });
+    await gateway.recordFundingHandoffStarted({ fundingId: funding.fundingId, leg: 'APPROVAL' });
+    const ambiguousFunding = await gateway.getFunding(funding.fundingId);
+    const gatewayAmbiguousHandoffVerified =
+      ambiguousFunding.state === 'OUTCOME_UNKNOWN' &&
+      ambiguousFunding.providerState === 'APPROVAL_HANDOFF_STARTED' &&
+      ambiguousFunding.approvalProviderTransactionId === null;
+    const noBlindProviderResubmitVerified =
+      providerHandoffDisposition({
+        providerTransactionId: ambiguousOperation.providerTransactionId,
+        state: ambiguousOperation.state,
+      }) === 'HOLD' &&
+      providerHandoffDisposition({
+        providerTransactionId: ambiguousFunding.approvalProviderTransactionId,
+        state: ambiguousFunding.state,
+      }) === 'HOLD';
     const firstCreated = (await persistence.transaction((transaction) =>
       repository.ensureRequestInTransaction(transaction, input)
     )).created;
@@ -294,6 +350,16 @@ export async function runProductEconomicOperationPersistenceProof(
       request?.jobStatus === 'COMPLETED' &&
       request.deliveryState === 'COMPLETE' &&
       request.settlementState === 'COMPLETE';
+    const genericOffer = await persistence.databaseForApplication
+      .withSchema(applicationSchema)
+      .selectFrom('service_offers')
+      .select(['created_by_principal_id as createdByPrincipalId', 'status'])
+      .where('offer_id', '=', fixture.offerId)
+      .executeTakeFirstOrThrow();
+    const genericActivatedOfferCanonicalVerified =
+      genericOffer.createdByPrincipalId === fixture.controllerPrincipalId &&
+      genericOffer.status === 'ACTIVE' &&
+      request?.offerId === fixture.offerId;
 
     const applicationRequests = await loadRequests({
       businessSlug: fixture.slug,
@@ -321,6 +387,10 @@ export async function runProductEconomicOperationPersistenceProof(
     return {
       applicationLifecycleVerified,
       canonicalReadVerified,
+      erc8183AmbiguousHandoffVerified,
+      gatewayAmbiguousHandoffVerified,
+      genericActivatedOfferCanonicalVerified,
+      noBlindProviderResubmitVerified,
       replayVerified: firstCreated && !replayCreated,
       semanticMismatchRejected,
       tenantIsolationVerified,

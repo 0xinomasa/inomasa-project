@@ -30,6 +30,8 @@ async function main(): Promise<void> {
       throw new Error('The Work 2 Operational Workspace persistence proof did not satisfy all assertions.');
     }
     console.log('work_2_offer_idempotency=PASS');
+    console.log('work_5_offer_activation_replay=PASS');
+    console.log('work_5_activated_offer_controller_scope=PASS');
     console.log('work_2_agent_idempotency=PASS');
     console.log('work_2_tenant_isolation=PASS');
     console.log('work_2_treasury_isolation=PASS');
@@ -47,6 +49,10 @@ async function main(): Promise<void> {
     console.log('work_3_request_idempotency=PASS');
     console.log('work_3_request_semantic_replay=PASS');
     console.log('work_3_tenant_isolation=PASS');
+    console.log('work_5_activated_product_canonical_economy=PASS');
+    console.log('work_5_gateway_ambiguous_handoff=PASS');
+    console.log('work_5_erc8183_ambiguous_handoff=PASS');
+    console.log('work_5_no_blind_provider_resubmit=PASS');
 
     const capitalProductProof = await runCapitalProductPersistenceProof(persistence);
     if (Object.values(capitalProductProof).some((verified) => !verified)) {

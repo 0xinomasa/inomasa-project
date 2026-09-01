@@ -79,21 +79,30 @@ export async function PATCH(request: Request, context: Context): Promise<Respons
     const { businessSlug } = await context.params;
     const body = await requestBody(request);
     const offerId = field(body, 'offerId');
+    const action = field(body, 'action');
     if (!offerId.startsWith('off_')) throw new Error('Offer ID is invalid.');
+    if (action !== 'ACTIVATE' && action !== 'RETIRE') throw new Error('Offer action is invalid.');
     const config = readDatabaseConnectionConfig('runtime');
     if (config.environment !== session.environment) {
       return Response.json({ error: 'Session and database environments do not match.' }, { status: 409 });
     }
     persistence = new PostgresPersistence(config);
-    const result = await new PostgresOperationalWorkspaceRepository(persistence).retireOffer({
-      controllerPrincipalId: session.principalId,
-      offerId,
-      slug: businessSlug,
-    });
+    const repository = new PostgresOperationalWorkspaceRepository(persistence);
+    const result = action === 'ACTIVATE'
+      ? await repository.activateOffer({
+          controllerPrincipalId: session.principalId,
+          offerId,
+          slug: businessSlug,
+        })
+      : await repository.retireOffer({
+          controllerPrincipalId: session.principalId,
+          offerId,
+          slug: businessSlug,
+        });
     return Response.json({ offerId, result });
   } catch (error: unknown) {
     const message = error instanceof Error ? error.message : 'Product or Service update failed.';
-    return Response.json({ error: message }, { status: /control|only controller/i.test(message) ? 403 : 400 });
+    return Response.json({ error: message }, { status: /not found|control|only controller/i.test(message) ? 404 : 400 });
   } finally {
     await persistence?.close();
   }

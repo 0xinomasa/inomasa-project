@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+
 import type { BusinessAgent } from './model.ts';
 
 export type EvmAddress = `0x${string}`;
@@ -48,6 +50,38 @@ export interface ContractExecutionPort {
     readonly referenceId: string;
     readonly sourceAddress: EvmAddress;
   }): Promise<{ readonly providerTransactionId: string }>;
+}
+
+function uuidFromDigest(digest: string): string {
+  const digits = digest.slice(0, 32).split('');
+  digits[12] = '4';
+  const variant = Number.parseInt(digits[16] ?? '0', 16);
+  digits[16] = ((variant & 0x3) | 0x8).toString(16);
+  const joined = digits.join('');
+  return `${joined.slice(0, 8)}-${joined.slice(8, 12)}-${joined.slice(12, 16)}-${joined.slice(16, 20)}-${joined.slice(20)}`;
+}
+
+export function deriveProductErc8004Identity(input: {
+  readonly agentPrincipalId: `agt_${string}`;
+  readonly businessId: `biz_${string}`;
+  readonly controllerPrincipalId: `usr_${string}`;
+}): {
+  readonly identityId: `aid_${string}`;
+  readonly metadataIdempotencyKey: string;
+  readonly registrationIdempotencyKey: string;
+} {
+  const digest = createHash('sha256')
+    .update('product-erc8004-identity-v1')
+    .update('\0')
+    .update(`${input.controllerPrincipalId}:${input.businessId}:${input.agentPrincipalId}`)
+    .digest('hex');
+  const metadataDigest = createHash('sha256').update('metadata').update('\0').update(digest).digest('hex');
+  const registrationDigest = createHash('sha256').update('registration').update('\0').update(digest).digest('hex');
+  return {
+    identityId: `aid_product_${digest.slice(0, 28)}`,
+    metadataIdempotencyKey: uuidFromDigest(metadataDigest),
+    registrationIdempotencyKey: uuidFromDigest(registrationDigest),
+  };
 }
 
 export function erc8004ReconciliationLeg(input: {

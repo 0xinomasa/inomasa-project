@@ -41,6 +41,7 @@ export interface GatewayFundingOperation {
   readonly depositProviderTransactionId: string | null;
   readonly depositorAddress: `0x${string}`;
   readonly fundingId: `gwf_${string}`;
+  readonly providerState: string | null;
   readonly state: GatewayFundingState;
 }
 
@@ -100,6 +101,7 @@ function asFunding(row: {
   readonly deposit_provider_transaction_id: string | null;
   readonly depositor_address: string;
   readonly funding_id: string;
+  readonly provider_state: string | null;
   readonly state: string;
 }): GatewayFundingOperation {
   return {
@@ -111,6 +113,7 @@ function asFunding(row: {
     depositProviderTransactionId: row.deposit_provider_transaction_id,
     depositorAddress: requireAddress(row.depositor_address, 'Gateway depositor'),
     fundingId: row.funding_id as `gwf_${string}`,
+    providerState: row.provider_state,
     state: row.state as GatewayFundingState,
   };
 }
@@ -224,35 +227,72 @@ export class PostgresGatewayX402Repository {
     readonly providerTransactionId: string;
     readonly fundingId: `gwf_${string}`;
   }): Promise<void> {
+    await this.#persistence.transaction(async (transaction) => {
+      const database = transaction.withSchema(applicationSchema);
+      const operation = await database
+        .selectFrom('gateway_funding_operations')
+        .select(['approval_provider_transaction_id', 'deposit_provider_transaction_id', 'provider_state', 'state'])
+        .where('funding_id', '=', input.fundingId)
+        .forUpdate()
+        .executeTakeFirstOrThrow();
+      const existingProviderTransactionId = input.leg === 'APPROVAL'
+        ? operation.approval_provider_transaction_id
+        : operation.deposit_provider_transaction_id;
+      if (existingProviderTransactionId !== null) {
+        if (existingProviderTransactionId !== input.providerTransactionId) {
+          throw new Error(`Gateway ${input.leg.toLowerCase()} is already committed to another provider transaction.`);
+        }
+        return;
+      }
+      if (
+        operation.state !== 'OUTCOME_UNKNOWN' ||
+        operation.provider_state !== `${input.leg}_HANDOFF_STARTED`
+      ) {
+        throw new Error(`Gateway ${input.leg.toLowerCase()} submission lacks its durable handoff intent.`);
+      }
+      await database
+        .updateTable('gateway_funding_operations')
+        .set(
+          input.leg === 'APPROVAL'
+            ? {
+                approval_provider_transaction_id: input.providerTransactionId,
+                provider_state: 'SUBMITTED',
+                state: 'APPROVAL_SUBMITTED',
+                updated_at: new Date(),
+              }
+            : {
+                deposit_provider_transaction_id: input.providerTransactionId,
+                provider_state: 'SUBMITTED',
+                state: 'DEPOSIT_SUBMITTED',
+                updated_at: new Date(),
+              },
+        )
+        .where('funding_id', '=', input.fundingId)
+        .executeTakeFirstOrThrow();
+    });
+  }
+
+  async recordFundingHandoffStarted(input: {
+    readonly fundingId: `gwf_${string}`;
+    readonly leg: 'APPROVAL' | 'DEPOSIT';
+  }): Promise<void> {
+    const expectedState = input.leg === 'APPROVAL' ? 'APPROVAL_AUTHORIZED' : 'APPROVAL_COMPLETE';
+    const providerState = `${input.leg}_HANDOFF_STARTED`;
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
+    const existing = await database
+      .selectFrom('gateway_funding_operations')
+      .select(['provider_state', 'state'])
+      .where('funding_id', '=', input.fundingId)
+      .executeTakeFirstOrThrow();
+    if (existing.state === 'OUTCOME_UNKNOWN' && existing.provider_state === providerState) return;
     const result = await database
       .updateTable('gateway_funding_operations')
-      .set(
-        input.leg === 'APPROVAL'
-          ? {
-              approval_provider_transaction_id: input.providerTransactionId,
-              provider_state: 'SUBMITTED',
-              state: 'APPROVAL_SUBMITTED',
-              updated_at: new Date(),
-            }
-          : {
-              deposit_provider_transaction_id: input.providerTransactionId,
-              provider_state: 'SUBMITTED',
-              state: 'DEPOSIT_SUBMITTED',
-              updated_at: new Date(),
-            },
-      )
+      .set({ provider_state: providerState, state: 'OUTCOME_UNKNOWN', updated_at: new Date() })
       .where('funding_id', '=', input.fundingId)
-      .where(
-        'state',
-        'in',
-        input.leg === 'APPROVAL'
-          ? ['APPROVAL_AUTHORIZED', 'OUTCOME_UNKNOWN']
-          : ['APPROVAL_COMPLETE', 'OUTCOME_UNKNOWN'],
-      )
+      .where('state', '=', expectedState)
       .executeTakeFirstOrThrow();
     if (result.numUpdatedRows !== 1n) {
-      throw new Error(`Gateway ${input.leg.toLowerCase()} submission is not admissible.`);
+      throw new Error(`Gateway ${input.leg.toLowerCase()} handoff is not admissible.`);
     }
   }
 

@@ -35,6 +35,7 @@ export interface ProductEconomicRequestSummary {
   readonly jobStatus: string | null;
   readonly kind: ProductEconomicOperationKind;
   readonly obligationId: string;
+  readonly offerCapabilityId: string;
   readonly offerDescription: string;
   readonly offerId: string;
   readonly paymentId: string | null;
@@ -182,6 +183,7 @@ export class PostgresProductEconomicOperationRepository {
         'job.protocol_job_id as jobProtocolId',
         'job.protocol_status as jobStatus',
         'request.obligation_id as obligationId',
+        'offer.capability_id as offerCapabilityId',
         'offer.description as offerDescription',
         'request.offer_id as offerId',
         'request.operation_kind as kind',

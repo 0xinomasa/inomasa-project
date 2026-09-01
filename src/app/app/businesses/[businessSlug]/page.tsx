@@ -93,7 +93,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
 
         <section className="workspace-panel commerce-preview" id="commerce">
           <div className="panel-heading"><div><p className="eyebrow">Commerce & Jobs</p><h2>Confirm and follow real testnet operations.</h2></div><span>{commerce.state === 'CONNECTED' ? 'Kernel connected' : commerce.state.replaceAll('_', ' ')}</span></div>
-          <p className="panel-description">Purchase an instant resource or commission evaluated work from a controlled test provider. Every confirmation creates one canonical obligation; exact settlement and delivery appear in Economic History below.</p>
+          <p className="panel-description">Purchase an instant resource or commission evaluated work. Offers you explicitly activated in another Business you control appear here beside the accepted regression fixtures. Every confirmation creates one canonical obligation; exact settlement and delivery appear in Economic History below.</p>
           {commerce.state === 'CONNECTED' ? (
             <EconomicOperations
               agents={agents}

@@ -29,6 +29,16 @@ function protocolLabel(protocol: string): string {
   return protocol.toLowerCase();
 }
 
+function capabilityLabel(capability: string): string {
+  const labels: Record<string, string> = {
+    ARC_READY: 'Arc-compatible structure',
+    COMMERCE_READY: 'Commerce structure',
+    IDENTITY_READY: 'Identity-compatible structure',
+    X402_READY: 'x402-compatible structure',
+  };
+  return labels[capability] ?? capability.replaceAll('_', ' ').toLowerCase();
+}
+
 export default async function LandingPage() {
   const economy = await loadLiveEconomy();
   return (
@@ -42,7 +52,8 @@ export default async function LandingPage() {
           <Link href="/build">Build</Link>
           <Link href="/migrate">Migrate</Link>
           <Link href="/capital">Capital</Link>
-          <a href="#economy">Live Economy</a>
+          <a className="landing-nav-secondary" href="#economy">Live Economy</a>
+          <Link className="header-login" href="/login">Sign in</Link>
         </nav>
       </header>
 
@@ -124,7 +135,7 @@ export default async function LandingPage() {
               <span className="template-number">0{index + 1}</span>
               <h3>{template.label}</h3>
               <p>{template.description}</p>
-              <span className="template-capabilities">{template.capabilities.join(' · ').replaceAll('_', ' ')}</span>
+              <span className="template-capabilities">{template.capabilities.map(capabilityLabel).join(' · ')}</span>
             </article>
           ))}
         </div>
