@@ -101,6 +101,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
               offers={commerce.offers}
               providerConfigured={commerce.providerConfigured}
               requests={commerce.requests}
+              treasuryReady={operational.state === 'CONNECTED' && operational.treasury?.status === 'ACTIVE'}
             />
           ) : (
             <div className="operational-notice"><strong>Commerce is {commerce.state.replaceAll('_', ' ').toLowerCase()}.</strong><p>No empty, paid, or failed state is inferred. Existing kernel records remain unchanged.</p></div>

@@ -110,12 +110,14 @@ export function EconomicOperations({
   offers,
   providerConfigured,
   requests,
+  treasuryReady,
 }: {
   readonly agents: readonly PurchaseAgentView[];
   readonly businessSlug: string;
   readonly offers: readonly CommerceOfferView[];
   readonly providerConfigured: boolean;
   readonly requests: readonly CommerceRequestView[];
+  readonly treasuryReady: boolean;
 }) {
   const router = useRouter();
   const [isRefreshing, startRefresh] = useTransition();
@@ -224,7 +226,7 @@ export function EconomicOperations({
                   <input name="confirmed" required type="checkbox" />
                   <span>I confirm exact {offer.amountUsdc} Arc Testnet USDC with common-control test provenance.</span>
                 </label>
-                <button className="button button--primary" disabled={!providerConfigured || unavailableAgent || pendingKey !== null || isRefreshing} type="submit">
+                <button className="button button--primary" disabled={!providerConfigured || !treasuryReady || unavailableAgent || pendingKey !== null || isRefreshing} type="submit">
                   {pendingKey === `prepare:${offer.offerId}` ? 'Confirming…' : offer.kind === 'X402_PURCHASE' ? 'Confirm purchase' : 'Confirm job'}
                 </button>
               </form>
@@ -235,6 +237,7 @@ export function EconomicOperations({
       </div>
 
       {!providerConfigured ? <div className="operational-notice"><strong>Economic provider unavailable.</strong><p>Offers and prior History remain readable, but no provider action can be submitted. No payment or job failure is inferred.</p></div> : null}
+      {providerConfigured && !treasuryReady ? <div className="operational-notice"><strong>Connect Business Treasury before confirming a new operation.</strong><p>Offers and prior History remain readable. No payment or job failure is inferred while the execution account is unavailable.</p></div> : null}
       {actionState === null ? null : <p aria-live="polite" className={`operation-message operation-message--${actionState.kind}`}>{actionState.message}</p>}
 
       <div className="economic-request-list">

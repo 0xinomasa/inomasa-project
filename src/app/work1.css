@@ -15,7 +15,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 .landing-page { background: var(--w-bg); color: var(--w-text); overflow: hidden; }
 .landing-header, .landing-hero, .landing-economy, .landing-build, .landing-principles, .landing-footer, .auth-header, .auth-layout { margin-inline: auto; max-width: 1240px; width: calc(100% - 64px); }
 .landing-header, .auth-header { align-items: center; border-bottom: 1px solid var(--w-line); display: flex; justify-content: space-between; min-height: 78px; }
-.landing-page .brand, .auth-page .brand { color: var(--w-text); }
+.landing-page .brand, .auth-page .brand { color: var(--w-text); min-height: 44px; }
 .landing-page .mark span, .auth-page .mark span { background: var(--w-text); }
 .landing-page .mark span:nth-child(2), .auth-page .mark span:nth-child(2) { background: var(--w-lime); }
 .landing-page .mark span:nth-child(3), .auth-page .mark span:nth-child(3) { background: var(--w-strong); }
@@ -127,7 +127,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 .business-list-row__side { align-items: end; display: flex; flex-direction: column; gap: 13px; }
 .business-list-row__side > span { color: #7c8278; font-family: 'Courier New', monospace; font-size: .6rem; text-transform: uppercase; }
 .workspace-header--business { align-items: start; }
-.workspace-header--business .quiet-link { display: block; margin-bottom: 28px; }
+.workspace-header--business .quiet-link { align-items: center; display: inline-flex; margin-bottom: 28px; min-height: 44px; }
 .business-overview-card { align-items: start; display: grid; gap: 30px; grid-template-columns: 1fr 310px; margin-bottom: 22px; padding: 28px; }
 .business-facts { border-left: 1px solid var(--w-line); display: grid; padding-left: 25px; }
 .business-facts div { border-bottom: 1px solid var(--w-line); display: flex; justify-content: space-between; padding-block: 11px; }
@@ -254,7 +254,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 body { overflow-x: hidden; }
 .product-frame { display: block; min-height: 100vh; }
 .product-topbar { align-items: center; background: rgba(247,247,244,.96); border-bottom: 1px solid var(--w-line); display: flex; gap: 30px; min-height: 72px; padding: 0 max(24px, calc((100vw - 1400px) / 2)); position: sticky; top: 0; z-index: 20; }
-.product-topbar .brand { color: var(--w-text); flex: 0 0 auto; }
+.product-topbar .brand { color: var(--w-text); flex: 0 0 auto; min-height: 44px; }
 .product-topbar .mark span { background: var(--w-text); }
 .product-topbar .mark span:nth-child(2) { background: var(--w-lime); }
 .product-topbar .mark span:nth-child(3) { background: var(--w-strong); }
@@ -264,7 +264,7 @@ body { overflow-x: hidden; }
 .product-global-nav a.is-active { font-weight: 600; }
 .product-global-nav a.is-locked { color: #92978e; }
 .product-global-nav a span { font-family: 'Courier New', monospace; font-size: .58rem; text-transform: uppercase; }
-.product-context-back { color: var(--w-muted); font-size: .82rem; min-height: 44px; padding: 12px 0; }
+.product-context-back { align-items: center; color: var(--w-muted); display: inline-flex; font-size: .82rem; min-height: 44px; padding: 12px 0; }
 .product-context-back:hover, .product-context-back:focus-visible { color: var(--w-text); text-decoration: underline; text-underline-offset: 4px; }
 .product-account { align-items: center; display: flex; flex: 0 0 auto; gap: 14px; margin-left: auto; }
 .product-account .signout-button { margin: 0; min-height: 44px; }
@@ -481,6 +481,7 @@ body { overflow-x: hidden; }
   .landing-nav > .landing-nav-secondary { display: none; }
   .product-topbar { gap: 0; min-height: 64px; padding-inline: 16px; }
   .product-topbar .brand { font-size: .74rem; gap: 8px; }
+  .product-context-back { border-left: 1px solid var(--w-line); margin-left: 12px; padding-left: 12px; }
   .product-global-nav, .product-account, .product-context-nav { display: none; }
   .mobile-product-menu { display: block; margin-left: auto; }
   .mobile-menu-trigger { align-items: center; background: transparent; border: 1px solid var(--w-strong); border-radius: 6px; color: var(--w-text); cursor: pointer; display: inline-flex; font: inherit; font-size: 1rem; gap: 8px; justify-content: center; min-height: 44px; min-width: 84px; padding: 0 12px; }

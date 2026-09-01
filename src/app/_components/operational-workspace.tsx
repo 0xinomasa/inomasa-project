@@ -1,7 +1,7 @@
 'use client';
 
 import { useRouter } from 'next/navigation';
-import { useState, type FormEvent } from 'react';
+import { useState, useTransition, type FormEvent } from 'react';
 
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../modules/commerce/money.ts';
 
@@ -70,6 +70,9 @@ export function OperationalWorkspace({
   const [productPending, setProductPending] = useState(false);
   const [agentPending, setAgentPending] = useState(false);
   const [treasuryPending, setTreasuryPending] = useState(false);
+  const [productRefreshing, startProductRefresh] = useTransition();
+  const [agentRefreshing, startAgentRefresh] = useTransition();
+  const [treasuryRefreshing, startTreasuryRefresh] = useTransition();
   const [balance, setBalance] = useState<null | { readonly fundingState: string; readonly value: string }>(null);
   const endpoint = `/api/product/businesses/${encodeURIComponent(businessSlug)}`;
 
@@ -97,7 +100,7 @@ export function OperationalWorkspace({
           : 'This exact draft already exists; no duplicate was created.',
       });
       formElement.reset();
-      router.refresh();
+      startProductRefresh(() => router.refresh());
     } catch (error: unknown) {
       setProductState({ kind: 'error', message: error instanceof Error ? error.message : 'Draft creation failed.' });
     } finally {
@@ -124,7 +127,7 @@ export function OperationalWorkspace({
             ? 'Draft was already retired.'
             : 'Draft retired.',
       });
-      router.refresh();
+      startProductRefresh(() => router.refresh());
     } catch (error: unknown) {
       setProductState({ kind: 'error', message: error instanceof Error ? error.message : 'Draft update failed.' });
     } finally {
@@ -155,7 +158,7 @@ export function OperationalWorkspace({
           : 'This exact bounded Agent already exists; no duplicate was created.',
       });
       formElement.reset();
-      router.refresh();
+      startAgentRefresh(() => router.refresh());
     } catch (error: unknown) {
       setAgentState({ kind: 'error', message: error instanceof Error ? error.message : 'Agent creation failed.' });
     } finally {
@@ -177,7 +180,7 @@ export function OperationalWorkspace({
         kind: 'success',
         message: typeof result['message'] === 'string' ? result['message'] : 'Agent identity state updated.',
       });
-      router.refresh();
+      startAgentRefresh(() => router.refresh());
     } catch (error: unknown) {
       setAgentState({ kind: 'error', message: error instanceof Error ? error.message : 'Agent identity operation failed.' });
     } finally {
@@ -211,7 +214,7 @@ export function OperationalWorkspace({
           ? `Treasury has ${value} Arc Testnet USDC.`
           : 'Treasury is connected and waiting for Arc Testnet USDC. No funding success was inferred.',
       });
-      router.refresh();
+      startTreasuryRefresh(() => router.refresh());
     } catch (error: unknown) {
       setTreasuryState({ kind: 'error', message: error instanceof Error ? error.message : 'Treasury operation failed.' });
     } finally {
@@ -237,11 +240,11 @@ export function OperationalWorkspace({
       <article className="workspace-panel operational-panel" id="products">
         <div className="panel-heading">
           <div><p className="eyebrow">Products & Services</p><h2>Define what this Business offers.</h2></div>
-          <span>{activeOffers.length} current</span>
+          <span>{productRefreshing ? 'Updating…' : `${activeOffers.length} current`}</span>
         </div>
         <p className="panel-description">Create a priced draft, then activate it explicitly. An active offer becomes available to another Business you control through the selected canonical testnet commerce path; creation alone never makes it purchasable.</p>
         <div className="operational-list">
-          {offers.length === 0 ? <p className="operational-empty">No Product or Service draft exists yet.</p> : offers.map((offer) => (
+          {productRefreshing ? <p aria-live="polite" className="operational-empty">Updating Products &amp; Services…</p> : offers.length === 0 ? <p className="operational-empty">No Product or Service draft exists yet.</p> : offers.map((offer) => (
             <div className="operational-row" key={offer.offerId}>
               <div>
                 <div className="operational-row__title"><strong>{offer.capabilityId.replaceAll('-', ' ')}</strong><span>{offer.status}</span></div>
@@ -250,8 +253,8 @@ export function OperationalWorkspace({
               </div>
               {offer.createdByProduct && offer.status === 'DRAFT' ? (
                 <div className="operational-row__actions">
-                  <button className="button button--primary" disabled={productPending} onClick={() => void manageOffer(offer.offerId, 'ACTIVATE')} type="button">Activate offer</button>
-                  <button className="button button--quiet" disabled={productPending} onClick={() => void manageOffer(offer.offerId, 'RETIRE')} type="button">Retire draft</button>
+                  <button className="button button--primary" disabled={productPending || productRefreshing} onClick={() => void manageOffer(offer.offerId, 'ACTIVATE')} type="button">Activate offer</button>
+                  <button className="button button--quiet" disabled={productPending || productRefreshing} onClick={() => void manageOffer(offer.offerId, 'RETIRE')} type="button">Retire draft</button>
                 </div>
               ) : null}
             </div>
@@ -269,7 +272,7 @@ export function OperationalWorkspace({
               </div>
             </div>
             {productState === null ? null : <p aria-live="polite" className={`operation-message operation-message--${productState.kind}`}>{productState.message}</p>}
-            <div className="form-submit-row"><p>Saved to the existing canonical offer catalog as a controller-attributable draft.</p><button className="button button--primary" disabled={productPending} type="submit">{productPending ? 'Saving…' : 'Create draft'}</button></div>
+            <div className="form-submit-row"><p>Saved to the existing canonical offer catalog as a controller-attributable draft.</p><button className="button button--primary" disabled={productPending || productRefreshing} type="submit">{productPending ? 'Saving…' : productRefreshing ? 'Updating…' : 'Create draft'}</button></div>
           </form>
         </details>
       </article>
@@ -277,11 +280,11 @@ export function OperationalWorkspace({
       <article className="workspace-panel operational-panel" id="agents">
         <div className="panel-heading">
           <div><p className="eyebrow">Agents</p><h2>Add bounded operating capacity.</h2></div>
-          <span>{activeAgents.length} active</span>
+          <span>{agentRefreshing ? 'Updating…' : `${activeAgents.length} active`}</span>
         </div>
         <p className="panel-description">Create an Agent for one clear role and capability. It runs only when you invoke it; identity, intelligence, money access, and broader authority are not added automatically.</p>
         <div className="operational-list">
-          {agents.length === 0 ? <p className="operational-empty">No Agent is assigned to this Business.</p> : agents.map((agent) => (
+          {agentRefreshing ? <p aria-live="polite" className="operational-empty">Updating Agents…</p> : agents.length === 0 ? <p className="operational-empty">No Agent is assigned to this Business.</p> : agents.map((agent) => (
             <div className="operational-row" key={agent.agentPrincipalId}>
               <div>
                 <div className="operational-row__title"><strong>{agent.displayName}</strong><span>{agent.status}</span></div>
@@ -290,7 +293,7 @@ export function OperationalWorkspace({
                 {agent.identityId === null ? null : <details className="agent-identity-detail"><summary>Identity details</summary><code>{agent.identityId}</code><span>ERC-8004 · Arc Testnet · execution account remains separate</span></details>}
               </div>
               {agent.capabilities.includes('purchase-service') && agent.identityState !== 'VERIFIED' && agent.identityState !== 'FAILED' ? (
-                <button className="button button--quiet" disabled={agentPending || treasury?.status !== 'ACTIVE'} onClick={() => void operateAgentIdentity(agent)} type="button">
+                <button className="button button--quiet" disabled={agentPending || agentRefreshing || treasury?.status !== 'ACTIVE'} onClick={() => void operateAgentIdentity(agent)} type="button">
                   {agent.identityId === null ? 'Prepare onchain identity' : agent.identityState === 'OUTCOME_UNKNOWN' ? 'Review identity outcome' : 'Continue identity activation'}
                 </button>
               ) : null}
@@ -308,7 +311,7 @@ export function OperationalWorkspace({
               </div>
             </div>
             {agentState === null ? null : <p aria-live="polite" className={`operation-message operation-message--${agentState.kind}`}>{agentState.message}</p>}
-            <div className="form-submit-row"><p>This action creates the bounded Agent only. It does not grant a wallet, spending authority, hosted runtime, or intelligence provider.</p><button className="button button--primary" disabled={agentPending} type="submit">{agentPending ? 'Creating…' : 'Create Agent'}</button></div>
+            <div className="form-submit-row"><p>This action creates the bounded Agent only. It does not grant a wallet, spending authority, hosted runtime, or intelligence provider.</p><button className="button button--primary" disabled={agentPending || agentRefreshing} type="submit">{agentPending ? 'Creating…' : agentRefreshing ? 'Updating…' : 'Create Agent'}</button></div>
           </form>
         </details>
       </article>
@@ -316,7 +319,7 @@ export function OperationalWorkspace({
       <article className="workspace-panel operational-panel" id="treasury">
         <div className="panel-heading">
           <div><p className="eyebrow">Treasury & funding</p><h2>Connect the Business execution account.</h2></div>
-          <span>{treasury?.status ?? 'UNBOUND'}</span>
+          <span>{treasuryRefreshing ? 'UPDATING…' : treasury?.status ?? 'UNBOUND'}</span>
         </div>
         <div className="treasury-separation">
           <div><span>Business Treasury</span><strong>{treasury?.provider ?? 'Not connected'} · {treasury?.accountType ?? 'No account'}</strong></div>
@@ -331,9 +334,9 @@ export function OperationalWorkspace({
         {!providerConfigured ? (
           <div className="operational-notice"><strong>Circle provider not configured.</strong><p>The Business and pending Treasury binding remain valid. Provisioning and balance checks are unavailable; no wallet failure is claimed.</p></div>
         ) : treasury?.status === 'PENDING' ? (
-          <div className="funding-actions"><div><strong>Step 1 · Provision Treasury</strong><p>Create the reviewed Circle Developer-Controlled EOA binding for this Business. The provider call is idempotent.</p></div><button className="button button--primary" disabled={treasuryPending} onClick={() => void operateTreasury('PROVISION')} type="button">{treasuryPending ? 'Connecting…' : 'Connect Treasury'}</button></div>
+          <div className="funding-actions"><div><strong>Step 1 · Provision Treasury</strong><p>Create the reviewed Circle Developer-Controlled EOA binding for this Business. The provider call is idempotent.</p></div><button className="button button--primary" disabled={treasuryPending || treasuryRefreshing} onClick={() => void operateTreasury('PROVISION')} type="button">{treasuryPending ? 'Connecting…' : treasuryRefreshing ? 'Updating…' : 'Connect Treasury'}</button></div>
         ) : (
-          <div className="funding-actions"><div><strong>Fund with Arc Testnet USDC</strong><p>Use the copied address with an approved testnet source, then check the exact provider-observed balance. Testnet value is never represented as Production funds.</p><a className="text-link" href="https://docs.arc.network/app-kit/quickstarts/bridge-tokens-across-blockchains" rel="noreferrer" target="_blank">Official Arc testnet funding guide ↗</a></div><button className="button button--primary" disabled={treasuryPending} onClick={() => void operateTreasury('CHECK_BALANCE')} type="button">{treasuryPending ? 'Checking…' : 'Check balance'}</button></div>
+          <div className="funding-actions"><div><strong>Fund with Arc Testnet USDC</strong><p>Use the copied address with an approved testnet source, then check the exact provider-observed balance. Testnet value is never represented as Production funds.</p><a className="text-link" href="https://docs.arc.network/app-kit/quickstarts/bridge-tokens-across-blockchains" rel="noreferrer" target="_blank">Official Arc testnet funding guide ↗</a></div><button className="button button--primary" disabled={treasuryPending || treasuryRefreshing} onClick={() => void operateTreasury('CHECK_BALANCE')} type="button">{treasuryPending ? 'Checking…' : treasuryRefreshing ? 'Updating…' : 'Check balance'}</button></div>
         )}
         {treasuryState === null ? null : <p aria-live="polite" className={`operation-message operation-message--${treasuryState.kind}`}>{treasuryState.message}</p>}
       </article>
