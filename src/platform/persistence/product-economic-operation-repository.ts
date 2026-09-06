@@ -23,6 +23,7 @@ export interface ProductEconomicRequestSummary {
   readonly amountMicroUsdc: string;
   readonly deliverySourceReference: string | null;
   readonly deliveryState: string | null;
+  readonly deliveryOutput?: unknown;
   readonly gatewayFundingState: string | null;
   readonly jobId: string | null;
   readonly jobOperations: readonly {
@@ -178,6 +179,7 @@ export class PostgresProductEconomicOperationRepository {
         'offer.price_micro_usdc as amountMicroUsdc',
         'execution.source_reference as deliverySourceReference',
         'execution.state as deliveryState',
+        'execution.output as deliveryOutput',
         'funding.state as gatewayFundingState',
         'request.job_id as jobId',
         'job.protocol_job_id as jobProtocolId',

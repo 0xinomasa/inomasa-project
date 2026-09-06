@@ -11,6 +11,8 @@
   "scripts": {
     "clean": "node scripts/clean.mjs",
     "dev": "next dev",
+    "dev:local": "next dev --hostname 127.0.0.1",
+    "local:check": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/local-check.ts",
     "business:create": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/business-create.ts",
     "alpha:bootstrap": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-bootstrap.ts",
     "alpha:agent-purchase": "node --env-file-if-exists=.env.local --experimental-strip-types scripts/alpha-agent-purchase.ts",

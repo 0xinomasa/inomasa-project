@@ -50,7 +50,7 @@ export default async function LandingPage() {
         </Link>
         <nav aria-label="Landing navigation" className="landing-nav">
           <Link href="/build">Build</Link>
-          <Link href="/migrate">Migrate</Link>
+          <Link href="/connect">Connect</Link>
           <Link href="/capital">Capital</Link>
           <a className="landing-nav-secondary" href="#economy">Live Economy</a>
           <Link className="header-login" href="/login">Sign in</Link>
@@ -83,7 +83,7 @@ export default async function LandingPage() {
       <section className="landing-paths" id="paths">
         <div className="landing-section-heading">
           <div><p className="eyebrow">Choose your path</p><h2>Start where the work is.</h2></div>
-          <p>Each path keeps its own boundary. BUILD is the current creation entry; MIGRATE stays locked; Capital shows only the controlled provider context that exists.</p>
+          <p>BUILD creates a new Business with AI assistance. CONNECT brings a configured existing Business into the same Arc economy. Capital retains its controlled provider context.</p>
         </div>
         <div className="landing-path-grid">
           {productPaths.map((path, index) => <PathCard key={path.id} path={path} position={`0${index + 1}`} />)}

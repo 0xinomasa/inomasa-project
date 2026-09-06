@@ -10,6 +10,8 @@ import { readDatabaseConnectionConfig } from '../../../../platform/persistence/c
 import { PostgresAlphaBusinessRepository } from '../../../../platform/persistence/alpha-business-repository.ts';
 import { PostgresPersistence } from '../../../../platform/persistence/database.ts';
 import { deriveBusinessGenesisIdentity } from './request-identity.ts';
+import { verifyCreationAssistance } from '../../../../platform/ai/proposal-proof.ts';
+import { readBoundedJson } from '../../../../platform/http/bounded-json.ts';
 
 export const dynamic = 'force-dynamic';
 
@@ -58,12 +60,15 @@ export async function POST(request: Request): Promise<Response> {
   }
   let body: Record<string, unknown>;
   try {
-    body = (await request.json()) as Record<string, unknown>;
+    body = (await readBoundedJson(request, 32_768)) as Record<string, unknown>;
   } catch {
     return Response.json({ error: 'Invalid JSON request.' }, { status: 400 });
   }
 
   try {
+    const creationAssistance = body['assistanceProof'] === undefined
+      ? undefined
+      : verifyCreationAssistance(body['assistanceProof'], session.principalId, process.env['INOMASA_AUTH_SECRET'] ?? '');
     const templateId = textField(body['templateId'], 'Template', 64);
     if (!isBusinessTemplateId(templateId)) {
       return Response.json({ error: 'Choose one of the four active BUILD templates.' }, { status: 400 });
@@ -98,6 +103,7 @@ export async function POST(request: Request): Promise<Response> {
     };
     const genesis = createBusinessGenesis(
       {
+        ...(creationAssistance === undefined ? {} : { creationAssistance }),
         commonControlGroupId: 'ccg_controlled_alpha',
         controller,
         displayName,

@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 
 import { productPaths } from '../src/app/_shell/model.ts';
+import { assertBusinessEntryRouteOpen } from '../src/modules/business/model.ts';
 import { businessTemplates } from '../src/modules/business/templates.ts';
 import {
   activityStatuses,
@@ -196,10 +197,12 @@ async function main(): Promise<void> {
     assert.ok(allAgents.every(({ business_id, provider_of_record_principal_id }) =>
       business_id === provider_of_record_principal_id,
     ));
-    const migratePath = productPaths.find(({ label }) => label === 'MIGRATE');
+    const migratePath = productPaths.find(({ id }) => id === 'migrate');
     assert.equal(migratePath?.href, '#migrate');
-    assert.equal(migratePath?.status, 'LOCKED');
-    assert.match(migratePath?.summary ?? '', /every current creation request is rejected/);
+    // The owner opened only configured CONNECT sources after H. Generic entry
+    // without external provenance remains fail-closed; historical H evidence is unchanged.
+    assert.equal(migratePath?.route, '/connect');
+    assert.throws(() => assertBusinessEntryRouteOpen('MIGRATE'), /LOCKED/);
 
     // Agentic Economy: each external primitive is complete and bound back to Business activity.
     assert.equal(identities.length, 2);

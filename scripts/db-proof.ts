@@ -8,6 +8,7 @@ import { runEngineeringPersistenceProof } from '../src/platform/persistence/engi
 import { runOperationalWorkspacePersistenceProof } from '../src/platform/persistence/operational-workspace-proof.ts';
 import { runProductEconomicOperationPersistenceProof } from '../src/platform/persistence/product-economic-operation-proof.ts';
 import { runCapitalProductPersistenceProof } from '../src/platform/persistence/capital-product-proof.ts';
+import { runLocalProductPersistenceProof } from '../src/platform/persistence/local-product-proof.ts';
 
 async function main(): Promise<void> {
   const config = readDatabaseConnectionConfig('runtime');
@@ -63,6 +64,12 @@ async function main(): Promise<void> {
     console.log('work_4_capital_explicit_acceptance=PASS');
     console.log('work_4_capital_acceptance_replay=PASS');
     console.log('work_4_capital_fixture_cleanup=PASS');
+
+    await runLocalProductPersistenceProof(persistence);
+    console.log('local_ai_connect_context_replay_tenant=PASS');
+    console.log('local_paid_delivery_authorization_idempotency=PASS');
+    console.log('local_external_evidence_no_financial_posting=PASS');
+    console.log('local_product_fixture_cleanup=PASS');
   } finally {
     await persistence.close();
   }

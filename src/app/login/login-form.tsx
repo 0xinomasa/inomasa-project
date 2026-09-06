@@ -66,7 +66,7 @@ export function LoginForm({ nextPath }: LoginFormProps) {
         {submitting ? 'Checking access…' : 'Enter Inomasa'}
       </button>
       <p className="form-note">
-        This is controlled Alpha access inside a protected Preview. Your session is mapped to a
+        This is invited access to the controlled Alpha. Your session is mapped to a
         stable Human Principal; it does not grant production or mainnet authority.
       </p>
     </form>

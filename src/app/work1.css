@@ -797,3 +797,10 @@ body { overflow-x: hidden; }
   .capital-path__proof > p, .capital-path__footer { font-size: .875rem; }
   .live-economy-row__protocols > span { font-size: .75rem; }
 }
+
+.delivered-resource {
+  max-height: 24rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
+}

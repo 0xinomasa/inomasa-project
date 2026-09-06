@@ -84,7 +84,7 @@ test('multiple users can create multiple generic Businesses without fixture-spec
   assert.equal(created[3]?.business.actorClassification, 'INDEPENDENT');
 });
 
-test('MIGRATE origin is modeled but creation remains locked', () => {
+test('MIGRATE still rejects creation without an authorized external connection', () => {
   assert.throws(
     () =>
       createBusinessGenesis(

@@ -1,3 +1,5 @@
+import { createHash } from 'node:crypto';
+import { canonicalJson } from '../../shared/canonical-json.ts';
 import type { ArcNetworkSnapshot } from '../arc/rpc.ts';
 import { supportsAlphaSnapshotExecution } from '../../modules/commerce/service-catalog.ts';
 import type { PostgresPersistence } from './database.ts';
@@ -42,9 +44,12 @@ export class PostgresAlphaServiceRepository {
     const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
     const existing = await database
       .selectFrom('service_executions')
-      .select('execution_id')
+      .select(['execution_id', 'obligation_id'])
       .where('execution_id', '=', executionId)
       .executeTakeFirst();
+    if (existing !== undefined && existing.obligation_id !== obligationId) {
+      throw new Error('Service execution belongs to another obligation.');
+    }
     const row = await database
       .selectFrom('obligations as obligation')
       .innerJoin('service_offers as offer', 'offer.offer_id', 'obligation.offer_id')
@@ -97,80 +102,78 @@ export class PostgresAlphaServiceRepository {
     readonly outputSha256: string;
     readonly snapshot: ArcNetworkSnapshot;
   }): Promise<{ readonly created: boolean }> {
-    if (!/^[0-9a-f]{64}$/.test(input.outputSha256)) {
-      throw new Error('Service output digest must be a lowercase SHA-256 value.');
-    }
+    const output = {
+      blockNumber: input.snapshot.blockNumber.toString(), chainId: input.snapshot.chainId,
+      gasPriceWei: input.snapshot.gasPriceWei.toString(), observedAt: input.snapshot.observedAt,
+      usdcCodeSha256: input.snapshot.usdcCodeSha256,
+    };
+    return this.recordCompletedResource({
+      ...input, output, completedAt: input.snapshot.observedAt,
+      sourceReference: `arc-block:${input.snapshot.blockNumber}`,
+      sourceType: 'ARC_TESTNET_RPC', factType: 'ARC_NETWORK_SNAPSHOT_DELIVERED',
+    });
+  }
 
+  async recordCompletedResource(input: {
+    readonly authorization: AlphaServiceExecutionAuthorization;
+    readonly executionId: `svc_${string}`;
+    readonly obligationId: `obl_${string}`;
+    readonly output: unknown;
+    readonly outputSha256: string;
+    readonly completedAt: string;
+    readonly sourceReference: string;
+    readonly sourceType: 'ARC_TESTNET_RPC' | 'EXTERNAL_HTTP_JSON';
+    readonly factType: 'ARC_NETWORK_SNAPSHOT_DELIVERED' | 'EXTERNAL_JSON_RESOURCE_DELIVERED';
+  }): Promise<{ readonly created: boolean }> {
+    if (createHash('sha256').update(canonicalJson(input.output)).digest('hex') !== input.outputSha256) {
+      throw new Error('Service output digest does not match its content.');
+    }
+    if ((input.sourceType === 'ARC_TESTNET_RPC') !== (input.factType === 'ARC_NETWORK_SNAPSHOT_DELIVERED')) {
+      throw new Error('Service evidence must retain the correct source classification.');
+    }
     return this.#persistence.transaction(async (transaction) => {
       const database = transaction.withSchema(applicationSchema);
       const state = await database
         .selectFrom('obligations as obligation')
         .innerJoin('settlement_operations as settlement', 'settlement.obligation_id', 'obligation.obligation_id')
+        .innerJoin('service_offers as offer', 'offer.offer_id', 'obligation.offer_id')
         .select([
-          'obligation.state as obligationState',
-          'settlement.state as settlementState',
+          'obligation.state as obligationState', 'settlement.state as settlementState',
+          'obligation.buyer_business_id as buyer', 'obligation.seller_business_id as seller',
+          'settlement.settlement_id as settlementId', 'obligation.environment', 'obligation.provenance',
+          'offer.offer_id as offerId', 'offer.capability_id as capabilityId',
         ])
-        .where('obligation.obligation_id', '=', input.obligationId)
-        .forUpdate()
-        .executeTakeFirstOrThrow();
-
-      if (state.obligationState !== 'SETTLED' || state.settlementState !== 'COMPLETE') {
-        throw new Error('Settlement ceased to authorize this paid service execution.');
+        .where('obligation.obligation_id', '=', input.obligationId).forUpdate().executeTakeFirstOrThrow();
+      if (state.obligationState !== 'SETTLED' || state.settlementState !== 'COMPLETE' ||
+        state.buyer !== input.authorization.buyerBusinessId || state.seller !== input.authorization.sellerBusinessId ||
+        state.settlementId !== input.authorization.settlementId || state.environment !== input.authorization.environment ||
+        state.provenance !== input.authorization.provenance || state.offerId !== input.authorization.offerId ||
+        state.capabilityId !== input.authorization.capabilityId) {
+        throw new Error('A matching COMPLETE settlement must authorize this paid service execution.');
       }
-
-      const execution = await database
-        .insertInto('service_executions')
-        .values({
-          capability_id: input.authorization.capabilityId,
-          completed_at: input.snapshot.observedAt,
-          consumer_business_id: input.authorization.buyerBusinessId,
-          environment: input.authorization.environment,
-          execution_id: input.executionId,
-          obligation_id: input.obligationId,
-          output: {
-            blockNumber: input.snapshot.blockNumber.toString(),
-            chainId: input.snapshot.chainId,
-            gasPriceWei: input.snapshot.gasPriceWei.toString(),
-            observedAt: input.snapshot.observedAt,
-            usdcCodeSha256: input.snapshot.usdcCodeSha256,
-          },
-          output_sha256: input.outputSha256,
-          provenance: input.authorization.provenance,
-          provider_business_id: input.authorization.sellerBusinessId,
-          settlement_id: input.authorization.settlementId,
-          source_reference: `arc-block:${input.snapshot.blockNumber}`,
-          state: 'COMPLETE',
-        })
-        .onConflict((conflict) => conflict.column('execution_id').doNothing())
-        .returning('execution_id')
-        .executeTakeFirst();
-
-      if (execution === undefined) return { created: false };
-
-      await database
-        .insertInto('evidence_facts')
-        .values({
-          coverage: 'SERVICE_OUTPUT',
-          environment: input.authorization.environment,
-          evidence_id: `evi_${input.executionId}_delivery`,
-          fact_type: 'ARC_NETWORK_SNAPSHOT_DELIVERED',
-          observed_at: input.snapshot.observedAt,
-          payload: {
-            capabilityId: input.authorization.capabilityId,
-            commonControl: input.authorization.provenance === 'COMMON_CONTROL_TEST',
-            consumerBusinessId: input.authorization.buyerBusinessId,
-            outputSha256: input.outputSha256,
-            providerBusinessId: input.authorization.sellerBusinessId,
-          },
-          provenance: input.authorization.provenance,
-          source_reference: `arc-block:${input.snapshot.blockNumber}`,
-          source_type: 'ARC_TESTNET_RPC',
-          subject_id: input.executionId,
-          subject_type: 'SERVICE_EXECUTION',
-          verification: 'PROVIDER_REPORTED',
-        })
-        .executeTakeFirstOrThrow();
-
+      const existing = await database.selectFrom('service_executions').select('execution_id')
+        .where('obligation_id', '=', input.obligationId).executeTakeFirst();
+      if (existing !== undefined) {
+        if (existing.execution_id !== input.executionId) throw new Error('The obligation already has a different service execution.');
+        return { created: false };
+      }
+      await database.insertInto('service_executions').values({
+        capability_id: input.authorization.capabilityId, completed_at: input.completedAt,
+        consumer_business_id: state.buyer, environment: state.environment, execution_id: input.executionId,
+        obligation_id: input.obligationId, output: input.output, output_sha256: input.outputSha256,
+        provenance: state.provenance, provider_business_id: state.seller, settlement_id: state.settlementId,
+        source_reference: input.sourceReference, state: 'COMPLETE',
+      }).executeTakeFirstOrThrow();
+      await database.insertInto('evidence_facts').values({
+        coverage: 'SERVICE_OUTPUT', environment: state.environment, evidence_id: `evi_${input.executionId}_delivery`,
+        fact_type: input.factType, observed_at: input.completedAt,
+        payload: {
+          capabilityId: input.authorization.capabilityId, commonControl: state.provenance === 'COMMON_CONTROL_TEST',
+          consumerBusinessId: state.buyer, outputSha256: input.outputSha256, providerBusinessId: state.seller,
+        },
+        provenance: state.provenance, source_reference: input.sourceReference, source_type: input.sourceType,
+        subject_id: input.executionId, subject_type: 'SERVICE_EXECUTION', verification: 'PROVIDER_REPORTED',
+      }).executeTakeFirstOrThrow();
       return { created: true };
     });
   }

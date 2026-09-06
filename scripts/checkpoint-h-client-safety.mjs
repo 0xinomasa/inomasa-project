@@ -6,6 +6,10 @@ import process from 'node:process';
 const staticRoot = join(process.cwd(), '.next', 'static');
 const readableExtensions = new Set(['.css', '.html', '.js', '.json', '.map', '.txt']);
 const privateEnvironmentNames = [
+  'GEMINI_API_KEY',
+  'INOMASA_AUTH_SECRET',
+  'INOMASA_ALPHA_INVITES',
+  'INOMASA_CONNECT_SOURCES',
   'CIRCLE_API_KEY',
   'CIRCLE_ENTITY_SECRET',
   'CIRCLE_WALLET_SET_ID',

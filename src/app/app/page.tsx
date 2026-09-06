@@ -156,7 +156,7 @@ export default async function ProductDashboardPage() {
               <h2>Keep the next step clear.</h2>
             </div>
           </div>
-          <p className="dashboard-guidance__copy">My Businesses is your directory. Open a Business to enter its contextual Workspace; global BUILD, Capital, and MIGRATE paths stay outside that workspace.</p>
+          <p className="dashboard-guidance__copy">My Businesses is your directory. Open a Business to enter its contextual Workspace; global BUILD, Capital, and CONNECT paths stay outside that workspace.</p>
         </section>
       </main>
     </ProductShell>

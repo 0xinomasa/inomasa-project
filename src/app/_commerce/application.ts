@@ -39,6 +39,7 @@ import {
   PostgresProductEconomicOperationRepository,
   type ProductEconomicRequestSummary,
 } from '../../platform/persistence/product-economic-operation-repository.ts';
+import { readBusinessSources, readConnectedResource } from '../../platform/http/business-source.ts';
 import { productCommerceSelectionForOffer } from './catalog.ts';
 
 export type ProductEconomicAction = 'ADVANCE' | 'PREPARE';
@@ -421,7 +422,7 @@ async function advanceGatewayFunding(input: {
     : `Gateway funding remains ${operation.state}.`;
 }
 
-async function ensureSnapshotDelivery(input: {
+async function ensurePaidServiceDelivery(input: {
   readonly executionId: `svc_${string}`;
   readonly obligationId: `obl_${string}`;
   readonly persistence: PostgresPersistence;
@@ -429,6 +430,17 @@ async function ensureSnapshotDelivery(input: {
   const services = new PostgresAlphaServiceRepository(input.persistence);
   const authorization = await services.getExecutionAuthorization(input.executionId, input.obligationId);
   if (authorization.alreadyComplete) return;
+  const { externalConnection } = await new PostgresAlphaBusinessRepository(input.persistence)
+    .getGenesisContext(authorization.sellerBusinessId);
+  if (externalConnection !== undefined) {
+    const result = await readConnectedResource(externalConnection, readBusinessSources());
+    await services.recordCompletedResource({
+      authorization, executionId: input.executionId, obligationId: input.obligationId,
+      output: result.output, outputSha256: result.outputSha256, completedAt: result.observedAt,
+      sourceReference: result.sourceReference, sourceType: 'EXTERNAL_HTTP_JSON', factType: 'EXTERNAL_JSON_RESOURCE_DELIVERED',
+    });
+    return;
+  }
   const snapshot = await new ArcTestnetRpc().readNetworkSnapshot(new Date().toISOString());
   await services.recordCompletedSnapshot({
     authorization,
@@ -478,7 +490,7 @@ async function advanceX402(
         repository: payments,
       });
     }
-    await ensureSnapshotDelivery({
+    await ensurePaidServiceDelivery({
       executionId: context.serviceExecutionId,
       obligationId: context.obligationId,
       persistence,
@@ -551,12 +563,12 @@ async function advanceX402(
     await payments.recordOutcomeUnknown(payment.paymentId, 'PRODUCT_SETTLE_REQUEST_AMBIGUOUS');
     return 'Gateway settlement handoff had an ambiguous outcome. The signed payment is persisted and was not blindly retried.';
   }
-  await ensureSnapshotDelivery({
+  await ensurePaidServiceDelivery({
     executionId: context.serviceExecutionId,
     obligationId: context.obligationId,
     persistence,
   });
-  return 'x402 exact payment settled and the Arc snapshot delivery completed.';
+  return 'x402 exact payment settled and the service resource was delivered.';
 }
 
 function deliverableFor(input: {

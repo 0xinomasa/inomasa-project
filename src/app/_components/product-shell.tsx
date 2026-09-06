@@ -21,7 +21,7 @@ export function ProductShell({
     { active: active === 'businesses', href: '/app/businesses', label: 'Businesses' },
     { active: active === 'build', href: '/build', label: 'BUILD' },
     { active: active === 'capital', href: '/capital', label: 'Capital' },
-    { active: active === 'migrate', href: '/migrate', label: 'MIGRATE', locked: true },
+    { active: active === 'migrate', href: '/connect', label: 'CONNECT' },
   ];
   const workspaceLinks: readonly ProductMenuLink[] = businessSlug === undefined ? [] : [
     { href: `/app/businesses/${businessSlug}`, label: 'Overview' },

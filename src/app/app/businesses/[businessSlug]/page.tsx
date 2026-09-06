@@ -49,7 +49,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
         <header className="workspace-header workspace-header--business">
           <div>
             <Link className="quiet-link" href="/app/businesses">← Back to Businesses</Link>
-            <p className="eyebrow">{site.entryRoute} · {site.templateId.replaceAll('-', ' ')}</p>
+            <p className="eyebrow">{site.entryRoute === 'MIGRATE' ? 'CONNECT' : site.entryRoute} · {site.templateId.replaceAll('-', ' ')}</p>
             <h1>{site.displayName}</h1>
             <p>{site.siteDescription}</p>
           </div>
@@ -69,6 +69,13 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             <div><span>Visibility</span><strong>{site.visibility.replaceAll('_', ' ')}</strong></div>
           </div>
         </section>
+
+        {site.creationAssistance === undefined ? null : (
+          <section className="workspace-card"><h2>Your initial Business brief</h2><p>{site.creationAssistance.proposal.firstService}</p><p>{site.creationAssistance.proposal.economicReason}</p><ol>{site.creationAssistance.proposal.nextSteps.map((step, index) => <li key={index}>{step}</li>)}</ol><p className="scope-note">AI-assisted proposal reviewed at creation. Actual service delivery and economic results are recorded separately.</p></section>
+        )}
+        {site.externalConnection === undefined ? null : (
+          <section className="workspace-card"><h2>Connected Business source</h2><p>Source: {site.externalConnection.sourceId}. Business information remains attributable to this external source.</p><p>Instant resources from this Business use its connected JSON service. Existing external payments and history are not imported.</p></section>
+        )}
 
         <nav aria-label="Workspace task flow" className="workspace-task-flow">
           <a href="#products"><span>01</span><strong>Set up</strong><small>Offers, Agents, Treasury</small></a>

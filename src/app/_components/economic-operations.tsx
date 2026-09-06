@@ -25,6 +25,7 @@ interface CommerceRequestView {
   readonly amountMicroUsdc: string;
   readonly deliverySourceReference: string | null;
   readonly deliveryState: string | null;
+  readonly deliveryOutput?: unknown;
   readonly gatewayFundingState: string | null;
   readonly jobId: string | null;
   readonly jobOperations: readonly {
@@ -272,6 +273,7 @@ export function EconomicOperations({
                   {request.paymentProviderReference === null ? null : <div><dt>Gateway receipt</dt><dd><code>{request.paymentProviderReference}</code></dd></div>}
                   {request.jobId === null ? null : <div><dt>Job</dt><dd><code>{request.jobId}{request.jobProtocolId === null ? '' : ` · Arc job ${request.jobProtocolId}`}</code></dd></div>}
                   {request.settlementTransactionHash === null ? null : <div><dt>Arc settlement</dt><dd><a href={`https://testnet.arcscan.app/tx/${request.settlementTransactionHash}`} rel="noreferrer" target="_blank">View verified transaction ↗</a></dd></div>}
+                  {request.deliveryState === 'COMPLETE' && request.deliveryOutput !== undefined ? <div><dt>Delivered result</dt><dd><pre className="delivered-resource">{JSON.stringify(request.deliveryOutput, null, 2)}</pre></dd></div> : null}
                   {request.deliverySourceReference === null ? null : <div><dt>Delivery source</dt><dd><code>{request.deliverySourceReference}</code></dd></div>}
                 </dl>
                 {request.jobOperations.length === 0 ? null : <ol className="job-lifecycle">{request.jobOperations.map((operation) => <li key={operation.leg}><span>{readable(operation.leg)}</span><strong>{readable(operation.state)}</strong>{operation.transactionHash === null ? null : <a href={`https://testnet.arcscan.app/tx/${operation.transactionHash}`} rel="noreferrer" target="_blank">ArcScan ↗</a>}</li>)}</ol>}
