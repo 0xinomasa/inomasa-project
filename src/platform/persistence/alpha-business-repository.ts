@@ -10,6 +10,9 @@ import {
   isBusinessTemplateReferenceId,
 } from '../../modules/business/templates.ts';
 import type { TreasuryBinding } from '../../modules/business/treasury.ts';
+import type { CreationAssistance } from '../../modules/business/creation-assistance.ts';
+import type { ExternalBusinessConnection } from '../../modules/business/external-connection.ts';
+import { canonicalJson } from '../../shared/canonical-json.ts';
 import type { PostgresPersistence } from './database.ts';
 import { applicationSchema } from './database.ts';
 
@@ -54,6 +57,8 @@ export interface AlphaBusinessSummary {
 }
 
 export interface BusinessSiteView {
+  readonly creationAssistance?: CreationAssistance;
+  readonly externalConnection?: ExternalBusinessConnection;
   readonly actorClassification: string;
   readonly businessId: `biz_${string}`;
   readonly businessPackage: BusinessPackage;
@@ -138,6 +143,15 @@ export class PostgresAlphaBusinessRepository {
         .executeTakeFirst();
 
       if (request === undefined) {
+        const context = await database.selectFrom('business_events').select('payload')
+          .where('business_id', '=', input.genesis.business.businessId)
+          .where('event_type', '=', 'BUSINESS_GENESIS_ACCEPTED').executeTakeFirst();
+        if (input.genesis.externalConnection !== undefined) {
+          const original = (context?.payload as { externalConnection?: ExternalBusinessConnection } | undefined)?.externalConnection;
+          if (!original || canonicalJson({ ...original, observedAt: '' }) !== canonicalJson({ ...input.genesis.externalConnection, observedAt: '' })) {
+            throw new Error('This source is already connected with different context. No origin was overwritten.');
+          }
+        }
         const existing = await database
           .selectFrom('businesses')
           .select([
@@ -237,6 +251,8 @@ export class PostgresAlphaBusinessRepository {
           event_type: input.genesis.event.eventType,
           occurred_at: input.genesis.event.occurredAt,
           payload: {
+            ...(input.genesis.creationAssistance === undefined ? {} : { creationAssistance: input.genesis.creationAssistance }),
+            ...(input.genesis.externalConnection === undefined ? {} : { externalConnection: input.genesis.externalConnection }),
             actorClassification: input.genesis.business.actorClassification,
             commonControlGroupId: input.genesis.business.commonControlGroupId ?? null,
             entryRoute: input.genesis.business.entryRoute,
@@ -322,6 +338,19 @@ export class PostgresAlphaBusinessRepository {
       .then((rows) =>
         rows.map((row) => ({ ...row, treasuryStatus: row.treasuryStatus ?? 'UNBOUND' })),
       );
+  }
+
+  /** Internal context read; product callers must first establish controller-scoped Business access. */
+  async getGenesisContext(businessId: string): Promise<{ creationAssistance?: CreationAssistance; externalConnection?: ExternalBusinessConnection }> {
+    const row = await this.#persistence.databaseForApplication.withSchema(applicationSchema)
+      .selectFrom('business_events').select('payload').where('business_id', '=', businessId)
+      .where('event_type', '=', 'BUSINESS_GENESIS_ACCEPTED').executeTakeFirst();
+    if (row === undefined) return {};
+    const payload = row.payload as { creationAssistance?: CreationAssistance; externalConnection?: ExternalBusinessConnection };
+    return {
+      ...(payload.creationAssistance === undefined ? {} : { creationAssistance: payload.creationAssistance }),
+      ...(payload.externalConnection === undefined ? {} : { externalConnection: payload.externalConnection }),
+    };
   }
 
   async getBusiness(businessId: `biz_${string}`): Promise<BusinessInstance> {
@@ -467,6 +496,7 @@ export class PostgresAlphaBusinessRepository {
 
     return {
       actorClassification: row.actorClassification,
+      ...(controllerPrincipalId === undefined ? {} : await this.getGenesisContext(business.businessId)),
       businessId: business.businessId,
       businessPackage: createBusinessPackage(business),
       displayName: row.displayName,

@@ -49,7 +49,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
         <header className="workspace-header workspace-header--business">
           <div>
             <Link className="quiet-link" href="/app/businesses">← Back to Businesses</Link>
-            <p className="eyebrow">{site.entryRoute} · {site.templateId.replaceAll('-', ' ')}</p>
+            <p className="eyebrow">{site.entryRoute === 'MIGRATE' ? 'CONNECT' : site.entryRoute} · {site.templateId.replaceAll('-', ' ')}</p>
             <h1>{site.displayName}</h1>
             <p>{site.siteDescription}</p>
           </div>
@@ -69,6 +69,13 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             <div><span>Visibility</span><strong>{site.visibility.replaceAll('_', ' ')}</strong></div>
           </div>
         </section>
+
+        {site.creationAssistance === undefined ? null : (
+          <section className="workspace-card"><h2>Your initial Business brief</h2><p>{site.creationAssistance.proposal.firstService}</p><p>{site.creationAssistance.proposal.economicReason}</p><ol>{site.creationAssistance.proposal.nextSteps.map((step, index) => <li key={index}>{step}</li>)}</ol><p className="scope-note">AI-assisted proposal reviewed at creation. Actual service delivery and economic results are recorded separately.</p></section>
+        )}
+        {site.externalConnection === undefined ? null : (
+          <section className="workspace-card"><h2>Connected Business source</h2><p>Source: {site.externalConnection.sourceId}. Business information remains attributable to this external source.</p><p>Instant resources from this Business use its connected JSON service. Existing external payments and history are not imported.</p></section>
+        )}
 
         <nav aria-label="Workspace task flow" className="workspace-task-flow">
           <a href="#products"><span>01</span><strong>Set up</strong><small>Offers, Agents, Treasury</small></a>
@@ -93,7 +100,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
 
         <section className="workspace-panel commerce-preview" id="commerce">
           <div className="panel-heading"><div><p className="eyebrow">Commerce & Jobs</p><h2>Confirm and follow real testnet operations.</h2></div><span>{commerce.state === 'CONNECTED' ? 'Kernel connected' : commerce.state.replaceAll('_', ' ')}</span></div>
-          <p className="panel-description">Purchase an instant resource or commission evaluated work from a controlled test provider. Every confirmation creates one canonical obligation; exact settlement and delivery appear in Economic History below.</p>
+          <p className="panel-description">Purchase an instant resource or commission evaluated work. Offers you explicitly activated in another Business you control appear here beside the accepted regression fixtures. Every confirmation creates one canonical obligation; exact settlement and delivery appear in Economic History below.</p>
           {commerce.state === 'CONNECTED' ? (
             <EconomicOperations
               agents={agents}
@@ -101,6 +108,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
               offers={commerce.offers}
               providerConfigured={commerce.providerConfigured}
               requests={commerce.requests}
+              treasuryReady={operational.state === 'CONNECTED' && operational.treasury?.status === 'ACTIVE'}
             />
           ) : (
             <div className="operational-notice"><strong>Commerce is {commerce.state.replaceAll('_', ' ').toLowerCase()}.</strong><p>No empty, paid, or failed state is inferred. Existing kernel records remain unchanged.</p></div>

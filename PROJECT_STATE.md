@@ -12,11 +12,11 @@ This file is the concise repository-native entry point for a human or AI operato
 | Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
 | Post-H Product Realization authority | [`Post-H Product Realization Record`](docs/engineering/post-h-product-realization.md): `NORMATIVE / ACTIVE` for Human-Operable Business Product Alpha realization after A–H; subordinate to Concept & Architecture and not a rewrite of REV2 |
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
-| Active realization program | **Verified Controlled Arc Testnet Economic/System Kernel + accepted Work 1–4 product realization**. A–H and Work 1–4 are accepted on GitHub `main`; the broader **Human-Operable Business Product Alpha** remains in product-realization progress under the Post-H record |
+| Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-authorized local BUILD/CONNECT continuation builds on the subsequent corrective head; integrated product acceptance remains open. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
-| Standing execution authorization | A–H authorization was completed at Checkpoint H. Work 1 — Fresh human to Business Workspace, Work 2 — Operational Workspace, Work 3 — Human-triggered economic operation, and Work 4 — Capital product interface — are accepted on `main`. The current owner-authorized realization continues through Work 5 only after the accepted Work 4 continuity head. This does not authorize Production/mainnet, public anonymous access, live MIGRATE, unrestricted Agent authority, or Production/public Capital. |
-| Next implementation checkpoint | **Work 5 — Integrated Human Product Alpha boundary is not started.** Start it from accepted Work 4 `main`; perform the corrective cross-product UX pass, full A–H and Work 1–4 regression, two-user journey, desktop and Android verification, and owner-acceptance preparation required by the Post-H record. Keep MIGRATE locked, Business Workspace contextual and operating-oriented, and Production/Vercel exposure unchanged. |
-| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / HUMAN-OPERABLE BUSINESS PRODUCT ALPHA NOT YET VERIFIED**. Work 5 is not started. |
+| Standing execution authorization | Continue the existing application locally under [Post-H section 12](docs/engineering/post-h-product-realization.md#12-local-proof-continuation-authorized-by-the-owner): bounded AI-assisted BUILD, configured-source CONNECT, and actual Arc Testnet economic proof. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
+| Next implementation checkpoint | **Continue `codex/local-arc-proof`; do not restart Work 5 or the accepted A–H kernel.** Complete the remaining live Gemini + existing-business resource + canonical Arc payment proof from the owner's configured local environment, then obtain Android/owner acceptance. See the continuation evidence and exact next step below. |
+| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / LOCAL ENGINEERING CHECKS PASSED / LIVE INTEGRATION PROOF PENDING**. New live AI/Arc evidence and whole-product acceptance are not claimed. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
 | Work 1 product acceptance evidence | Owner-observed invited login, four-template BUILD entry, Business creation/persistence, My Businesses/Workspace entry, and two-way second-user tenant isolation. The corrected protected Preview was deployment `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9` from exact Work 1 head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; deferred non-blocking UX findings are retained in the Post-H Product Realization record. |
@@ -37,7 +37,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | First integrated Alpha proof | Pull request `#14`; two Circle Developer-Controlled EOA Treasuries `ACTIVE`; settlement `set_arc_snapshot_v1` completed for exact `0.250000` Arc Testnet USDC in transaction `0x887980b47c7c1eeb9f5457aa80323e9b03bd7934008811ef56fbcaf1820b3913`; paid service `svc_arc_snapshot_v1` completed from Arc block `58765304` |
 | Bounded Agent proof | Commits `262aa5f` and `8fc9657`; Agent `agt_ops_pilot_buyer_v1` is provider-attributed, operator-invoked, and non-custodial; exact offer/counterparty/per-action/cumulative/expiry/revocation policy issued and consumed authorization `xau_arc_snapshot_agent_v1`; settlement `set_arc_snapshot_agent_v1` completed for `0.100000` Arc Testnet USDC in transaction `0x4e0c30f33cf96364469fa814fe61388199a0ba9cd9581d6b10ee7e09a1f44093`; service `svc_arc_snapshot_agent_v1` completed from Arc block `58768105` |
 | Circle Gateway x402 proof | Implementation commit `1c15f7d2a98429d4c62f0ee718f30a624106cfee`, pull request `#16`, merge `8d60744ec7c330a0403ef4787bc21634fbf2ed01`; final PR run `32839024137` and accepted-main run `32839154514` completed successfully. Ops Pilot deposited `1.000000` Arc Testnet USDC to Gateway in transaction `0x2280402061b6a7960efd6d24804a753310eba5e3f193b0a5a66225c11b7c2c53`; Agent payment `pay_arc_snapshot_x402_v1` settled exact `0.010000` USDC through x402 v2 `exact`, provider receipt `3d6239e1-9d29-46a0-bfb8-117578b9d1d4`; Gateway balances became payer `0.990000`, seller `0.010000`, pending zero; service `svc_arc_snapshot_x402_v1` completed from Arc block `58771214` |
-| Current continuity checkpoint | REV2 Checkpoint H remains the accepted verified kernel. Post-H Product Realization remains normative; Work 1–4 are accepted on `main` and Work 5 is the exact next realization boundary. |
+| Current continuity checkpoint | Accepted main `ca1e9178abca916289ac11229163be11e2f2a951` includes Work 5 #48. Corrective branch `codex/work-5-closeout-corrective-pass` ends at `175498bb1fa740cc88ba6cbfe9ab4620792197b9`; its work is preserved as the parent of `codex/local-arc-proof`. |
 | Checkpoint B acceptance evidence | Pull request `#22`; implementation commit `97ad37446d2701adedd165de19d3e67acc198d3a`; PR verification run `33024043557`; merge commit `104a7e75ced8def6841e86603ef68778baaa2375`; and accepted-main run `33024149185` completed successfully, including 31/31 tests, lint, typecheck, Next.js `16.3.3` production build, and clean PostgreSQL reconstruction through migration `007` plus write/read/rollback proof |
 | Checkpoint B runtime evidence | Configured private-testnet migration/write-read/rollback passed; local production HTTP returned `200` for Home and `checkpoint-b-api-proof` plus expected `404` for an unknown site; automated visual browser proof remains unclaimed because `agent-browser` is not installed in the verified Ubuntu Proot profile |
 | Checkpoint B generic proof instance | `Checkpoint B API Proof`, Business `biz_checkpoint_b_api_proof_a9f2e7fabf34`, template `api-data-compute@1`, route `/business/checkpoint-b-api-proof`, provenance `COMMON_CONTROL_TEST`, logical Treasury `PENDING`; no wallet provisioning, transfer, independent demand, or new economic activity was claimed |
@@ -67,10 +67,10 @@ This file is the concise repository-native entry point for a human or AI operato
 | Authority migration local evidence | npm audit (0 vulnerabilities), lint, typecheck, 28/28 tests, Next.js `16.3.3` production build, migrations `001`-`006` already current, database write/read/rollback, local Markdown-link audit, and `git diff --check` passed; no product/provider/database behavior changed |
 | Authority migration acceptance evidence | Pull request `#19`; implementation commit `751bd4c4d5e75b7a6fc8087c99034ae05089cf4e`; final PR head `218cdd273e9b6d291703e930aada1e4b768f2057`; final PR verification run `32949059522`; merge commit `d3cba7871204ba91a20094ce4353db0a650933b9`; and accepted-main run `32949201003` completed successfully, including clean PostgreSQL reconstruction/proof |
 | B4 local pre-deployment evidence | Node `22.23.2`, npm `10.9.8`; clean install and audit (0 vulnerabilities), lint, typecheck, 6/6 tests, production build, and production-server HTTP `200` with expected Inomasa shell anchors |
-| Product implementation boundary | Accepted `main` includes the A–H verified controlled Arc Testnet Economic/System Kernel and accepted Work 1–4 product realization: product entry, Operational Workspace, human-confirmed canonical x402/ERC-8183 operation with contextual Economic History, and controller-scoped provider-driven Capital. Human-Operable Business Product Alpha realization remains incomplete under the Post-H record; Work 5 is not started. Production/mainnet and broader exposure remain unauthorized. |
+| Product implementation boundary | The accepted kernel and Work 1–4 slices remain intact; Work 5 implementation is merged. The local continuation adds bounded AI proposals, operator-configured existing-business context, and external JSON delivery behind the existing paid-service authorization. No second ledger, schema migration, wallet model, or hosted service is added. |
 | Verified private-testnet state | All accepted fixtures remain synthetic/common-control: Signal Forge, Ops Pilot, Checkpoint B API Proof, the four Reference Economy Businesses, the Work 2 Provider Lab, seven Agents, and four Capital Providers. The accepted A–H regression projection remains nine exact settled commerce obligations totaling `0.680000` USDC, two exact Capital allocations totaling `0.400000`, twenty economic entries, twenty-two narrow Evidence facts, and nine complete service executions; Work 3 product-operation evidence is recorded separately above and is not silently folded into those kernel counts. Checkpoint B API Proof still has only a `PENDING` logical Treasury and no economic activity; none of this proves independent demand, Production Capital, or real investment performance |
 | Repository continuity marker | `src/index.ts` `repositoryBaseline` is intentionally retained as a machine-readable descriptive marker maintained since B1. It is subordinate to the active authority documents and `PROJECT_STATE.md`, and it grants no runtime or product authority |
-| Current blocking gate | No incomplete gate remains inside the accepted A–H kernel sequence or accepted Work 1–4 slices. Human Product Alpha still requires Work 5 and final integrated Product Acceptance: the corrective cross-product UX pass, desktop/Android two-user journey, clean integrated hosted provenance only if a safely proven Preview is needed, and A–H/Work 1–4 regressions. `PG-TLS-SEMANTICS-01` remains active only for its scoped dependency change. |
+| Current blocking gate | New live AI generation, real configured-source paid delivery, actual Arc proof attributable to the new journey, and final Android/owner acceptance remain open. Historical A–H receipts are not evidence that the new integrations ran. Native PostgreSQL CI and current source/build evidence must accompany review. Hosted proof is deferred by owner instruction; `PG-TLS-SEMANTICS-01` retains its original scoped meaning. |
 | Baseline fixture/product-label status | Signal Forge, Ops Pilot, both accepted buyer Agents, all four Reference Economy Businesses, and all four Capital Providers remain controlled proof fixtures. Their rendered commerce/Capital state is not generic product capacity, independent demand or underwriting, public availability, or active roadmap authority |
 | Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
@@ -83,6 +83,26 @@ This file is the concise repository-native entry point for a human or AI operato
 | Deployment state | Work 1 merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a` unintentionally triggered Production deployment `dpl_8Uwgxnw5bNSCgrY3Spa868RUnDgp` through the then-active Git integration. This was not authorized Production scope. The Vercel project was paused and the Production domain was directly verified to return HTTP `503 DEPLOYMENT_PAUSED`; the project-level GitHub repository connection was then removed. Existing protected Preview artifacts remain available. No `vercel.json`, Production resume, database change, or secret change was introduced by containment. |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
+
+## Local continuation verification and remaining proof
+
+The source tree was reconstructed from the exact Git objects at corrective head
+`175498bb1fa740cc88ba6cbfe9ab4620792197b9`; all source blob identities and the
+head tree were checked before changes. This preserves the three corrective
+commits after Work 5. No main merge, deployment, new database provider,
+production dependency, lockfile change, contract deployment, or new schema
+migration is part of this continuation.
+
+| Evidence | Observed scope |
+| --- | --- |
+| Corrective baseline | Node 22 `npm run verify` passed before changes: 81 tests, lint, types, build and browser-secret boundary. |
+| Current unit/engineering gates | Node 22.22.0 `npm run verify` passed locally: lint, types, 92/92 tests, build, and secret-name scan of 18 browser artifacts for 10 private environment names. New tests cover structured AI output, tampered/expired/cross-principal proposal proofs, provider failures, source authorization, URL/size bounds and actual local-origin handling. Implementation head `b63aedafe1e3466d36c379098a243372e3978bd7` also passed [Engineering verification run `34066094336`](https://github.com/0xinomasa/inomasa-project/actions/runs/34066094336) in [draft PR #49](https://github.com/0xinomasa/inomasa-project/pull/49). The PR remains unmerged. |
+| Database proof | All migrations through `014`, previous Work 2/3/4/5 persistence checks, and new `runLocalProductPersistenceProof` passed on isolated PGlite 0.5.8 with its socket server. The new proof checks retained AI/source context, source replay conflicts, tenant isolation, pending distinct Treasury records, rejection before COMPLETE settlement, output/evidence integrity, exactly one delivery, no financial posting by delivery, and fixture cleanup. This is a PostgreSQL-compatible local test; it is not a native PostgreSQL 17 result. Native PostgreSQL 17 verification also passed in run `34066094336`, job `101574994778`, including clean migrations and `db:verify`; this is separate from the earlier PGlite result. |
+| Local browser proof | A fresh migrated temporary database, a separate loopback HTTP source, the actual Next.js local server and Chromium 149 passed ten checks: anonymous mutation rejection, honest unconfigured AI/no creation, login + BUILD creation + workspace, cross-origin rejection, CONNECT source + workspace, replay and changed-manifest rejection, 390×844 overflow check, second-principal workspace/source isolation, no premature payment/resource delivery, and no uncaught page error. This verifies the changed paths, not every old product journey. |
+| Browser environment | `agent-browser` could not start its daemon here; direct Playwright controlled an isolated Chromium installation instead. The browser's font directory required an environment-only correction. Test helpers stayed outside the repository; application dependencies and Android setup were not changed. |
+| Newly observed application correction | Next's local request URL used `localhost` while the browser sent `127.0.0.1`. The new endpoints now compare Origin with the actual Host plus request protocol; cross-site, missing, different-port/protocol and malformed hosts still fail closed. Temporary diagnostics were removed. |
+| Live integration limits | No Gemini key/model entitlement, owner Neon connection or Circle execution credentials are available in this workspace. No live AI generation or new Arc payment was executed. A connected loopback source and synthetic settled database row cannot be presented as that evidence. |
+| Continuity | This existing state file, README, AGENTS and Post-H section 12 carry the bounded continuation. The optional Second Brain path was unavailable here; no alternate state authority was created. |
 
 ## Open mandatory gates
 
@@ -250,18 +270,49 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-**Accept this Work 4 continuity reconciliation on `main`, then implement Work 5 —
-Integrated Human Product Alpha boundary — on a focused branch from that accepted
-head.** Perform one corrective cross-product UX pass without changing accepted
-kernel semantics: clarify BUILD / MIGRATE / Capital visually, compact Live Economy
-while retaining useful protocol context, reduce engineering-facing copy on normal
-user surfaces, improve hierarchy and page length, preserve Android as first-class
-without bottom navigation, and keep Business Workspace contextual and
-operating-oriented rather than chat-first. Run the full A–H and Work 1–4 regression,
-two-user journey, desktop and Android verification, then prepare owner acceptance.
+As rechecked on 2026-09-07, PR #49 remains draft, open, mergeable and unmerged.
+Implementation head `b63aedafe1e3466d36c379098a243372e3978bd7` passed local and
+GitHub verification. This closeout only records that result; it does not repeat
+implementation or claim a new live payment. The Vercel project was read-only
+checked before and after the branch/PR write: `live: false`, unchanged update
+time and unchanged latest deployment. No Vercel mutation or deployment was executed.
 
-Keep Vercel Production paused, keep project-level Git auto-deployment disconnected,
-retain Protected Preview evidence, and leave the existing Neon development
-persistence configuration intact unless a separately justified change requires
-otherwise. Do not infer Production, mainnet, public access, live MIGRATE,
-unrestricted Agent authority, or public Capital authorization.
+Continue the same `codex/local-arc-proof` branch from the recorded corrective
+baseline, retaining all successful changes. Inspect its current HEAD, pending
+changes and CI before any command. Do not merge, replay historical payments,
+reseed accepted A–H fixtures, migrate wallet custody, or deploy to Vercel as an
+implicit part of this continuation.
+
+On the owner's Android + Termux + Ubuntu environment, inspect configuration
+presence without reading secrets into chat, use the existing Node 22/npm setup,
+and run `npm run local:check`. The checker reads migration state and Arc network
+state only; it never creates wallets, migrates tables, seeds fixtures or transfers
+funds. `--offline` skips the Arc read. Presence checks do not verify provider access.
+Use `npm run dev:local` and open `http://127.0.0.1:3000` on the same device. The
+selected local browser origin must match the application origin. The phone is a
+development client, not a hosting requirement.
+
+Use `PRIVATE_ARC_TESTNET` with the existing properly separated Neon configuration
+for real Arc economic execution. `LOCAL_DEVELOPMENT` is sufficient for local
+creation/source testing but is not a bypass for economic environment guards.
+Apply migrations only if a real missing version is identified, with the normal
+administrative connection; no new migration was added by this continuation.
+`db:verify` belongs on an isolated test database, never on the accepted proof data.
+
+Complete one bounded new journey: a valid Gemini proposal accepted into BUILD,
+an operator-controlled existing Business connected from its JSON manifest,
+its explicitly activated X402 offer, confirmed payment through the existing
+Circle/Gateway path, external resource delivery, and consistent Economic History.
+The source remains external; AI cannot grant spending authority. Bind evidence to
+source HEAD, principal/Business/request IDs, amount, provider receipt, output hash,
+obligation/settlement/execution, replay result and observed time. A Gateway receipt
+is provider-reported batched-payment evidence, not an individual Arc transaction
+hash. For a direct chain transaction in the proof, use the accepted direct USDC
+or ERC-8183 path and record the actual Arc receipt separately. Do not relabel a
+Gateway payment or invent a per-payment hash.
+
+If a required credential, model entitlement, funded wallet or operator-controlled
+source is missing, stop only that external step and report its specific blocker.
+Do not ask for secret values in chat or replace unavailable providers with success
+fixtures. Re-run the existing A–H/product read-only regressions against the owner's
+accepted private testnet data, then obtain final Android/owner acceptance.

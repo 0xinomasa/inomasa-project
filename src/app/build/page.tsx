@@ -21,8 +21,8 @@ export default async function BuildPage() {
         <header className="workspace-header">
           <div>
             <p className="eyebrow">BUILD · Business entry</p>
-            <h1>Start with a useful shape.</h1>
-            <p>Choose a template, add the minimum context, and create a Business you can operate in one shared environment.</p>
+            <h1>Turn an idea into a Business.</h1>
+            <p>Develop your idea with AI, review its first service and the role of Arc payments, then create the Business you will operate.</p>
           </div>
           <Link className="quiet-link" href="/app/businesses">Back to Businesses</Link>
         </header>
@@ -30,7 +30,7 @@ export default async function BuildPage() {
         <section className="workspace-card">
           <CreateBusinessForm templates={businessTemplates} />
         </section>
-        <p className="scope-note">Templates are starting structures, not permanent silos. MIGRATE remains locked in this Alpha.</p>
+        <p className="scope-note">Templates are starting structures. Existing Businesses can enter through <Link href="/connect">CONNECT</Link> when an authorized source is configured.</p>
       </main>
     </ProductShell>
   );

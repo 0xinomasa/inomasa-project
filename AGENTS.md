@@ -37,10 +37,17 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   Capital product interface — is accepted through pull request `#46`: final
   implementation head `251e999d7353d2a64dcd7e7e7568a3dedac76f42`, merge
   `b7879be06d70b299c43ba6eef7c62483c1cf2a31`, final PR Engineering verification
-  run `33353646282`, and accepted-main run `33353765607` successful. Work 5 is not
-  started.
-- BUILD is active. MIGRATE is a system-ready boundary but remains user-facing
-  `LOCKED / NOT YET OPEN`. Generic Capital is accepted for the controlled
+  run `33353646282`, and accepted-main run `33353765607` successful. Work 5
+  implementation is merged through #48 (`ca1e9178abca916289ac11229163be11e2f2a951`).
+  Its corrective head `175498bb1fa740cc88ba6cbfe9ab4620792197b9` is the source
+  baseline for the owner-authorized local proof continuation. Final integrated
+  product acceptance remains outstanding; do not restart Work 5.
+- BUILD is active with bounded AI drafting in the local continuation. CONNECT
+  opens only operator-configured, controller-scoped HTTP JSON sources under
+  Post-H section 12. It uses the existing internal MIGRATE entry route;
+  unconfigured migration remains closed. Existing Web2 and Web3 Businesses
+  remain within the intended product concept; this narrow connector is not
+  universal business or wallet migration. Generic Capital is accepted for the controlled
   Checkpoint F scope after Business, Agent, commerce, and Economic
   History/observability capability. Reference Economy proof composition is accepted
   for the controlled Checkpoint G scope. Integrated Verification is accepted for
@@ -96,13 +103,19 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Preserve current product code, fixtures, migrations, tests, and proof until a
   generic replacement passes regression evidence: replace by proof, not rewrite by
   assumption.
-- Production/mainnet, public anonymous access, unrestricted Agent authority, live
-  MIGRATE, and Production/public Capital exposure remain unauthorized. After the
+- Production/mainnet, public anonymous access, unrestricted Agent authority, arbitrary live
+  migration, and Production/public Capital exposure remain unauthorized. After the
   Work 1 merge unintentionally triggered a Vercel Production deployment through
   Git integration, the Vercel project was paused and the project-level Git
   repository connection was disconnected. Existing protected Preview artifacts
   remain available. Do not reconnect Git auto-deployment or resume Production
   without explicit owner authorization and the applicable exposure gates.
+- The next proof is localhost-first on Android/Termux/Ubuntu or an equivalent
+  isolated execution profile. Do not deploy to Vercel, reconnect Git deployment,
+  create another database provider, or rewrite the accepted economic kernel.
+  Explain technical terms to the owner in Indonesian before the original term
+  in parentheses, including repeated mentions. Screen-by-screen approval is not
+  the development process.
 - Never present local state, synthetic/common-control demand, testnet USDC, pending
   provider state, or an unexecuted adapter as real finalized Arc commerce.
 

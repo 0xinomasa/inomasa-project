@@ -282,7 +282,7 @@ export class PostgresErc8183Repository {
       const database = transaction.withSchema(applicationSchema);
       const operation = await database
         .selectFrom('erc8183_job_operations')
-        .select(['job_id', 'leg', 'provider_transaction_id', 'state'])
+        .select(['job_id', 'leg', 'provider_state', 'provider_transaction_id', 'state'])
         .where('operation_id', '=', input.operationId)
         .forUpdate()
         .executeTakeFirstOrThrow();
@@ -292,8 +292,8 @@ export class PostgresErc8183Repository {
         }
         return;
       }
-      if (operation.state !== 'AUTHORIZED' && operation.state !== 'OUTCOME_UNKNOWN') {
-        throw new Error('ERC-8183 operation is not admissible for submission.');
+      if (operation.state !== 'OUTCOME_UNKNOWN' || operation.provider_state !== 'HANDOFF_STARTED') {
+        throw new Error('ERC-8183 operation lacks its durable handoff intent.');
       }
       await database
         .updateTable('erc8183_job_operations')
@@ -321,6 +321,44 @@ export class PostgresErc8183Repository {
           })
           .where('settlement_id', '=', job.settlement_id)
           .where('state', 'in', ['AUTHORIZED', 'OUTCOME_UNKNOWN'])
+          .executeTakeFirstOrThrow();
+      }
+    });
+  }
+
+  async recordHandoffStarted(operationId: `jop_${string}`): Promise<void> {
+    await this.#persistence.transaction(async (transaction) => {
+      const database = transaction.withSchema(applicationSchema);
+      const operation = await database
+        .selectFrom('erc8183_job_operations')
+        .select(['job_id', 'leg', 'provider_state', 'provider_transaction_id', 'state'])
+        .where('operation_id', '=', operationId)
+        .forUpdate()
+        .executeTakeFirstOrThrow();
+      if (
+        operation.state === 'OUTCOME_UNKNOWN' &&
+        operation.provider_state === 'HANDOFF_STARTED' &&
+        operation.provider_transaction_id === null
+      ) return;
+      if (operation.state !== 'AUTHORIZED') {
+        throw new Error('ERC-8183 handoff is not admissible from the persisted operation state.');
+      }
+      await database
+        .updateTable('erc8183_job_operations')
+        .set({ provider_state: 'HANDOFF_STARTED', state: 'OUTCOME_UNKNOWN', updated_at: new Date() })
+        .where('operation_id', '=', operationId)
+        .executeTakeFirstOrThrow();
+      if (operation.leg === 'COMPLETE') {
+        const job = await database
+          .selectFrom('erc8183_jobs')
+          .select('settlement_id')
+          .where('job_id', '=', operation.job_id)
+          .executeTakeFirstOrThrow();
+        await database
+          .updateTable('settlement_operations')
+          .set({ provider_state: 'HANDOFF_STARTED', state: 'OUTCOME_UNKNOWN', updated_at: new Date() })
+          .where('settlement_id', '=', job.settlement_id)
+          .where('state', '=', 'AUTHORIZED')
           .executeTakeFirstOrThrow();
       }
     });

@@ -5,6 +5,16 @@
 **Scope:** controlled Arc Testnet, Protected Preview, owner/common-control Alpha only
 **Baseline:** accepted GitHub `main` at `3647e3462bf0c77024209b5550a6f04ca5e53e1e`
 
+**Owner-authorized continuation, 2026-09-06:** the next proof runs on localhost,
+including Android/Termux/Ubuntu, before any hosting. Work 5 implementation is on
+main through #48 (`ca1e9178abca916289ac11229163be11e2f2a951`); its corrective
+continuation ends at `175498bb1fa740cc88ba6cbfe9ab4620792197b9` and is the source
+baseline for this work. Product acceptance and new live integration proof remain
+outstanding. Section 12 records the current scope amendment; earlier statements
+about unstarted work, hosted-first acceptance, excluded AI creation, and locked
+MIGRATE describe the earlier boundary and are superseded only within that section's
+explicitly bounded scope. A–H evidence and economic semantics remain unchanged.
+
 ## 1. Purpose and authority placement
 
 This is one coherent product-realization record for the state after REV2
@@ -443,3 +453,56 @@ and REV2 documents. Accepted A–H implementation truth and historical checkpoin
 evidence remain intact. `PROJECT_STATE.md` records the current status and links to
 this record. The superseded Canonical Architecture remains historical. No active
 architecture authority is silently changed by this record.
+
+## 12. Local proof continuation authorized by the owner
+
+The owner authorized implementation after an independent review, with actual
+Arc/USDC economics as a structural requirement. Continue the existing application
+and corrective work. Use normal engineering execution; screen-by-screen design
+approval is not the development method. Explain technical work to the owner in
+Indonesian followed by the technical term in parentheses, every time.
+
+The bounded additions are AI-assisted BUILD and an operator-configured connection
+to an existing business's HTTP JSON source. CONNECT is the product wording for
+this narrow MIGRATE capability, not a second Business model or a bulk migration
+system. Opening a configured source does not open arbitrary remote URLs, public
+access, independent demand, or wallet migration. The server binds each source to
+one invited Human Principal, retains external provenance, and creates the same
+Business/control/workspace/pending Treasury records used by BUILD. Existing
+external operations, customer information, wallets and historical payments are
+not imported or represented as Inomasa-originated economic facts.
+
+AI assists drafting and requires human acceptance through existing Business
+creation. A model response cannot grant authority, move funds, execute code or
+create Capital. No configured provider, rejected output and an unavailable
+provider must remain distinct from successful AI generation. Gemini's documented
+HTTP API is a replaceable initial adapter, configured only when the operator has
+authorized access. Model selection is explicit; there is no paid subscription,
+SDK dependency or automatic provider fallback. Alternatives were manual template
+creation (retained) and a new agent framework (unnecessary for a bounded draft).
+Costs and quotas remain those of the configured provider; request/output limits
+and no automatic retries bound individual calls. Removing this adapter leaves
+the existing creation and economic paths intact.
+
+An existing Web2 JSON resource may be delivered after the canonical paid-service
+authorization. The connector adds source verification and delivery only; payment,
+settlement, USDC posting and Economic History retain their existing owners.
+The source and observed result remain external facts, not chain-verified facts.
+The alternative, replacing the external business application or deploying a new
+payment protocol, is unnecessary. The connector adds no hosted service or package;
+its fixed read-only source configuration can be replaced without changing the
+Business identity or financial model. A change to a bound source requires an
+explicit connection change, never silent retargeting of an existing paid offer.
+
+Proof must distinguish local tests, controlled external HTTP execution, live AI
+generation, and actual Arc Testnet money movement. Gateway receipts remain
+provider-reported batched-payment evidence; individual Arc transaction links must
+come from direct settlement or ERC-8183 chain evidence. A connected source or a
+generated draft alone does not prove the economic thesis. Capital keeps its
+accepted controlled provider-driven scope and is not a prerequisite for the first
+BUILD/CONNECT commercial loop.
+
+Vercel remains paused/disconnected. No deployment, Vercel configuration, new
+database provider, new contract, mainnet transaction or public exposure is part of
+this continuation. The existing Neon configuration can be used from localhost;
+isolated databases remain mandatory for destructive reconstruction tests.

@@ -5,8 +5,8 @@ import './globals.css';
 import './work1.css';
 
 export const metadata: Metadata = {
-  description: 'Inomasa application skeleton for authorized economic activity.',
-  title: 'Inomasa — Application Skeleton',
+  description: 'Inomasa controlled Alpha Business operating environment on Arc Testnet.',
+  title: 'Inomasa · Controlled Alpha',
 };
 
 export const viewport: Viewport = {

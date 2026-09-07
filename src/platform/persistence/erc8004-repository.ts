@@ -177,7 +177,8 @@ export class PostgresErc8004Repository {
         updated_at: new Date(),
       })
       .where('identity_id', '=', input.identityId)
-      .where('state', '=', 'REGISTER_AUTHORIZED')
+      .where('state', '=', 'OUTCOME_UNKNOWN')
+      .where('provider_state', '=', 'REGISTRATION_HANDOFF_STARTED')
       .executeTakeFirstOrThrow();
     if (result.numUpdatedRows !== 1n) throw new Error('ERC-8004 registration submission raced.');
   }
@@ -227,7 +228,8 @@ export class PostgresErc8004Repository {
         updated_at: new Date(),
       })
       .where('identity_id', '=', input.identityId)
-      .where('state', '=', 'IDENTITY_REGISTERED')
+      .where('state', '=', 'OUTCOME_UNKNOWN')
+      .where('provider_state', '=', 'METADATA_HANDOFF_STARTED')
       .executeTakeFirstOrThrow();
     if (result.numUpdatedRows !== 1n) throw new Error('ERC-8004 metadata submission raced.');
   }
@@ -266,6 +268,28 @@ export class PostgresErc8004Repository {
       .where('identity_id', '=', input.identityId)
       .where('state', 'in', ['REGISTER_SUBMITTED', 'METADATA_SUBMITTED', 'OUTCOME_UNKNOWN'])
       .executeTakeFirstOrThrow();
+  }
+
+  async recordHandoffStarted(input: {
+    readonly identityId: `aid_${string}`;
+    readonly leg: 'METADATA' | 'REGISTRATION';
+  }): Promise<void> {
+    const expectedState = input.leg === 'REGISTRATION' ? 'REGISTER_AUTHORIZED' : 'IDENTITY_REGISTERED';
+    const providerState = `${input.leg}_HANDOFF_STARTED`;
+    const database = this.#persistence.databaseForApplication.withSchema(applicationSchema);
+    const existing = await database
+      .selectFrom('erc8004_identity_operations')
+      .select(['provider_state', 'state'])
+      .where('identity_id', '=', input.identityId)
+      .executeTakeFirstOrThrow();
+    if (existing.state === 'OUTCOME_UNKNOWN' && existing.provider_state === providerState) return;
+    const result = await database
+      .updateTable('erc8004_identity_operations')
+      .set({ provider_state: providerState, state: 'OUTCOME_UNKNOWN', updated_at: new Date() })
+      .where('identity_id', '=', input.identityId)
+      .where('state', '=', expectedState)
+      .executeTakeFirstOrThrow();
+    if (result.numUpdatedRows !== 1n) throw new Error(`ERC-8004 ${input.leg.toLowerCase()} handoff is not admissible.`);
   }
 
   async ensureVerifiedEvidence(identityId: `aid_${string}`): Promise<void> {

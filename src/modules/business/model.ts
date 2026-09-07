@@ -1,4 +1,6 @@
 import type { InomasaEnvironment } from '../../shared/environment.ts';
+import type { CreationAssistance } from './creation-assistance.ts';
+import { assertControlledConnection, type ExternalBusinessConnection } from './external-connection.ts';
 
 import {
   getBusinessTemplateDefinition,
@@ -51,6 +53,8 @@ export interface BusinessGenesisEvent {
 }
 
 export interface BusinessGenesis {
+  readonly creationAssistance?: CreationAssistance;
+  readonly externalConnection?: ExternalBusinessConnection;
   readonly business: BusinessInstance;
   readonly businessPrincipal: {
     readonly actorClassification: ActorClassification;
@@ -64,6 +68,8 @@ export interface BusinessGenesis {
 }
 
 export interface BusinessGenesisCommand {
+  readonly creationAssistance?: CreationAssistance;
+  readonly externalConnection?: ExternalBusinessConnection;
   readonly commonControlGroupId?: string;
   readonly controller: HumanPrincipal;
   readonly displayName?: string;
@@ -122,7 +128,16 @@ export function createBusinessGenesis(
   const slug = normalizeBusinessSlug(command.slug ?? displayName);
   const summary = requireNonEmpty(command.summary ?? template.description, 'Business summary');
 
-  assertBusinessEntryRouteOpen(entryRoute);
+  if (entryRoute === 'MIGRATE' && command.externalConnection !== undefined) {
+    assertControlledConnection(command.externalConnection, command.controller);
+    const manifest = command.externalConnection.manifest;
+    if (displayName !== manifest.displayName || summary !== manifest.summary || template.templateId !== manifest.templateId) {
+      throw new Error('Connected Business context must match the observed external manifest.');
+    }
+  } else {
+    assertBusinessEntryRouteOpen(entryRoute);
+    if (command.externalConnection !== undefined) throw new Error('External origin cannot be labeled as BUILD.');
+  }
 
   if (command.controller.actorClassification === 'COMMON_CONTROL_TEST') {
     requireNonEmpty(command.commonControlGroupId ?? '', 'Common-control group ID');
@@ -147,6 +162,8 @@ export function createBusinessGenesis(
   };
 
   return {
+    ...(command.creationAssistance === undefined ? {} : { creationAssistance: command.creationAssistance }),
+    ...(command.externalConnection === undefined ? {} : { externalConnection: command.externalConnection }),
     business,
     businessPrincipal: {
       actorClassification: business.actorClassification,

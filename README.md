@@ -3,7 +3,7 @@
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
 The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
-Economic/System Kernel** plus accepted Work 1–4 Human Product Alpha realization.
+Economic/System Kernel** plus accepted Work 1–4 Human Product Alpha realization and merged Work 5 implementation (#48).
 The kernel includes four reusable BUILD templates, generic multi-user and
 multi-Business genesis, reusable Business and Agent systems, generated Business
 Sites, bounded Agent authority, ERC-8004 identity linkage, direct Arc USDC and x402
@@ -16,8 +16,8 @@ Business Workspace entry, and the accepted product shell. Work 2 adds operable
 Product/Service drafts, bounded Agents, Treasury provisioning, and controlled
 funding-state refresh in Business context. Work 3 adds human-confirmed canonical
 x402 purchases and ERC-8183 evaluated jobs, honest failure/unknown handling, and
-contextual Economic History without a second ledger. MIGRATE is modeled but
-remains user-facing locked. Work 4 adds controller-scoped provider decisions,
+contextual Economic History without a second ledger. The local continuation exposes CONNECT for operator-configured business sources
+using the existing MIGRATE model; unconfigured entry remains closed. Work 4 adds controller-scoped provider decisions,
 explicit offered-allocation acceptance, exact allocation/proof state, and bounded
 later-use visibility in the Capital and Business Workspace surfaces while keeping
 Capital separate from Revenue. Human-Operable Business Product Alpha as a whole is not
@@ -51,9 +51,12 @@ accepted-main run `33337675145`. Work 4 — Capital product interface — is acc
 through pull request `#46`, final implementation head
 `251e999d7353d2a64dcd7e7e7568a3dedac76f42`, merge
 `b7879be06d70b299c43ba6eef7c62483c1cf2a31`, final PR run `33353646282`, and
-accepted-main run `33353765607`. Work 5 has not started. The Human-Operable
+accepted-main run `33353765607`. Work 5 implementation is merged through #48
+(`ca1e9178abca916289ac11229163be11e2f2a951`). The local continuation preserves
+corrective head `175498bb1fa740cc88ba6cbfe9ab4620792197b9` and adds bounded AI
+BUILD and configured-source CONNECT under Post-H section 12. The Human-Operable
 Business Product Alpha therefore remains `NOT YET VERIFIED / REALIZATION IN
-PROGRESS`. No Production, mainnet, public anonymous access, live MIGRATE,
+PROGRESS`. No Production, mainnet, public anonymous access, arbitrary migration,
 unrestricted Agent authority, or public/Production Capital scope is implied.
 
 For takeover, current gate status, supported environments, external-provider inventory, and recovery steps, start with [`PROJECT_STATE.md`](PROJECT_STATE.md). Repository evidence—not a device, chat, or AI platform—is the continuity source.
@@ -92,22 +95,83 @@ On Android, keep repositories inside the Ubuntu filesystem rather than `/sdcard`
 ## Run locally
 
 ```bash
-npm run dev
+npm run local:check
+npm run dev:local
 ```
 
-Open `http://localhost:3000`. Without database/provider configuration the dashboard
+Open `http://127.0.0.1:3000` on the same device. The readiness checker only reads
+configuration presence, migration state and Arc connectivity. It does not migrate,
+seed or pay; `npm run local:check -- --offline` skips network inspection.
+Use the current Node 22/npm setup and your existing ignored `.env.local`.
+Keep credentials out of chat and Git. `LOCAL_DEVELOPMENT` supports creation/source
+testing; actual economic execution requires `PRIVATE_ARC_TESTNET` and its
+separate authorized database/provider configuration.
+
+Without database/provider configuration the dashboard
 fails closed and labels those integrations `NOT_CONFIGURED`. With a migrated and
 bootstrapped database, it displays the actual Business, Treasury, obligation,
 settlement, ledger, service, and Evidence state available in that explicitly
 selected environment. Published protected-Alpha Business Sites are served from
 Business data at `/business/<business-slug>`; they are not separate deployments.
 
-For a production-mode local run:
+The owner-selected proof uses the development command above, without Vercel.
+A production-mode local build remains available for engineering verification;
+private-testnet session cookies require the appropriate secure origin in that mode:
 
 ```bash
 npm run build
 npm start
 ```
+
+### Local BUILD / CONNECT continuation
+
+BUILD can request a bounded Gemini proposal using `GEMINI_API_KEY` and an explicit
+`INOMASA_AI_MODEL` available to the operator. The model proposes Business context,
+a first service and the role of Arc payments. It cannot create a wallet, grant
+Agent authority, spend money or create Capital. The accepted proposal is signed
+for the logged-in principal and retained in the existing Business genesis event
+when Business creation succeeds. The initial proposal and subsequent human edits
+are distinct; manual template creation remains an Alpha testing constraint, not
+the long-term AI-assisted BUILD concept.
+
+Drafts before acceptance live in the current page and expire after one hour.
+There is no background retry, fallback provider, durable draft recovery or usage
+billing in this slice. Requests are bounded to 3,000 input characters, 4,096 output
+tokens, a 25-second provider deadline, and one attempt per principal per minute in
+one running process. The limit is not a distributed quota or an account-wide
+spending cap. Missing configuration and failed/invalid provider responses are
+explicit failures, never simulated AI success.
+
+CONNECT at `/connect` reads `INOMASA_CONNECT_SOURCES` from server-only
+configuration. See `.env.example` for the complete descriptor. Each source has
+`sourceId`, `label`, `controllerPrincipalId`, `manifestUrl`, and `resourceUrl`.
+Configure it only for a Business the invited operator controls. The manifest is a
+JSON object with `version: 1`, `externalBusinessId`, `displayName`, `summary`, and
+one existing `templateId`. The resource returns the bounded JSON service output.
+HTTPS is required; `INOMASA_CONNECT_ALLOW_LOOPBACK=true` permits explicit local
+HTTP test sources. URLs cannot contain credentials, queries or fragments and
+redirects are rejected. Source ownership is operator-configured, not an automated
+legal ownership attestation. The local browser never receives the configuration.
+
+This slice connects one resource per source/Business and preserves external
+provenance. It creates the existing Business/control/workspace and pending Arc
+Treasury capability; it does not import customer records, existing wallets, or
+historical revenue. Existing Web2 and Web3 Businesses remain within the concept;
+universal connectors and wallet migration are outside this proof. An activated
+X402 offer uses the existing canonical payment and settlement path. Only after
+COMPLETE settlement may the server read and retain the resource output. A retry
+retains the original delivered output and does not post another payment. A failed
+source remains undelivered and can be explicitly retried without paying again.
+Changing a bound endpoint requires a future explicit connection-update operation;
+silent retargeting is rejected.
+
+Gemini uses its [documented generation interface](https://ai.google.dev/api/generate-content)
+and [structured output](https://ai.google.dev/gemini-api/docs/structured-output),
+with no additional package or hosted service. Arc uses the existing
+[testnet connection profile](https://docs.arc.io/arc/references/connect-to-arc)
+and Circle adapters. PostgreSQL/Neon retains its current role; no Supabase or
+Vercel integration is needed to prove this locally. New live AI generation and
+new Arc transaction evidence remain separate acceptance requirements.
 
 ## Verify
 
@@ -172,8 +236,9 @@ npm run business:create -- \
 The command creates the Business, control, reusable Business Package read model,
 protected Business Site data, and a pending logical Treasury binding in one database
 transaction. It does not provision a provider wallet, transfer USDC, or claim an
-independent actor. MIGRATE requests fail closed while that entry route remains
-`LOCKED / NOT YET OPEN`.
+independent actor. Unconfigured MIGRATE requests still fail closed. The scoped CONNECT route is
+described in the local continuation below; this CLI does not import external
+Business systems, wallets or past revenue.
 
 Prepare the versioned offer, common-control obligation, and idempotent settlement
 authorization:

@@ -4,6 +4,7 @@ import test from 'node:test';
 import {
   agentRegistry,
   buildErc8004RegistrationFile,
+  deriveProductErc8004Identity,
   encodeRegistrationDataUri,
   erc8004ReconciliationLeg,
 } from '../src/modules/agent/erc8004.ts';
@@ -34,6 +35,22 @@ test('generic Agent preserves Business relationship without collapsing identity 
     () => validateBusinessAgent({ ...agent, capabilities: ['purchase-service', 'purchase-service'] }),
     /unique/,
   );
+});
+
+test('generic product Agent identity is stable and remains scoped to Agent, Business, and controller', () => {
+  const input = {
+    agentPrincipalId: agent.agentPrincipalId,
+    businessId: agent.businessId,
+    controllerPrincipalId: 'usr_example' as const,
+  };
+  const identity = deriveProductErc8004Identity(input);
+  assert.deepEqual(deriveProductErc8004Identity(input), identity);
+  assert.match(identity.identityId, /^aid_product_/);
+  assert.notEqual(
+    deriveProductErc8004Identity({ ...input, agentPrincipalId: 'agt_other' }).identityId,
+    identity.identityId,
+  );
+  assert.notEqual(identity.registrationIdempotencyKey, identity.metadataIdempotencyKey);
 });
 
 test('ERC-8004 ambiguous outcomes reconcile the persisted transaction leg without resubmission', () => {

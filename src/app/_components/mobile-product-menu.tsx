@@ -26,19 +26,40 @@ export function MobileProductMenu({
   const [open, setOpen] = useState(false);
   const drawerId = useId();
   const closeButtonRef = useRef<HTMLButtonElement>(null);
+  const drawerRef = useRef<HTMLElement>(null);
   const triggerRef = useRef<HTMLButtonElement>(null);
 
   useEffect(() => {
     if (!open) return;
+    const previousOverflow = document.body.style.overflow;
+    document.body.style.overflow = 'hidden';
     closeButtonRef.current?.focus();
-    const closeOnEscape = (event: KeyboardEvent) => {
+    const containFocus = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setOpen(false);
-        triggerRef.current?.focus();
+        return;
+      }
+      if (event.key !== 'Tab') return;
+      const focusable = Array.from(drawerRef.current?.querySelectorAll<HTMLElement>(
+        'a[href], button:not([disabled]), input:not([disabled]), select:not([disabled]), textarea:not([disabled]), [tabindex]:not([tabindex="-1"])',
+      ) ?? []);
+      const first = focusable[0];
+      const last = focusable.at(-1);
+      if (first === undefined || last === undefined) return;
+      if (event.shiftKey && document.activeElement === first) {
+        event.preventDefault();
+        last.focus();
+      } else if (!event.shiftKey && document.activeElement === last) {
+        event.preventDefault();
+        first.focus();
       }
     };
-    window.addEventListener('keydown', closeOnEscape);
-    return () => window.removeEventListener('keydown', closeOnEscape);
+    window.addEventListener('keydown', containFocus);
+    return () => {
+      window.removeEventListener('keydown', containFocus);
+      document.body.style.overflow = previousOverflow;
+      triggerRef.current?.focus();
+    };
   }, [open]);
 
   return (
@@ -63,6 +84,7 @@ export function MobileProductMenu({
             className="mobile-menu-drawer"
             id={drawerId}
             onClick={(event) => event.stopPropagation()}
+            ref={drawerRef}
             role="dialog"
           >
             <div className="mobile-menu-drawer__heading">
@@ -70,7 +92,7 @@ export function MobileProductMenu({
                 <span className="mobile-menu-drawer__caption">Inomasa</span>
                 <strong>{context ?? 'Product navigation'}</strong>
               </div>
-              <button aria-label="Close menu" className="mobile-menu-close" onClick={() => { setOpen(false); triggerRef.current?.focus(); }} ref={closeButtonRef} type="button">×</button>
+              <button aria-label="Close menu" className="mobile-menu-close" onClick={() => setOpen(false)} ref={closeButtonRef} type="button">×</button>
             </div>
             <nav aria-label="Mobile product navigation" className="mobile-menu-links">
               {links.map((link) => (

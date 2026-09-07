@@ -23,6 +23,13 @@ function compactAddress(address: string | null): string {
   return address === null ? 'NOT BOUND' : `${address.slice(0, 8)}…${address.slice(-6)}`;
 }
 
+function packageStatusLabel(status: string): string {
+  if (status === 'READY' || status === 'AVAILABLE' || status === 'CHECKPOINT_C') {
+    return 'Structure included';
+  }
+  return status.replaceAll('_', ' ');
+}
+
 export async function generateMetadata({ params }: BusinessSitePageProps): Promise<Metadata> {
   await params;
   return { title: 'Protected Business Site · Inomasa' };
@@ -80,14 +87,14 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
         <div className="section-heading">
           <div>
             <p className="eyebrow">Products & services</p>
-            <h2>Available from this Business.</h2>
+            <h2>Offers from this Business.</h2>
           </div>
           <p>Offers are loaded from Business data. This page is not a separate deployment.</p>
         </div>
         <div className="business-site__offers">
           {site.offers.length === 0 ? (
             <article className="activity-empty">
-              <span>CATALOG READY</span>
+              <span>NO ACTIVE OFFER</span>
               <p>No active product or service has been published yet.</p>
             </article>
           ) : (
@@ -118,7 +125,7 @@ export default async function BusinessSitePage({ params }: BusinessSitePageProps
           {packageCapabilities.map(([label, status]) => (
             <article key={label}>
               <span>{label}</span>
-              <strong>{status.replaceAll('_', ' ')}</strong>
+              <strong>{packageStatusLabel(status)}</strong>
             </article>
           ))}
         </div>

@@ -15,7 +15,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 .landing-page { background: var(--w-bg); color: var(--w-text); overflow: hidden; }
 .landing-header, .landing-hero, .landing-economy, .landing-build, .landing-principles, .landing-footer, .auth-header, .auth-layout { margin-inline: auto; max-width: 1240px; width: calc(100% - 64px); }
 .landing-header, .auth-header { align-items: center; border-bottom: 1px solid var(--w-line); display: flex; justify-content: space-between; min-height: 78px; }
-.landing-page .brand, .auth-page .brand { color: var(--w-text); }
+.landing-page .brand, .auth-page .brand { color: var(--w-text); min-height: 44px; }
 .landing-page .mark span, .auth-page .mark span { background: var(--w-text); }
 .landing-page .mark span:nth-child(2), .auth-page .mark span:nth-child(2) { background: var(--w-lime); }
 .landing-page .mark span:nth-child(3), .auth-page .mark span:nth-child(3) { background: var(--w-strong); }
@@ -38,6 +38,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 .landing-status-card { padding: 22px; }
 .landing-status-card__topline { align-items: center; display: flex; font-size: .78rem; gap: 8px; margin-bottom: 17px; }
 .landing-page .status-dot, .product-content .status-dot, .auth-page .status-dot { background: #79b62a; box-shadow: none; }
+.landing-page .status-dot--muted, .product-content .status-dot--muted, .auth-page .status-dot--muted { background: #a4a99f; }
 .landing-status-row { align-items: center; border-top: 1px solid var(--w-line); display: flex; font-size: .76rem; justify-content: space-between; padding-block: 14px; }
 .landing-status-row span { color: var(--w-muted); }
 .landing-status-row strong { font-family: 'Courier New', monospace; font-size: .62rem; font-weight: 400; }
@@ -126,7 +127,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 .business-list-row__side { align-items: end; display: flex; flex-direction: column; gap: 13px; }
 .business-list-row__side > span { color: #7c8278; font-family: 'Courier New', monospace; font-size: .6rem; text-transform: uppercase; }
 .workspace-header--business { align-items: start; }
-.workspace-header--business .quiet-link { display: block; margin-bottom: 28px; }
+.workspace-header--business .quiet-link { align-items: center; display: inline-flex; margin-bottom: 28px; min-height: 44px; }
 .business-overview-card { align-items: start; display: grid; gap: 30px; grid-template-columns: 1fr 310px; margin-bottom: 22px; padding: 28px; }
 .business-facts { border-left: 1px solid var(--w-line); display: grid; padding-left: 25px; }
 .business-facts div { border-bottom: 1px solid var(--w-line); display: flex; justify-content: space-between; padding-block: 11px; }
@@ -253,7 +254,7 @@ body { background: var(--w-bg); color: var(--w-text); }
 body { overflow-x: hidden; }
 .product-frame { display: block; min-height: 100vh; }
 .product-topbar { align-items: center; background: rgba(247,247,244,.96); border-bottom: 1px solid var(--w-line); display: flex; gap: 30px; min-height: 72px; padding: 0 max(24px, calc((100vw - 1400px) / 2)); position: sticky; top: 0; z-index: 20; }
-.product-topbar .brand { color: var(--w-text); flex: 0 0 auto; }
+.product-topbar .brand { color: var(--w-text); flex: 0 0 auto; min-height: 44px; }
 .product-topbar .mark span { background: var(--w-text); }
 .product-topbar .mark span:nth-child(2) { background: var(--w-lime); }
 .product-topbar .mark span:nth-child(3) { background: var(--w-strong); }
@@ -263,7 +264,7 @@ body { overflow-x: hidden; }
 .product-global-nav a.is-active { font-weight: 600; }
 .product-global-nav a.is-locked { color: #92978e; }
 .product-global-nav a span { font-family: 'Courier New', monospace; font-size: .58rem; text-transform: uppercase; }
-.product-context-back { color: var(--w-muted); font-size: .82rem; min-height: 44px; padding: 12px 0; }
+.product-context-back { align-items: center; color: var(--w-muted); display: inline-flex; font-size: .82rem; min-height: 44px; padding: 12px 0; }
 .product-context-back:hover, .product-context-back:focus-visible { color: var(--w-text); text-decoration: underline; text-underline-offset: 4px; }
 .product-account { align-items: center; display: flex; flex: 0 0 auto; gap: 14px; margin-left: auto; }
 .product-account .signout-button { margin: 0; min-height: 44px; }
@@ -334,6 +335,21 @@ body { overflow-x: hidden; }
 .field select:focus { border-color: #86b53d; outline: 3px solid #dff4bd; }
 .button--quiet { background: transparent; border: 1px solid var(--w-strong); color: var(--w-text); cursor: pointer; flex: 0 0 auto; }
 .button:disabled { cursor: wait; opacity: .55; }
+.operational-row__actions { align-items: center; display: flex; flex-wrap: wrap; gap: 8px; }
+.agent-identity-detail { margin-top: 10px; }
+.agent-identity-detail summary { color: #4f7715; cursor: pointer; font-size: .78rem; font-weight: 500; }
+.agent-identity-detail code, .agent-identity-detail span { display: block; font-size: .7rem; margin-top: 7px; overflow-wrap: anywhere; }
+.commerce-offer details summary, .economic-proof summary, .capital-path__proof summary,
+.capital-path__workspace-details > summary, .economic-activity__workspace-details > summary,
+.economic-activity__proofs summary, .agent-identity-detail summary {
+  align-items: center;
+  display: flex;
+  min-height: 44px;
+}
+.commerce-offer details summary:focus-visible, .economic-proof summary:focus-visible,
+.capital-path__proof summary:focus-visible, .capital-path__workspace-details > summary:focus-visible,
+.economic-activity__workspace-details > summary:focus-visible, .economic-activity__proofs summary:focus-visible,
+.agent-identity-detail summary:focus-visible { outline: 3px solid #dff4bd; outline-offset: 2px; }
 .operation-message { border-radius: 5px; font-size: .78rem; line-height: 1.55; margin: 18px 0 0; padding: 12px; }
 .operation-message--success { background: var(--w-soft); border: 1px solid #c6e99c; color: #426b14; }
 .operation-message--error { background: #fff0ed; border: 1px solid #edc0b9; color: var(--w-danger); }
@@ -462,12 +478,13 @@ body { overflow-x: hidden; }
   .landing-header, .landing-hero, .landing-economy, .landing-build, .landing-principles, .landing-footer, .landing-paths, .auth-header, .auth-layout { width: calc(100% - 32px); }
   .landing-nav { gap: 8px; }
   .landing-nav > a { display: inline-flex; font-size: .74rem; }
-  .landing-nav > a:last-child { display: none; }
+  .landing-nav > .landing-nav-secondary { display: none; }
   .product-topbar { gap: 0; min-height: 64px; padding-inline: 16px; }
   .product-topbar .brand { font-size: .74rem; gap: 8px; }
+  .product-context-back { border-left: 1px solid var(--w-line); margin-left: 12px; padding-left: 12px; }
   .product-global-nav, .product-account, .product-context-nav { display: none; }
   .mobile-product-menu { display: block; margin-left: auto; }
-  .mobile-menu-trigger { align-items: center; background: transparent; border: 1px solid var(--w-strong); border-radius: 6px; color: var(--w-text); cursor: pointer; display: inline-flex; font: inherit; font-size: .8rem; gap: 8px; justify-content: center; min-height: 44px; min-width: 78px; padding: 0 12px; }
+  .mobile-menu-trigger { align-items: center; background: transparent; border: 1px solid var(--w-strong); border-radius: 6px; color: var(--w-text); cursor: pointer; display: inline-flex; font: inherit; font-size: 1rem; gap: 8px; justify-content: center; min-height: 44px; min-width: 84px; padding: 0 12px; }
   .mobile-menu-trigger:focus-visible, .mobile-menu-close:focus-visible, .mobile-menu-links a:focus-visible { outline: 3px solid #dff4bd; outline-offset: 2px; }
   .mobile-menu-icon { display: grid; gap: 3px; }
   .mobile-menu-icon i { background: currentColor; display: block; height: 1px; width: 15px; }
@@ -478,7 +495,7 @@ body { overflow-x: hidden; }
   .mobile-menu-drawer__heading strong { font-size: 1rem; font-weight: 500; }
   .mobile-menu-close { background: transparent; border: 0; color: var(--w-text); cursor: pointer; font-size: 1.7rem; line-height: 1; min-height: 44px; min-width: 44px; }
   .mobile-menu-links { display: grid; gap: 2px; padding-block: 15px; }
-  .mobile-menu-links a { align-items: center; border-radius: 6px; color: var(--w-text); display: flex; font-size: .95rem; justify-content: space-between; min-height: 48px; padding: 0 11px; }
+  .mobile-menu-links a { align-items: center; border-radius: 6px; color: var(--w-text); display: flex; font-size: 1rem; justify-content: space-between; min-height: 48px; padding: 0 11px; }
   .mobile-menu-links a:hover, .mobile-menu-links a:focus-visible { background: var(--w-bg); }
   .mobile-menu-links a.is-locked { color: #92978e; }
   .mobile-menu-links small { color: #858a81; font-family: 'Courier New', monospace; font-size: .66rem; text-transform: uppercase; }
@@ -500,7 +517,7 @@ body { overflow-x: hidden; }
   .live-economy-row__amount { font-size: .7rem; }
   .dashboard-signal-grid { grid-template-columns: repeat(2, minmax(0, 1fr)); margin-bottom: 39px; }
   .dashboard-signal-card > strong { font-size: 1.25rem; }
-  .landing-page .button, .product-content .button, .auth-page .button { min-height: 48px; padding-inline: 16px; }
+  .landing-page .button, .product-content .button, .auth-page .button { font-size: 1rem; min-height: 48px; padding-inline: 16px; }
   .landing-lede, .landing-section-heading > p, .live-economy-row__activity small, .live-economy-state p, .landing-template-card p, .landing-principle-list p, .workspace-header p:not(.eyebrow), .dashboard-intro p:last-child, .dashboard-signal-card > p, .business-summary-card p, .business-list-row p, .empty-workspace p, .panel-empty p, .treasury-state p, .panel-description, .form-submit-row p, .field small, .form-note, .state-card p, .dashboard-guidance__copy { font-size: .875rem; }
   .landing-page .eyebrow, .auth-page .eyebrow, .product-content .eyebrow { font-size: .75rem; }
   .landing-nav a { min-height: 44px; padding-block: 10px; }
@@ -510,9 +527,10 @@ body { overflow-x: hidden; }
   .operational-field-grid, .treasury-separation { grid-template-columns: 1fr; }
   .operational-row, .funding-actions { align-items: stretch; flex-direction: column; }
   .operational-row .button, .funding-actions .button { width: 100%; }
+  .operational-row__actions { align-items: stretch; flex-direction: column; width: 100%; }
   .operational-row p, .operational-empty, .operation-message, .funding-actions p, .operational-notice p { font-size: .875rem; }
-  .operational-row small, .treasury-separation span, .treasury-address > span, .funding-balance > span, .funding-balance small { font-size: .75rem; }
-  .operational-row__title span { font-size: .75rem; }
+  .operational-row small, .treasury-separation span, .treasury-address > span, .funding-balance > span, .funding-balance small { font-size: .875rem; }
+  .operational-row__title span { font-size: .875rem; }
   .treasury-address { grid-template-columns: 1fr; }
   .treasury-address > span { grid-column: auto; }
   .treasury-address .button { width: 100%; }
@@ -760,4 +778,29 @@ body { overflow-x: hidden; }
   .product-content .economic-history-list--workspace .economic-activity__headline > strong { white-space: normal; }
   .product-content .economic-history-list--workspace .economic-activity__context,
   .product-content .economic-history-list--workspace .economic-activity__proofs > div { grid-template-columns: 1fr; }
+  .landing-nav .header-login { align-items: center; display: inline-flex; font-size: .875rem; min-height: 44px; }
+  .product-topbar .brand, .mobile-menu-account strong, .mobile-menu-account small { font-size: .875rem; }
+  .mobile-menu-drawer__caption, .mobile-menu-links small,
+  .economic-request__summary small, .economic-request__facts span,
+  .economic-proof dt, .economic-proof dd,
+  .agent-identity-detail code, .agent-identity-detail span,
+  .capital-path__facts dt, .capital-path__proof dt,
+  .capital-path__amount > span, .capital-path__purpose > span,
+  .capital-path__no-use, .capital-path__proof span { font-size: .75rem; }
+  .live-economy-row__amount, .commerce-offer > p, .commerce-offer > small,
+  .economic-confirmation, .economic-request__summary p,
+  .economic-request__facts strong, .operation-unknown p,
+  .commerce-offer details, .job-lifecycle li, .agent-identity-detail summary,
+  .capital-summary span, .capital-summary p,
+  .capital-path__amount > p, .capital-path__purpose p,
+  .capital-path__facts dd, .capital-path__uses p,
+  .capital-path__proof > p, .capital-path__footer { font-size: .875rem; }
+  .live-economy-row__protocols > span { font-size: .75rem; }
+}
+
+.delivered-resource {
+  max-height: 24rem;
+  overflow: auto;
+  white-space: pre-wrap;
+  overflow-wrap: anywhere;
 }

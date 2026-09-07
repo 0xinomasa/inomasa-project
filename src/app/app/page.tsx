@@ -29,19 +29,36 @@ export default async function ProductDashboardPage() {
     ? undefined
     : await loadBusinessEconomicHistory(firstBusiness.slug, session.principalId);
   const attentionBusinesses = owned.state === 'CONNECTED'
-    ? owned.businesses.filter((business) => business.treasuryStatus !== 'READY' || business.siteStatus !== 'PUBLISHED')
+    ? owned.businesses.filter((business) => business.treasuryStatus !== 'ACTIVE' || business.siteStatus !== 'PUBLISHED')
     : [];
-  const nextAction = firstBusiness === undefined
+  const nextAction = owned.state === 'NOT_CONFIGURED'
     ? {
+      description: 'Business data needs the approved private Alpha PostgreSQL runtime before product operations can begin.',
+      href: null,
+      label: 'Private Alpha data is not connected',
+    }
+    : owned.state === 'UNAVAILABLE'
+      ? {
+        description: 'The authenticated product area is available, but Business data could not be loaded. No empty portfolio is inferred.',
+        href: null,
+        label: 'Business data is temporarily unavailable',
+      }
+      : firstBusiness === undefined
+        ? {
       description: 'Choose one of the four accepted templates and create a Business you control.',
       href: '/build',
       label: 'Build your first Business',
-    }
-    : {
-      description: 'Open its Workspace to review the current Business state and available context.',
-      href: '/app/businesses/' + firstBusiness.slug,
-      label: 'Continue ' + firstBusiness.displayName,
-    };
+        }
+        : {
+          description: 'Open its Workspace to review the current Business state and available context.',
+          href: '/app/businesses/' + firstBusiness.slug,
+          label: 'Continue ' + firstBusiness.displayName,
+        };
+  const workspaceStatus = owned.state === 'CONNECTED'
+    ? 'Workspace connected · Arc Testnet'
+    : owned.state === 'NOT_CONFIGURED'
+      ? 'Workspace data not configured'
+      : 'Workspace data unavailable';
 
   return (
     <ProductShell active="dashboard" session={session}>
@@ -52,7 +69,10 @@ export default async function ProductDashboardPage() {
             <h1>Good to see you, {session.displayName}.</h1>
             <p>Your Businesses, agents, money, and economic history will meet in one calm workspace.</p>
           </div>
-          <div className="kernel-chip"><span className="status-dot" /> Workspace connected · Arc Testnet</div>
+          <div className="kernel-chip">
+            <span className={owned.state === 'CONNECTED' ? 'status-dot' : 'status-dot status-dot--muted'} />
+            {workspaceStatus}
+          </div>
         </header>
 
         <section className="workspace-card dashboard-intro">
@@ -61,7 +81,9 @@ export default async function ProductDashboardPage() {
             <h2>{nextAction.label}</h2>
             <p>{nextAction.description}</p>
           </div>
-          <Link className="button button--primary" href={nextAction.href}>{firstBusiness === undefined ? 'Open BUILD' : 'Open Workspace'}</Link>
+          {nextAction.href === null ? null : (
+            <Link className="button button--primary" href={nextAction.href}>{firstBusiness === undefined ? 'Open BUILD' : 'Open Workspace'}</Link>
+          )}
         </section>
 
         <section aria-label="Portfolio signals" className="dashboard-signal-grid">
@@ -81,7 +103,7 @@ export default async function ProductDashboardPage() {
             <p>{firstBusinessHistory?.state === 'UNAVAILABLE' ? 'History is temporarily unavailable.' : 'Business outcomes, counted once per activity.'}</p>
           </article>
           <article className="dashboard-signal-card">
-            <span>Agent activity</span>
+            <span>Agent authority</span>
             <strong>Bounded</strong>
             <p>Agent actions remain scoped to their Business authority.</p>
           </article>
@@ -134,7 +156,7 @@ export default async function ProductDashboardPage() {
               <h2>Keep the next step clear.</h2>
             </div>
           </div>
-          <p className="dashboard-guidance__copy">My Businesses is your directory. Open a Business to enter its contextual Workspace; global BUILD, Capital, and MIGRATE paths stay outside that workspace.</p>
+          <p className="dashboard-guidance__copy">My Businesses is your directory. Open a Business to enter its contextual Workspace; global BUILD, Capital, and CONNECT paths stay outside that workspace.</p>
         </section>
       </main>
     </ProductShell>

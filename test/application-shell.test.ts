@@ -8,7 +8,7 @@ test('the application shell keeps the three entry paths distinct', () => {
     productPaths.map(({ label, status }) => ({ label, status })),
     [
       { label: 'BUILD', status: 'ALPHA' },
-      { label: 'MIGRATE', status: 'LOCKED' },
+      { label: 'CONNECT', status: 'ALPHA' },
       { label: 'CAPITAL', status: 'ALPHA' },
     ],
   );
