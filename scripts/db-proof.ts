@@ -10,6 +10,8 @@ import { runProductEconomicOperationPersistenceProof } from '../src/platform/per
 import { runCapitalProductPersistenceProof } from '../src/platform/persistence/capital-product-proof.ts';
 import { runLocalProductPersistenceProof } from '../src/platform/persistence/local-product-proof.ts';
 
+import { runBusinessWorkPersistenceProof } from '../src/platform/persistence/business-work-proof.ts';
+
 async function main(): Promise<void> {
   const config = readDatabaseConnectionConfig('runtime');
   const persistence = new PostgresPersistence(config);
@@ -70,6 +72,9 @@ async function main(): Promise<void> {
     console.log('local_paid_delivery_authorization_idempotency=PASS');
     console.log('local_external_evidence_no_financial_posting=PASS');
     console.log('local_product_fixture_cleanup=PASS');
+    await runBusinessWorkPersistenceProof(persistence);
+    console.log('business_work_replay_recovery_tenancy_review=PASS');
+    console.log('business_work_provider_failures_bounded_attempts_no_economics=PASS');
   } finally {
     await persistence.close();
   }

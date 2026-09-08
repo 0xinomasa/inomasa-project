@@ -52,6 +52,14 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   History/observability capability. Reference Economy proof composition is accepted
   for the controlled Checkpoint G scope. Integrated Verification is accepted for
   the controlled Checkpoint H scope; this is not Production/public Capital exposure.
+- The owner-selected continuation now follows Post-H section 13: align Alpha,
+  persist recoverable Business work, link its economic requirements, close
+  contextual History/Capital, then prove reuse and usability. CONNECT is a later
+  entry into the same system, not a prerequisite for the first operating Business.
+  The current research-work slice adds controller-triggered Arc observation,
+  attributed model analysis and human result review. It grants no spending or
+  Capital authority; preserve the existing economic kernel and phone evidence.
+  It is not the earlier numbered Work 2 and must not reset accepted Work 1–5.
 - The accepted controlled Alpha implementation remains the regression baseline:
   deterministic Business genesis, explicit common-control provenance, logical
   Treasury bindings, Circle Developer-Controlled EOA execution, direct Arc USDC

@@ -506,3 +506,128 @@ Vercel remains paused/disconnected. No deployment, Vercel configuration, new
 database provider, new contract, mainnet transaction or public exposure is part of
 this continuation. The existing Neon configuration can be used from localhost;
 isolated databases remain mandatory for destructive reconstruction tests.
+
+## 13. Owner-selected closed Alpha direction and code alignment — 2026-09-07
+
+This section records the owner's subsequent explicit direction. It supersedes
+section 12's sequencing of CONNECT as the immediate blocker, not the accepted
+financial kernel or the evidence of earlier work. The owner selected this order:
+
+1. Align Alpha design and retained/relaxed/open boundaries.
+2. Realize a Business work item from objective to reviewed output, including recovery.
+3. Connect its resource need to bounded authority, Arc payment and actual resource use.
+4. Reconstruct its economic context and provider-driven Capital/use loop.
+5. Prove reuse across additional Businesses, providers, failure states and screen sizes.
+
+CONNECT remains the second entry into the same Business system and follows this
+operational proof. Work continues here when code/data/tool access permits; the
+phone is required for its uncommitted state, locally held access, and actual
+Android acceptance. No transfer of Second Brain or phone state is implied.
+
+### 13.1 Retain, relax, and leave open
+
+Retain Business/control/Agent/Treasury separation, fail-closed tenancy, exact USDC,
+bounded authorization, ambiguous-effect reconciliation, one canonical financial
+posting, source-scoped Evidence, common-control labels, and provider-owned Capital
+judgment. Keep one modular application and the current PostgreSQL provider.
+
+Relax the old limitation of AI to genesis drafting: selected research work may
+use an intelligence provider after creation. Operator-invoked deterministic
+Agents remain valid for their earlier proof. A runtime label or Agent object is
+not proof of active reasoning. Alpha's small population and four templates are
+not architectural population/capability limits. UI composition may change with
+actual operating needs; no per-screen approval process is introduced.
+
+Still open: broader capability catalogue, cross-controller offer discovery/access,
+standing budgets for new work shapes, automatic provider fallback, general-purpose
+agent scheduling, external Agent execution, future custody profiles, independent
+outcome evaluation, and Capital instruments beyond CONTROLLED_TEST_ALLOCATION.
+Approval of the direction does not select all these designs or widen exposure.
+
+### 13.2 Mapping to the existing implementation
+
+| Existing location | Retained responsibility | Required delta and sequence |
+| --- | --- | --- |
+| `modules/business/model.ts`, `creation-assistance.ts`, `platform/ai/gemini.ts` | Business genesis, human-reviewed proposal, attributed generation | Preserve successful BUILD; add post-genesis work without creating Business again. |
+| `modules/agent/model.ts`, `business/operational-workspace.ts` | Agent identity, Business role, research capability | Bind work to an existing active research-capable Agent; do not equate model with Agent. Step 2. |
+| `platform/persistence/operational-workspace-repository.ts` | Controller-scoped Business/offer/Treasury | Reuse control lookup; work has its own persisted objective/progress. Current activated-offer lookup requires the buyer controller to also control the seller: cross-controller commerce remains a step-3 gap. |
+| `modules/authority/model.ts`, `platform/persistence/agent-authority-repository.ts` | Specific offer/counterparty/action/per-action/cumulative authorization | Step 3 derives economic requests from approved work requirements; never interpret an LLM plan as authority. |
+| `app/_commerce/application.ts`, `platform/persistence/product-economic-operation-repository.ts` | Canonical product request, obligation, external execution and reconciliation | Reuse their payment identities and unknown-outcome handling. Internal work is not an ERC-8183 job and must link, not impersonate it. Step 3. |
+| `modules/commerce/service-catalog.ts`, `platform/persistence/alpha-service-repository.ts` | Supported execution capabilities, settlement-gated delivery | Bind advertised deliverables to actual executors; a freely named offer does not create that capability. Step 3. |
+| `modules/economic-history/model.ts`, `platform/persistence/economic-history-repository.ts` | Contextual projection of source-owned economic facts | Add work/input/output links without a second ledger. No economic entry for merely generating research. Step 4. |
+| `modules/capital/model.ts`, `platform/persistence/capital-repository.ts` | Provider mandate, decision, acceptance, allocation and later-use | Extend material from the new work history; existing counts/volume alone do not demonstrate rich work/outcome evaluation. Step 4. |
+| `app/app/businesses/[businessSlug]/page.tsx`, `app/_components/` | Reusable authenticated Business Workspace | Add work state, actionable failures and human review inside the existing shell; technical detail stays progressive. Steps 2 and 5. |
+
+### 13.3 Selected first implementation: persisted research work
+
+One versioned capability observes public Arc Testnet data through the existing
+read-only Arc adapter, then asks an explicitly configured model to prepare an
+attributed analysis for the Business objective and acceptance criteria. The
+controller reviews the result. This is a useful bounded executor, not a claim
+that every service/template is now executable or that research generated Revenue.
+
+Work owns objective, input snapshot, Agent/context snapshot, step, revision,
+attempt history, output and review. The existing financial kernel owns money.
+No payment tool, arbitrary URL, shell execution, autonomous loop, or new economic
+authority is added by this slice. No onchain Agent registration is needed merely
+to draft research; economic/interoperability gates still apply when transacting.
+
+Use additive PostgreSQL work/attempt records within the existing Business module;
+no new domain or runtime dependency. Short database transactions serialize claims
+and persist results; no transaction remains open during a provider call. A lease
+and attempt token fence stale completion. A client supplies the observed revision
+so duplicate/replayed step requests cannot accidentally advance a later step.
+Each request performs at most one step. Expired execution is recorded as outcome
+unknown before an explicit retry, especially because a lost model response may
+still have consumed provider quota. Completed work never invokes the provider
+again. No claim of exactly-once external generation is made.
+
+Alternatives considered: process-local promises lose work when the phone stops;
+reusing an ERC-8183 job falsely imposes funded-work semantics on internal tasks;
+a separate workflow service adds infrastructure before this slice needs it.
+PostgreSQL storage costs grow with retained inputs/outputs/attempts; bound their
+sizes and calls. The implementation is reversible by disabling the new entry
+while preserving its records; do not erase prior evidence to roll back a feature.
+A future worker can use the same persisted contract after separate proof.
+
+Sources for implementation details: [PostgreSQL row locks](https://www.postgresql.org/docs/17/explicit-locking.html)
+and [Gemini structured output](https://ai.google.dev/gemini-api/docs/structured-output).
+Schema conformance does not prove content truth. The pinned Next.js route-handler
+guide was read locally; no Next.js upgrade is selected.
+
+### 13.4 Acceptance for the first work slice
+
+Require fresh Business reuse, current controller/Agent checks, immutable objective
+on request replay, persisted input reused after process replacement, stale-revision
+and stale-attempt rejection, explicit recovery after lost response, visible
+unconfigured/quota/invalid-output failure, and human result acceptance. Verify
+mobile and desktop states plus no financial writes. Synthetic providers prove
+these mechanics only; live AI/source use and owner Android acceptance remain
+separate evidence. Steps 3–5 are not complete because this slice passes.
+
+
+### 13.5 First work slice implementation and proof boundary
+
+The separate `codex/business-work-continuation` implements section 13.3 on top of
+PR #49 head `42aa51cf7554f5190cae24e377c547effbf51ebd`: migration 015, a Business
+work contract, PostgreSQL work/attempt repository, Gemini analyst adapter,
+authenticated work route and existing-Workspace controls. No new runtime package
+or economic execution path is introduced. The specific research capability is
+selected for the first experiment; it is not a final capability catalogue.
+
+Local verification on Node 22 passed 99 unit/contract tests, lint, types, build,
+secret-name boundary checks, the isolated PGlite persistence suite and twelve
+synthetic-provider browser checks, including actual app process restart and
+cross-controller denial. The explicit Agent-selector label, readable form colors,
+result spacing and hidden development indicator were checked in mobile and
+desktop screenshots. PROJECT_STATE records exact scope, remote CI status and
+remaining live acceptance; this record does not turn synthetic output into live
+Arc or AI proof. The phone's successful prior BUILD remains separate evidence.
+
+Step 3 must connect work requirements to real supported resources and existing
+bounded economic authorization, including correcting the current same-controller
+offer-discovery restriction. No new transfer is authorized by passing step 2.
+Step 4 enriches contextual History and provider-specific Capital material without
+new truth owners or universal scores. Step 5 proves another live provider,
+additional Businesses and broader usability. Shared provider quotas, automatic
+scheduling and outcome-quality evaluation remain open beyond this slice.
