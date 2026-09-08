@@ -59,6 +59,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   The current research-work slice adds controller-triggered Arc observation,
   attributed model analysis and human result review. It grants no spending or
   Capital authority; preserve the existing economic kernel and phone evidence.
+  Step 3 follows section 13.6: optional work resources, explicit seller sharing
+  within invited Alpha, human-confirmed canonical purchase and settlement-gated
+  input attachment. It reuses financial authority; do not infer Agent-generated
+  procurement, arbitrary service execution or Capital acceptance from this bridge.
   It is not the earlier numbered Work 2 and must not reset accepted Work 1–5.
 - The accepted controlled Alpha implementation remains the regression baseline:
   deterministic Business genesis, explicit common-control provenance, logical

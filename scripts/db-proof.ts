@@ -2,7 +2,8 @@ import {
   DatabaseConfigurationError,
   readDatabaseConnectionConfig,
 } from '../src/platform/persistence/config.ts';
-import { loadProductEconomicRequests } from '../src/app/_commerce/application.ts';
+import { runWorkResourceProof } from '../src/platform/persistence/work-resource-proof.ts';
+import { loadProductEconomicRequests, prepareProductEconomicOperation } from '../src/app/_commerce/application.ts';
 import { PostgresPersistence } from '../src/platform/persistence/database.ts';
 import { runEngineeringPersistenceProof } from '../src/platform/persistence/engineering-proof.ts';
 import { runOperationalWorkspacePersistenceProof } from '../src/platform/persistence/operational-workspace-proof.ts';
@@ -75,6 +76,8 @@ async function main(): Promise<void> {
     await runBusinessWorkPersistenceProof(persistence);
     console.log('business_work_replay_recovery_tenancy_review=PASS');
     console.log('business_work_provider_failures_bounded_attempts_no_economics=PASS');
+    await runWorkResourceProof(persistence,prepareProductEconomicOperation);
+    console.log('work_resource_sharing_atomic_confirmation_delivery_input_recovery=PASS');
   } finally {
     await persistence.close();
   }

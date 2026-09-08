@@ -1,3 +1,4 @@
+import { hasSameProductOrigin } from '@/platform/http/request-origin.ts';
 import { getProductSession } from '@/app/_auth/server.ts';
 import { executeProductEconomicAction } from '@/app/_commerce/application.ts';
 
@@ -18,6 +19,8 @@ export async function POST(request: Request, context: Context): Promise<Response
   if (session === null) {
     return Response.json({ error: 'Product authentication is required.' }, { status: 401 });
   }
+  if(!hasSameProductOrigin(request))return Response.json({error:'A same-origin request is required.'},{status:403});
+  if(session.environment!==process.env['INOMASA_ENV'])return Response.json({error:'Session environment does not match.'},{status:409});
   if (!process.env['INOMASA_ENV']?.trim() || !process.env['DATABASE_URL']?.trim()) {
     return Response.json({ error: 'Economic operation persistence is not configured.' }, { status: 503 });
   }

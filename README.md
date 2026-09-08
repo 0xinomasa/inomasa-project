@@ -389,6 +389,30 @@ codex --sandbox danger-full-access
 
 This disables Codex's internal sandbox. Use it only from this trusted repository after confirming the Git worktree, and never make it a global default. Read [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md) before use.
 
+## Work-linked resource continuation
+
+An optional paid Arc snapshot can now supply a saved research work item. Before
+its first observation, record a resource purpose and select an active instant offer.
+The seller can explicitly share that offer with invited Alpha Businesses; private
+workspaces remain isolated. Existing offers are unshared by default. This first
+executor supplies a network snapshot, even when a product offer has a custom name;
+it does not implement arbitrary services or establish independent market demand.
+
+Review the frozen exact price/provider/recipient and select a verified purchasing
+Agent to confirm. A research Agent does not automatically receive spending authority.
+The existing canonical purchase is persisted with its requirement. Continue that
+same purchase for Circle/Gateway preparation, settlement and delivery; ambiguous
+results stay on hold. Work uses the received resource only after matching payment,
+settlement, delivery and content-digest checks. A saved result remains available
+through restart or AI quota failure without another purchase. Human result review
+is still required. Gateway receipts are provider-scoped, not individual Arc hashes.
+
+Migration `016` is additive to `015`; inspect actual state before applying missing
+migrations. `db:verify` is destructive to its own synthetic fixtures and belongs on
+an isolated test database only. No additional provider, runtime package or hosted
+worker is required. See PROJECT_STATE and Post-H section 13.6 for proof status,
+remaining live acceptance and the next unfinished action.
+
 ## Git workflow
 
 The private GitHub repository on `main` is the engineering source of truth. B1 establishes the initial baseline directly; subsequent work should use focused branches and reviewed commits. See [`docs/engineering/git-workflow.md`](docs/engineering/git-workflow.md).

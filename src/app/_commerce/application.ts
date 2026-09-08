@@ -1,3 +1,4 @@
+import { PostgresWorkResourceRepository } from '../../platform/persistence/work-resource-repository.ts';
 import { createHash } from 'node:crypto';
 
 import { keccak256, toBytes } from 'viem';
@@ -45,6 +46,7 @@ import { productCommerceSelectionForOffer } from './catalog.ts';
 export type ProductEconomicAction = 'ADVANCE' | 'PREPARE';
 
 export interface ProductEconomicActionInput {
+  readonly workResource?: { readonly workId:string; readonly revision:number };
   readonly action: ProductEconomicAction;
   readonly agentPrincipalId?: string;
   readonly businessSlug: string;
@@ -109,19 +111,27 @@ async function requestSummary(
   return request;
 }
 
-async function prepareOperation(
+export async function prepareProductEconomicOperation(
   persistence: PostgresPersistence,
   input: ProductEconomicActionInput,
+  requirementsReader?: CircleGatewayX402Adapter['getRequirements'],
 ): Promise<ProductEconomicActionResult> {
   const kind = requestedKind(input.kind);
   const offerId = asOfferId(input.offerId);
   const requestRepository = new PostgresProductEconomicOperationRepository(persistence);
+  const resourceLink=await persistence.databaseForApplication.withSchema('inomasa_app').selectFrom('business_work_resources')
+    .select(['work_id','purchase_agent_id','state','reason']).where('request_id','=',input.requestId).executeTakeFirst();
+  if ((resourceLink !== undefined) !== (input.workResource !== undefined) ||
+    (resourceLink && (resourceLink.work_id !== input.workResource?.workId || kind !== 'X402_PURCHASE'))) {
+    throw new Error('The resource request requires its original work confirmation.');
+  }
+
   const existing = (await requestRepository.listRequests({
     controllerPrincipalId: input.controllerPrincipalId,
     slug: input.businessSlug,
   }))?.find(({ requestId }) => requestId === input.requestId);
   if (existing !== undefined) {
-    if (existing.kind !== kind || existing.offerId !== offerId) {
+    if (existing.kind !== kind || existing.offerId !== offerId || (kind === 'X402_PURCHASE' && existing.agentPrincipalId !== input.agentPrincipalId)) {
       throw new Error('Economic request replay changed the confirmed operation.');
     }
     return { message: 'This exact confirmation already exists; no duplicate obligation was created.', request: existing };
@@ -191,8 +201,8 @@ async function prepareOperation(
     ) {
       throw new Error('The selected Agent requires active bounded purchase-service capability and an active onchain identity.');
     }
-    const gateway = new CircleGatewayX402Adapter(readCircleDeveloperWalletConfig(), buyerAddress);
-    const requirements = await gateway.getRequirements({
+    const readRequirements = requirementsReader ?? ((value:Parameters<CircleGatewayX402Adapter['getRequirements']>[0])=>new CircleGatewayX402Adapter(readCircleDeveloperWalletConfig(), buyerAddress).getRequirements(value));
+    const requirements = await readRequirements({
       amountMicroUsdc: capability.offer.priceMicroUsdc,
       payToAddress: providerAddress,
     });
@@ -210,6 +220,7 @@ async function prepareOperation(
       buyer,
       controllerPrincipalId: input.controllerPrincipalId,
       erc8004IdentityId: agent.identityId as `aid_${string}`,
+      ...(resourceLink?{purpose:`Resource input for work ${resourceLink.work_id}; see persisted requirement for purpose.`} : {}),
       identity,
       offer: capability.offer,
       provider,
@@ -218,6 +229,11 @@ async function prepareOperation(
     const authorities = new PostgresAgentAuthorityRepository(persistence);
     const payments = new PostgresGatewayX402Repository(persistence);
     await persistence.transaction(async (transaction) => {
+      if(selection.createdByProduct){
+        await transaction.withSchema('inomasa_app').selectFrom('service_offers').select('offer_id').where('offer_id','=',offerId).forShare().executeTakeFirstOrThrow();
+        const available=(await workspaces.listActivatedProductOffersForBuyer({controllerPrincipalId:input.controllerPrincipalId,slug:input.businessSlug},transaction))?.find(o=>o.offerId===offerId);
+        if(!available||available.priceMicroUsdc!==capability.offer.priceMicroUsdc.toString()||available.termsVersion!==capability.offer.termsVersion||available.description!==capability.offer.description)throw new Error('The selected offer changed or is no longer available. No purchase was confirmed.');
+      }
       await authorities.ensureAgentAndGrant({
         agentBusinessId: buyer.businessId,
         agentCapabilities: agent.capabilities,
@@ -267,6 +283,9 @@ async function prepareOperation(
         serviceExecutionId: identity.serviceExecutionId,
         settlementId: identity.settlementId,
       });
+      if (input.workResource) await new PostgresWorkResourceRepository(persistence).confirmInTransaction(transaction,
+        {controllerPrincipalId:input.controllerPrincipalId,slug:input.businessSlug,environment:buyer.environment},
+        {...input.workResource,requestId:input.requestId,agentId:agentPrincipalId,offerId,amount:capability.offer.priceMicroUsdc.toString(),recipient:providerAddress});
       await authorities.consumeAuthorizationInTransaction(transaction, {
         authorizationId: identity.authorizationId,
         consumedAt: requestedAt,
@@ -836,7 +855,7 @@ export async function executeProductEconomicAction(
   };
   const persistence = new PostgresPersistence(config);
   try {
-    if (normalizedInput.action === 'PREPARE') return await prepareOperation(persistence, normalizedInput);
+    if (normalizedInput.action === 'PREPARE') return await prepareProductEconomicOperation(persistence, normalizedInput);
     const repository = new PostgresProductEconomicOperationRepository(persistence);
     const before = await requestSummary(repository, normalizedInput);
     const message = before.kind === 'X402_PURCHASE'

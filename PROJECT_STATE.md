@@ -15,8 +15,8 @@ This file is the concise repository-native entry point for a human or AI operato
 | Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-selected Business operations continuation builds on unmerged PR #49; Post-H section 13 now orders work, economic requirements, History/Capital and reuse. Integrated product acceptance remains open. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
 | Standing execution authorization | Continue the existing application locally under Post-H sections 12–13: preserve BUILD and add recoverable Business operations before work-linked economics, contextual History/Capital and reuse. CONNECT follows through the same operating system. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
-| Next implementation checkpoint | **Continue `codex/business-work-continuation` from PR #49 head `42aa51cf7554f5190cae24e377c547effbf51ebd`; preserve the separate phone branch and its uncommitted evidence.** Verify persisted research work, then implement work-linked economic requirements; CONNECT is not the immediate blocker. See the continuation evidence and exact next step below. |
-| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / PERSISTED BUSINESS WORK IMPLEMENTED IN UNMERGED CONTINUATION**. Isolated mechanics proof, phone-reported BUILD evidence, new live work evidence and whole-product acceptance remain distinct. |
+| Next implementation checkpoint | **Continue `codex/work-economic-requirements` from verified PR #50 head `d7c078c4b376d499ab1a13cdaa258edabdd9e80c`; preserve both earlier unmerged branches and the phone evidence.** Work/resource linkage is implemented; finish its browser and native PostgreSQL verification before closing step 3. See the continuation evidence and exact next step below. |
+| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / PERSISTED BUSINESS WORK AND RESOURCE LINK IMPLEMENTED IN UNMERGED CONTINUATIONS**. Isolated mechanics proof, phone-reported BUILD evidence, new live work evidence and whole-product acceptance remain distinct. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
 | Work 1 product acceptance evidence | Owner-observed invited login, four-template BUILD entry, Business creation/persistence, My Businesses/Workspace entry, and two-way second-user tenant isolation. The corrected protected Preview was deployment `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9` from exact Work 1 head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; deferred non-blocking UX findings are retained in the Post-H Product Realization record. |
@@ -103,6 +103,60 @@ migration was part of that PR #49 continuation. The later work slice below adds 
 | Newly observed application correction | Next's local request URL used `localhost` while the browser sent `127.0.0.1`. The new endpoints now compare Origin with the actual Host plus request protocol; cross-site, missing, different-port/protocol and malformed hosts still fail closed. Temporary diagnostics were removed. |
 | Live integration limits | No Gemini key/model entitlement, owner Neon connection or Circle execution credentials are available in this workspace. No live AI generation or new Arc payment was executed. A connected loopback source and synthetic settled database row cannot be presented as that evidence. |
 | Continuity | This existing state file, README, AGENTS and Post-H section 12 carry the bounded continuation. The optional Second Brain path was unavailable here; no alternate state authority was created. |
+
+## Work-linked economic requirements continuation — 2026-09-08
+
+The owner explicitly authorized step 3 after the first work slice. The clean
+source was PR #50 head `d7c078c4b376d499ab1a13cdaa258edabdd9e80c`, independently
+rechecked open/unmerged on GitHub. Work is on `codex/work-economic-requirements`;
+PR #49, PR #50, main and the phone checkout are preserved. Post-H section 13.6
+records the selected bridge and its limits before implementation.
+
+Migration 016 adds default-private offer sharing, one optional resource requirement
+per work, and an attributed saved resource input. A seller explicitly shares an
+active instant-resource offer with other invited Alpha Businesses in the same
+environment. Sharing never grants workspace access. An unconfirmed requirement
+can be declined; a confirmed purchase retains delivery even after sharing withdrawal.
+
+The requirement freezes purpose, offer/terms, price, recipient and canonical request
+identity. Human confirmation uses an active purchase Agent with verified economic
+identity and the existing bounded grant/obligation/payment preparation. Confirmation
+and the canonical request commit together. Changed terms, lost visibility and changed
+work reject the transaction. PREPARE replay checks the original purchasing Agent.
+The default runtime still uses Circle; a read-only requirements port enables isolated
+composition testing without keys or provider calls.
+
+Work cannot bypass a pending resource by reading a free replacement. Only matching
+COMPLETE payment/settlement and completed, digest-checked Arc delivery become its
+stored input. Analysis includes the resource/purpose/authority references in its
+input digest. The financial kernel remains the only poster of Revenue/Service Cost;
+attachment and analysis never pay or post again. One selected resource is an initial
+capability limit, not a general relationship cardinality. Agent-generated procurement,
+arbitrary resource executors, shared budgets and expanded Capital remain unimplemented.
+
+Observed so far: Node 22 `npm run verify` passed 99 tests, lint, typecheck, build and
+client-secret scanning (18 artifacts / 10 names). Isolated PGlite `db:verify` applied
+001–016 and passed all existing proofs plus actual canonical PREPARE composition
+with two controllers, opt-in/revocation, changed-price rollback, withdrawal during
+provider discovery, exact replay, wrong Agent rejection, pending/unknown/payment-only
+holds, corrupt delivery rejection, saved paid input analysis, and exactly one request,
+one delivery and two canonical postings. Provider identities/signatures/outcomes were
+explicitly synthetic. No real transfer, model call, wallet provisioning or old-data
+mutation occurred.
+
+Twelve browser checks passed on actual Next.js/Chromium with a fresh isolated
+PGlite database: existing BUILD/Agent entry, private offers, explicit cross-controller
+sharing, requirement/confirmation, pending-source holds, withdrawal after confirmation,
+application stop/restart, paid input reuse through an AI quota retry, owner review,
+390/1440-pixel layouts without horizontal overflow, private work isolation, and exactly
+one purchase with two canonical postings and one delivery. Screenshots were visually
+inspected. No uncaught page error was observed; expected conflict/quota responses
+remain visible. Circle capability discovery, signatures/settlement, Arc and Gemini
+responses were synthetic, not live provider proof. Browser helpers/certificates stayed
+outside the repository. A local TLS certificate-name mismatch and a truncated local
+browser binary were corrected in that test environment only; application TLS and
+Android configuration were not weakened. Native PostgreSQL CI remains pending at
+this checkpoint. Vercel remains paused and unlinked.
 
 ## Persisted Business work continuation — 2026-09-08
 
@@ -360,41 +414,25 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-Continue the owner-selected sequence in Post-H section 13 from
-`codex/business-work-continuation`, based on exact PR #49 head
-`42aa51cf7554f5190cae24e377c547effbf51ebd`. This is an unmerged continuation,
-not a replacement accepted baseline. Inspect current local/remote heads,
-uncommitted work, CI and recorded evidence before any state-changing command.
-Do not replace or reset the phone's `codex/local-arc-proof` checkout. Preserve
-its PROJECT_STATE observations and private configuration before integrating
-this separate continuation. Do not recreate Arc Data Lokal or resubmit its
-accepted Gemini BUILD merely because those local events are absent from GitHub.
+Resume the same step-3 work on `codex/work-economic-requirements`, based on verified
+PR #50 head `d7c078c4b376d499ab1a13cdaa258edabdd9e80c`. Inspect the current diff,
+branch/remote heads and verification artifacts before repeating any mutation.
+Implementation, isolated database proof and twelve browser checks are complete.
+Persist the reviewed continuation and obtain native PostgreSQL CI on its exact head. Do not advance to History/Capital implementation while this is incomplete.
 
-For phone verification, inspect actual migration state and retain the existing
-Node 22/npm setup. `local:check` is read-only; `dev:local` serves the selected
-loopback origin. Apply missing `015` through the normal authorized administrative
-connection only after verifying the selected database and existing migration
-state. Run mutation-based `db:verify` on an isolated test database only. Then
-exercise the saved research work with an existing active research-capable Agent
-and the owner's configured model. Verify restart/recovery, attributed source and
-output, explicit human review, and Android behavior. Current workspace synthetic
-proof cannot substitute for those live calls or owner acceptance.
+Do not reset or replace the phone's `codex/local-arc-proof` checkout, its
+PROJECT_STATE observations, private configuration, stash or Arc Data Lokal genesis.
+After integration is actually selected, inspect the phone's migration state and apply
+only missing 015/016 through the existing authorized administrative connection.
+Mutation-based `db:verify` requires an isolated database, never old proof data.
 
-Implementation can continue here on step 3 after the first work slice is
-verified: model a work's resource need, discovery/access to an actually executable
-offer across appropriately authorized controllers, bounded approval and the
-existing canonical economic request. Preserve independent work/payment/delivery
-states and exact request identities. No amount, recipient or new allocation is
-selected by this record. Do not submit money while previous effects or authority
-are uncertain. Actual economic execution still requires PRIVATE_ARC_TESTNET;
-LOCAL_DEVELOPMENT is not a bypass.
+Live economic acceptance still requires exact amount, recipient and authority,
+PRIVATE_ARC_TESTNET, current provider access, funded dedicated Business accounts
+and the existing economic Agent identity. Inspect uncertain provider/chain effects
+before retrying. Synthetic integration proof is not a live Arc payment or Android
+owner acceptance. No real amount or recipient is selected by this record.
 
-Step 4 connects source-owned work/input/output evidence to Economic History and
-provider-driven Capital, including later use. Step 5 proves another Business,
-provider substitution, failure recovery and mobile/desktop usability. A shared
-catalogue or another model adapter is not proven merely because an API key exists.
-CONNECT remains an alternative entry into the same system and is deferred until
-these operating/economic relationships are usable.
-
-No main merge, Vercel deployment, Git auto-deployment reconnection, wallet custody
-migration, new hosted provider or expanded financial authority is included.
+Following step 3, step 4 connects work/input/output evidence to contextual Economic
+History and provider-driven Capital; step 5 expands reuse, providers and usability.
+CONNECT remains a later entry into the same system. No main merge, Vercel deployment,
+Git auto-deployment reconnection, new hosted provider or expanded financial authority.

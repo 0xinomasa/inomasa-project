@@ -64,7 +64,7 @@ export function productCommerceSelectionForOffer(
     createdByProduct: true,
     displayName: offer.capabilityId.replaceAll('-', ' '),
     kind: offer.commerceProtocol === 'X402' ? 'X402_PURCHASE' : 'ERC8183_JOB',
-    providerDisplayName: `${offer.providerDisplayName} · your controlled test provider`,
+    providerDisplayName: `${offer.providerDisplayName} · controlled Alpha provider`,
     transactionShape: offer.commerceProtocol === 'X402'
       ? 'x402 v2 exact · deterministic Alpha resource delivery'
       : 'ERC-8183 · funded and evaluated Alpha work',
