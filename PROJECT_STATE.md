@@ -173,8 +173,14 @@ binary and correcting its environment-only font path. Reopening a page after
 app restart avoided an HMR navigation race in the helper; no application recovery
 check was bypassed. These helper repairs changed no Android installation.
 
-Native PostgreSQL 17 and remote CI evidence remain pending until a run for this
-continuation is observed. A passed local profile alone does not satisfy that gate.
+Implementation commit `3da4a7c2fc79319b9068c0104fb7acf8b04ddc51` is stored in
+[draft PR #50](https://github.com/0xinomasa/inomasa-project/pull/50), based on PR
+#49's separate branch. [Engineering verification run `34187149689`](https://github.com/0xinomasa/inomasa-project/actions/runs/34187149689),
+job `101937676607`, completed successfully on that implementation: dependency
+installation, `npm run verify`, and `npm run db:verify` against native PostgreSQL
+17 all passed. This is separate from the PGlite/browser profile. PR #50 remains
+unmerged and does not change accepted main. The follow-up documentation commit
+records this observed result; subsequent PR checks remain visible in GitHub.
 No new live Gemini generation, Arc observation, payment or Capital allocation is
 claimed from this workspace. The owner-reported phone transcript separately
 records live Gemini BUILD and one `arc-data-lokal` Business with pending Treasury;
