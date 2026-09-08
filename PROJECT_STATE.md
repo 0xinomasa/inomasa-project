@@ -12,11 +12,11 @@ This file is the concise repository-native entry point for a human or AI operato
 | Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
 | Post-H Product Realization authority | [`Post-H Product Realization Record`](docs/engineering/post-h-product-realization.md): `NORMATIVE / ACTIVE` for Human-Operable Business Product Alpha realization after A–H; subordinate to Concept & Architecture and not a rewrite of REV2 |
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
-| Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-authorized local BUILD/CONNECT continuation builds on the subsequent corrective head; integrated product acceptance remains open. |
+| Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-selected Business operations continuation builds on unmerged PR #49; Post-H section 13 now orders work, economic requirements, History/Capital and reuse. Integrated product acceptance remains open. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
-| Standing execution authorization | Continue the existing application locally under [Post-H section 12](docs/engineering/post-h-product-realization.md#12-local-proof-continuation-authorized-by-the-owner): bounded AI-assisted BUILD, configured-source CONNECT, and actual Arc Testnet economic proof. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
-| Next implementation checkpoint | **Continue `codex/local-arc-proof`; do not restart Work 5 or the accepted A–H kernel.** Complete the remaining live Gemini + existing-business resource + canonical Arc payment proof from the owner's configured local environment, then obtain Android/owner acceptance. See the continuation evidence and exact next step below. |
-| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / LOCAL ENGINEERING CHECKS PASSED / LIVE INTEGRATION PROOF PENDING**. New live AI/Arc evidence and whole-product acceptance are not claimed. |
+| Standing execution authorization | Continue the existing application locally under Post-H sections 12–13: preserve BUILD and add recoverable Business operations before work-linked economics, contextual History/Capital and reuse. CONNECT follows through the same operating system. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
+| Next implementation checkpoint | **Continue `codex/business-work-continuation` from PR #49 head `42aa51cf7554f5190cae24e377c547effbf51ebd`; preserve the separate phone branch and its uncommitted evidence.** Verify persisted research work, then implement work-linked economic requirements; CONNECT is not the immediate blocker. See the continuation evidence and exact next step below. |
+| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / PERSISTED BUSINESS WORK IMPLEMENTED IN UNMERGED CONTINUATION**. Isolated mechanics proof, phone-reported BUILD evidence, new live work evidence and whole-product acceptance remain distinct. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
 | Work 1 product acceptance evidence | Owner-observed invited login, four-template BUILD entry, Business creation/persistence, My Businesses/Workspace entry, and two-way second-user tenant isolation. The corrected protected Preview was deployment `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9` from exact Work 1 head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; deferred non-blocking UX findings are retained in the Post-H Product Realization record. |
@@ -84,14 +84,14 @@ This file is the concise repository-native entry point for a human or AI operato
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
 
-## Local continuation verification and remaining proof
+## PR #49 local continuation verification (historical scope)
 
 The source tree was reconstructed from the exact Git objects at corrective head
 `175498bb1fa740cc88ba6cbfe9ab4620792197b9`; all source blob identities and the
 head tree were checked before changes. This preserves the three corrective
 commits after Work 5. No main merge, deployment, new database provider,
 production dependency, lockfile change, contract deployment, or new schema
-migration is part of this continuation.
+migration was part of that PR #49 continuation. The later work slice below adds migration `015`.
 
 | Evidence | Observed scope |
 | --- | --- |
@@ -103,6 +103,90 @@ migration is part of this continuation.
 | Newly observed application correction | Next's local request URL used `localhost` while the browser sent `127.0.0.1`. The new endpoints now compare Origin with the actual Host plus request protocol; cross-site, missing, different-port/protocol and malformed hosts still fail closed. Temporary diagnostics were removed. |
 | Live integration limits | No Gemini key/model entitlement, owner Neon connection or Circle execution credentials are available in this workspace. No live AI generation or new Arc payment was executed. A connected loopback source and synthetic settled database row cannot be presented as that evidence. |
 | Continuity | This existing state file, README, AGENTS and Post-H section 12 carry the bounded continuation. The optional Second Brain path was unavailable here; no alternate state authority was created. |
+
+## Persisted Business work continuation — 2026-09-08
+
+Post-H section 13 records the owner's new five-step sequence and the mapping
+from existing code before implementation. Step 1 alignment is complete for this
+slice; step 2 now has persisted research work in the existing Business module.
+It is a bounded capability and a basis for further discovery, not a finalized
+universal Agent architecture or an economic loop already completed.
+
+The separate branch `codex/business-work-continuation` starts from exact PR #49
+head `42aa51cf7554f5190cae24e377c547effbf51ebd`. GitHub's original branch was
+rechecked unchanged before continuation. The source initially had no changes;
+the phone checkout and its uncommitted state are not accessible here. Accepted
+main and PR #49 have not been replaced. Vercel was read-only checked: project
+`inomasa` remains paused (`live: false`) with no repository link and unchanged
+update time. No deployment is part of this work.
+
+### Implementation and boundaries
+
+Migration `015` adds Business work and execution attempts. Existing Business,
+Agent, controller and environment checks govern work creation and execution.
+Objectives and criteria are immutable for an exact request identity. Short
+transactions claim one step, save an attempt before the provider call, and fence
+completion by revision, attempt token and lease. Work survives a process stop;
+expired attempts become OUTCOME_UNKNOWN before a separate explicit retry.
+Completed observations are reused, completed work never calls the model again,
+and the controller must accept or reject generated output with a review note.
+
+The first capability observes public Arc Testnet data, then uses an explicit
+Gemini model through a provider-neutral port. It performs no financial actions.
+Each work allows at most three AI attempts; this is not a global account quota.
+Provider errors, unavailable access and invalid output are visible. Model output
+has input/output digests and attribution, not a claim of truth or payment.
+The Workspace uses its existing shell plus work/criteria/result/review controls;
+no screen-by-screen approval workflow or application redesign is introduced.
+
+No production package, lockfile, hosting, database provider, custody meaning or
+financial kernel is changed. Local fixtures and model/source responses used for
+mechanics proof are synthetic. Historical money and evidence are untouched.
+
+### Verification and remaining evidence
+
+Final local Node 22.22.0 `npm run verify` passed 99/99 tests, lint,
+typecheck, build and a scan of 23 browser artifacts for 10 private environment
+names. The isolated PGlite/socket profile applied migrations 001–015 and passed
+`db:proof`, including existing proofs. New work proof covers two separate
+controllers/Businesses using the same executor, replay conflicts, concurrent
+claim exclusion, persisted source reuse, stale completion rejection, expired
+source/model attempts, missing provider, quota/invalid-output failures, human
+review, retired-Agent denial, a three-attempt ceiling and no financial entries.
+PGlite is PostgreSQL-compatible, not a native PostgreSQL 17 result.
+
+The actual Next.js app and Chromium passed twelve isolated browser checks:
+existing Business/Agent entry, exact work replay, origin rejection, persisted
+source step, app-process restart and reopening, visible quota failure, explicit
+AI retry without source replay, 390×844 and 1440×900 no-overflow states, mandatory
+human review, cross-controller read/mutation rejection, and zero new financial
+entries/obligations/settlements or uncaught page errors. Source/model transports
+were injected outside the repository and external browser requests were blocked.
+This is synthetic application mechanics evidence, not live integration evidence.
+
+An explicit label association fixed the new Agent selector's accessible name.
+The new form now uses the existing light product colors and padded result cards.
+Screenshots were visually inspected after correction. The Next.js development
+indicator is disabled through its documented setting; compile/runtime errors
+remain visible. Browser restoration required re-extracting a truncated test
+binary and correcting its environment-only font path. Reopening a page after
+app restart avoided an HMR navigation race in the helper; no application recovery
+check was bypassed. These helper repairs changed no Android installation.
+
+Native PostgreSQL 17 and remote CI evidence remain pending until a run for this
+continuation is observed. A passed local profile alone does not satisfy that gate.
+No new live Gemini generation, Arc observation, payment or Capital allocation is
+claimed from this workspace. The owner-reported phone transcript separately
+records live Gemini BUILD and one `arc-data-lokal` Business with pending Treasury;
+that success must be inspected before further phone operations, never recreated
+as an automated test. This repository cannot claim direct verification of the
+phone's unsynced configuration or runtime.
+
+Cross-controller activated-offer discovery remains a concrete step-3 gap: the
+current product lookup requires one controller to own buyer and seller. Economic
+requirements, work-to-payment/delivery/use links, enriched History/Capital,
+another live model and final mobile/desktop owner acceptance remain open. The
+new internal work record is not an ERC-8183 funded job or a second ledger.
 
 ## Open mandatory gates
 
@@ -270,49 +354,41 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-As rechecked on 2026-09-07, PR #49 remains draft, open, mergeable and unmerged.
-Implementation head `b63aedafe1e3466d36c379098a243372e3978bd7` passed local and
-GitHub verification. This closeout only records that result; it does not repeat
-implementation or claim a new live payment. The Vercel project was read-only
-checked before and after the branch/PR write: `live: false`, unchanged update
-time and unchanged latest deployment. No Vercel mutation or deployment was executed.
+Continue the owner-selected sequence in Post-H section 13 from
+`codex/business-work-continuation`, based on exact PR #49 head
+`42aa51cf7554f5190cae24e377c547effbf51ebd`. This is an unmerged continuation,
+not a replacement accepted baseline. Inspect current local/remote heads,
+uncommitted work, CI and recorded evidence before any state-changing command.
+Do not replace or reset the phone's `codex/local-arc-proof` checkout. Preserve
+its PROJECT_STATE observations and private configuration before integrating
+this separate continuation. Do not recreate Arc Data Lokal or resubmit its
+accepted Gemini BUILD merely because those local events are absent from GitHub.
 
-Continue the same `codex/local-arc-proof` branch from the recorded corrective
-baseline, retaining all successful changes. Inspect its current HEAD, pending
-changes and CI before any command. Do not merge, replay historical payments,
-reseed accepted A–H fixtures, migrate wallet custody, or deploy to Vercel as an
-implicit part of this continuation.
+For phone verification, inspect actual migration state and retain the existing
+Node 22/npm setup. `local:check` is read-only; `dev:local` serves the selected
+loopback origin. Apply missing `015` through the normal authorized administrative
+connection only after verifying the selected database and existing migration
+state. Run mutation-based `db:verify` on an isolated test database only. Then
+exercise the saved research work with an existing active research-capable Agent
+and the owner's configured model. Verify restart/recovery, attributed source and
+output, explicit human review, and Android behavior. Current workspace synthetic
+proof cannot substitute for those live calls or owner acceptance.
 
-On the owner's Android + Termux + Ubuntu environment, inspect configuration
-presence without reading secrets into chat, use the existing Node 22/npm setup,
-and run `npm run local:check`. The checker reads migration state and Arc network
-state only; it never creates wallets, migrates tables, seeds fixtures or transfers
-funds. `--offline` skips the Arc read. Presence checks do not verify provider access.
-Use `npm run dev:local` and open `http://127.0.0.1:3000` on the same device. The
-selected local browser origin must match the application origin. The phone is a
-development client, not a hosting requirement.
+Implementation can continue here on step 3 after the first work slice is
+verified: model a work's resource need, discovery/access to an actually executable
+offer across appropriately authorized controllers, bounded approval and the
+existing canonical economic request. Preserve independent work/payment/delivery
+states and exact request identities. No amount, recipient or new allocation is
+selected by this record. Do not submit money while previous effects or authority
+are uncertain. Actual economic execution still requires PRIVATE_ARC_TESTNET;
+LOCAL_DEVELOPMENT is not a bypass.
 
-Use `PRIVATE_ARC_TESTNET` with the existing properly separated Neon configuration
-for real Arc economic execution. `LOCAL_DEVELOPMENT` is sufficient for local
-creation/source testing but is not a bypass for economic environment guards.
-Apply migrations only if a real missing version is identified, with the normal
-administrative connection; no new migration was added by this continuation.
-`db:verify` belongs on an isolated test database, never on the accepted proof data.
+Step 4 connects source-owned work/input/output evidence to Economic History and
+provider-driven Capital, including later use. Step 5 proves another Business,
+provider substitution, failure recovery and mobile/desktop usability. A shared
+catalogue or another model adapter is not proven merely because an API key exists.
+CONNECT remains an alternative entry into the same system and is deferred until
+these operating/economic relationships are usable.
 
-Complete one bounded new journey: a valid Gemini proposal accepted into BUILD,
-an operator-controlled existing Business connected from its JSON manifest,
-its explicitly activated X402 offer, confirmed payment through the existing
-Circle/Gateway path, external resource delivery, and consistent Economic History.
-The source remains external; AI cannot grant spending authority. Bind evidence to
-source HEAD, principal/Business/request IDs, amount, provider receipt, output hash,
-obligation/settlement/execution, replay result and observed time. A Gateway receipt
-is provider-reported batched-payment evidence, not an individual Arc transaction
-hash. For a direct chain transaction in the proof, use the accepted direct USDC
-or ERC-8183 path and record the actual Arc receipt separately. Do not relabel a
-Gateway payment or invent a per-payment hash.
-
-If a required credential, model entitlement, funded wallet or operator-controlled
-source is missing, stop only that external step and report its specific blocker.
-Do not ask for secret values in chat or replace unavailable providers with success
-fixtures. Re-run the existing A–H/product read-only regressions against the owner's
-accepted private testnet data, then obtain final Android/owner acceptance.
+No main merge, Vercel deployment, Git auto-deployment reconnection, wallet custody
+migration, new hosted provider or expanded financial authority is included.

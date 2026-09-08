@@ -173,6 +173,41 @@ and Circle adapters. PostgreSQL/Neon retains its current role; no Supabase or
 Vercel integration is needed to prove this locally. New live AI generation and
 new Arc transaction evidence remain separate acceptance requirements.
 
+### Persisted Business work continuation
+
+The next owner-selected sequence is recorded in Post-H section 13. Existing
+BUILD success is retained. A Business with an active research-capable Agent can
+save an objective and acceptance criteria in its Workspace, read public Arc
+Testnet data, request an attributed analysis, and explicitly accept or reject the
+result. The same executor serves other Businesses; model identity does not
+replace Agent identity. This is one supported research capability, not arbitrary
+autonomous Business execution.
+
+Migration `015` adds work and attempt records to the existing PostgreSQL schema.
+First verify it on an isolated database. On an existing device, inspect actual
+migration state before applying a missing migration through the normal authorized
+administrative connection; never run `db:verify` against historical proof data.
+No provider or dependency change is required. Use existing `GEMINI_API_KEY` and
+explicit `INOMASA_AI_MODEL` configuration; there is no automatic provider switch.
+
+Each action executes one persisted step. Closing the app does not remove saved
+work. A running step holds a 90-second lease; after interruption, refresh and
+check its state before explicitly retrying. A lost model response may still have
+consumed quota. A completed source observation is reused for analysis retries,
+and completed work does not call the model again. Creation retains its request
+identity in the current browser session to reconcile an uncertain response.
+Three model attempts per work, bounded inputs/outputs and a provider deadline
+limit this capability; they are not a shared account-wide quota or billing cap.
+Missing access, quota failure, invalid output and uncertain outcomes remain
+visible. Work requires human review before completion.
+
+Research results are not Revenue or payment evidence. This slice creates no
+wallet, settlement, delivery entitlement, accounting entry or Capital allocation.
+Linking work to authorized purchases, consumed service outputs, Economic History
+and provider Capital decisions remains the next implementation scope. The
+current seller-offer lookup still requires common controller ownership; it must
+be adapted and proven before claiming general cross-controller commerce.
+
 ## Verify
 
 Run the complete local quality gate:

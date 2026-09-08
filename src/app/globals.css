@@ -1918,3 +1918,14 @@ footer p {
     transition-duration: 0.01ms !important;
   }
 }
+
+/* Business work uses the existing workspace shell. */
+.work-form, .work-form label, .work-list { display: grid; gap: 0.75rem; }
+.work-form { margin: 1rem 0; }
+.work-form textarea, .work-form select { width: 100%; min-width: 0; padding: 0.75rem; border: 1px solid var(--w-strong); border-radius: 0.5rem; background: var(--w-surface); color: var(--w-text); font: inherit; }
+.work-form textarea::placeholder { color: var(--w-muted); opacity: 1; }
+.work-form textarea { min-height: 5rem; resize: vertical; }
+.work-item { display: block; overflow-wrap: anywhere; min-width: 0; padding: 1rem; }
+.work-item details { margin-top: 1rem; }
+.work-actions { display: flex; gap: 0.75rem; flex-wrap: wrap; }
+.business-work-panel { scroll-margin-top: 6rem; }

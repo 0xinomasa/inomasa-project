@@ -517,7 +517,45 @@ interface EvidenceFactTable {
   readonly verification: string;
 }
 
+interface BusinessWorkTable {
+  readonly work_id: string;
+  readonly business_id: string;
+  readonly agent_principal_id: string;
+  readonly created_by: string;
+  readonly environment: string;
+  readonly request_key: string;
+  readonly objective: string;
+  readonly acceptance_criteria: string;
+  readonly capability: Generated<string>;
+  readonly context: unknown;
+  readonly state: string;
+  readonly step: string;
+  readonly revision: number;
+  readonly active_attempt_id: string | null;
+  readonly lease_until: Timestamp | null;
+  readonly observation: unknown;
+  readonly generation: unknown;
+  readonly failure: string | null;
+  readonly reviewed_by: string | null;
+  readonly review_note: string | null;
+  readonly created_at: Generated<Date>;
+  readonly updated_at: Timestamp;
+}
+interface BusinessWorkAttemptTable {
+  readonly attempt_id: string;
+  readonly work_id: string;
+  readonly step: string;
+  readonly state: string;
+  readonly provider: string | null;
+  readonly model: string | null;
+  readonly failure: string | null;
+  readonly started_at: Generated<Date>;
+  readonly finished_at: Timestamp | null;
+}
+
 export interface PersistenceDatabase {
+  readonly business_work: BusinessWorkTable;
+  readonly business_work_attempts: BusinessWorkAttemptTable;
   readonly action_intents: ActionIntentTable;
   readonly agent_registrations: AgentRegistrationTable;
   readonly authority_policy_decisions: AuthorityPolicyDecisionTable;

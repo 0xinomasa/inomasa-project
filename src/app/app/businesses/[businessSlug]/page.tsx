@@ -6,6 +6,7 @@ import { requireProductSession } from '../../../_auth/server';
 import { loadBusinessAgents, loadBusinessSite } from '../../../_business/site';
 import { loadCapitalPaths } from '../../../_capital/data';
 import { loadBusinessEconomicHistory } from '../../../_economic-history/data';
+import { BusinessWorkPanel } from '../../../_components/business-work';
 import { CapitalPathList } from '../../../_components/capital-path-list';
 import { EconomicActivityList } from '../../../_components/economic-activity-list';
 import { EconomicOperations } from '../../../_components/economic-operations';
@@ -79,7 +80,7 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
 
         <nav aria-label="Workspace task flow" className="workspace-task-flow">
           <a href="#products"><span>01</span><strong>Set up</strong><small>Offers, Agents, Treasury</small></a>
-          <a href="#commerce"><span>02</span><strong>Operate</strong><small>Purchases and jobs</small></a>
+          <a href="#work"><span>02</span><strong>Work</strong><small>Objectives and results</small></a>
           <a href="#history"><span>03</span><strong>Review</strong><small>Outcomes and proof</small></a>
         </nav>
 
@@ -97,6 +98,8 @@ export default async function BusinessWorkspacePage({ params }: WorkspaceProps) 
             <p>No empty or successful operating state is inferred. Existing Business control and kernel facts remain unchanged.</p>
           </section>
         )}
+
+        <BusinessWorkPanel businessSlug={businessSlug} controllerPrincipalId={session.principalId} agents={agents} />
 
         <section className="workspace-panel commerce-preview" id="commerce">
           <div className="panel-heading"><div><p className="eyebrow">Commerce & Jobs</p><h2>Confirm and follow real testnet operations.</h2></div><span>{commerce.state === 'CONNECTED' ? 'Kernel connected' : commerce.state.replaceAll('_', ' ')}</span></div>
