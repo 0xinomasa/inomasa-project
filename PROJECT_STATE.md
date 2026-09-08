@@ -15,7 +15,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-selected Business operations continuation builds on unmerged PR #49; Post-H section 13 now orders work, economic requirements, History/Capital and reuse. Integrated product acceptance remains open. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
 | Standing execution authorization | Continue the existing application locally under Post-H sections 12–13: preserve BUILD and add recoverable Business operations before work-linked economics, contextual History/Capital and reuse. CONNECT follows through the same operating system. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
-| Next implementation checkpoint | **Continue `codex/work-economic-requirements` from verified PR #50 head `d7c078c4b376d499ab1a13cdaa258edabdd9e80c`; preserve both earlier unmerged branches and the phone evidence.** Work/resource linkage is implemented; finish its browser and native PostgreSQL verification before closing step 3. See the continuation evidence and exact next step below. |
+| Next implementation checkpoint | **Step 3 is implemented and independently verified in draft PR #51, `codex/work-economic-requirements`, stacked on unmerged #50 and #49.** Code head `60d2bfff5de622ae22687edb2a693a0e0c912e7a` passed native PostgreSQL CI `34243042485` and twelve isolated browser checks. Live work-linked Arc payment and Android owner acceptance remain open. Preserve phone evidence and inspect actual state before integration or any transaction. |
 | Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / PERSISTED BUSINESS WORK AND RESOURCE LINK IMPLEMENTED IN UNMERGED CONTINUATIONS**. Isolated mechanics proof, phone-reported BUILD evidence, new live work evidence and whole-product acceptance remain distinct. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
@@ -155,8 +155,18 @@ remain visible. Circle capability discovery, signatures/settlement, Arc and Gemi
 responses were synthetic, not live provider proof. Browser helpers/certificates stayed
 outside the repository. A local TLS certificate-name mismatch and a truncated local
 browser binary were corrected in that test environment only; application TLS and
-Android configuration were not weakened. Native PostgreSQL CI remains pending at
-this checkpoint. Vercel remains paused and unlinked.
+Android configuration were not weakened.
+
+The exact reviewed tree `2adb8352d0d78428ad3562eee0e662f0542c2c29` was persisted as
+code commit `60d2bfff5de622ae22687edb2a693a0e0c912e7a` in draft [PR #51](https://github.com/0xinomasa/inomasa-project/pull/51),
+base `codex/business-work-continuation`. Native PostgreSQL 17 and all engineering
+checks passed in [run `34243042485`](https://github.com/0xinomasa/inomasa-project/actions/runs/34243042485),
+job `102117840152`. These are observed checks on the code head, separate from the
+isolated browser provider simulation. PR #49/#50 remain open and unmerged; no main
+merge or device mutation occurred. Vercel was rechecked paused with unchanged
+configuration time and no deployment action. This section and Exact next step
+are the continuity closeout; the direction document for Second Brain separately
+retains rationale and limitations.
 
 ## Persisted Business work continuation — 2026-09-08
 
@@ -414,11 +424,22 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-Resume the same step-3 work on `codex/work-economic-requirements`, based on verified
-PR #50 head `d7c078c4b376d499ab1a13cdaa258edabdd9e80c`. Inspect the current diff,
-branch/remote heads and verification artifacts before repeating any mutation.
-Implementation, isolated database proof and twelve browser checks are complete.
-Persist the reviewed continuation and obtain native PostgreSQL CI on its exact head. Do not advance to History/Capital implementation while this is incomplete.
+Step-3 implementation is reviewable in draft PR #51 on
+`codex/work-economic-requirements`, based on PR #50 head
+`d7c078c4b376d499ab1a13cdaa258edabdd9e80c`. Code commit
+`60d2bfff5de622ae22687edb2a693a0e0c912e7a` passed isolated database/browser proof
+and native PostgreSQL CI run `34243042485`. Inspect the actual branch/remote head
+and any subsequent documentation commit; do not force the checkout back to this
+code checkpoint. Do not reimplement the bridge or repeat successful setup.
+
+The first unverified part of step 3 is its live, owner-controlled Arc journey on
+the actual device. First inspect phone changes and reconcile the stacked #49/#50/#51
+continuation without discarding local work. Validate the existing private configuration
+without printing it, and use the saved Business rather than recreating genesis.
+Prepare a concrete resource requirement with its purpose, exact offer/amount/recipient,
+and already authorized buying Agent before any new payment. Until those inputs and
+access are available, code review and read-only preparation may continue here.
+Do not silently advance to step 4 History/Capital implementation.
 
 Do not reset or replace the phone's `codex/local-arc-proof` checkout, its
 PROJECT_STATE observations, private configuration, stash or Arc Data Lokal genesis.
