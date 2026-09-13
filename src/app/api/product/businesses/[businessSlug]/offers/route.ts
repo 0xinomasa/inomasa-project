@@ -1,3 +1,4 @@
+import { hasSameProductOrigin } from '@/platform/http/request-origin.ts';
 import { getProductSession } from '@/app/_auth/server.ts';
 import { createProductOfferDraft } from '@/modules/business/operational-workspace.ts';
 import { readDatabaseConnectionConfig } from '@/platform/persistence/config.ts';
@@ -25,6 +26,7 @@ async function requestBody(request: Request): Promise<Record<string, unknown>> {
 export async function POST(request: Request, context: Context): Promise<Response> {
   const session = await getProductSession();
   if (session === null) return Response.json({ error: 'Product authentication is required.' }, { status: 401 });
+  if (!hasSameProductOrigin(request)) return Response.json({ error:'A same-origin request is required.' },{status:403});
   if (!process.env['INOMASA_ENV']?.trim() || !process.env['DATABASE_URL']?.trim()) {
     return Response.json({ error: 'Operational Workspace persistence is not configured.' }, { status: 503 });
   }
@@ -71,6 +73,7 @@ export async function POST(request: Request, context: Context): Promise<Response
 export async function PATCH(request: Request, context: Context): Promise<Response> {
   const session = await getProductSession();
   if (session === null) return Response.json({ error: 'Product authentication is required.' }, { status: 401 });
+  if (!hasSameProductOrigin(request)) return Response.json({ error:'A same-origin request is required.' },{status:403});
   if (!process.env['INOMASA_ENV']?.trim() || !process.env['DATABASE_URL']?.trim()) {
     return Response.json({ error: 'Operational Workspace persistence is not configured.' }, { status: 503 });
   }
@@ -81,13 +84,14 @@ export async function PATCH(request: Request, context: Context): Promise<Respons
     const offerId = field(body, 'offerId');
     const action = field(body, 'action');
     if (!offerId.startsWith('off_')) throw new Error('Offer ID is invalid.');
-    if (action !== 'ACTIVATE' && action !== 'RETIRE') throw new Error('Offer action is invalid.');
+    if (!['ACTIVATE','RETIRE','SHARE','WITHDRAW'].includes(action)) throw new Error('Offer action is invalid.');
     const config = readDatabaseConnectionConfig('runtime');
     if (config.environment !== session.environment) {
       return Response.json({ error: 'Session and database environments do not match.' }, { status: 409 });
     }
     persistence = new PostgresPersistence(config);
     const repository = new PostgresOperationalWorkspaceRepository(persistence);
+    if(action==='SHARE'||action==='WITHDRAW')return Response.json({offerId,result:await repository.shareOffer({controllerPrincipalId:session.principalId,slug:businessSlug,offerId,shared:action==='SHARE'})});
     const result = action === 'ACTIVATE'
       ? await repository.activateOffer({
           controllerPrincipalId: session.principalId,

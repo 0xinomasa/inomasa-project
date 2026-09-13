@@ -6,6 +6,7 @@ import { useState, useTransition, type FormEvent } from 'react';
 import { formatUsdcAmount, type UsdcMicroAmount } from '../../modules/commerce/money.ts';
 
 interface OfferView {
+  readonly alphaShared?: boolean;
   readonly capabilityId: string;
   readonly commerceProtocol: string;
   readonly createdByProduct: boolean;
@@ -108,7 +109,7 @@ export function OperationalWorkspace({
     }
   }
 
-  async function manageOffer(offerId: string, action: 'ACTIVATE' | 'RETIRE'): Promise<void> {
+  async function manageOffer(offerId: string, action: 'ACTIVATE' | 'RETIRE' | 'SHARE' | 'WITHDRAW'): Promise<void> {
     setProductPending(true);
     setProductState(null);
     try {
@@ -119,7 +120,7 @@ export function OperationalWorkspace({
       }));
       setProductState({
         kind: 'success',
-        message: action === 'ACTIVATE'
+        message: action === 'SHARE' ? 'Offer shared with invited Alpha Businesses. Private work remains private.' : action === 'WITHDRAW' ? 'Sharing withdrawn for new purchases. Existing purchases remain deliverable.' : action === 'ACTIVATE'
           ? result['result'] === 'ALREADY_ACTIVE'
             ? 'This offer is already active; no duplicate activation occurred.'
             : 'Offer activated. It is now available to another Business you control through the selected canonical commerce path.'
@@ -242,7 +243,7 @@ export function OperationalWorkspace({
           <div><p className="eyebrow">Products & Services</p><h2>Define what this Business offers.</h2></div>
           <span>{productRefreshing ? 'Updating…' : `${activeOffers.length} current`}</span>
         </div>
-        <p className="panel-description">Create a priced draft, then activate it explicitly. An active offer becomes available to another Business you control through the selected canonical testnet commerce path; creation alone never makes it purchasable.</p>
+        <p className="panel-description">Create a priced draft, then activate it explicitly. An active offer becomes available to another Business you control through the selected canonical testnet commerce path; creation alone never makes it purchasable. You can explicitly share an active instant resource with other invited Alpha Businesses.</p>
         <div className="operational-list">
           {productRefreshing ? <p aria-live="polite" className="operational-empty">Updating Products &amp; Services…</p> : offers.length === 0 ? <p className="operational-empty">No Product or Service draft exists yet.</p> : offers.map((offer) => (
             <div className="operational-row" key={offer.offerId}>
@@ -251,6 +252,7 @@ export function OperationalWorkspace({
                 <p>{offer.description}</p>
                 <small>{usdc(offer.priceMicroUsdc)} · {offer.commerceProtocol === 'X402' ? 'Instant resource' : offer.commerceProtocol === 'ERC8183' ? 'Evaluated work' : 'Direct settlement'}</small>
               </div>
+              {offer.createdByProduct && offer.status==='ACTIVE' && offer.commerceProtocol==='X402'?<button type="button" className="button button--secondary" disabled={productPending||productRefreshing} onClick={()=>void manageOffer(offer.offerId,offer.alphaShared?'WITHDRAW':'SHARE')}>{offer.alphaShared?'Withdraw Alpha sharing':'Share with Alpha Businesses'}</button>:null}
               {offer.createdByProduct && offer.status === 'DRAFT' ? (
                 <div className="operational-row__actions">
                   <button className="button button--primary" disabled={productPending || productRefreshing} onClick={() => void manageOffer(offer.offerId, 'ACTIVATE')} type="button">Activate offer</button>

@@ -14,6 +14,7 @@ export interface OperationalBusinessContext {
 }
 
 export interface OperationalOfferSummary {
+  readonly alphaShared?: boolean;
   readonly capabilityId: string;
   readonly commerceProtocol: string;
   readonly createdByProduct: boolean;
@@ -106,6 +107,7 @@ export class PostgresOperationalWorkspaceRepository {
       .withSchema(applicationSchema)
       .selectFrom('service_offers')
       .select([
+        'alpha_shared as alphaShared',
         'capability_id as capabilityId',
         'commerce_protocol as commerceProtocol',
         'created_by_principal_id as createdByPrincipalId',
@@ -263,6 +265,19 @@ export class PostgresOperationalWorkspaceRepository {
     return 'ACTIVATED';
   }
 
+  async shareOffer(input: {readonly controllerPrincipalId:`usr_${string}`;readonly slug:string;readonly offerId:string;readonly shared:boolean}) {
+    return this.#persistence.transaction(async tx=>{
+      const business=await this.getBusinessForController(input,tx);
+      if(!business||!['PRIVATE_ARC_TESTNET','AUTOMATED_TEST','LOCAL_DEVELOPMENT'].includes(business.environment))throw new Error('Business control in the closed Alpha is required.');
+      const db=tx.withSchema(applicationSchema);
+      const offer=await db.selectFrom('service_offers').selectAll().where('offer_id','=',input.offerId).forUpdate().executeTakeFirst();
+      if(!offer||offer.provider_business_id!==business.businessId||offer.created_by_principal_id!==input.controllerPrincipalId)throw new Error('Only the controlling principal can share this offer.');
+      if(offer.status!=='ACTIVE'||offer.commerce_protocol!=='X402')throw new Error('Only an active instant resource can be shared in this slice.');
+      await db.updateTable('service_offers').set({alpha_shared:input.shared,updated_at:new Date()}).where('offer_id','=',input.offerId).execute();
+      return input.shared?'SHARED':'WITHDRAWN';
+    });
+  }
+
   async listActivatedProductOffersForBuyer(input: {
     readonly controllerPrincipalId: `usr_${string}`;
     readonly slug: string;
@@ -279,6 +294,7 @@ export class PostgresOperationalWorkspaceRepository {
           .on('control.status', '=', 'ACTIVE'),
       )
       .select([
+        'offer.alpha_shared as alphaShared',
         'offer.capability_id as capabilityId',
         'offer.commerce_protocol as commerceProtocol',
         'offer.created_by_principal_id as createdByPrincipalId',
@@ -291,12 +307,16 @@ export class PostgresOperationalWorkspaceRepository {
         'offer.status',
         'offer.terms_version as termsVersion',
       ])
-      .where('offer.created_by_principal_id', '=', input.controllerPrincipalId)
       .where('offer.provider_business_id', '<>', buyer.businessId)
       .where('offer.status', '=', 'ACTIVE')
       .where('offer.commerce_protocol', 'in', ['X402', 'ERC8183'])
       .where('provider.status', '=', 'ACTIVE')
-      .where('control.controller_principal_id', '=', input.controllerPrincipalId)
+      .where('provider.environment', '=', buyer.environment)
+      .whereRef('control.controller_principal_id', '=', 'offer.created_by_principal_id')
+      .where(eb=>eb.or([
+        eb('control.controller_principal_id','=',input.controllerPrincipalId),
+        eb('offer.alpha_shared','=',true),
+      ]))
       .orderBy('offer.updated_at', 'desc')
       .execute();
     return rows.map(({ createdByPrincipalId, ...row }) => ({

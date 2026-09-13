@@ -145,6 +145,7 @@ function isoAfter(value: string, milliseconds: number, label: string): string {
 }
 
 export function createProductX402Plan(input: {
+  readonly purpose?: string;
   readonly agentPrincipalId: `agt_${string}`;
   readonly buyer: BusinessInstance;
   readonly controllerPrincipalId: `usr_${string}`;
@@ -192,7 +193,7 @@ export function createProductX402Plan(input: {
     grantId: grant.grantId,
     intentId: input.identity.intentId,
     offerId: input.offer.offerId,
-    purpose: 'Human-confirmed controlled x402 purchase from the Business Workspace.',
+    purpose: input.purpose ?? 'Human-confirmed controlled x402 purchase from the Business Workspace.',
     requestedAt: input.requestedAt,
     requesterPrincipalId: input.agentPrincipalId,
     representedBusinessId: input.buyer.businessId,

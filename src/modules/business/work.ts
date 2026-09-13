@@ -33,7 +33,40 @@ export interface WorkGeneration {
   readonly outputSha256: string;
   readonly analysis: WorkAnalysis;
 }
+export interface WorkResourceInput {
+  readonly executionAuthorizationId:string;
+  readonly requestId: string;
+  readonly obligationId: string;
+  readonly settlementId: string;
+  readonly executionId: string;
+  readonly providerBusinessId: string;
+  readonly purchaseAgentId: string;
+  readonly outputSha256: string;
+  readonly sourceReference: string;
+  readonly amountMicroUsdc: string;
+  readonly reason: string;
+  readonly provenance: string;
+}
+export interface WorkResourceTerms {
+  readonly offerId: string;
+  readonly providerBusinessId: string;
+  readonly providerDisplayName: string;
+  readonly description: string;
+  readonly capabilityId: string;
+  readonly amountMicroUsdc: string;
+  readonly termsVersion: number;
+  readonly recipient: string;
+}
+export interface WorkResourceRequirement {
+  readonly workId: string;
+  readonly requestId: string;
+  readonly reason: string;
+  readonly terms: WorkResourceTerms;
+  readonly state: 'PROPOSED' | 'APPROVED' | 'ATTACHED' | 'DECLINED';
+  readonly purchaseAgentId: string | null;
+}
 export interface BusinessWork {
+  readonly resourceInput?: WorkResourceInput | null;
   readonly workId: string;
   readonly requestKey: string;
   readonly businessId: `biz_${string}`;
@@ -54,6 +87,7 @@ export interface BusinessWork {
   readonly updatedAt: string;
 }
 export interface WorkAnalysisInput {
+  readonly resource?: WorkResourceInput;
   readonly objective: string;
   readonly acceptanceCriteria: string;
   readonly businessName: string;
@@ -106,7 +140,7 @@ export function validateWorkAnalysis(value: unknown): WorkAnalysis {
 }
 export function workAnalysisInput(work: BusinessWork): WorkAnalysisInput {
   if (work.observation === null) throw new WorkError('CONFLICT', 'Stored source data is required.');
-  return { objective: work.objective, acceptanceCriteria: work.acceptanceCriteria, businessName: work.context.businessName, observation: work.observation };
+  return { objective: work.objective, acceptanceCriteria: work.acceptanceCriteria, businessName: work.context.businessName, observation: work.observation, ...(work.resourceInput ? {resource:work.resourceInput} : {}) };
 }
 export interface WorkRepository {
   claim(scope: WorkScope, workId: string, revision: number, analyst: Pick<WorkAnalyst, 'provider' | 'model'> | null): Promise<{ readonly work: BusinessWork; readonly attemptId: string | null }>;

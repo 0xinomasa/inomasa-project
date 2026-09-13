@@ -1,3 +1,4 @@
+import { PostgresWorkResourceRepository } from './work-resource-repository.ts';
 import { randomUUID } from 'node:crypto';
 import { sql, type Selectable } from 'kysely';
 import { boundedText } from '../../modules/business/creation-assistance.ts';
@@ -10,7 +11,7 @@ import { PostgresOperationalWorkspaceRepository } from './operational-workspace-
 
 type Row = Selectable<PersistenceDatabase['business_work']>;
 function view(row: Row): BusinessWork {
-  return { workId: row.work_id, requestKey: row.request_key, businessId: row.business_id as `biz_${string}`, agentPrincipalId: row.agent_principal_id as `agt_${string}`,
+  return { resourceInput:(row.resource_input ?? null) as Exclude<BusinessWork['resourceInput'],undefined>, workId: row.work_id, requestKey: row.request_key, businessId: row.business_id as `biz_${string}`, agentPrincipalId: row.agent_principal_id as `agt_${string}`,
     objective: row.objective, acceptanceCriteria: row.acceptance_criteria, context: row.context as BusinessWork['context'],
     state: row.state as BusinessWork['state'], step: row.step as BusinessWork['step'], revision: row.revision,
     observation: row.observation as BusinessWork['observation'], generation: row.generation as BusinessWork['generation'],
@@ -66,7 +67,7 @@ export class PostgresBusinessWorkRepository implements WorkRepository {
       const inserted = await db.insertInto('business_work').values({work_id:workId,business_id:business.businessId,agent_principal_id:input.agentId,
         created_by:scope.controllerPrincipalId,environment:scope.environment,request_key:input.requestKey,objective,acceptance_criteria:criteria,
         context:JSON.stringify({businessName:business.displayName,agentName:agent.display_name,role:agent.role,softwareVersion:agent.software_version}),
-        state:'READY',step:'OBSERVE',revision:0,active_attempt_id:null,lease_until:null,observation:null,generation:null,failure:null,
+        resource_input:null,state:'READY',step:'OBSERVE',revision:0,active_attempt_id:null,lease_until:null,observation:null,generation:null,failure:null,
         reviewed_by:null,review_note:null,updated_at:await this.#now(tx)})
         .onConflict(c=>c.column('work_id').doNothing()).returning('work_id').executeTakeFirst();
       const row = await db.selectFrom('business_work').selectAll().where('work_id','=',workId).executeTakeFirstOrThrow();
@@ -113,6 +114,14 @@ export class PostgresBusinessWorkRepository implements WorkRepository {
           const blocked = await db.updateTable('business_work').set({state:'RETRYABLE',failure,revision:row.revision+1,updated_at:now})
             .where('work_id','=',workId).returningAll().executeTakeFirstOrThrow();
           return {work:view(blocked),attemptId:null};
+        }
+      }
+      if (row.step === 'OBSERVE') {
+        const attached=await new PostgresWorkResourceRepository(this.persistence).attachInTransaction(tx,workId);
+        if(attached){
+          const updated=await db.updateTable('business_work').set({state:'READY',step:'ANALYZE',observation:JSON.stringify(attached.observation),
+            resource_input:JSON.stringify(attached.resource),failure:null,revision:row.revision+1,updated_at:now}).where('work_id','=',workId).returningAll().executeTakeFirstOrThrow();
+          return {work:view(updated),attemptId:null};
         }
       }
       const attemptId = randomUUID();

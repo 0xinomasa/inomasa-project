@@ -631,3 +631,53 @@ Step 4 enriches contextual History and provider-specific Capital material withou
 new truth owners or universal scores. Step 5 proves another live provider,
 additional Businesses and broader usability. Shared provider quotas, automatic
 scheduling and outcome-quality evaluation remain open beyond this slice.
+
+### 13.6 Selected work-to-resource bridge — 2026-09-08
+
+The owner authorized the third step. Select one optional paid Arc snapshot input
+per research work item before its first observation. The controller records why
+that input is useful and selects an executable offer. This is an explicit resource
+requirement, not an AI-generated procurement decision or a claim of autonomous discovery.
+Free public observation remains available when no requirement is selected or it
+is declined. The paid path demonstrates attributed procurement and input use;
+it does not establish that a public snapshot has independent market demand.
+
+The seller may explicitly share an active product offer with invited Alpha
+Businesses in the same environment. Existing offers remain controller-only by
+default. Sharing exposes offer descriptors, not private workspace data, Agents,
+Treasury credentials or work. Withdrawal prevents new confirmations; obligations
+already confirmed retain reconciliation and delivery access. Common-control
+provenance remains unchanged, even when two invited accounts are different.
+
+A requirement freezes the offer, seller, amount, terms and recipient, plus a
+single canonical request identity. Explicit human confirmation selects an active
+purchase-capable Agent and reuses the existing verified identity/authority gates.
+Research capability alone never grants spending. Confirmation and the canonical
+obligation are recorded in one database transaction after rechecking work,
+offer visibility and terms. No external call runs while those rows are locked.
+The existing commerce executor owns payment, rail funding and reconciliation.
+Unknown results never authorize a replacement request or payment.
+
+Work accepts only a matching settled obligation and completed, digest-checked Arc
+snapshot delivery as input. The saved input retains request, obligation, settlement,
+delivery, counterparty and purchasing-Agent references. Analysis includes that
+context in its input digest; attachment is not a second Cost posting or proof of
+output quality. Completion still requires human review. Gateway receipts remain
+provider evidence, not individual Arc transfer hashes. Rich History/Capital views
+remain the following step, not implicitly completed by this bridge.
+
+Use additive tables/columns in the current Business/persistence modules and the
+existing commerce composition. No package, vendor, hosted worker or new payment
+protocol. Alternatives rejected: attaching any transaction after the fact loses
+prior purpose/authority; invoking another payment executor duplicates financial
+state; opening all seller data breaks tenancy. One optional resource per work is
+the bounded first implementation, not the eventual relationship cardinality.
+Costs are bounded persisted context and existing provider calls. Disable new
+entry points to roll back exposure while retaining obligations/evidence.
+
+Required proof: sharing opt-in/revocation/environment isolation, requirement
+replay and changed-term rejection, approval/obligation atomicity, no observation
+bypass while waiting, no resource before settlement/delivery, exact delivered
+input reused after interruption, no second posting/payment, and existing regression
+checks. Synthetic tests establish mechanics only; live payment and Android owner
+acceptance require separate evidence and explicit financial parameters.

@@ -2,6 +2,16 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
+Current realignment: **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT
+STARTED**. P1 and the Final Visual Design Package are the accepted product and
+experience baseline. The canonical `Inomasa_Product_Realignment_Map.md` governs
+stages and gates; exact document identities, this device's Second Brain locations,
+and corrections to older guidance are in the [source hierarchy](docs/engineering/source-hierarchy.md).
+Report missing sources on another device; do not assume `/mnt/second-brain/`
+exists there or guess source contents. P2 readiness planning and active-documentation
+alignment were owner-accepted on 2026-09-13. P3 remains NOT STARTED and requires
+separate authorization.
+
 The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
 Economic/System Kernel** plus accepted Work 1–4 Human Product Alpha realization and merged Work 5 implementation (#48).
 The kernel includes four reusable BUILD templates, generic multi-user and
@@ -21,8 +31,9 @@ using the existing MIGRATE model; unconfigured entry remains closed. Work 4 adds
 explicit offered-allocation acceptance, exact allocation/proof state, and bounded
 later-use visibility in the Capital and Business Workspace surfaces while keeping
 Capital separate from Revenue. Human-Operable Business Product Alpha as a whole is not
-yet verified; its normative realization contract is
-[`Post-H Product Realization`](docs/engineering/post-h-product-realization.md).
+yet verified. P1/roadmap govern current realization; the
+[`Post-H Product Realization`](docs/engineering/post-h-product-realization.md)
+record retains applicable implementation semantics and historical evidence.
 
 Signal Forge, Ops Pilot, and the fresh four-template Reference Economy remain
 common-control regression/proof fixtures rather than product-capacity or
@@ -32,7 +43,7 @@ or user custody. All money is Arc Testnet USDC; no Production/mainnet authority 
 implied.
 
 B0-B5 and the old B6/B7/B8 and R1-R5 sequences remain historical lineage. The
-active controlled-Alpha program is defined by
+retained controlled-Alpha kernel contract is defined by
 [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md).
 Checkpoints A–H are accepted on GitHub `main` as a **Verified Controlled Arc Testnet
 Economic/System Kernel**. Work 1 — Fresh human to Business Workspace — is accepted
@@ -63,15 +74,47 @@ For takeover, current gate status, supported environments, external-provider inv
 
 ## Authority
 
-[`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md)
-is the active product and system-architecture authority. The REV2 document above is
-the active Alpha implementation guide, while [`Post-H Product Realization`](docs/engineering/post-h-product-realization.md)
-is the normative Human-Operable Product Alpha realization authority after A–H.
-Accepted GitHub `main` remains mutable engineering truth. Inomasa Canonical Architecture v1.0 is
+Accepted P1 and the latest explicit roadmap decisions govern product/experience
+realignment. [`Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md)
+retains unaffected contracts; REV2 retains kernel semantics. Post-H's old
+sequence and experience choices are read through the explicit corrections in
+the source hierarchy, without rewriting the original documents.
+Accepted GitHub `main` remains mutable engineering truth for accepted code;
+branch implementation, design acceptance, runtime proof and owner usability
+acceptance are separate. Inomasa Canonical Architecture v1.0 is
 `SUPERSEDED / HISTORICAL`. See the complete
 [`source hierarchy`](docs/engineering/source-hierarchy.md).
 The lightweight [`engineering documentation index`](docs/engineering/README.md)
 separates active guidance, operational references, and historical evidence.
+
+The active roadmap proceeds through P3 access/Account/Personal Wallet, P4
+BUILD/readiness, P5 a complete operating economic cycle, P6 reuse/cross-controller
+proof and core acceptance, P7 CAPITAL returning to operations/History, P8 whole
+Alpha acceptance, and P9 conditional CONNECT. CAPITAL mechanisms are evaluated
+at P7; no permanent universal-score prohibition or new scoring authority is
+adopted. The owner's 2026-09-13 target for localhost Alpha is application entry
+with typed email only: no invitations, allowlist or entry OTP. The existing code
+still uses invitations. Typed email must not select a legacy controller principal,
+Business or wallet. Personal Wallet remains Circle User-Controlled Wallet with
+separate wallet authentication; its email-OTP route is not an application-entry
+requirement. Public deployment and P6 controller proof need their own scope.
+Established Account, wallet and Business relationships must survive session loss
+or device changes. One contextual authentication flow restores protected access,
+reusing valid sessions and the entered email. Before replacing legacy access,
+prove the owner's old-account return/binding path; retaining old access is not
+proof of safety or recovery. The authorized roadmap/documentation synchronization
+is complete and owner-accepted. A future P3 worktree must carry
+the latest reviewed documentation, which is absent from its selected base commit.
+See PROJECT_STATE for the P2
+closure/publication checkpoint, selected branch base, isolated P3 experiment and
+R01–R11 timing. “Join the Alpha” must match actual local entry, with honest wallet control
+and recovery explanation. Local Arc Litepaper availability is not a gate.
+
+P0 resolved the old allowance action as **NOT SUBMITTED**, with no pending
+transaction for that action. Preserve existing Work/proposal, migrations 015/016
+and device continuity. The operational reference sections below describe existing
+capabilities and procedures for separately authorized work; they do not reopen
+that financial plan or authorize commands in this documentation-only pass.
 
 ## Requirements
 
@@ -114,7 +157,7 @@ settlement, ledger, service, and Evidence state available in that explicitly
 selected environment. Published protected-Alpha Business Sites are served from
 Business data at `/business/<business-slug>`; they are not separate deployments.
 
-The owner-selected proof uses the development command above, without Vercel.
+The recorded local proof profile uses the development command above, without Vercel.
 A production-mode local build remains available for engineering verification;
 private-testnet session cookies require the appropriate secure origin in that mode:
 
@@ -175,8 +218,9 @@ new Arc transaction evidence remain separate acceptance requirements.
 
 ### Persisted Business work continuation
 
-The next owner-selected sequence is recorded in Post-H section 13. Existing
-BUILD success is retained. A Business with an active research-capable Agent can
+This implemented research slice is recorded in Post-H section 13; its old
+five-step sequence is historical. The canonical P0–P9 roadmap supplies the active
+sequence. Existing BUILD evidence is retained within its original scope. A Business with an active research-capable Agent can
 save an objective and acceptance criteria in its Workspace, read public Arc
 Testnet data, request an attributed analysis, and explicitly accept or reject the
 result. The same executor serves other Businesses; model identity does not
@@ -184,9 +228,10 @@ replace Agent identity. This is one supported research capability, not arbitrary
 autonomous Business execution.
 
 Migration `015` adds work and attempt records to the existing PostgreSQL schema.
-First verify it on an isolated database. On an existing device, inspect actual
-migration state before applying a missing migration through the normal authorized
-administrative connection; never run `db:verify` against historical proof data.
+P0 already records 015/016 applied on this device; do not repeat them. For a
+separately authorized future environment setup, verify against an isolated
+database and inspect actual migration state before applying only missing changes;
+never run `db:verify` against historical proof data.
 No provider or dependency change is required. Use existing `GEMINI_API_KEY` and
 explicit `INOMASA_AI_MODEL` configuration; there is no automatic provider switch.
 
@@ -203,14 +248,17 @@ visible. Work requires human review before completion.
 
 Research results are not Revenue or payment evidence. This slice creates no
 wallet, settlement, delivery entitlement, accounting entry or Capital allocation.
-Linking work to authorized purchases, consumed service outputs, Economic History
-and provider Capital decisions remains the next implementation scope. The
-current seller-offer lookup still requires common controller ownership; it must
-be adapted and proven before claiming general cross-controller commerce.
+The subsequent resource bridge already links an authorized purchase and delivered
+input to work and supports explicit seller sharing within the invited Alpha;
+see the work-linked resource section below. Complete Work/result-to-History
+integration remains a P5 gap; cross-controller core acceptance belongs to P6,
+and the CAPITAL loop belongs to P7. The earlier same-controller-only lookup
+limitation describes the pre-bridge implementation, not the current code.
 
 ## Verify
 
-Run the complete local quality gate:
+For separately authorized implementation verification, run the complete local
+quality gate. The current documentation-only P2 pass excludes these commands:
 
 ```bash
 npm run verify
@@ -388,6 +436,34 @@ codex --sandbox danger-full-access
 ```
 
 This disables Codex's internal sandbox. Use it only from this trusted repository after confirming the Git worktree, and never make it a global default. Read [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md) before use.
+
+## Work-linked resource continuation
+
+An optional paid Arc snapshot can now supply a saved research work item. Before
+its first observation, record a resource purpose and select an active instant offer.
+The seller can explicitly share that offer with invited Alpha Businesses; private
+workspaces remain isolated. Existing offers are unshared by default. This first
+executor supplies a network snapshot, even when a product offer has a custom name;
+it does not implement arbitrary services or establish independent market demand.
+
+When separately authorized, the product requires review of the frozen exact
+price/provider/recipient and selection of a verified purchasing Agent. A research
+Agent does not automatically receive spending authority. The canonical purchase
+is persisted with its requirement; subsequent preparation/settlement/delivery
+retains that request identity, and ambiguous results stay on hold. This describes
+the implemented mechanism, not permission to continue the old P0 proposal.
+Work uses the received resource only after matching payment,
+settlement, delivery and content-digest checks. A saved result remains available
+through restart or AI quota failure without another purchase. Human result review
+is still required. Gateway receipts are provider-scoped, not individual Arc hashes.
+
+Migration `016` is additive to `015`; both are already applied on the P0 device.
+Only separately authorized setup on another environment may need missing migrations.
+`db:verify` is destructive to its own synthetic fixtures and belongs on
+an isolated test database only. No additional provider, runtime package or hosted
+worker is required. Post-H section 13.6 retains the bridge's scoped proof record.
+See PROJECT_STATE for the P2 publication checkpoint and remaining work; the old
+purchase/funding journey is not the next action.
 
 ## Git workflow
 

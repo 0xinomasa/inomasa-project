@@ -9,21 +9,85 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 - Read `PROJECT_STATE.md` first for accepted engineering truth, active authority,
   open holds, takeover procedure, and the exact next execution checkpoint. Chat
   history is never required project state.
+- Read the owner-designated Project Instructions Full, active roadmap and accepted
+  P1 sources identified in `docs/engineering/source-hierarchy.md`. Their
+  `/mnt/second-brain/` locations are device-local. Report unavailable sources in
+  another environment; do not guess their contents or treat the packaged
+  instructions snapshot as a second active copy.
 - Read `docs/engineering/source-hierarchy.md` and
   `docs/engineering/architecture-invariants.md` before any structural, domain,
   authority, economic, wallet, settlement, evidence, agent, trust, risk, capital,
-  or AI-runtime decision. Read both active authority documents linked there before
-  changing product or system meaning.
+  or AI-runtime decision. Apply the explicit P1 corrections documented there;
+  read the applicable product and architecture sources before changing meaning.
 - Read `docs/engineering/environment-and-safety.md` before handling environment configuration or running Codex in Ubuntu Proot.
 
 ## Current phase boundary
+
+- **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT STARTED.**
+  `Inomasa_Product_Realignment_Map.md` is the canonical active roadmap. P1 and the
+  Final Visual Design Package are accepted product/experience direction, not
+  proof of implementation, runtime or owner usability acceptance. The owner
+  accepted and closed P2 on 2026-09-13 after readiness planning across R01–R11,
+  active-documentation alignment and the canonical roadmap update. The owner
+  subsequently authorized review, small documentation corrections, commit and
+  push of P2 documentation to `codex/work-economic-requirements`, followed by
+  remote verification after checking deployment triggers. Exclude older local
+  continuity deltas, generated artifacts, both stashes and private configuration
+  from that commit. No application code, local tests/build/server, database/
+  wallet operations, worktree creation, main merge or deployment is authorized.
+  P3 remains NOT STARTED and requires separate authorization.
+- Follow the roadmap's P3 access/Account/Personal Wallet → P4 BUILD/readiness →
+  P5 operating economic cycle → P6 reuse/cross-controller/core acceptance →
+  P7 CAPITAL/operations/History → P8 integrated Alpha closure → P9 conditional
+  CONNECT order. CAPITAL is before Alpha closure and after sufficient P6 proof.
+  Mechanism evaluation, including whether a score is appropriate, waits for P7;
+  no permanent universal-score prohibition or new authority is established now.
+- P0 resolved the old allowance action as **NOT SUBMITTED**, with no pending
+  transaction for that action. Preserve the saved research Agent, Work/proposal,
+  migrations 015/016, local continuity, `next-env.d.ts`, `.playwright-cli/` and both
+  stashes. Do not reopen the old allowance/purchase plan or repeat completed P0.
+- Owner decision (2026-09-13): localhost Alpha entry is typed email only, with
+  no invitation, email allowlist or application-entry OTP. Current invite code is
+  historical implementation, not the target requirement. Typed email proves no
+  identity or control; never map it to a legacy principal/Business/wallet.
+  Personal Wallet remains Circle User-Controlled Wallet with separate authentic
+  wallet access. An established Account and its wallet/Business bindings survive
+  logout, cookie loss and device change; session identity is not Account identity.
+  Reuse valid authentication and prefill email in one contextual recovery flow.
+  Before replacing old access, prove the owner's legacy return/binding path;
+  deferring bulk legacy migration does not waive that cutover gate. Retaining
+  legacy access is not proof that it is safe or recoverable. Align “Join the
+  Alpha” with this local entry and explain material
+  wallet control/recovery facts. UI is English. Public access and P6 independent
+  controller proof are separate profiles, not inferred from this local decision.
+- P2 covers R01–R11 dependencies, write-test data isolation, branch/PR strategy
+  and acceptance gates; detail the nearest P3 slice. Resolve only planning-critical
+  uncertainties now, bound first-P3 proofs, and leave later-stage design to its
+  stage. Do not require production infrastructure, a broad device matrix, all
+  future designs or old PR merges before local planning can proceed.
+- A future P3 worktree from the selected e176e80 base must explicitly carry the
+  latest reviewed six-document changes and substantive continuity: that commit
+  does not contain them. Verify its active instructions before implementation;
+  preserve this dirty checkout and both stashes. No worktree creation is authorized
+  in this pass. The authorized 2026-09-13 finalization relocated the remaining
+  baseline contents byte-for-byte into the single device-local `Product Baseline/`
+  directory and updated the canonical roadmap; Project Instructions, P1/PDF/
+  History/manifest contents remain untouched. See the source hierarchy for the
+  exact active path; do not use the former nested P2 package path.
+- Stop searching for Arc Litepaper; local availability is not a gate. Use arc.io
+  and linked official documentation when an actual Arc question requires it.
+  Reuse completed relevant checks; repeat only on change or an unmet gate. Routine
+  work within granted scope needs no repeated approval. Protect old data, tenant
+  boundaries, wallet control, real costs and irreversible effects; those still
+  require applicable authority and evidence.
 
 - B0-B5, the old B6/B7/B8 and R1-R5 sequences, and Human-Controlled Business Entry
   selection remain historical engineering lineage, not the active roadmap.
 - The active kernel is **Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2**;
   Checkpoints A–H are accepted as the **Verified Controlled Arc Testnet
-  Economic/System Kernel**. The normative post-H realization authority is
-  [`docs/engineering/post-h-product-realization.md`](docs/engineering/post-h-product-realization.md).
+  Economic/System Kernel**. The retained post-H realization record is
+  [`docs/engineering/post-h-product-realization.md`](docs/engineering/post-h-product-realization.md),
+  read with the P1/roadmap corrections in the active source hierarchy.
   Human-Operable Business Product Alpha remains **NOT YET VERIFIED**. Work 1 —
   Fresh human to Business Workspace — is accepted on `main` through pull request
   `#40`. Work 2 — Operational Workspace — is accepted through pull request `#42`:
@@ -52,13 +116,16 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   History/observability capability. Reference Economy proof composition is accepted
   for the controlled Checkpoint G scope. Integrated Verification is accepted for
   the controlled Checkpoint H scope; this is not Production/public Capital exposure.
-- The owner-selected continuation now follows Post-H section 13: align Alpha,
-  persist recoverable Business work, link its economic requirements, close
-  contextual History/Capital, then prove reuse and usability. CONNECT is a later
-  entry into the same system, not a prerequisite for the first operating Business.
-  The current research-work slice adds controller-triggered Arc observation,
+- Post-H section 13's former five-step sequence is historical and superseded by
+  the active P0–P9 roadmap. CONNECT remains a later entry into the same system,
+  not a prerequisite for the first operating Business.
+  The existing research-work slice adds controller-triggered Arc observation,
   attributed model analysis and human result review. It grants no spending or
   Capital authority; preserve the existing economic kernel and phone evidence.
+  Step 3 follows section 13.6: optional work resources, explicit seller sharing
+  within invited Alpha, human-confirmed canonical purchase and settlement-gated
+  input attachment. It reuses financial authority; do not infer Agent-generated
+  procurement, arbitrary service execution or Capital acceptance from this bridge.
   It is not the earlier numbered Work 2 and must not reset accepted Work 1–5.
 - The accepted controlled Alpha implementation remains the regression baseline:
   deterministic Business genesis, explicit common-control provenance, logical
@@ -110,7 +177,8 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   affected checkpoint.
 - Preserve current product code, fixtures, migrations, tests, and proof until a
   generic replacement passes regression evidence: replace by proof, not rewrite by
-  assumption.
+  assumption. Preserving correct semantics does not require retaining obsolete
+  UI, manual template entry or old code composition as the product definition.
 - Production/mainnet, public anonymous access, unrestricted Agent authority, arbitrary live
   migration, and Production/public Capital exposure remain unauthorized. After the
   Work 1 merge unintentionally triggered a Vercel Production deployment through
@@ -118,7 +186,7 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   repository connection was disconnected. Existing protected Preview artifacts
   remain available. Do not reconnect Git auto-deployment or resume Production
   without explicit owner authorization and the applicable exposure gates.
-- The next proof is localhost-first on Android/Termux/Ubuntu or an equivalent
+- Any separately authorized future runtime proof is localhost-first on Android/Termux/Ubuntu or an equivalent
   isolated execution profile. Do not deploy to Vercel, reconnect Git deployment,
   create another database provider, or rewrite the accepted economic kernel.
   Explain technical terms to the owner in Indonesian before the original term
@@ -129,22 +197,26 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Architecture authority
 
-- `docs/architecture/inomasa-concept-and-architecture-v1.0.md` is the active
-  product and system-architecture authority.
+- Accepted P1 and the latest explicit owner decisions in the canonical roadmap
+  govern product realignment. See `docs/engineering/source-hierarchy.md` for exact
+  source identities, locations and the portions of older guidance superseded.
+- `docs/architecture/inomasa-concept-and-architecture-v1.0.md` remains the
+  product/system-architecture contract where not explicitly corrected by P1.
 - `docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md`
   is the active controlled-Alpha implementation guide and remains subordinate to
   the Concept & Architecture contract.
-- `docs/engineering/post-h-product-realization.md` is the normative Human-Operable
-  Product Alpha realization authority after A–H. It does not rewrite REV2 or
-  accepted kernel semantics and does not authorize broader exposure.
-- Accepted GitHub `main` is mutable engineering truth. Repository guidance cannot
-  silently amend the active authority documents or falsify accepted evidence.
+- `docs/engineering/post-h-product-realization.md` retains applicable realization
+  semantics and historical evidence. Its old sequence and superseded experience
+  choices do not override P1 or the roadmap; REV2 kernel semantics remain intact.
+- Accepted GitHub `main` is mutable engineering truth for accepted implementation.
+  Product acceptance is distinct from code acceptance; recognizing owner-accepted
+  P1 does not require merging the old PR stack or validate branch/runtime state.
 - **Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`.** It and the
   Foundation, Domain, map, B0-B5, candidate, review, and adjudication artifacts are
   lineage/audit evidence only unless an active authority explicitly carries a
   meaning forward.
-- Never make a silent product/architecture change. If the two active authority
-  documents conflict substantively or leave a material product decision unresolved,
+- Never make a silent product/architecture change. If applicable sources still
+  conflict after explicit accepted corrections, or leave a material decision unresolved,
   stop the affected work, identify the conflict, and ask the user.
 - Keep intent, design, implementation, and proof distinct. Use `REQUIRED`,
   `SELECTED`, `PROTOTYPED`, `IMPLEMENTED`, and `VERIFIED` accurately.
@@ -157,8 +229,10 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   active technical decisions, or operational boundaries—update the appropriate
   existing repository state or documentation. Update `PROJECT_STATE.md` when
   takeover or current execution state materially changes.
-- Second Brain at `/mnt/second-brain/Project/inomasa-project/` is curated
-  continuity/context enrichment, not competing engineering authority. Use it for
+- Second Brain at `/mnt/second-brain/Project/inomasa-project/` is this device's
+  curated context location. Owner-designated P1/roadmap/instructions sources have
+  the roles documented in the source hierarchy; they are not accepted code proof.
+  For other continuity/context enrichment, use it for
   durable rationale, lessons, workflow decisions, historical context, or concise
   milestone/session summaries that do not belong as normative engineering truth.
 - If both engineering truth and continuity context materially change, update both
@@ -213,7 +287,16 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Completion gate
 
-Before reporting completion:
+For the owner-authorized P2 documentation publication, inspect the staged content,
+references, status/gates, deployment triggers and preservation of existing work.
+Run `git diff --cached --check` and `git diff --check`; commit only the reviewed
+documentation, push the working branch and verify the exact remote commit.
+P2 is already COMPLETE / OWNER ACCEPTED. Report remaining local changes and stop
+before P3. Local tests/build/server and database/provider mutations are excluded;
+automatic PR verification may run on the authorized push. Do not claim skipped
+checks passed. Later implementation verification requirements remain below.
+
+For implementation work, before reporting completion:
 
 1. Run `npm run lint`.
 2. Run `npm run typecheck`.

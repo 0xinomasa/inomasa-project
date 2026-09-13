@@ -220,6 +220,7 @@ interface TreasuryBindingTable {
 }
 
 interface ServiceOfferTable {
+  readonly alpha_shared: Generated<boolean>;
   readonly capability_id: string;
   readonly commerce_protocol: Generated<string>;
   readonly created_at: Generated<Date>;
@@ -518,6 +519,7 @@ interface EvidenceFactTable {
 }
 
 interface BusinessWorkTable {
+  readonly resource_input: unknown;
   readonly work_id: string;
   readonly business_id: string;
   readonly agent_principal_id: string;
@@ -553,7 +555,22 @@ interface BusinessWorkAttemptTable {
   readonly finished_at: Timestamp | null;
 }
 
+interface BusinessWorkResourceTable {
+  readonly canonical_request_id: string | null;
+  readonly work_id: string;
+  readonly request_id: string;
+  readonly offer_id: string;
+  readonly reason: string;
+  readonly terms: unknown;
+  readonly state: string;
+  readonly proposed_by: string;
+  readonly approved_by: string | null;
+  readonly purchase_agent_id: string | null;
+  readonly created_at: Generated<Date>;
+  readonly approved_at: Timestamp | null;
+}
 export interface PersistenceDatabase {
+  readonly business_work_resources: BusinessWorkResourceTable;
   readonly business_work: BusinessWorkTable;
   readonly business_work_attempts: BusinessWorkAttemptTable;
   readonly action_intents: ActionIntentTable;

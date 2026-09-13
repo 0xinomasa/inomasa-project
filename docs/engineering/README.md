@@ -2,23 +2,50 @@
 
 This index classifies repository engineering documents for takeover. The active
 authority order remains defined by [`source-hierarchy.md`](source-hierarchy.md);
-this page is navigation only.
+this page is navigation only. **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER
+ACCEPTED / P3–P9 NOT STARTED.** P3 is the next phase but requires explicit owner
+authorization; P2 closure does not start it or reopen the P0 allowance/purchase.
 
 ## Active
+
+- [P1 and canonical roadmap source identities](source-hierarchy.md#source-identity-and-device-local-locations)
+  — `Inomasa_Product_Realignment_Map.md`, accepted P1/Final Visual Design Package,
+  active Project Instructions Full and Main Audit. The catalog gives exact
+  device-local paths; report missing sources in other environments instead of
+  assuming the Android mount exists or reconstructing source contents.
+- [P2 closure and publication checkpoint](../../PROJECT_STATE.md#exact-next-step)
+  — local inspection/alignment record, the 2026-09-13 email-only local entry
+  decision, R01–R11 dependency/uncertainty timing, documentation publication and
+  P3 authorization hold.
 
 - [`source-hierarchy.md`](source-hierarchy.md) — authority, mutable-truth, mirror,
   conflict, and status rules.
 - [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](inomasa-alpha-implementation-and-testnet-realization-v1.0.md)
   — active controlled-Alpha implementation guide and A–H kernel contract.
 - [`Post-H Product Realization Record`](post-h-product-realization.md)
-  — normative Human-Operable Business Product Alpha realization authority after A–H.
+  — retained realization semantics and evidence; old sequencing and product-facing
+  choices are subject to the explicit P1/roadmap corrections in the source hierarchy.
 - [`architecture-invariants.md`](architecture-invariants.md) — concise engineering
   guardrails derived from the active Concept and Realization documents.
 
-The active product and system-architecture authority lives in
-[`docs/architecture/inomasa-concept-and-architecture-v1.0.md`](../architecture/inomasa-concept-and-architecture-v1.0.md).
-The Post-H record governs product realization only; it does not replace the
-architecture authority or REV2 kernel contracts.
+Accepted P1 governs product/experience realignment; the canonical roadmap governs
+stages and gates. [Concept & Architecture v1.0](../architecture/inomasa-concept-and-architecture-v1.0.md)
+retains unaffected contracts, and REV2 retains kernel semantics. P1/design
+acceptance is separate from code acceptance and runtime/owner usability proof.
+CAPITAL is P7 after P6 core acceptance and before P8 Alpha closure; mechanism
+assessment remains open at P7 without current score/authority expansion. CONNECT
+is P9 conditional expansion. This index does not create another roadmap.
+
+Local application entry is email-only under the latest owner decision; wallet
+control remains separately authenticated. Durable Account/wallet/Business recovery
+and a proven legacy return path before access cutover are part of the accepted
+P3 plan inherited from P2 closure, alongside data isolation, branch base and
+first-P3 criteria.
+The authorized canonical roadmap update incorporates these corrections directly,
+including R01 and §9.5–9.6. P2 is owner-accepted. Legacy access safety/
+recovery still needs proof before cutover; a future P3 worktree must carry the
+latest reviewed instructions missing from its selected base commit.
+Local Arc Litepaper is not a gate; no further search is required.
 
 ## Operational
 
