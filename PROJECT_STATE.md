@@ -4,19 +4,21 @@ This file is the concise repository-native entry point for a human or AI operato
 
 ## Current mutable state
 
-| Item | Accepted state |
+| Item | State and evidence scope |
 | --- | --- |
 | Source repository | Private `0xinomasa/inomasa-project` |
 | Accepted branch | `main` |
-| Active product/architecture authority | [`Inomasa Concept & Architecture v1.0`](docs/architecture/inomasa-concept-and-architecture-v1.0.md): `ACCEPTED / ACTIVE` |
+| Active product/architecture authority | Owner-accepted P1 Product & Experience Baseline and Final Visual Design Package, with the latest explicit roadmap corrections. Concept & Architecture v1.0 retains unaffected contracts. Exact sources and precedence: [source hierarchy](docs/engineering/source-hierarchy.md). |
 | Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
-| Post-H Product Realization authority | [`Post-H Product Realization Record`](docs/engineering/post-h-product-realization.md): `NORMATIVE / ACTIVE` for Human-Operable Business Product Alpha realization after A–H; subordinate to Concept & Architecture and not a rewrite of REV2 |
+| Post-H Product Realization authority | [Post-H Product Realization Record](docs/engineering/post-h-product-realization.md) retains applicable semantics and dated A–H/Work 1–5 evidence; its former sequence and superseded experience choices no longer direct current work. See the source hierarchy's explicit corrections. |
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
-| Active realization program | **A–H verified kernel + Work 1–4 accepted + Work 5 implementation merged through #48**. The owner-selected Business operations continuation builds on unmerged PR #49; Post-H section 13 now orders work, economic requirements, History/Capital and reuse. Integrated product acceptance remains open. |
+| Active realization program | **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT STARTED.** The canonical `Inomasa_Product_Realignment_Map.md` governs realignment. Existing A–H kernel and accepted/merged Work 1–5 remain the engineering baseline; draft #49–#51 are distinct from accepted main. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
-| Standing execution authorization | Continue the existing application locally under Post-H sections 12–13: preserve BUILD and add recoverable Business operations before work-linked economics, contextual History/Capital and reuse. CONNECT follows through the same operating system. No Vercel deployment, public access, mainnet, arbitrary migration, or expanded Capital/Agent authority. |
-| Next implementation checkpoint | **Step 3 is implemented and independently verified in draft PR #51, `codex/work-economic-requirements`, stacked on unmerged #50 and #49.** Code head `60d2bfff5de622ae22687edb2a693a0e0c912e7a` passed native PostgreSQL CI `34243042485` and twelve isolated browser checks. Live work-linked Arc payment and Android owner acceptance remain open. Preserve phone evidence and inspect actual state before integration or any transaction. |
-| Current execution status | **A–H KERNEL VERIFIED / WORK 1–4 ACCEPTED / WORK 5 MERGED / PERSISTED BUSINESS WORK AND RESOURCE LINK IMPLEMENTED IN UNMERGED CONTINUATIONS**. Isolated mechanics proof, phone-reported BUILD evidence, new live work evidence and whole-product acceptance remain distinct. |
+| Standing execution authorization | Owner authorizes review, small documentation corrections, commit and push of P2 documentation to `codex/work-economic-requirements`, plus remote verification after checking deployment triggers. Exclude older local continuity deltas, generated artifacts, stashes and private configuration. No P3 implementation/worktree, local tests/build/server, database/wallet actions, main merge or deployment. |
+| Historical step-3 implementation/preparation checkpoint | **Step 3 is implemented and independently verified in draft PR #51, `codex/work-economic-requirements`, stacked on unmerged #50 and #49.** Code head `60d2bfff5de622ae22687edb2a693a0e0c912e7a` passed native PostgreSQL CI `34243042485` and twelve isolated browser checks. Live work-linked Arc payment and Android owner acceptance remain open. Preserve phone evidence and inspect actual state before integration or any transaction. |
+| Current execution status | **P2 COMPLETE — OWNER ACCEPTED on 2026-09-13.** Product/design acceptance, available branch implementation, accepted main, dated runtime/provider evidence and later runtime/usability acceptance remain separate. P3 is NOT STARTED. |
+| Next phase gate | P3 awaits explicit owner authorization. Its accepted plan retains pre-write data isolation, durable Account/wallet authentication and recovery, and proof of legacy Business return before access cutover. |
+| P0 financial action result | Old allowance **NOT SUBMITTED**, with no pending transaction for that action, based on accepted P0. No reopening of old approval, funding or purchase plans. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
 | Work 1 product acceptance evidence | Owner-observed invited login, four-template BUILD entry, Business creation/persistence, My Businesses/Workspace entry, and two-way second-user tenant isolation. The corrected protected Preview was deployment `dpl_6BoHhm2v6WGQp7C1dkcLd6Cb5rV9` from exact Work 1 head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; deferred non-blocking UX findings are retained in the Post-H Product Realization record. |
@@ -70,7 +72,7 @@ This file is the concise repository-native entry point for a human or AI operato
 | Product implementation boundary | The accepted kernel and Work 1–4 slices remain intact; Work 5 implementation is merged. The local continuation adds bounded AI proposals, operator-configured existing-business context, and external JSON delivery behind the existing paid-service authorization. No second ledger, schema migration, wallet model, or hosted service is added. |
 | Verified private-testnet state | All accepted fixtures remain synthetic/common-control: Signal Forge, Ops Pilot, Checkpoint B API Proof, the four Reference Economy Businesses, the Work 2 Provider Lab, seven Agents, and four Capital Providers. The accepted A–H regression projection remains nine exact settled commerce obligations totaling `0.680000` USDC, two exact Capital allocations totaling `0.400000`, twenty economic entries, twenty-two narrow Evidence facts, and nine complete service executions; Work 3 product-operation evidence is recorded separately above and is not silently folded into those kernel counts. Checkpoint B API Proof still has only a `PENDING` logical Treasury and no economic activity; none of this proves independent demand, Production Capital, or real investment performance |
 | Repository continuity marker | `src/index.ts` `repositoryBaseline` is intentionally retained as a machine-readable descriptive marker maintained since B1. It is subordinate to the active authority documents and `PROJECT_STATE.md`, and it grants no runtime or product authority |
-| Current blocking gate | New live AI generation, real configured-source paid delivery, actual Arc proof attributable to the new journey, and final Android/owner acceptance remain open. Historical A–H receipts are not evidence that the new integrations ran. Native PostgreSQL CI and current source/build evidence must accompany review. Hosted proof is deferred by owner instruction; `PG-TLS-SEMANTICS-01` retains its original scoped meaning. |
+| Historical pre-P0/P1 journey evidence and holds | New live AI generation, real configured-source paid delivery, actual Arc proof attributable to the new journey, and final Android/owner acceptance remain open. Historical A–H receipts are not evidence that the new integrations ran. Native PostgreSQL CI and current source/build evidence must accompany review. Hosted proof is deferred by owner instruction; `PG-TLS-SEMANTICS-01` retains its original scoped meaning. |
 | Baseline fixture/product-label status | Signal Forge, Ops Pilot, both accepted buyer Agents, all four Reference Economy Businesses, and all four Capital Providers remain controlled proof fixtures. Their rendered commerce/Capital state is not generic product capacity, independent demand or underwriting, public availability, or active roadmap authority |
 | Next.js security baseline | Next.js `16.3.3` is the selected patched Active LTS runtime following the [official 2026-08-25 security release](https://nextjs.org/blog/august-2026-security-release); pull request `#18`, merge `97608da2755bde50e900f71d5c94db9c931a7685`, and accepted-main run `32945917201` passed without product or database changes |
 | First deployment evidence | Vercel deployment `dpl_HLPGUzp74Z1Yt3DunwgXvLVMddAt` from `48a980411f409f86f9e69fdf0b8e9a2119d17eac`, incorrectly targeted Production, ended `ERROR` (`STATIC_BUILD_NO_OUT_DIR`) |
@@ -83,6 +85,385 @@ This file is the concise repository-native entry point for a human or AI operato
 | Deployment state | Work 1 merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a` unintentionally triggered Production deployment `dpl_8Uwgxnw5bNSCgrY3Spa868RUnDgp` through the then-active Git integration. This was not authorized Production scope. The Vercel project was paused and the Production domain was directly verified to return HTTP `503 DEPLOYMENT_PAUSED`; the project-level GitHub repository connection was then removed. Existing protected Preview artifacts remain available. No `vercel.json`, Production resume, database change, or secret change was introduced by containment. |
 
 The inherited `PASS WITH WORKAROUND` is the Ubuntu Proot Codex sandbox limitation documented in [`docs/engineering/environment-and-safety.md`](docs/engineering/environment-and-safety.md). It is not a persistence failure and is not a requirement on other devices.
+
+## P2 local access and readiness revision — 2026-09-13
+
+**ACTIVE OWNER DECISION:** localhost Alpha entry accepts typed email without
+invitations, an email allowlist or application-entry OTP. This replaces the
+invited-entry target for the local profile only. Existing application code still
+uses invitations and derives a principal from email; removing only the invitation
+check would expose existing Business control and is not an acceptable realization.
+
+P0 COMPLETE, P1 ACCEPTED, P2 COMPLETE — OWNER ACCEPTED, and P3–P9 NOT STARTED.
+The six-system/P1 design is retained. This record updates readiness planning,
+not implementation. Finalization incorporates the owner's 2026-09-13 corrections
+into the single canonical Second Brain roadmap at
+`/mnt/second-brain/Project/inomasa-project/Product Baseline/Inomasa_Product_Realignment_Map.md`
+(metadata, §§2/3/5 and §9) under explicit permission, and checks consistency with
+these six repository documents.
+Earlier replacement-text proposals are now applied, not a second roadmap.
+Project Instructions, P1, PDFs, History and the extraction manifest are untouched.
+All 17 files remaining in the former nested P2 package were relocated into the
+single `Product Baseline/` directory with their relative paths, sizes and SHA-256
+checksums unchanged. The empty `P2 Baseline/` parent was then removed. This path
+change gives the accepted product sources a stage-neutral home through P9 and
+beyond; it does not rename documents, alter product decisions, or make the
+manifest a live folder index.
+
+### P3 proposal: durable Account, one contextual authentication flow
+
+Owner refinement: an established Account must survive session changes. Temporary
+entry context is not a newly created durable Account on every visit. The technical
+mechanisms below are accepted as the P3 readiness plan; implementation and
+provider verification remain outstanding.
+
+1. Typed email opens an unverified local entry context without invitation,
+   allowlist or application-entry OTP. Use an opaque session identity independent
+   of email. Two fresh browsers entering the same email receive no shared rights;
+   no legacy Business names, balances, Work or wallet IDs are disclosed.
+2. Keep a durable internal Account ID and server-side binding from validated
+   Circle user identity, scoped by provider application/environment, to that
+   Account and its existing controller relationships. Session IDs are replaceable
+   access credentials, never Account IDs. Email is a contact/display attribute,
+   not authority. After authentication, resolve the existing binding first;
+   create a new Account only when no binding exists, with concurrency protection.
+3. Offer one contextual “Continue to your account” action for setup or recovery,
+   with the already entered email prefilled and editable before authentication.
+   The proposed Circle UCW email OTP authenticates durable Account/wallet access;
+   it is not an OTP gate on application entry. Explain that protected existing
+   data cannot be restored by typing email alone. Reuse valid authenticated
+   application/provider sessions within their actual scopes; do not demand
+   email or OTP again on every navigation or force a second independent login.
+   Retain any provider-required wallet initialization/signing approval.
+4. Validate the provider session on the server, bound to the initiating local
+   session/challenge. Never trust browser email, IDs or success flags as proof.
+   Resolve the bound wallet before provisioning. Persist one provisioning request
+   and reconcile unknown outcomes before retry; provider failure must not create
+   a replacement Account/wallet. A zero-balance ready wallet needs no funding.
+5. Preserve Account, wallet binding and Business ownership across browser close,
+   logout, cookie loss and device change. A valid session resumes directly; after
+   proof is lost, the same verified identity restores the same Account and wallet.
+   Logout invalidates application access and clears provider session material/
+   private caches, not persistent bindings or data. Expired wallet credentials
+   may require contextual reauthentication without replacing a still-valid
+   application Account. Unbound temporary drafts are explicitly temporary and
+   cannot be recovered by email; never describe them as a durable Account.
+6. Legacy continuity is a prerequisite for replacing old access, not a promise
+   to migrate every old account in the first experiment. Retain the existing
+   legacy access path until the owner's existing principal has a proven
+   return/recovery path. Retention is not proof that this path is safe or
+   recoverable; both the relevant access checks and return path remain to prove.
+   This is a compatibility route, not an invitation
+   requirement on normal email-only local entry. A retained cookie alone is
+   insufficient because it expires. Before cutover, demonstrate fresh-session
+   access using valid legacy control proof, or an explicitly authorized binding
+   of that exact principal to the verified destination identity with attribution.
+   Newly verifying a matching legacy email is insufficient. If legacy access
+   cannot be re-established, keep the old path unchanged and stop cutover pending
+   scoped owner-assisted recovery; do not invent credentials or silently rekey.
+   Associate the existing principal, not copied Businesses or merged accounts.
+   Broad migration tooling and unrelated legacy accounts can wait.
+7. Load Business choices from server-checked control relationships of the
+   recovered Account. Preserve deep-link/mutation checks and the Business of
+   pending decisions when switching. Personal Wallet recovery does not migrate
+   old DCW Treasury bindings or grant spending authority. Keep economic records,
+   old principal IDs and controller provenance intact.
+
+This local convenience profile is restricted to a deliberately selected isolated
+localhost execution profile, not a hostname string trusted from the browser or
+an automatic relaxation of PRIVATE_ARC_TESTNET controls. P3 must verify loopback
+serving and server request/session boundaries before sensitive access. It is not
+a public deployment model or evidence of independent controllers/demand at P6.
+
+### Current official Circle evidence, reviewed 2026-09-13
+
+Circle documents social, email-OTP and PIN authentication. Its email route needs
+configured SMTP and email access for recovery. Retain email OTP for the wallet
+as the simplest proposal consistent with the selected direction; neither PIN nor
+another custody product is substituted to remove app-entry OTP.
+[Authentication methods](https://developers.circle.com/wallets/user-controlled/authentication-methods).
+
+The Web SDK handles user challenges; the tutorial describes loading an existing
+wallet for an initialized user. Its email sandbox example does not itself prove
+delivery to the owner's inbox. Use a working test email delivery route for the
+owner trial; enterprise email operations and production availability are not P2
+requirements.
+[Web SDK](https://developers.circle.com/sdks/user-controlled/web-sdk),
+[wallet tutorial](https://developers.circle.com/wallets/user-controlled/build-a-wallet-app).
+
+The authenticated user endpoint returns the user identity using a user token;
+server validation is the proposed binding boundary.
+[Get user](https://developers.circle.com/api-reference/wallets/user-controlled-wallets/get-user-by-token).
+Circle lists both EOA and SCA for user-controlled Arc Testnet accounts. Select one
+supported profile before the first provisioning attempt according to actual setup
+cost and needed features, without forcing Treasury features into Personal Wallet.
+[Supported blockchains](https://developers.circle.com/wallets/supported-blockchains).
+Exact SDK/session expiry, callbacks, provider configuration and costs remain
+first-P3 checks. These are documentation observations, not provider-account or
+runtime verification; no OTP, wallet or provider configuration action was executed.
+
+### R01–R11 dependency and evidence timing
+
+This is a refinement of the canonical roadmap's existing IDs, not a new roadmap.
+
+| Requirement | Dependency / near-term contract | Evidence due |
+| --- | --- | --- |
+| R01 Account/Personal Wallet | Temporary entry separate from durable Account; verified identity restores existing bindings; legacy return path before cutover | First P3: same Account/wallet after session loss or device change, no duplicate provisioning; real wallet auth requires scoped provider permission |
+| R02 Account/Business scope | R01 and existing server-side control records; no email-derived legacy rights | P3: two separate browser contexts, guessed IDs/deep links denied, no leakage/switching confusion; independent-controller proof still P6 |
+| R03 Formation | R01/R02 and Personal Wallet readiness; consumes R05/R06's minimum coordination/context contract | P4: resumable AI-assisted creation and one genesis; full schema/catalog design not required at P2 |
+| R04 Readiness | R03 plus Treasury binding and R07 executable offering dependencies | P4: Created/readiness/launch distinguished, failed dependency not advertised as ready |
+| R05 Orchestrator | R02 scope, R06 context, existing bounded authority; retain recoverable Work | Minimum at P4; bounded operation/model-cost/recovery proof at P5; no universal agent runtime required first |
+| R06 Brain | Stable Business identity and R02 access; inputs/assumptions/decisions separate | Minimum at P4; durable, source-attributed work knowledge at P5; supported model replacement at P6 |
+| R07 Offering/customer | R03/R04 and existing commerce/fulfillment; immutable committed terms | P4–P5: one supported offering/order fulfilled consistently; broad connector/catalog coverage deferred |
+| R08 Economic decision | R02 authority/context, R07 terms, canonical economic path | P5: enforce actual amount/fee scope and reconcile uncertainty before real financial use; P3 handles only its actual provider/setup costs |
+| R09 History | Existing ledger plus R05/R07/R08 work/decision/delivery/use links | P5: explain the complete cycle without double-counting transfers; P7 adds funded loop |
+| R10 Reuse/core acceptance | Working P3–P5 journey | P6: distinct Business/controller contexts, supported model reuse and owner Android/desktop acceptance; local email entry alone proves no independence |
+| R11 CAPITAL/closure/CONNECT | P6 sufficient core proof → P7 funded loop → P8 integrated acceptance | A09/A10 and CAPITAL mechanism at P7; no permanent score prohibition; CONNECT remains conditional P9 |
+
+### Remove avoidable work while keeping concrete safeguards
+
+- End local Arc Litepaper lookup. Its historical missing-path note below is closed
+  as a work item, not resolved by inventing a file. If Arc information is needed,
+  use [arc.io](https://www.arc.io/) and linked official documentation.
+- Reuse P0, inspected PDFs, manifest-at-extraction evidence and unchanged code
+  findings. Recheck only an affected change, uncertain effect or relevant gate.
+  No repeated audit, rendering, old financial retry or proof-data reconstruction.
+- Do not seek repeated permission for routine work within an authorized slice.
+  New actual costs, control changes, external writes and irreversible actions
+  still need authority covering their concrete scope.
+- Do not require production hosting, public signup, enterprise SMTP, mainnet,
+  complete custody evolution or broad device testing before the first local flow.
+  Start with the owner's actual browser; check a second representative browser
+  after the path works, before closing P3. Full core Android/desktop acceptance
+  remains P6 and integrated acceptance P8.
+- Plan R01–R11 interfaces/dependencies now; defer detailed later-stage schemas,
+  all agent types, general services, CAPITAL instruments and CONNECT design.
+  Retain minimum Brain/Orchestrator/readiness commitments for P4 planning.
+- Use this state file, source hierarchy and existing roadmap/PR records.
+  No additional planning document or duplicate roadmap is needed.
+
+### Data, branch/PR and first-P3 gates
+
+Before the first write-based test, the implementer must identify and verify a
+separate test database target and credentials that cannot mutate historical proof
+data. Do not merely relabel the active database or run current db:verify on it:
+that command migrates and writes fixtures (A15). Use synthetic test data, disabled
+live wallet/model side effects by default, and make the exact target explicit.
+Isolation need not mean a new database provider or production infrastructure.
+No database inspection/provisioning is authorized in this pass.
+
+Selected planning base: inspected commit
+`e176e80a4261b1bafd4ca9b689027e61bd848863` on #51 lineage, retaining #49/#50's
+Work/resource code. After authorization, use an isolated worktree and focused P3
+branch from that commit; leave the current dirty checkout untouched. Carry the
+latest reviewed six-document delta explicitly, not all uncommitted files or
+stash-pop. The selected base commit does not contain these local documentation
+updates; verify the resulting worktree's actual instructions and continuity before
+implementation, rather than following the old base's next task.
+Preserve substantive PROJECT_STATE continuity, next-env.d.ts, all browser
+artifacts, both stashes and private configuration. If the base has changed,
+inspect only the intervening relevant delta before carrying this plan forward.
+P2 planning created no branch/worktree; its documentation is now authorized for
+commit and push on the existing branch. Eventual PRs must state their #51
+ancestry and separate new work from the existing stack; merging that stack is not
+a P2 prerequisite or evidence of P1 product acceptance. Recheck deployment
+triggers only before a separately authorized remote operation.
+
+### One bounded first-P3 experiment and acceptance measures
+
+1. Before writes: prove the chosen isolated database/role cannot modify existing
+   proof data; use synthetic Accounts/Businesses and disabled live provider/model
+   effects. Record target identity and isolation evidence, never credentials.
+2. In the owner's actual browser: email-only entry, a temporary context and
+   contextual authentication with prefilled email. Deterministic adapter checks
+   first exercise persistent Account lookup, existing-wallet reuse, expired
+   session, timeout/concurrent initialization and foreign-Business denial.
+3. Under separate provider/configuration/cost authority: validate actual Circle
+   app/email delivery, select one supported EOA/SCA profile and prove one UCW
+   setup followed by recovery of that same wallet. No funding, purchase or
+   allowance is part of this experiment. A mock does not close wallet readiness.
+4. Compare persistent Account ID, wallet binding and authorized Business set
+   before/after browser close, logout, cookie loss and a second independent
+   browser context representing device/session loss. Same verified identity
+   must recover the same IDs; the same typed email without proof recovers none.
+   A second physical device is not required for this initial mechanism test.
+5. Before old access is replaced, separately demonstrate the owner's legacy
+   return/binding path after session loss under its scoped authority. Rehearse
+   with synthetic legacy fixtures first; a real historical binding is not
+   authorized by this documentation. Keep old access available until it passes.
+
+Success requires no duplicate Account/wallet, no foreign or historical data
+leakage, no lost old control, honest recoverable failure/unknown states, and no
+repeated email/OTP while applicable authentication remains valid. The owner must
+understand which step restores protected access and be able to return to the same
+Account without operator-reading OTPs. Tokens/credentials stay out of evidence.
+A supported second-browser compatibility check follows the working path before
+P3 closes; broader Android/desktop core acceptance stays P6. P4 genesis still
+requires P3 wallet readiness, not a mock or documentation claim.
+
+### P2 closure acceptance and later evidence
+
+- Owner accepted the completed P2 plan: durable Account/session contract, simple contextual
+  UCW flow, legacy-before-cutover guard, selected branch base, preservation/data
+  plan, first-P3 success criteria and R01–R11 dependency timing.
+- P2 closure was accepted after authorized synchronization of the canonical
+  roadmap directly updated the affected sections, including R01/§9.5–9.6. No
+  additional P2 planning blocker remains. Provider/runtime and legacy cutover
+  proof remain at the explicit P3/later gates and are not claimed complete.
+- Early P3, not P2 closure proof: actual isolation, SDK/session behavior, working
+  email delivery, provider identity stability, supported wallet profile/cost and
+  real same-wallet recovery. Any failure stops the affected slice, not all
+  planning. The implementer records observed evidence at the tested revision.
+- Before legacy cutover: owner-specific fresh-session legacy recovery or verified
+  association as above. This gate cannot be deferred merely because bulk migration
+  is deferred. Material changes in control, actual costs or recovery dependence
+  require an explicit recommendation and appropriate owner authority.
+- Later: R03–R09 evidence at P4/P5; R10/P6 reuse/core acceptance; R11/P7 CAPITAL
+  mechanism/A09/A10 and funded loop; P8 integrated closure; conditional P9 CONNECT.
+  Their complete schemas/designs are not prerequisites for closing P2.
+
+P2 is COMPLETE — OWNER ACCEPTED on 2026-09-13. Do not start P3 automatically.
+No live proof, merge or new document is
+needed in this pass; implementation and provider actions need their own scope.
+All earlier local changes and historical evidence are retained; no code,
+configuration, database or external service state is changed. The dated 2026-09-12
+records below remain historical: their invited-entry assumptions, pending planning
+and Arc Litepaper location follow-up are superseded by this revision.
+
+Finalization validation: the actual before/after content differences in the
+roadmap and six repository documents were inspected, not only links/formatting.
+The roadmap's extraction checksum changes intentionally; its manifest and other
+Second Brain source contents are not edited. The Product Baseline relocation
+preserved all 17 remaining files byte-for-byte. git diff --check succeeded, 43 local
+Markdown references resolved, and branch/HEAD/stash list plus content hashes of
+next-env.d.ts and all 31 browser artifacts matched the pre-edit snapshot.
+These checks do not constitute application tests or P3 acceptance.
+
+## P2 inspection and documentation alignment — 2026-09-12
+
+The owner accepted the preceding inspection report and authorized alignment of
+six active documentation files only. **P2 IN PROGRESS; P3–P9 NOT STARTED.**
+These local edits await owner review and are not committed or accepted into main.
+The [source hierarchy](docs/engineering/source-hierarchy.md) identifies the
+canonical roadmap, accepted P1, exact device-local paths and explicit corrections;
+this continuity note is not another roadmap.
+
+### Evidence carried forward and PDF clarification
+
+The inspection confirmed branch `codex/work-economic-requirements`, HEAD
+`e176e80a4261b1bafd4ca9b689027e61bd848863`, and all 22 manifest entries'
+byte lengths/SHA-256. Required P1/instructions sources were read and the relevant
+Concept/REV2/Post-H/checkpoint sections inspected. Remote/provider status and
+old test results remain dated evidence; this pass does not reverify them.
+
+| PDF identity (under the catalogued package's `output/pdf/`) | Original pages | Captured images | Unique pages visually inspected |
+| --- | --- | --- | --- |
+| `Inomasa_Final_Visual_Design_Package_2026-09-11.pdf` | 20 | 21: `visual-01`–`visual-20` plus page-1 `visual-probe` | 20 |
+| `Inomasa_P1_Platform_System_Model_2026-09-10.pdf` | 4 | 6: `model-01`–`model-06` | 4 |
+
+The existing `model-04.png`/`model-05.png` captures are byte-identical;
+`model-06.png` is another view of page 4. Retained captures 04/06 show `4 / 4`
+in the viewer. This clarification uses existing artifacts at
+`/tmp/inomasa-p2-pdf.zBWlH9`, without rerendering or repeating the full review.
+Image counts do not establish page counts. The preceding review was visual,
+not merely text extraction, and proves no application runtime/usability.
+The two exploratory PDFs remain integrity-checked history. Temporary captures
+are not required portable project state.
+
+### Preserved P0 and local continuity
+
+P0 is COMPLETE by the owner's accepted reconciliation, without a new database
+or transaction inspection. Migrations 015/016 are already applied on the recorded
+device. Preserve research-only Agent `agt_product_15c7e41dfe2af99bffb519dc2c42`,
+Work `wrk_016bbbe3dec99bfbe691ccf8dcea10d7` and proposal
+`b2abdd52-6b89-4260-a48c-ade81f71d429`. The old allowance is definitively
+**NOT SUBMITTED**, with no pending transaction for that action. Old balances,
+fee estimates and financial plans below are historical, not renewed authority.
+
+Before this pass, local changes were `PROJECT_STATE.md` (+411/-14),
+generated `next-env.d.ts` (+2/-2) and untracked `.playwright-cli/`.
+The two retained stashes are `stash@{0}` (“preserve Android live Gemini proof
+before PR51 takeover 2026-09-09”) and `stash@{1}` (“preserve phone work-5
+continuity before local arc proof 2026-09-07”). Recovered Android observations
+and the old next-step text remain intact, explicitly historical.
+
+### Second Brain path reconciliation — 2026-09-12
+
+After the documentation alignment, the owner moved historical references within
+Second Brain. A path-only check found the dated historical roadmap at
+`/mnt/second-brain/Project/inomasa-project/History/Inomasa_Product_Realignment_Map_2026-09-09.md`
+and Canonical Architecture at
+`/mnt/second-brain/Project/inomasa-project/History/Inomasa_Canonical_Architecture_v1.0.docx`;
+both SHA-256 values match their original `BASELINE_MANIFEST.json` entries. The
+undated active roadmap and all catalogued P1 sources remain in their recorded
+locations. The manifest is retained as the package-at-extraction record and is
+not rewritten to mirror later folder curation.
+
+The manifest identity `project_sources/03-Arc-Litepaper-2025.pdf` was not found
+under the project Second Brain by filename or recorded SHA-256 during this check.
+`History/Nexia_Litepaper_v1.1.pdf` is a different file and is not substituted.
+This is an unresolved current path only, not evidence that the manifest content
+was corrupt. Report its current location when available; do not infer its contents.
+No Second Brain file was moved, deleted or changed by this reconciliation.
+
+### Alignment and remaining P2
+
+This pass aligns `AGENTS.md`, this file, root `README.md`, and engineering
+`source-hierarchy.md`, `architecture-invariants.md`, `README.md`.
+Concept/REV2/Post-H, historical sources and Second Brain remain untouched.
+No new document or baseline-package copy is created.
+
+The prior inspection corroborated roadmap §9/R01–R11 gaps: Account/Personal
+Wallet, AI-assisted formation/Brain/Orchestrator, real readiness, reusable Work,
+Work-to-History, fee enforcement and audit A09/A10/A15. Existing canonical
+economics, authority, persistence and the resource bridge remain the foundation;
+this documentation change fixes none of those application gaps.
+
+After owner review, remaining P2 work is to make R01/R02's P3 access/identity/
+wallet/recovery contract concrete, protect historical principals and Businesses,
+and resolve or explicitly bound provider/profile/cost/device uncertainties with
+responsibility, evidence and timing. Current provider runtime is UNVERIFIED here.
+Any deferred first P3 proof needs its own scope before broader implementation.
+Establish isolation before later write-based database verification.
+
+Invited access remains the current implementation boundary, not a permanent
+product decision. Carry roadmap §5's “Join the Alpha” and “Circle User-Controlled
+Wallet” notes with honest control/recovery information. CAPITAL evaluation is
+P7 after P6 and before P8 closure; CONNECT is P9 conditional. No permanent
+universal-score prohibition, new score or expanded authority is adopted.
+
+Documentation checks found no whitespace errors or broken local references
+(43 checked). The six file contents matched the reviewed edits; historical
+continuation/old next-step text was preserved. Content hashes confirmed unchanged
+`next-env.d.ts` and all 31 `.playwright-cli/` artifacts; branch/HEAD and both stash
+list entries matched the pre-edit snapshot. These are documentation/preservation
+checks only. Tests/build/server, migrations, database/provider/wallet/transaction
+actions and remote Git/deployment operations were not run.
+P2 still needs owner review, a concrete P3 plan and bounded material uncertainties.
+Stop for review; do not start P3.
+
+## P2 documentation publication scope
+
+The owner authorized one P2 documentation commit on the existing working branch.
+The staged PROJECT_STATE carries P2 decisions, accepted P0 summaries, source
+locations and future gates; the older detailed Android continuity additions and
+their historical next-step edits stay intact in the local working file, outside
+this commit. Their existence is recorded here without attributing them to P2.
+The committed pre-existing historical text is retained under explicit historical
+headings. Transfer the separate local continuity deliberately in future work.
+
+Before publication, GitHub reported the working branch at e176e80, PR #51 open/
+draft with auto-merge unset, no repository webhooks, and only the engineering
+verification workflow (no deploy step). The Vercel connected-app check reported
+both Inomasa projects with Git link null; the primary project reported live false.
+This supports the authorized branch push without automatic deployment. The push
+can run the existing PR verification; it is not a local test or deployment claim.
+
+## Historical continuation evidence
+
+The following dated #49–#51 and Android sections preserve observations and prior
+execution directions. Their unfinished financial journey is not the active task.
+Current P2 authorization and the P0 NOT SUBMITTED result above take precedence.
 
 ## PR #49 local continuation verification (historical scope)
 
@@ -298,7 +679,7 @@ an observed successful `main` CI run.
 ## Durable continuity rules
 
 1. GitHub `main`, committed specifications, migrations, tests, CI evidence, and explicit gate records are the engineering continuity source.
-2. [`docs/architecture/inomasa-concept-and-architecture-v1.0.md`](docs/architecture/inomasa-concept-and-architecture-v1.0.md) is the active product and system-architecture authority.
+2. Accepted P1 and the canonical roadmap govern product realignment; Concept & Architecture retains unaffected contracts. See [source hierarchy](docs/engineering/source-hierarchy.md) for identities, locations and explicit corrections. Product acceptance is separate from accepted main implementation.
 3. [`docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md) is the active Alpha implementation guide and cannot silently amend the Concept & Architecture contract.
 4. Devices are replaceable development clients. Android + Termux + Ubuntu Proot is proven, not architecturally required.
 5. Operators and AI tools are replaceable. Codex, OpenCode, ChatGPT, another AI, or a human engineer receives no authority from chat history or tool identity.
@@ -311,8 +692,8 @@ an observed successful `main` CI run.
 
 ## Invariant destination, adaptable execution route
 
-The engineering destination is set by the two active authority documents, accepted
-state and next checkpoint in this file, repository safety rules, acceptance
+The engineering destination follows the applicable source hierarchy, accepted P1,
+canonical roadmap, retained kernel contracts, current checkpoint, safety rules, acceptance
 criteria, and required verification evidence. An execution route is adaptable: it
 is a scoped profile selected for the actual device, operating system, operator, AI
 tool, and infrastructure capabilities in front of the operator.
@@ -344,6 +725,11 @@ Statuses are scoped. Passing CI does not verify a local workstation, and verifyi
 Native Windows outside WSL is `SUPPORTED/TARGET`, not `VERIFIED`. It requires an environment-appropriate clean bootstrap route and observed evidence; evaluating that route does not change the architecture.
 
 ## Clean-clone takeover
+
+These are operational reference commands, not instructions to execute during the
+current documentation-only P2 pass. First obtain the owner-designated product
+sources by their identities in the source hierarchy; a clean clone need not
+contain this device's Second Brain mount. Report missing sources without guessing.
 
 Prerequisites are authorized GitHub access, Git, NVM, and a platform capable of running Node.js 22 and npm. Start without database or provider credentials:
 
@@ -404,7 +790,8 @@ The accepted A–H private-testnet regression projection is recorded above as se
 Agents, four Capital Providers, `0.680000` USDC of settled commerce, `0.400000`
 USDC of separate Capital allocation, twenty economic entries, twenty-two Evidence
 facts, and nine complete service deliveries; all remain synthetic/common-control
-proof fixtures. The Post-H record defines the remaining human product realization.
+proof fixtures. The canonical roadmap defines the remaining human product realization; Post-H
+retains applicable semantics and dated evidence under the source hierarchy.
 No credential is committed, and no hosted Agent, Agent wallet custody, LLM
 authority, independent demand, Production Capital, Production database, or
 currently serving authorized Production deployment exists.
@@ -417,12 +804,34 @@ currently serving authorized Production deployment exists.
 - **PostgreSQL provider unavailable:** do not redesign application code. Provision an authorized standards-compatible PostgreSQL development database, set generic local variables, replay versioned migrations, and run `npm run db:verify`.
 - **GitHub temporarily unavailable:** preserve the last verified clone and work offline only when safe. Do not declare a merge/gate accepted until the authoritative origin and `main` CI are available again.
 - **CI unavailable:** local evidence may diagnose work, but cannot replace the required observed `main` CI evidence for an accepted gate.
-- **Active authority document missing or unreadable:** continue only mechanical,
-  non-semantic diagnosis. Restore the accepted repository copy from Git history
-  before structural, domain, authority, or product work.
+- **Required source missing or unreadable:** report the exact document identity
+  and location from the source hierarchy. Continue only unaffected inspection.
+  Do not assume a repository copy replaces an owner-designated P1 source, that
+  another device has the same mount, or that a summary supplies missing meaning.
 - **Credential loss or suspected compromise:** do not record recovery material here. Stop affected access, use the provider/account recovery process, rotate credentials, and re-run the relevant verification before resuming.
 
 ## Exact next step
+
+Publish the reviewed P2-only documentation to `codex/work-economic-requirements`
+under the owner's commit/push authorization and verify its exact remote commit.
+Keep earlier substantive Android continuity deltas in the local PROJECT_STATE
+outside this commit, together with generated artifacts, stashes and private
+configuration. Publication is complete only when the intended commit is on GitHub;
+this record does not claim an unobserved push. No main merge or deployment.
+
+P2 is COMPLETE — OWNER ACCEPTED. After publication, stop and await authorization
+for P3 access, Account and Personal Wallet; it remains NOT STARTED. A future P3
+worktree must carry the reviewed documentation commit and preserve the separate
+local continuity. Prove data isolation before writes and retain wallet recovery
+and legacy-Business return gates before access cutover. Later documentation review
+may happen on GitHub and corrections may use follow-up commits; they do not reopen
+P2 acceptance automatically. Do not repeat the audit or old allowance/purchase.
+
+## Historical next step — preserved 2026-09-09 record
+
+The remainder of this section is the previous next-step text, retained verbatim
+for continuity. Its financial-approval boundary and five-step order are superseded
+as active directions by P0 and the P1/P2 roadmap. It is not an execution instruction.
 
 Step-3 implementation is reviewable in draft PR #51 on
 `codex/work-economic-requirements`, based on PR #50 head
