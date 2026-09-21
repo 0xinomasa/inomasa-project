@@ -2,6 +2,9 @@ import type { Metadata } from 'next';
 import Link from 'next/link';
 
 import { Mark } from '../_components/mark';
+import { localEntryEnabled } from '../../platform/auth/local-entry.ts';
+import { LocalEntryForm } from './local-entry-form';
+import styles from '../account/account.module.css';
 import { LoginForm } from './login-form';
 
 export const dynamic = 'force-dynamic';
@@ -12,11 +15,14 @@ export const metadata: Metadata = {
 };
 
 type LoginPageProps = {
-  readonly searchParams: Promise<{ next?: string }>;
+  readonly searchParams: Promise<{ next?: string; legacy?: string }>;
 };
 
 export default async function LoginPage({ searchParams }: LoginPageProps) {
   const params = await searchParams;
+  if (localEntryEnabled() && params.legacy !== '1' && !params.next) {
+    return <main className={styles['page']}><header className={styles['header']}><Link className={styles['brand']} href="/">inomasa</Link></header><section className={styles['entry']}><p className={styles['eyebrow']}>GET STARTED</p><h1>Welcome to Inomasa</h1><p>Start with your email.</p><div className={styles['card']}><LocalEntryForm /></div></section></main>;
+  }
   const nextPath = params.next?.startsWith('/') && !params.next.startsWith('//')
     ? params.next
     : '/app';

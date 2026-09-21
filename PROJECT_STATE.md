@@ -2,6 +2,46 @@
 
 This file is the concise repository-native entry point for a human or AI operator taking over Inomasa engineering. It records current mutable state separately from durable operating rules. Chat history is context only and is never required engineering evidence.
 
+## P3 Work checkpoint — 2026-09-20
+
+- Branch/worktree: `codex/p3-work-account-wallet`, `inomasa-p3-work`; base
+  `963281f1a23cc989dadc4ec27d0340cc44acd3fd`, confirmed unchanged on GitHub.
+  P2 remains accepted. Owner authorized P3 here after the phone PostgreSQL freeze.
+- Sources: owner-uploaded `Inomasa_Product_Realignment_Map(2).md` is the active
+  roadmap's P2-accepted snapshot, plus P1 correction §§8.1–8.2, final consolidation
+  and final visual pages 5–6. It is not a new roadmap. Phone mounts/state are not
+  assumed accessible. The older +411/-14 continuity is deliberately not imported.
+- Implemented first slice: explicitly selected LOCAL_DEVELOPMENT email entry,
+  isolated opaque server session, `/account` P1-oriented desktop/mobile layout,
+  expiry/logout/revocation, and additive migration 017. Unverified email grants
+  no Account, legacy principal or Business rights. The retained legacy login is
+  compatibility only; its continued availability is not proof of safe cutover.
+- Account persistence includes challenge-bound, app/environment-scoped identity
+  completion, token rotation and durable identity uniqueness. Its verifier is a
+  server-only interface tested with synthetic identities, not a Circle adapter.
+  There is no HTTP endpoint accepting a claimed provider identity as proof.
+  Wallet connection is honestly unavailable; BUILD is disabled on the new page.
+- Database isolation: fresh empty on-disk PGlite 0.5.8 database, loopback listener,
+  explicit synthetic URLs and no copied private configuration. Migrations 001–017
+  and `db:verify` passed after enabling the harness's connection multiplexer.
+  Initial cross-process connection attempt was isolated by Work networking;
+  subsequent default single-connection harness rejected overlapping connections.
+  Fixes affect the external test harness only. This is PostgreSQL-compatible
+  proof, not native PostgreSQL concurrency/isolation certification.
+- Checks observed: lint, typecheck, 101 tests, optimized build and complete
+  compatible database proof passed. Account proof covers same-email isolation,
+  provider failure/wrong app, rotation, replay, logout during verification,
+  expiry, same-identity recovery/concurrency and persistence across reconnection.
+  Native PostgreSQL CI, live Circle authentication/recovery, legacy binding and
+  owner usability acceptance remain open. Browser verification passed at 1360×1000 and 390×844: email entry, reload,
+  logout/server revocation, fresh-context redirect, legacy-access availability,
+  legacy API denial for new cookies and cross-origin rejection. No page errors
+  or mobile horizontal overflow; screenshots visually reviewed. The truncated
+  cached Chromium executable was re-extracted from its existing archive and its
+  font paths corrected in the external harness. No application workaround.
+- No old database, phone file, wallet, funding, allowance or provider configuration
+  was changed. P0 NOT SUBMITTED remains accepted historical evidence.
+
 ## Current mutable state
 
 | Item | State and evidence scope |
@@ -12,12 +52,12 @@ This file is the concise repository-native entry point for a human or AI operato
 | Active Alpha implementation guide | [`Inomasa Alpha Implementation & Testnet Realization v1.0 — REV2`](docs/engineering/inomasa-alpha-implementation-and-testnet-realization-v1.0.md): `ACCEPTED / ACTIVE` |
 | Post-H Product Realization authority | [Post-H Product Realization Record](docs/engineering/post-h-product-realization.md) retains applicable semantics and dated A–H/Work 1–5 evidence; its former sequence and superseded experience choices no longer direct current work. See the source hierarchy's explicit corrections. |
 | Historical architecture status | Inomasa Canonical Architecture v1.0 is `SUPERSEDED / HISTORICAL`; it and B0-B5-era planning remain lineage, not current authority |
-| Active realization program | **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT STARTED.** The canonical `Inomasa_Product_Realignment_Map.md` governs realignment. Existing A–H kernel and accepted/merged Work 1–5 remain the engineering baseline; draft #49–#51 are distinct from accepted main. |
+| Active realization program | **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3 IN PROGRESS / P4–P9 NOT STARTED.** The canonical `Inomasa_Product_Realignment_Map.md` governs realignment. Existing A–H kernel and accepted/merged Work 1–5 remain the engineering baseline; draft #49–#51 are distinct from accepted main. |
 | REV2 completion status | **VERIFIED CONTROLLED ARC TESTNET ECONOMIC/SYSTEM KERNEL** within the exact controlled Arc Testnet scope and A–H evidence below; Human-Operable Business Product Alpha remains **NOT YET VERIFIED** |
-| Standing execution authorization | Owner authorizes review, small documentation corrections, commit and push of P2 documentation to `codex/work-economic-requirements`, plus remote verification after checking deployment triggers. Exclude older local continuity deltas, generated artifacts, stashes and private configuration. No P3 implementation/worktree, local tests/build/server, database/wallet actions, main merge or deployment. |
+| Standing execution authorization | Owner authorized P3 implementation in ChatGPT Work from published P2 and uploaded sources, without opening Termux or retrieving interrupted phone work. Isolated code/tests/local application are in scope; live provider spending/provisioning, old transactions, deployment and main merge retain separate gates. |
 | Historical step-3 implementation/preparation checkpoint | **Step 3 is implemented and independently verified in draft PR #51, `codex/work-economic-requirements`, stacked on unmerged #50 and #49.** Code head `60d2bfff5de622ae22687edb2a693a0e0c912e7a` passed native PostgreSQL CI `34243042485` and twelve isolated browser checks. Live work-linked Arc payment and Android owner acceptance remain open. Preserve phone evidence and inspect actual state before integration or any transaction. |
-| Current execution status | **P2 COMPLETE — OWNER ACCEPTED on 2026-09-13.** Product/design acceptance, available branch implementation, accepted main, dated runtime/provider evidence and later runtime/usability acceptance remain separate. P3 is NOT STARTED. |
-| Next phase gate | P3 awaits explicit owner authorization. Its accepted plan retains pre-write data isolation, durable Account/wallet authentication and recovery, and proof of legacy Business return before access cutover. |
+| Current execution status | P2 COMPLETE / OWNER ACCEPTED; P3 IN PROGRESS. Local email entry and Account persistence foundation implemented; live Circle, wallet provisioning/recovery and legacy Business binding remain unimplemented/unverified. |
+| Next phase gate | Continue P3 as described below; P4 requires ready Personal Wallet and P3 acceptance. P3 itself is already authorized. |
 | P0 financial action result | Old allowance **NOT SUBMITTED**, with no pending transaction for that action, based on accepted P0. No reopening of old approval, funding or purchase plans. |
 | Current browser capability | **VERIFIED — ENVIRONMENT-SCOPED**. On 2026-08-28, Ubuntu ARM64 (`aarch64`) launched headless Chromium through `/usr/local/bin/playwright-proot` wrapper version `0.1.18`; a local `data:` page opened, snapshot/evaluation completed with `readyState: complete`, and the session closed. The accepted E/F/G/H local application-browser proofs, protected H Preview evidence, and Work 1 owner/browser evidence are recorded separately; this capability fact alone does not prove final integrated Human Product Alpha readiness |
 | Work 1 acceptance evidence | Pull request `#40`; implementation head `b4e006e2114df3a045acc615b6b11f6a00355b5f`; merge commit `27b30747c4a2fd14b1b29a1ee221fb99c893bd1a`; Engineering verification run `33279953605` completed successfully. Local verification recorded lint, typecheck, production build, 64/64 tests, auth/session, tenant/controller isolation, replay/idempotency, MIGRATE locked behavior, Live Economy semantics, and client-secret boundary PASS. |
@@ -812,20 +852,18 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-Publish the reviewed P2-only documentation to `codex/work-economic-requirements`
-under the owner's commit/push authorization and verify its exact remote commit.
-Keep earlier substantive Android continuity deltas in the local PROJECT_STATE
-outside this commit, together with generated artifacts, stashes and private
-configuration. Publication is complete only when the intended commit is on GitHub;
-this record does not claim an unobserved push. No main merge or deployment.
+Continue the same P3 branch. Complete local browser verification and publish the
+reviewed first-slice checkpoint after checking deployment triggers. Then implement
+Circle UCW contextual authentication and verified Account/Business bindings using
+current official provider contracts. Native PostgreSQL proof is required in CI.
+Before live setup, identify the approved Circle application, usable email delivery,
+wallet profile and any cost/authority needed; do not request or put secrets in chat.
+Test wallet lookup/reconciliation before creation and real recovery before declaring
+readiness. Prove legacy return before replacing any legacy access. P3 remains open.
 
-P2 is COMPLETE — OWNER ACCEPTED. After publication, stop and await authorization
-for P3 access, Account and Personal Wallet; it remains NOT STARTED. A future P3
-worktree must carry the reviewed documentation commit and preserve the separate
-local continuity. Prove data isolation before writes and retain wallet recovery
-and legacy-Business return gates before access cutover. Later documentation review
-may happen on GitHub and corrections may use follow-up commits; they do not reopen
-P2 acceptance automatically. Do not repeat the audit or old allowance/purchase.
+Use the last observed file/Git/test state when resuming; a check of the preceding
+step is not authorization to repeat an uncertain provider operation. Do not restart
+P2, reapply phone stashes or reopen old financial actions.
 
 ## Historical next step — preserved 2026-09-09 record
 

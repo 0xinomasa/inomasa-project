@@ -23,19 +23,16 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Current phase boundary
 
-- **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT STARTED.**
-  `Inomasa_Product_Realignment_Map.md` is the canonical active roadmap. P1 and the
-  Final Visual Design Package are accepted product/experience direction, not
-  proof of implementation, runtime or owner usability acceptance. The owner
-  accepted and closed P2 on 2026-09-13 after readiness planning across R01–R11,
-  active-documentation alignment and the canonical roadmap update. The owner
-  subsequently authorized review, small documentation corrections, commit and
-  push of P2 documentation to `codex/work-economic-requirements`, followed by
-  remote verification after checking deployment triggers. Exclude older local
-  continuity deltas, generated artifacts, both stashes and private configuration
-  from that commit. No application code, local tests/build/server, database/
-  wallet operations, worktree creation, main merge or deployment is authorized.
-  P3 remains NOT STARTED and requires separate authorization.
+- **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3 IN PROGRESS / P4–P9 NOT STARTED.**
+  The owner authorized restarting P3 in ChatGPT Work from published P2 and the
+  uploaded active roadmap, without reopening Termux or depending on interrupted
+  phone work. The isolated branch `codex/p3-work-account-wallet` starts at
+  `963281f1a23cc989dadc4ec27d0340cc44acd3fd` (P2 docs plus the selected e176e80
+  implementation ancestry). Local code, synthetic database tests and local browser
+  verification are in scope. Preserve phone state and the accepted economic kernel.
+  Live Circle provisioning, paid providers, old financial actions, main merge,
+  deployment and widening public access still need their applicable authorization.
+  P1 acceptance remains product direction, not proof of runtime or usability.
 - Follow the roadmap's P3 access/Account/Personal Wallet → P4 BUILD/readiness →
   P5 operating economic cycle → P6 reuse/cross-controller/core acceptance →
   P7 CAPITAL/operations/History → P8 integrated Alpha closure → P9 conditional
@@ -65,15 +62,13 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
   uncertainties now, bound first-P3 proofs, and leave later-stage design to its
   stage. Do not require production infrastructure, a broad device matrix, all
   future designs or old PR merges before local planning can proceed.
-- A future P3 worktree from the selected e176e80 base must explicitly carry the
-  latest reviewed six-document changes and substantive continuity: that commit
-  does not contain them. Verify its active instructions before implementation;
-  preserve this dirty checkout and both stashes. No worktree creation is authorized
-  in this pass. The authorized 2026-09-13 finalization relocated the remaining
-  baseline contents byte-for-byte into the single device-local `Product Baseline/`
-  directory and updated the canonical roadmap; Project Instructions, P1/PDF/
-  History/manifest contents remain untouched. See the source hierarchy for the
-  exact active path; do not use the former nested P2 package path.
+- The P3 Work checkout carries the published P2 documentation. The phone-only
+  continuity delta (+411/-14), generated artifacts, private configuration and
+  stashes are not available here and must not be overwritten or inferred as
+  synchronized. The owner explicitly permits restarting P3 without retrieving
+  them. Preserve historical identities and re-prove any live cutover separately.
+  Product Baseline paths remain device-local; use the uploaded owner sources in
+  Work. Resume from PROJECT_STATE and actual changes when the owner says “lanjut”.
 - Stop searching for Arc Litepaper; local availability is not a gate. Use arc.io
   and linked official documentation when an actual Arc question requires it.
   Reuse completed relevant checks; repeat only on change or an unmet gate. Routine
@@ -287,14 +282,11 @@ These repository-wide instructions apply to Codex, OpenCode, and any other codin
 
 ## Completion gate
 
-For the owner-authorized P2 documentation publication, inspect the staged content,
-references, status/gates, deployment triggers and preservation of existing work.
-Run `git diff --cached --check` and `git diff --check`; commit only the reviewed
-documentation, push the working branch and verify the exact remote commit.
-P2 is already COMPLETE / OWNER ACCEPTED. Report remaining local changes and stop
-before P3. Local tests/build/server and database/provider mutations are excluded;
-automatic PR verification may run on the authorized push. Do not claim skipped
-checks passed. Later implementation verification requirements remain below.
+P2 publication completed at 963281f. Current work is the owner-authorized P3
+implementation. Commit coherent reviewed changes on the focused branch, preserve
+unrelated changes, and check deployment triggers before remote publication.
+Native PostgreSQL CI and live wallet/legacy cutover proof remain distinct from
+compatible local database and synthetic identity tests.
 
 For implementation work, before reporting completion:
 

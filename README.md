@@ -2,15 +2,24 @@
 
 Private engineering repository for Inomasa, an application layer being designed for real economic activity and agentic workflows on Arc.
 
-Current realignment: **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3–P9 NOT
+Current realignment: **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER ACCEPTED / P3 IN PROGRESS / P4–P9 NOT
 STARTED**. P1 and the Final Visual Design Package are the accepted product and
 experience baseline. The canonical `Inomasa_Product_Realignment_Map.md` governs
 stages and gates; exact document identities, this device's Second Brain locations,
 and corrections to older guidance are in the [source hierarchy](docs/engineering/source-hierarchy.md).
 Report missing sources on another device; do not assume `/mnt/second-brain/`
 exists there or guess source contents. P2 readiness planning and active-documentation
-alignment were owner-accepted on 2026-09-13. P3 remains NOT STARTED and requires
-separate authorization.
+alignment were owner-accepted on 2026-09-13. The owner has now authorized P3 implementation in an isolated ChatGPT Work checkout.
+
+P3's first local slice adds email entry at `/login` and session-backed `/account`.
+Select it with `INOMASA_ENV=LOCAL_DEVELOPMENT` and
+`INOMASA_LOCAL_ENTRY_ENABLED=true`, use an isolated migrated test database, and
+run `npm run dev:local` bound to `127.0.0.1`. Leave the flag unset in hosted profiles.
+Entry does not authenticate ownership: Circle connection and legacy Account/Business
+binding are pending, and BUILD stays disabled on the new Account page. Existing
+Alpha access remains available at `/login?legacy=1` until its replacement is proven.
+`npm run db:verify` now also tests the Account repository using a synthetic verifier;
+it is a writing test and must never target the old evidence database.
 
 The accepted implementation on `main` is the A–H **Verified Controlled Arc Testnet
 Economic/System Kernel** plus accepted Work 1–4 Human Product Alpha realization and merged Work 5 implementation (#48).
