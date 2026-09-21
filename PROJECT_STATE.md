@@ -2,8 +2,13 @@
 
 This file is the concise repository-native entry point for a human or AI operator taking over Inomasa engineering. It records current mutable state separately from durable operating rules. Chat history is context only and is never required engineering evidence.
 
-## P3 Work checkpoint — 2026-09-20
+## P3 Work checkpoint — local verification 2026-09-20; published 2026-09-21
 
+- Publication: [draft PR #52](https://github.com/0xinomasa/inomasa-project/pull/52),
+  implementation commit `ec2e2327133ddf508490da7c223bfdeeb7da50b7`; remote tree
+  matches the staged local tree exactly. No main merge. GitHub had not created
+  a verification run for this head at the last check; native PostgreSQL remains
+  pending, not passed. Vercel reports `live: false`, latest deployment BLOCKED.
 - Branch/worktree: `codex/p3-work-account-wallet`, `inomasa-p3-work`; base
   `963281f1a23cc989dadc4ec27d0340cc44acd3fd`, confirmed unchanged on GitHub.
   P2 remains accepted. Owner authorized P3 here after the phone PostgreSQL freeze.
@@ -852,8 +857,8 @@ currently serving authorized Production deployment exists.
 
 ## Exact next step
 
-Continue the same P3 branch. Complete local browser verification and publish the
-reviewed first-slice checkpoint after checking deployment triggers. Then implement
+Continue the same P3 branch from the published first-slice checkpoint in draft
+PR #52. Local browser verification and publication are complete. Implement
 Circle UCW contextual authentication and verified Account/Business bindings using
 current official provider contracts. Native PostgreSQL proof is required in CI.
 Before live setup, identify the approved Circle application, usable email delivery,
