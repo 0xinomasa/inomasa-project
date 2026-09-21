@@ -1,3 +1,4 @@
+import { runAccountPersistenceProof } from '../src/platform/persistence/account-proof.ts';
 import {
   DatabaseConfigurationError,
   readDatabaseConnectionConfig,
@@ -78,6 +79,8 @@ async function main(): Promise<void> {
     console.log('business_work_provider_failures_bounded_attempts_no_economics=PASS');
     await runWorkResourceProof(persistence,prepareProductEconomicOperation);
     console.log('work_resource_sharing_atomic_confirmation_delivery_input_recovery=PASS');
+    await runAccountPersistenceProof(persistence);
+    console.log('p3_account_synthetic_identity_recovery_replay_isolation=PASS');
   } finally {
     await persistence.close();
   }

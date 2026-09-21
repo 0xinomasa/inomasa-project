@@ -16,10 +16,10 @@ fixture, vendor example, or code on main does not silently replace product meani
 2. **`Inomasa_Product_Realignment_Map.md`** is the canonical active roadmap:
    stage, status, dependencies, gates, and explicit latest owner corrections.
    P0 is COMPLETE; P1 is ACCEPTED; P2 is COMPLETE / OWNER ACCEPTED;
-   P3–P9 are NOT STARTED.
+   P3 is IN PROGRESS under the subsequent owner authorization; P4–P9 are NOT STARTED.
    The owner's 2026-09-13 local-access, durable-Account and P2-scope corrections
    are incorporated directly in its affected sections under explicit permission.
-   The owner accepted and closed P2 on 2026-09-13. P3 remains unauthorized.
+   The owner accepted and closed P2 on 2026-09-13. P3 was subsequently authorized in ChatGPT Work; see PROJECT_STATE for the current execution checkpoint.
 3. **Accepted P1 and the Final Visual Design Package** govern product and
    experience realignment. Read Final Consolidation with Corrective Owner Review,
    the system model, final visual notes/package, and the roadmap's latest

@@ -3,8 +3,7 @@
 This index classifies repository engineering documents for takeover. The active
 authority order remains defined by [`source-hierarchy.md`](source-hierarchy.md);
 this page is navigation only. **P0 COMPLETE / P1 ACCEPTED / P2 COMPLETE — OWNER
-ACCEPTED / P3–P9 NOT STARTED.** P3 is the next phase but requires explicit owner
-authorization; P2 closure does not start it or reopen the P0 allowance/purchase.
+ACCEPTED / P3 IN PROGRESS / P4–P9 NOT STARTED.** P3 has separate owner authorization for Work implementation; old financial actions remain closed.
 
 ## Active
 
@@ -13,10 +12,10 @@ authorization; P2 closure does not start it or reopen the P0 allowance/purchase.
   active Project Instructions Full and Main Audit. The catalog gives exact
   device-local paths; report missing sources in other environments instead of
   assuming the Android mount exists or reconstructing source contents.
-- [P2 closure and publication checkpoint](../../PROJECT_STATE.md#exact-next-step)
+- [P3 Work execution checkpoint](../../PROJECT_STATE.md#exact-next-step)
   — local inspection/alignment record, the 2026-09-13 email-only local entry
-  decision, R01–R11 dependency/uncertainty timing, documentation publication and
-  P3 authorization hold.
+  decision, R01–R11 dependency/uncertainty timing, published P2 documentation and
+  current P3 implementation/proof boundaries.
 
 - [`source-hierarchy.md`](source-hierarchy.md) — authority, mutable-truth, mirror,
   conflict, and status rules.

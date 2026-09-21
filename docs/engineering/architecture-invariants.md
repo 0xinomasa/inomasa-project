@@ -6,8 +6,7 @@ This file summarizes retained Concept/REV2 contracts and accepted P1 corrections
 Read [source-hierarchy.md](source-hierarchy.md) for source identities, device-local
 locations and exact precedence. P1/Final Visual Design Package acceptance governs
 product direction; it does not establish runtime, usability or implementation
-acceptance. P2 is COMPLETE / OWNER ACCEPTED; P3 remains NOT STARTED pending
-explicit authorization. Report unresolved material conflicts before
+acceptance. P2 is COMPLETE / OWNER ACCEPTED; P3 is now owner-authorized and IN PROGRESS in Work. Report unresolved material conflicts before
 changing affected behavior; do not reopen already accepted design choices.
 
 ## Invariants carried into engineering
